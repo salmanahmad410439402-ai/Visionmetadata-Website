@@ -1,5 +1,7 @@
-import { useState } from "react";
-import { Check } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Check, Clock } from "lucide-react";
+
+const TRIAL_END = new Date("2026-03-22T15:40:21.162Z");
 
 const plans = [
   {
@@ -44,8 +46,38 @@ const plans = [
   },
 ];
 
+type TimeLeft = {
+  days: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
+  expired: boolean;
+};
+
+const getTimeLeft = (): TimeLeft => {
+  const diff = TRIAL_END.getTime() - Date.now();
+  if (diff <= 0) return { days: 0, hours: 0, minutes: 0, seconds: 0, expired: true };
+  return {
+    days: Math.floor(diff / (1000 * 60 * 60 * 24)),
+    hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
+    minutes: Math.floor((diff / (1000 * 60)) % 60),
+    seconds: Math.floor((diff / 1000) % 60),
+    expired: false,
+  };
+};
+
+const pad = (n: number) => String(n).padStart(2, "0");
+
 const PricingSection = () => {
   const [currency, setCurrency] = useState<"PKR" | "USD">("PKR");
+  const [timeLeft, setTimeLeft] = useState<TimeLeft>(getTimeLeft());
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeLeft(getTimeLeft());
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   const getWhatsAppMessage = (planName: string, cur: "PKR" | "USD") => {
     const plan = plans.find((p) => p.name === planName)!;
@@ -79,9 +111,91 @@ const PricingSection = () => {
         </div>
 
         {/* Scarcity banner */}
-        <p className="text-center text-sm font-semibold mb-10" style={{ color: "#1ba6dd" }}>
+        <p className="text-center text-sm font-semibold mb-6" style={{ color: "#1ba6dd" }}>
           🔥 Limited Time: This discount is only for the first 300 lucky users!
         </p>
+
+        {/* ─── EID COUNTDOWN BANNER ─── */}
+        {!timeLeft.expired ? (
+          <div
+            className="relative mx-auto max-w-2xl mb-10 rounded-2xl overflow-hidden border"
+            style={{
+              borderColor: "rgba(27,166,221,0.4)",
+              background: "linear-gradient(135deg, rgba(27,166,221,0.08) 0%, rgba(10,70,123,0.18) 100%)",
+            }}
+          >
+            {/* Top badge */}
+            <div className="flex justify-center -mt-0 pt-4">
+              <span
+                className="inline-flex items-center gap-1.5 px-4 py-1 rounded-full text-xs font-black uppercase tracking-widest"
+                style={{ backgroundColor: "rgba(27,166,221,0.18)", color: "#1ba6dd", border: "1px solid rgba(27,166,221,0.35)" }}
+              >
+                🎉 Eid Special Discount — Limited Time Only
+              </span>
+            </div>
+
+            <div className="px-6 py-5 text-center">
+              <p className="text-sm text-white/70 mb-4 font-medium">
+                These discounted prices <span className="text-white font-bold">expire when the timer hits zero.</span> After that, prices go back to full rate.
+              </p>
+
+              {/* Countdown timer */}
+              <div className="flex justify-center items-center gap-2 sm:gap-4">
+                {[
+                  { label: "Days", value: timeLeft.days },
+                  { label: "Hours", value: timeLeft.hours },
+                  { label: "Mins", value: timeLeft.minutes },
+                  { label: "Secs", value: timeLeft.seconds },
+                ].map(({ label, value }, i) => (
+                  <div key={label} className="flex items-center gap-2 sm:gap-4">
+                    <div className="flex flex-col items-center">
+                      <div
+                        className="w-14 h-14 sm:w-16 sm:h-16 rounded-xl flex items-center justify-center text-2xl sm:text-3xl font-black tabular-nums"
+                        style={{
+                          background: "rgba(27,166,221,0.15)",
+                          border: "1px solid rgba(27,166,221,0.3)",
+                          color: "#1ba6dd",
+                          fontVariantNumeric: "tabular-nums",
+                        }}
+                      >
+                        {pad(value)}
+                      </div>
+                      <span className="text-[10px] uppercase tracking-widest text-white/40 mt-1 font-semibold">
+                        {label}
+                      </span>
+                    </div>
+                    {i < 3 && (
+                      <span className="text-2xl font-black mb-4" style={{ color: "rgba(27,166,221,0.5)" }}>
+                        :
+                      </span>
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex items-center justify-center gap-1.5 mt-4">
+                <Clock className="w-3.5 h-3.5" style={{ color: "#1ba6dd" }} />
+                <p className="text-xs font-semibold" style={{ color: "#1ba6dd" }}>
+                  Lock in your Eid price before the timer runs out!
+                </p>
+              </div>
+            </div>
+          </div>
+        ) : (
+          /* Expired state */
+          <div
+            className="relative mx-auto max-w-2xl mb-10 rounded-2xl border px-6 py-5 text-center"
+            style={{
+              borderColor: "rgba(255,80,80,0.3)",
+              background: "rgba(255,80,80,0.06)",
+            }}
+          >
+            <p className="text-sm font-bold" style={{ color: "#ff6b6b" }}>
+              ⏰ The Eid discount period has ended. Prices are now back to standard rates.
+            </p>
+          </div>
+        )}
+        {/* ─── END COUNTDOWN BANNER ─── */}
 
         {/* Currency toggle */}
         <div className="flex justify-center mb-14">
@@ -90,10 +204,11 @@ const PricingSection = () => {
               <button
                 key={cur}
                 onClick={() => setCurrency(cur)}
-                className={`px-6 py-2 rounded-lg text-sm font-semibold transition-all duration-200 ${currency === cur
-                  ? "bg-primary text-primary-foreground shadow-md"
-                  : "text-muted-foreground hover:text-foreground"
-                  }`}
+                className={`px-6 py-2 rounded-lg text-sm font-semibold transition-all duration-200 ${
+                  currency === cur
+                    ? "bg-primary text-primary-foreground shadow-md"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
               >
                 {cur}
               </button>
@@ -105,10 +220,11 @@ const PricingSection = () => {
           {plans.map((plan) => (
             <div
               key={plan.name}
-              className={`relative rounded-2xl p-6 border transition-all duration-300 ${plan.highlighted
-                ? "bg-card border-primary shadow-[0_0_40px_hsl(190_95%_50%/0.12)]"
-                : "bg-card border-border hover:border-primary/30"
-                }`}
+              className={`relative rounded-2xl p-6 border transition-all duration-300 ${
+                plan.highlighted
+                  ? "bg-card border-primary shadow-[0_0_40px_hsl(190_95%_50%/0.12)]"
+                  : "bg-card border-border hover:border-primary/30"
+              }`}
             >
               {plan.highlighted && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-primary text-primary-foreground text-xs font-bold">
@@ -121,12 +237,22 @@ const PricingSection = () => {
 
               {/* Discount badge */}
               {plan.discount && (
-                <span
-                  className="inline-block px-3 py-1 rounded-full text-xs font-bold mb-3"
-                  style={{ backgroundColor: "rgba(27, 166, 221, 0.15)", color: "#1ba6dd" }}
-                >
-                  Save {plan.discount}%
-                </span>
+                <div className="flex items-center gap-2 mb-3 flex-wrap">
+                  <span
+                    className="inline-block px-3 py-1 rounded-full text-xs font-bold"
+                    style={{ backgroundColor: "rgba(27, 166, 221, 0.15)", color: "#1ba6dd" }}
+                  >
+                    Save {plan.discount}%
+                  </span>
+                  {!timeLeft.expired && (
+                    <span
+                      className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide animate-pulse"
+                      style={{ backgroundColor: "rgba(255,160,0,0.15)", color: "#ffaa00", border: "1px solid rgba(255,160,0,0.3)" }}
+                    >
+                      🎉 Eid Price
+                    </span>
+                  )}
+                </div>
               )}
 
               <div className="mb-6">
@@ -156,7 +282,12 @@ const PricingSection = () => {
               </div>
 
               <ul className="space-y-2 mb-6">
-                {["Platform-ready CSVs for Adobe, SS, DT & Freepik", "Full metadata generation", "Bulk processing", "Embed into files"].map((f) => (
+                {[
+                  "Platform-ready CSVs for Adobe, SS, DT & Freepik",
+                  "Full metadata generation",
+                  "Bulk processing",
+                  "Embed into files",
+                ].map((f) => (
                   <li key={f} className="flex items-center gap-2 text-sm text-muted-foreground">
                     <Check className="w-4 h-4 text-primary flex-shrink-0" />
                     {f}
@@ -167,10 +298,11 @@ const PricingSection = () => {
               <div className="flex gap-2">
                 <a
                   href="#contact"
-                  className={`flex-1 block text-center py-3 rounded-xl text-sm font-bold transition-all duration-200 ${plan.highlighted
-                    ? "bg-primary text-primary-foreground shadow-[0_0_20px_hsl(190_95%_50%/0.3)] hover:shadow-[0_0_30px_hsl(190_95%_50%/0.45)]"
-                    : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
-                    }`}
+                  className={`flex-1 block text-center py-3 rounded-xl text-sm font-bold transition-all duration-200 ${
+                    plan.highlighted
+                      ? "bg-primary text-primary-foreground shadow-[0_0_20px_hsl(190_95%_50%/0.3)] hover:shadow-[0_0_30px_hsl(190_95%_50%/0.45)]"
+                      : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+                  }`}
                 >
                   Get {plan.name}
                 </a>
