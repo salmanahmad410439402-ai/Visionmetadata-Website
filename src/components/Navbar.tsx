@@ -25,7 +25,7 @@ const Navbar = () => {
     >
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
         <a href="#" className="text-xl font-bold tracking-tight text-foreground">
-          Vision<span className="text-primary">Meta</span> PRO
+          Vision<span className="text-primary">Metadata</span> Pro
         </a>
 
         {/* Desktop links */}

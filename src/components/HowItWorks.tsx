@@ -5,7 +5,7 @@ const steps = [
     icon: Upload,
     step: "01",
     title: "Upload Assets",
-    desc: "Upload images, videos, or vector files directly into VisionMeta.",
+    desc: "Upload images, videos, or vector files directly into VisionMetadata.",
   },
   {
     icon: Sparkles,

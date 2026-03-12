@@ -10,7 +10,7 @@ const HeroSection = () => {
       <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-semibold tracking-wide uppercase mb-8">
           <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-          VISIONMETA PRO
+          VISIONMETADATA PRO
         </div>
 
         <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black tracking-tight text-foreground mb-4">
@@ -26,13 +26,13 @@ const HeroSection = () => {
         </p>
 
         <div className="flex flex-col items-center gap-4">
-          <a href="https://github.com/salmangraphics839-hue/visionmeta-releases/releases/latest/download/VisionMeta-Pro-Setup.exe">
+          <a href="https://github.com/salmangraphics839-hue/visionmeta-releases/releases/latest/download/VisionMetadata-Pro-Setup.exe">
             <Button
               size="lg"
               className="h-14 px-10 text-base font-bold rounded-xl shadow-[0_0_30px_hsl(190_95%_50%/0.3)] hover:shadow-[0_0_40px_hsl(190_95%_50%/0.45)] transition-all duration-300"
             >
               <Download className="w-5 h-5 mr-2" />
-              Download VisionMeta PRO
+              Download VisionMetadata Pro
             </Button>
           </a>
           <span className="text-xs text-muted-foreground">Desktop software • Windows</span>

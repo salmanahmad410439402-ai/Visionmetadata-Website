@@ -15,7 +15,7 @@ const WhyVisionMeta = () => {
     <section className="py-24 px-6">
       <div className="max-w-6xl mx-auto">
         <h2 className="text-3xl sm:text-4xl font-bold text-center text-foreground mb-4">
-          Why VisionMeta PRO
+          Why VisionMetadata Pro
         </h2>
         <p className="text-center text-muted-foreground mb-16 max-w-xl mx-auto">
           Everything you need to dominate stock metadata

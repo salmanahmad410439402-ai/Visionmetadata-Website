@@ -7,9 +7,9 @@ import {
 
 const faqs = [
     {
-        question: "Does VisionMeta PRO embed metadata directly into files?",
+        question: "Does VisionMetadata Pro embed metadata directly into files?",
         answer:
-            "Yes. VisionMeta PRO embeds metadata directly into image, vector, and video files using industry-standard metadata formats such as EXIF, IPTC, and XMP (where supported). The metadata is written into the file after generation.",
+            "Yes. VisionMetadata Pro embeds metadata directly into image, vector, and video files using industry-standard metadata formats such as EXIF, IPTC, and XMP (where supported). The metadata is written into the file after generation.",
     },
     {
         question: "Will stock platforms automatically detect this metadata?",
@@ -19,17 +19,17 @@ const faqs = [
     {
         question: "What file types are supported?",
         answer:
-            "VisionMeta PRO supports JPG, PNG, EPS, AI, SVG, MP4, and MOV files. Metadata is embedded according to each file type's supported standards.",
+            "VisionMetadata Pro supports JPG, PNG, EPS, AI, SVG, MP4, and MOV files. Metadata is embedded according to each file type's supported standards.",
     },
     {
-        question: "Does VisionMeta PRO work online or offline?",
+        question: "Does VisionMetadata Pro work online or offline?",
         answer:
-            "VisionMeta PRO uses secure AI APIs to generate metadata, so an internet connection is required. To ensure fast performance even on slow connections, the software intelligently processes images, vectors and videos, sending minimal data to the AI while processing everything else locally.",
+            "VisionMetadata Pro uses secure AI APIs to generate metadata, so an internet connection is required. To ensure fast performance even on slow connections, the software intelligently processes images, vectors and videos, sending minimal data to the AI while processing everything else locally.",
     },
     {
         question: "Do I still need to enter metadata manually on stock websites?",
         answer:
-            "No. Once metadata is generated and embedded using VisionMeta PRO, you can upload files directly to supported stock platforms. Titles and keywords are automatically detected without manual entry.",
+            "No. Once metadata is generated and embedded using VisionMetadata Pro, you can upload files directly to supported stock platforms. Titles and keywords are automatically detected without manual entry.",
     },
 ];
 
