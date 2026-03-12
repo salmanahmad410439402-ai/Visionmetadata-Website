@@ -21,7 +21,7 @@ const ContactSection = () => {
             <div className="space-y-4 text-sm">
               <div>
                 <span className="text-muted-foreground">WhatsApp:</span>
-                <p className="text-foreground font-medium">+92 329 7090888</p>
+                <p className="text-foreground font-medium">+92 329 74090888</p>
               </div>
               <div>
                 <span className="text-muted-foreground">Email:</span>
