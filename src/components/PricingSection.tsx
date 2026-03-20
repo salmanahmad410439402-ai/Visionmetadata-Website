@@ -246,10 +246,10 @@ const PricingSection = () => {
             return (
               <div
                 key={plan.name}
-                className={`relative rounded-2xl p-6 border transition-all duration-300 ${
+                className={`relative rounded-2xl p-6 border transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_12px_40px_hsl(190_95%_50%/0.15)] ${
                   plan.highlighted
                     ? "bg-card border-primary shadow-[0_0_40px_hsl(190_95%_50%/0.12)]"
-                    : "bg-card border-border hover:border-primary/30"
+                    : "bg-card border-border hover:border-primary/40"
                 }`}
               >
                 {plan.highlighted && (
