@@ -31,7 +31,7 @@ const DownloadSection = () => {
               You only need a license key to unlock continued use after the trial.
             </p>
 
-            <a href="https://github.com/salmangraphics839-hue/visionmeta-releases/releases/latest/download/VisionMetadata-Pro-Setup.exe">
+            <a href="https://github.com/salmangraphics839-hue/visionmeta-releases/releases/download/v1.0.0/VisionMetadata.Pro.Setup.1.0.1.exe">
               <Button size="lg"
                 className="btn-shimmer h-16 px-14 text-lg font-bold rounded-2xl shadow-[0_0_40px_hsl(190_95%_50%/0.35)] hover:shadow-[0_0_56px_hsl(190_95%_50%/0.5)] hover:scale-[1.03] transition-all duration-300">
                 <Download className="w-6 h-6 mr-3" />

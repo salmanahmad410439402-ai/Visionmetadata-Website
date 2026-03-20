@@ -60,7 +60,7 @@ const HeroSection = () => {
 
         {/* CTA */}
         <div className="reveal reveal-delay-4 flex flex-col items-center gap-3">
-          <a href="https://github.com/salmangraphics839-hue/visionmeta-releases/releases/latest/download/VisionMetadata-Pro-Setup.exe">
+          <a href="https://github.com/salmangraphics839-hue/visionmeta-releases/releases/download/v1.0.0/VisionMetadata.Pro.Setup.1.0.1.exe">
             <Button size="lg" className="btn-shimmer h-14 px-10 text-base font-bold rounded-xl shadow-[0_0_30px_hsl(190_95%_50%/0.35)] hover:shadow-[0_0_48px_hsl(190_95%_50%/0.5)] hover:scale-[1.03] transition-all duration-300">
               <Download className="w-5 h-5 mr-2" />
               Download Free — Windows
