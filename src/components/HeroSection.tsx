@@ -24,7 +24,7 @@ const HeroSection = () => {
             <span className="ping-slow absolute inline-flex h-full w-full rounded-full bg-primary opacity-60" />
             <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-primary" />
           </span>
-          VisionMetadata Pro — v1.0 Now Available
+          VisionMetadata Pro — v1.1.3 Now Available
         </div>
 
         {/* Headline */}
