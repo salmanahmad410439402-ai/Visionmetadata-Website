@@ -47,7 +47,7 @@ const Navbar = () => {
         </div>
 
         {/* CTA */}
-        <a href="https://github.com/salmangraphics839-hue/visionmeta-releases/releases/download/v1.0.0/VisionMetadata.Pro.Setup.v1.1.3.zip"
+        <a href="https://github.com/salmangraphics839-hue/visionmeta-releases/releases/download/1.2.0/VisionMetadata.Pro_1.2.0.zip"
           className="hidden md:inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-primary text-primary-foreground text-sm font-bold hover:opacity-90 hover:scale-[1.03] transition-all duration-200 shadow-[0_0_16px_hsl(190_95%_50%/0.25)]">
           <Download className="w-3.5 h-3.5" />
           Download
