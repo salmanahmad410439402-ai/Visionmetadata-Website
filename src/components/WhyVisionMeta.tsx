@@ -1,4 +1,4 @@
-import { X, Check } from "lucide-react";
+import { X, Check, Zap, Shield, Brain, BarChart3, FileStack, Globe } from "lucide-react";
 import { useReveal } from "@/hooks/useReveal";
 
 const before = [
@@ -19,63 +19,120 @@ const after = [
   "Confidence scores & risk analysis per asset",
 ];
 
+const coreCapabilities = [
+  {
+    icon: Brain,
+    title: "Multi-AI Support",
+    desc: "Connect Gemini, GPT-4, Groq, Mistral, or run locally with Ollama. Use multiple providers simultaneously.",
+  },
+  {
+    icon: FileStack,
+    title: "100+ File Types",
+    desc: "JPEG, PNG, WebP, MP4 videos, AI vectors, EPS, SVG, TIFF. Process anything in one batch.",
+  },
+  {
+    icon: BarChart3,
+    title: "SEO Confidence Scoring",
+    desc: "Every asset gets a confidence score (0-100) with risk flags to prevent platform rejection.",
+  },
+  {
+    icon: Shield,
+    title: "Trademark Protection",
+    desc: "AI-powered sniffer automatically removes brand names and replaces them with safe alternatives.",
+  },
+  {
+    icon: Zap,
+    title: "Smart Batch Processing",
+    desc: "Process 100+ files at once with automatic retry on failure and unattended mode support.",
+  },
+  {
+    icon: Globe,
+    title: "Platform Export",
+    desc: "Export formatted CSV for Adobe Stock, Shutterstock, Freepik, Dreamstime, 123RF, Vecteezy.",
+  },
+];
+
 const WhyVisionMeta = () => {
   const ref = useReveal();
   return (
-    <section ref={ref as React.RefObject<HTMLElement>} className="py-24 px-6">
-      <div className="max-w-5xl mx-auto">
+    <section ref={ref as React.RefObject<HTMLElement>} className="pt-12 pb-16 px-6">
+      <div className="max-w-6xl mx-auto">
 
-        <div className="text-center mb-14">
-          <div className="reveal inline-flex items-center gap-2 px-3 py-1 rounded-full border text-xs font-semibold uppercase tracking-widest mb-4"
-            style={{ background: "hsl(190 95% 50% / 0.07)", borderColor: "hsl(190 95% 50% / 0.2)", color: "hsl(190 95% 65%)" }}>
+        {/* Core Capabilities Grid */}
+        <div className="mb-32">
+          <div className="text-center mb-16">
+            <div className="reveal inline-flex items-center gap-2 px-3 py-1 rounded-full border text-xs font-semibold uppercase tracking-widest mb-4"
+              style={{ background: "hsl(190 95% 50% / 0.07)", borderColor: "hsl(190 95% 50% / 0.2)", color: "hsl(190 95% 65%)" }}>
+              Powerful Features
+            </div>
+            <h2 className="reveal reveal-delay-1 text-4xl sm:text-5xl font-bold text-foreground mb-4">
+              Built for Professional Metadata
+            </h2>
+            <p className="reveal reveal-delay-2 max-w-2xl mx-auto text-lg" style={{ color: "hsl(215 20% 65%)" }}>
+              Everything you need to generate SEO-optimized metadata at scale, from single assets to 500+ file batches.
+            </p>
+          </div>
+
+          <div className="reveal reveal-delay-3 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {coreCapabilities.map(({ icon: Icon, title, desc }) => (
+              <div key={title} className="reveal rounded-2xl border p-6 hover:border-primary/50 transition-all duration-300"
+                style={{ background: "hsl(220 40% 8%)", borderColor: "hsl(220 30% 16%)" }}>
+                <Icon className="w-10 h-10 text-primary mb-4" />
+                <h3 className="font-bold text-lg mb-2">{title}</h3>
+                <p className="text-sm text-secondary">{desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Before vs After */}
+        <div className="text-center mb-16">
+          <div className="reveal inline-flex items-center gap-2 px-3 py-1 rounded-full border text-xs font-semibold uppercase tracking-widest mb-4 bg-accent-cyan-subtle border-accent-cyan-subtle text-accent-cyan">
             Before vs After
           </div>
           <h2 className="reveal reveal-delay-1 text-3xl sm:text-4xl font-bold text-foreground mb-4">
-            The Old Way vs VisionMetadata Pro
+            See What Changes
           </h2>
-          <p className="reveal reveal-delay-2 max-w-xl mx-auto" style={{ color: "hsl(215 20% 65%)" }}>
-            See exactly what changes when you stop doing metadata manually
+          <p className="reveal reveal-delay-2 max-w-xl mx-auto text-secondary">
+            From manual keyword entry to automated, AI-optimized metadata in minutes
           </p>
         </div>
 
-        <div className="reveal reveal-delay-3 grid md:grid-cols-2 gap-5">
+        <div className="reveal reveal-delay-3 grid md:grid-cols-2 gap-6">
 
           {/* Before column */}
-          <div className="rounded-2xl border p-7"
-            style={{ background: "hsl(0 30% 6%)", borderColor: "hsl(0 40% 16%)" }}>
-            <div className="flex items-center gap-2 mb-6">
-              <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: "hsl(0 60% 15%)" }}>
-                <X className="w-4 h-4" style={{ color: "hsl(0 70% 60%)" }} />
+          <div className="rounded-2xl border p-8 bg-red-950/20 border-red-900/40">
+            <div className="flex items-center gap-3 mb-8">
+              <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 bg-red-900/30">
+                <X className="w-5 h-5 text-red-500" />
               </div>
-              <h3 className="text-base font-bold" style={{ color: "hsl(0 60% 70%)" }}>Doing It Manually</h3>
+              <h3 className="text-lg font-bold text-red-400">Without Automation</h3>
             </div>
-            <ul className="space-y-3">
+            <ul className="space-y-4">
               {before.map((item) => (
-                <li key={item} className="flex items-start gap-2.5 text-sm" style={{ color: "hsl(215 15% 52%)" }}>
-                  <X className="w-3.5 h-3.5 flex-shrink-0 mt-0.5" style={{ color: "hsl(0 60% 45%)" }} />
-                  {item}
+                <li key={item} className="flex items-start gap-3 text-sm text-secondary">
+                  <X className="w-4 h-4 flex-shrink-0 mt-0.5 mt-1 text-red-400" />
+                  <span>{item}</span>
                 </li>
               ))}
             </ul>
           </div>
 
           {/* After column */}
-          <div className="rounded-2xl border p-7 relative overflow-hidden"
-            style={{ background: "hsl(190 40% 5%)", borderColor: "hsl(190 50% 18%)" }}>
-            <div className="absolute inset-0 pointer-events-none"
-              style={{ background: "radial-gradient(ellipse at 50% 0%, hsl(190 95% 50% / 0.05) 0%, transparent 65%)" }} />
+          <div className="rounded-2xl border p-8 relative overflow-hidden bg-cyan-950/20 border-accent-cyan-dark">
+            <div className="absolute inset-0 pointer-events-none glow-cyan-sm" />
             <div className="relative">
-              <div className="flex items-center gap-2 mb-6">
-                <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: "hsl(190 60% 12%)" }}>
-                  <Check className="w-4 h-4 text-primary" />
+              <div className="flex items-center gap-3 mb-8">
+                <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 bg-accent-cyan-dark">
+                  <Check className="w-5 h-5 text-primary" />
                 </div>
-                <h3 className="text-base font-bold text-primary">With VisionMetadata Pro</h3>
+                <h3 className="text-lg font-bold text-primary">With VisionMetadata Pro</h3>
               </div>
-              <ul className="space-y-3">
+              <ul className="space-y-4">
                 {after.map((item) => (
-                  <li key={item} className="flex items-start gap-2.5 text-sm" style={{ color: "hsl(215 20% 72%)" }}>
-                    <Check className="w-3.5 h-3.5 flex-shrink-0 mt-0.5 text-primary" />
-                    {item}
+                  <li key={item} className="flex items-start gap-3 text-sm text-primary/80">
+                    <Check className="w-4 h-4 flex-shrink-0 mt-1 text-primary" />
+                    <span>{item}</span>
                   </li>
                 ))}
               </ul>

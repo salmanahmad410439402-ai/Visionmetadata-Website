@@ -7,7 +7,7 @@ const VideoDemoSection = () => {
     const ref = useReveal();
 
     return (
-        <section ref={ref as React.RefObject<HTMLElement>} className="py-24 px-6">
+        <section ref={ref as React.RefObject<HTMLElement>} className="pt-12 pb-16 px-6">
             <div className="max-w-4xl mx-auto">
                 <div className="text-center mb-12">
                     <div className="reveal inline-flex items-center gap-2 px-3 py-1 rounded-full border text-xs font-semibold uppercase tracking-widest mb-4"

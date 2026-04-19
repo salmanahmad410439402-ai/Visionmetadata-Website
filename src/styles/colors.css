@@ -1,0 +1,291 @@
+/* ═══════════════════════════════════════════════════════════════
+   VISIONMETADATA PRO - STANDARDIZED COLOR CLASSES
+   Replaces scattered inline HSL values for consistency & maintainability
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── CSS COLOR VARIABLES ── */
+:root {
+  /* Dark theme (default) */
+  --text-primary: hsl(190 95% 72%);
+  --text-secondary: hsl(215 20% 75%);
+  --text-tertiary: hsl(215 20% 65%);
+  --text-quaternary: hsl(215 20% 60%);
+  --text-minimal: hsl(215 20% 50%);
+  --text-minimal-low: hsl(215 20% 40%);
+  --text-accent: hsl(190 95% 65%);
+  --text-accent-bright: hsl(190 95% 72%);
+  
+  --bg-card-primary: hsl(220 40% 8%);
+  --bg-card-secondary: hsl(220 40% 12%);
+  
+  --border-card-primary: hsl(220 30% 16%);
+  --border-card-secondary: hsl(220 30% 20%);
+  --border-muted: hsl(220 30% 14%);
+  
+  --bg-body: #0f172a;
+  --color-foreground: #ffffff;
+  
+  color-scheme: dark;
+}
+
+/* Light theme */
+html.light {
+  --text-primary: hsl(190 95% 25%);
+  --text-secondary: hsl(215 20% 25%);
+  --text-tertiary: hsl(215 20% 35%);
+  --text-quaternary: hsl(215 20% 40%);
+  --text-minimal: hsl(215 20% 50%);
+  --text-minimal-low: hsl(215 20% 60%);
+  --text-accent: hsl(190 95% 35%);
+  --text-accent-bright: hsl(190 95% 25%);
+  
+  --bg-card-primary: hsl(220 40% 92%);
+  --bg-card-secondary: hsl(220 40% 88%);
+  
+  --border-card-primary: hsl(220 30% 84%);
+  --border-card-secondary: hsl(220 30% 80%);
+  --border-muted: hsl(220 30% 86%);
+  
+  --bg-body: #ffffff;
+  --color-foreground: #0f172a;
+  
+  color-scheme: light;
+}
+
+/* ── TEXT COLORS ── */
+
+/* Primary text - full brightness */
+.text-primary-bright {
+  color: var(--text-primary);
+}
+
+/* Secondary text - standard muted */
+.text-secondary {
+  color: var(--text-secondary);
+}
+
+/* Tertiary text - more muted */
+.text-tertiary {
+  color: var(--text-tertiary);
+}
+
+/* Quaternary text - very muted */
+.text-quaternary {
+  color: var(--text-quaternary);
+}
+
+/* Minimal text - footer level */
+.text-minimal {
+  color: var(--text-minimal);
+}
+
+/* Very low contrast */
+.text-minimal-low {
+  color: var(--text-minimal-low);
+}
+
+/* Accent text - cyan */
+.text-accent {
+  color: var(--text-accent);
+}
+
+/* Bright accent */
+.text-accent-bright {
+  color: var(--text-accent-bright);
+}
+
+/* ── BACKGROUND COLORS ── */
+
+/* Primary card background */
+.bg-card-primary {
+  background-color: var(--bg-card-primary);
+}
+
+/* Secondary card background - slightly lighter */
+.bg-card-secondary {
+  background-color: var(--bg-card-secondary);
+}
+
+/* ── BORDER COLORS ── */
+
+/* Primary border - standard card border */
+.border-card-primary {
+  border-color: var(--border-card-primary);
+}
+
+/* Secondary border - lighter variant */
+.border-card-secondary {
+  border-color: var(--border-card-secondary);
+}
+
+/* Muted border */
+.border-muted {
+  border-color: var(--border-muted);
+}
+
+/* Interactive border - cyan hover state */
+.border-interactive {
+  border-color: hsl(190 95% 50%);
+}
+
+/* ── ACCENT/HIGHLIGHT COLORS ── */
+
+/* Cyan accent - full opacity */
+.accent-cyan {
+  background-color: hsl(190 95% 50%);
+}
+
+/* Cyan accent - semi-transparent for backgrounds */
+.accent-cyan-light {
+  background-color: hsl(190 95% 50% / 0.08);
+}
+
+/* Cyan accent - ultra-light for subtle backgrounds */
+.accent-cyan-ultra-light {
+  background-color: hsl(190 95% 50% / 0.04);
+}
+
+/* Cyan accent - with 25% opacity for borders */
+.accent-cyan-border {
+  border-color: hsl(190 95% 50% / 0.25);
+}
+
+/* Cyan accent - with 20% opacity for borders */
+.accent-cyan-border-soft {
+  border-color: hsl(190 95% 50% / 0.2);
+}
+
+/* Cyan accent - with 50% opacity for interactive states */
+.accent-cyan-interactive {
+  color: hsl(190 95% 50% / 0.5);
+}
+
+/* Cyan accent - with 12% opacity for very subtle backgrounds */
+.accent-cyan-subtle {
+  background-color: hsl(190 95% 50% / 0.12);
+}
+
+/* Cyan glow shadow */
+.glow-cyan {
+  box-shadow: 0 0 24px hsl(190 95% 50% / 0.08);
+}
+
+/* Cyan glow shadow - medium */
+.glow-cyan-md {
+  box-shadow: 0 0 30px hsl(190 95% 50% / 0.25);
+}
+
+/* Cyan glow shadow - strong */
+.glow-cyan-lg {
+  box-shadow: 0 0 40px hsl(190 95% 50% / 0.35);
+}
+
+/* Cyan glow shadow - extra strong (hover state) */
+.glow-cyan-xl {
+  box-shadow: 0 0 56px hsl(190 95% 50% / 0.5);
+}
+
+/* ── INPUT STATES ── */
+
+/* Valid input state */
+.input-valid {
+  border-color: hsl(142 71% 45%);
+}
+
+/* Invalid input state */
+.input-invalid {
+  border-color: hsl(0 84% 60%);
+}
+
+.input-invalid:focus {
+  outline: none;
+  ring: 2px;
+  ring-color: hsl(0 84% 60% / 0.5);
+}
+
+/* ── INTERACTIVE STATE COLORS ── */
+
+/* Hover state background - subtle cyan tint */
+.bg-hover-cyan {
+  background-color: hsl(190 95% 50% / 0.05);
+}
+
+/* Focus state - cyan glow */
+.focus-cyan {
+  outline: 2px solid hsl(190 95% 50%);
+  outline-offset: 2px;
+}
+
+/* ── SEMANTIC COLORS ── */
+
+/* Success/check state */
+.text-success {
+  color: hsl(142 71% 45%);
+}
+
+.bg-success-light {
+  background-color: hsl(120 50% 20% / 0.3);
+}
+
+.border-success {
+  border-color: hsl(120 100% 50%);
+}
+
+/* Error/warning state */
+.text-error {
+  color: hsl(0 84% 60%);
+}
+
+.bg-error-light {
+  background-color: hsl(0 100% 20% / 0.3);
+}
+
+.border-error {
+  border-color: hsl(0 100% 50%);
+}
+
+/* Info state */
+.text-info {
+  color: hsl(190 95% 65%);
+}
+
+.bg-info-light {
+  background-color: hsl(190 95% 50% / 0.1);
+}
+
+/* ── SHADOW UTILITIES ── */
+
+/* Subtle shadow */
+.shadow-subtle {
+  box-shadow: 0 1px 2px hsl(0 0% 0% / 0.2);
+}
+
+/* Standard shadow */
+.shadow-standard {
+  box-shadow: 0 4px 6px hsl(0 0% 0% / 0.1);
+}
+
+/* Elevated shadow */
+.shadow-elevated {
+  box-shadow: 0 10px 15px hsl(0 0% 0% / 0.2);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   USAGE EXAMPLES:
+   
+   <div className="bg-card-primary border border-card-primary">
+     <p className="text-secondary">Standard text</p>
+   </div>
+   
+   <button className="bg-primary hover:glow-cyan-lg">
+     Download
+   </button>
+   
+   <input className="border border-card-secondary focus:border-interactive input-invalid" />
+   
+   <div className="rounded-lg p-4 bg-success-light border border-success text-success">
+     Success message here
+   </div>
+   
+   ═════════════════════════════════════════════════════════════════ */
+

@@ -11,6 +11,15 @@ export default defineConfig(({ mode }) => ({
     hmr: {
       overlay: false,
     },
+    // Only use proxy in development when running backend locally
+    ...(mode === "development" && {
+      proxy: {
+        "/api": {
+          target: "http://localhost:4000",
+          changeOrigin: true,
+        },
+      },
+    }),
   },
   plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
   resolve: {

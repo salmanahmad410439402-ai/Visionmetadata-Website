@@ -1,9 +1,20 @@
 import { Download, Shield, Zap, Cpu, Globe, Check, Clock, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useReveal } from "@/hooks/useReveal";
+import { useTypingEffect } from "@/hooks/useTypingEffect";
 
 const HeroSection = () => {
   const ref = useReveal();
+  const typedText = useTypingEffect(
+    [
+      'Process 100+ Files in Minutes',
+      'Generate AI Metadata at Scale',
+      'Works With Every Stock Platform',
+    ],
+    60,
+    35,
+    3000
+  );
 
   return (
     <section
@@ -24,22 +35,19 @@ const HeroSection = () => {
             <span className="ping-slow absolute inline-flex h-full w-full rounded-full bg-primary opacity-60" />
             <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-primary" />
           </span>
-          VisionMetadata Pro — v1.1.3 Now Available
+          VisionMetadata Pro — v1.2.0 Now Available
         </div>
 
-        {/* Headline */}
-        <h1 className="reveal reveal-delay-1 text-5xl sm:text-6xl lg:text-7xl font-black tracking-tight text-foreground mb-4 leading-[1.05]">
-          Stop Wasting Hours<br className="hidden sm:block" /> on{" "}
-          <span className="text-gradient">Stock Metadata</span>
+        {/* Headline with Typing Animation */}
+        <h1 className="reveal reveal-delay-1 text-3xl sm:text-4xl lg:text-4xl font-black tracking-tight text-foreground mb-4 leading-[1.05]">
+          <span className="text-gradient">{typedText}</span>
         </h1>
 
-        <p className="reveal reveal-delay-2 text-lg sm:text-xl font-semibold mb-5"
-          style={{ color: "hsl(210 40% 88%)" }}>
+        <p className="reveal reveal-delay-2 text-lg sm:text-xl font-semibold mb-5 text-secondary">
           AI-powered metadata generation for Adobe Stock, Shutterstock, Freepik & more.
         </p>
 
-        <p className="reveal reveal-delay-2 max-w-2xl mx-auto text-base sm:text-lg leading-relaxed mb-8"
-          style={{ color: "hsl(215 20% 72%)" }}>
+        <p className="reveal reveal-delay-2 max-w-2xl mx-auto text-base sm:text-lg leading-relaxed mb-8 text-tertiary">
           Generate, optimize, and embed titles, descriptions, and keywords directly into your images, videos, and vector files — in bulk, in seconds, ready for upload.
         </p>
 
@@ -50,8 +58,7 @@ const HeroSection = () => {
             { icon: Cpu,   label: "100% Offline via Ollama" },
             { icon: Zap,   label: "Auto-Fallback Mode" },
           ].map(({ icon: Icon, label }) => (
-            <div key={label} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-medium"
-              style={{ background: "hsl(190 95% 50% / 0.08)", borderColor: "hsl(190 95% 50% / 0.25)", color: "hsl(190 95% 72%)" }}>
+            <div key={label} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-medium accent-cyan-light accent-cyan-border text-accent-bright">
               <Icon className="w-3 h-3" />
               {label}
             </div>
@@ -60,7 +67,7 @@ const HeroSection = () => {
 
         {/* CTA */}
         <div className="reveal reveal-delay-4 flex flex-col items-center gap-3">
-          <a href="https://github.com/salmangraphics839-hue/visionmeta-releases/releases/download/1.2.0/VisionMetadata.Pro_1.2.0.zip">
+          <a href="https://github.com/salmangraphics839-hue/visionmeta-releases/releases/download/1.2.0/VisionMetadata.Pro_1.2.0.zip" target="_blank" rel="noopener noreferrer">
             <Button size="lg" className="btn-shimmer h-14 px-10 text-base font-bold rounded-xl shadow-[0_0_30px_hsl(190_95%_50%/0.35)] hover:shadow-[0_0_48px_hsl(190_95%_50%/0.5)] hover:scale-[1.03] transition-all duration-300">
               <Download className="w-5 h-5 mr-2" />
               Download Free — Windows

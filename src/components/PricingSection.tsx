@@ -104,130 +104,42 @@ const PricingSection = () => {
   };
 
   return (
-    <section id="pricing" className="py-24 px-6">
+    <section id="pricing" className="pt-24 pb-16 px-6">
       <div className="max-w-6xl mx-auto">
-        <h2 className="text-3xl sm:text-4xl font-bold text-center text-foreground mb-4">
+        <h2 className="text-3xl sm:text-4xl font-bold text-center text-foreground mb-6">
           Simple Pricing
         </h2>
-        <p className="text-center text-muted-foreground mb-4 max-w-xl mx-auto">
+        <p className="text-center text-tertiary mb-12 max-w-xl mx-auto">
           Choose a plan that fits your workflow
         </p>
 
         {/* Platform logos */}
-        <div className="flex flex-wrap justify-center items-center gap-6 mb-6">
+        <div className="flex flex-wrap justify-center items-center gap-6 mb-12">
           {["Adobe Stock", "Shutterstock", "Dreamstime", "Freepik"].map((name) => (
             <span
               key={name}
-              className="text-xs uppercase tracking-wider font-semibold"
-              style={{ color: "rgba(255,255,255,0.35)" }}
+              className="text-xs uppercase tracking-wider font-semibold text-minimal"
             >
               {name}
             </span>
           ))}
         </div>
 
-        {/* Scarcity banner */}
-        <p className="text-center text-sm font-semibold mb-6" style={{ color: "#1ba6dd" }}>
-          🔥 Limited Time: This discount is only for the first 300 lucky users!
-        </p>
-
         {/* ─── EID COUNTDOWN / EXPIRED BANNER ─── */}
-        {!isExpired ? (
-          <div
-            className="relative mx-auto max-w-2xl mb-10 rounded-2xl overflow-hidden border"
-            style={{
-              borderColor: "rgba(27,166,221,0.4)",
-              background: "linear-gradient(135deg, rgba(27,166,221,0.08) 0%, rgba(10,70,123,0.18) 100%)",
-            }}
-          >
-            <div className="flex justify-center pt-4">
-              <span
-                className="inline-flex items-center gap-1.5 px-4 py-1 rounded-full text-xs font-black uppercase tracking-widest"
-                style={{ backgroundColor: "rgba(27,166,221,0.18)", color: "#1ba6dd", border: "1px solid rgba(27,166,221,0.35)" }}
-              >
-                🎉 Eid Special Discount — Limited Time Only
-              </span>
-            </div>
-
-            <div className="px-6 py-5 text-center">
-              <p className="text-sm text-white/70 mb-4 font-medium">
-                These discounted prices{" "}
-                <span className="text-white font-bold">expire when the timer hits zero.</span>{" "}
-                After that, prices go back to standard rates.
-              </p>
-
-              {/* Countdown timer */}
-              <div className="flex justify-center items-center gap-2 sm:gap-4">
-                {[
-                  { label: "Days",  value: timeLeft.days },
-                  { label: "Hours", value: timeLeft.hours },
-                  { label: "Mins",  value: timeLeft.minutes },
-                  { label: "Secs",  value: timeLeft.seconds },
-                ].map(({ label, value }, i) => (
-                  <div key={label} className="flex items-center gap-2 sm:gap-4">
-                    <div className="flex flex-col items-center">
-                      <div
-                        className="w-14 h-14 sm:w-16 sm:h-16 rounded-xl flex items-center justify-center text-2xl sm:text-3xl font-black"
-                        style={{
-                          background: "rgba(27,166,221,0.15)",
-                          border: "1px solid rgba(27,166,221,0.3)",
-                          color: "#1ba6dd",
-                          fontVariantNumeric: "tabular-nums",
-                        }}
-                      >
-                        {pad(value)}
-                      </div>
-                      <span className="text-[10px] uppercase tracking-widest text-white/40 mt-1 font-semibold">
-                        {label}
-                      </span>
-                    </div>
-                    {i < 3 && (
-                      <span className="text-2xl font-black mb-4" style={{ color: "rgba(27,166,221,0.5)" }}>
-                        :
-                      </span>
-                    )}
-                  </div>
-                ))}
-              </div>
-
-              <div className="flex items-center justify-center gap-1.5 mt-4">
-                <Clock className="w-3.5 h-3.5" style={{ color: "#1ba6dd" }} />
-                <p className="text-xs font-semibold" style={{ color: "#1ba6dd" }}>
-                  Lock in your Eid price before the timer runs out!
-                </p>
-              </div>
-            </div>
-          </div>
-        ) : (
-          /* ─── EXPIRED: post-Eid notice ─── */
-          <div
-            className="relative mx-auto max-w-2xl mb-10 rounded-2xl border px-6 py-5 text-center"
-            style={{
-              borderColor: "rgba(255,160,0,0.3)",
-              background: "rgba(255,160,0,0.06)",
-            }}
-          >
-            <p className="text-sm font-bold mb-1" style={{ color: "#ffaa00" }}>
-              ⏰ The Eid special discount has ended.
-            </p>
-            <p className="text-xs text-white/50">
-              Standard discounted pricing is still available — but Eid rates are no longer active.
-            </p>
-          </div>
-        )}
+        {/* Discount banners removed */}
         {/* ─── END BANNER ─── */}
 
         {/* Currency toggle */}
-        <div className="flex justify-center mb-14">
-          <div className="inline-flex rounded-xl bg-card border border-border p-1">
+        <div className="flex justify-center mb-20">
+          <div className="inline-flex rounded-xl bg-card-primary border border-card-primary p-1">
             {(["PKR", "USD"] as const).map((cur) => (
               <button
                 key={cur}
                 onClick={() => setCurrency(cur)}
-                className={`px-6 py-2 rounded-lg text-sm font-semibold transition-all duration-200 ${
+                className={`px-6 py-2 rounded-lg text-sm font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
                   currency === cur
                     ? "bg-primary text-primary-foreground shadow-md"
-                    : "text-muted-foreground hover:text-foreground"
+                    : "text-quaternary hover:text-secondary"
                 }`}
               >
                 {cur}
@@ -246,10 +158,10 @@ const PricingSection = () => {
             return (
               <div
                 key={plan.name}
-                className={`relative rounded-2xl p-6 border transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_12px_40px_hsl(190_95%_50%/0.15)] ${
+                className={`relative rounded-2xl p-6 border transition-all duration-300 hover:-translate-y-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
                   plan.highlighted
-                    ? "bg-card border-primary shadow-[0_0_40px_hsl(190_95%_50%/0.12)]"
-                    : "bg-card border-border hover:border-primary/40"
+                    ? "bg-card-primary border-primary shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30"
+                    : "bg-card-primary border-card-primary hover:border-primary/40 hover:shadow-lg"
                 }`}
               >
                 {plan.highlighted && (
@@ -259,22 +171,16 @@ const PricingSection = () => {
                 )}
 
                 <h3 className="text-lg font-bold text-foreground mb-1">{plan.name}</h3>
-                <p className="text-sm text-muted-foreground mb-4">{plan.duration}</p>
+                <p className="text-sm text-quaternary mb-4">{plan.duration}</p>
 
                 {/* Discount badges */}
                 {currentDiscount && (
                   <div className="flex items-center gap-2 mb-3 flex-wrap">
-                    <span
-                      className="inline-block px-3 py-1 rounded-full text-xs font-bold"
-                      style={{ backgroundColor: "rgba(27,166,221,0.15)", color: "#1ba6dd" }}
-                    >
+                    <span className="inline-block px-3 py-1 rounded-full text-xs font-bold bg-info-light text-info">
                       Save {currentDiscount}%
                     </span>
                     {!isExpired && (
-                      <span
-                        className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide animate-pulse"
-                        style={{ backgroundColor: "rgba(255,160,0,0.15)", color: "#ffaa00", border: "1px solid rgba(255,160,0,0.3)" }}
-                      >
+                      <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide animate-pulse bg-yellow-500/20 text-yellow-300 border border-yellow-500/30">
                         🎉 Eid Price
                       </span>
                     )}
@@ -285,15 +191,12 @@ const PricingSection = () => {
                 <div className="mb-6">
                   {currentDiscount ? (
                     <>
-                      <span
-                        className="block text-lg font-semibold line-through mb-1"
-                        style={{ color: "rgba(255,255,255,0.4)" }}
-                      >
+                      <span className="block text-lg font-semibold line-through mb-1 text-minimal-low">
                         {currency === "PKR"
                           ? `₨${plan.originalPkr.toLocaleString()}`
                           : `$${plan.originalUsd}`}
                       </span>
-                      <span className="text-4xl font-black" style={{ color: "#1ba6dd" }}>
+                      <span className="text-4xl font-black text-info">
                         {currency === "PKR"
                           ? `₨${currentPkr.toLocaleString()}`
                           : `$${currentUsd}`}
@@ -316,7 +219,7 @@ const PricingSection = () => {
                     "Bulk processing",
                     "Embed into files",
                   ].map((f) => (
-                    <li key={f} className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <li key={f} className="flex items-center gap-2 text-sm text-tertiary">
                       <Check className="w-4 h-4 text-primary flex-shrink-0" />
                       {f}
                     </li>
@@ -327,9 +230,9 @@ const PricingSection = () => {
                 <div className="flex gap-2">
                   <a
                     href="#contact"
-                    className={`flex-1 block text-center py-3 rounded-xl text-sm font-bold transition-all duration-200 ${
+                    className={`flex-1 block text-center py-3 rounded-xl text-sm font-bold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 hover:scale-[1.02] active:scale-[0.98] ${
                       plan.highlighted
-                        ? "bg-primary text-primary-foreground shadow-[0_0_20px_hsl(190_95%_50%/0.3)] hover:shadow-[0_0_30px_hsl(190_95%_50%/0.45)]"
+                        ? "bg-primary text-primary-foreground shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/40"
                         : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
                     }`}
                   >
@@ -352,7 +255,7 @@ const PricingSection = () => {
           })}
         </div>
 
-        <p className="text-center text-xs text-muted-foreground mt-10">
+        <p className="text-center text-xs text-muted-foreground mt-14">
           Early adopter pricing — prices will increase as features expand.
         </p>
       </div>

@@ -1,17 +1,22 @@
 import { useState, useEffect } from "react";
-import { Download } from "lucide-react";
+import { NavLink } from "react-router-dom";
+import { Download, Moon, Sun } from "lucide-react";
+import { useTheme } from "@/hooks/useTheme.tsx";
+import { analytics } from "@/lib/analytics";
 
 const navLinks = [
-  { label: "Features", href: "#features" },
-  { label: "Pricing",  href: "#pricing"  },
-  { label: "Download", href: "#download" },
-  { label: "FAQ",      href: "#faq"      },
-  { label: "Contact",  href: "#contact"  },
+  { label: "Features", to: "/features" },
+  { label: "Pricing",  to: "/pricing"  },
+  { label: "Download", to: "/download" },
+  { label: "Tutorials", to: "/tutorials" },
+  { label: "FAQ",      to: "/faq"      },
+  { label: "Contact",  to: "/contact"  },
 ];
 
 const Navbar = () => {
   const [scrolled, setScrolled]     = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { theme, toggleTheme }      = useTheme();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -36,22 +41,42 @@ const Navbar = () => {
         {/* Desktop links */}
         <div className="hidden md:flex items-center gap-7">
           {navLinks.map((link) => (
-            <a key={link.href} href={link.href}
-              className="text-sm font-medium transition-colors duration-200"
-              style={{ color: "hsl(215 20% 65%)" }}
-              onMouseEnter={e => (e.currentTarget.style.color = "hsl(190 95% 60%)")}
-              onMouseLeave={e => (e.currentTarget.style.color = "hsl(215 20% 65%)")}>
+            <NavLink key={link.to} to={link.to}
+              className="text-sm font-medium transition-colors duration-200 relative group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-2 py-1"
+              style={({ isActive }) => ({ color: isActive ? "hsl(190 95% 60%)" : "hsl(215 20% 65%)" })}>
               {link.label}
-            </a>
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary group-hover:w-full transition-all duration-300" />
+            </NavLink>
           ))}
         </div>
 
-        {/* CTA */}
-        <a href="https://github.com/salmangraphics839-hue/visionmeta-releases/releases/download/1.2.0/VisionMetadata.Pro_1.2.0.zip"
-          className="hidden md:inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-primary text-primary-foreground text-sm font-bold hover:opacity-90 hover:scale-[1.03] transition-all duration-200 shadow-[0_0_16px_hsl(190_95%_50%/0.25)]">
-          <Download className="w-3.5 h-3.5" />
-          Download
-        </a>
+        {/* Desktop Actions */}
+        <div className="hidden md:flex items-center gap-3">
+          {/* Theme Toggle */}
+          <button
+            onClick={() => {
+              toggleTheme();
+              analytics.trackFeatureUsage('theme-toggle', { newTheme: theme === 'dark' ? 'light' : 'dark' });
+            }}
+            className="p-2 rounded-lg hover:bg-primary/10 transition-colors duration-200 text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+            title={`Current: ${theme} mode`}
+          >
+            {theme === 'dark' ? (
+              <Sun className="w-5 h-5 text-yellow-400" />
+            ) : (
+              <Moon className="w-5 h-5 text-slate-600" />
+            )}
+          </button>
+
+          {/* Download CTA */}
+          <a href="https://github.com/salmangraphics839-hue/visionmeta-releases/releases/download/v1.1.3/VisionMetadata.Pro_1.1.3.zip" target="_blank" rel="noopener noreferrer"
+            onClick={() => analytics.trackCTAClick('download', 'navbar')}
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-primary text-primary-foreground text-sm font-bold hover:opacity-90 hover:scale-[1.03] transition-all duration-200 shadow-[0_0_16px_hsl(190_95%_50%/0.25)]">
+            <Download className="w-3.5 h-3.5" />
+            Download
+          </a>
+        </div>
 
         {/* Mobile toggle */}
         <button className="md:hidden text-foreground p-1" onClick={() => setMobileOpen(!mobileOpen)} aria-label="Toggle menu">
@@ -63,20 +88,43 @@ const Navbar = () => {
         </button>
       </div>
 
-      {/* Mobile menu */}
+        {/* Mobile menu */}
       {mobileOpen && (
-        <div className="md:hidden bg-background/95 backdrop-blur-xl border-b border-border px-6 pb-5 pt-2">
+        <div className="md:hidden bg-background/95 backdrop-blur-xl border-b border-border px-6 pb-4 pt-3 animate-in fade-in slide-in-from-top-2 duration-200">
           {navLinks.map((link) => (
-            <a key={link.href} href={link.href} onClick={() => setMobileOpen(false)}
-              className="block py-2.5 text-sm font-medium transition-colors"
-              style={{ color: "hsl(215 20% 65%)" }}>
+            <NavLink key={link.to} to={link.to} onClick={() => setMobileOpen(false)}
+              className="block py-3 px-2 text-sm font-medium transition-colors rounded hover:bg-primary/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+              style={({ isActive }) => ({ color: isActive ? "hsl(190 95% 60%)" : "hsl(215 20% 65%)" })}>
               {link.label}
-            </a>
+            </NavLink>
           ))}
-          <a href="https://github.com/salmangraphics839-hue/visionmeta-releases/releases/latest/download/VisionMetadata-Pro-Setup.exe"
-            className="mt-3 flex items-center justify-center gap-2 w-full py-2.5 rounded-lg bg-primary text-primary-foreground text-sm font-bold">
-            <Download className="w-4 h-4" /> Download
-          </a>
+          
+          {/* Mobile Actions */}
+          <div className="flex items-center gap-3 mt-4 pt-4 border-t border-border">
+            {/* Theme Toggle */}
+            <button
+              onClick={() => {
+                toggleTheme();
+                analytics.trackFeatureUsage('theme-toggle', { newTheme: theme === 'dark' ? 'light' : 'dark' });
+              }}
+              className="p-2 rounded-lg hover:bg-primary/10 transition-colors duration-200 text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+              aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+              title={`Current: ${theme} mode`}
+            >
+              {theme === 'dark' ? (
+                <Sun className="w-5 h-5 text-yellow-400" />
+              ) : (
+                <Moon className="w-5 h-5 text-slate-600" />
+              )}
+            </button>
+
+            {/* Download CTA */}
+            <a href="https://github.com/salmangraphics839-hue/visionmeta-releases/releases/download/1.2.0/VisionMetadata.Pro_1.2.0.zip" target="_blank" rel="noopener noreferrer"
+              onClick={() => analytics.trackCTAClick('download', 'navbar-mobile')}
+              className="flex-1 flex items-center justify-center gap-2 py-3 rounded-lg bg-primary text-primary-foreground text-sm font-bold transition-all hover:scale-[1.01] active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background">
+              <Download className="w-4 h-4" /> Download
+            </a>
+          </div>
         </div>
       )}
     </nav>

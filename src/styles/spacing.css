@@ -1,0 +1,150 @@
+/* ═══════════════════════════════════════════════════════════════
+   VISIONMETADATA PRO - SPACING & LAYOUT UTILITIES
+   Mobile-first responsive spacing system
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── SECTION SPACING ── */
+
+.section-padding {
+  @apply pt-12 pb-16 px-6 sm:px-8 lg:px-6;
+}
+
+.section-padding-sm {
+  @apply pt-8 pb-12 px-6 sm:px-8 lg:px-6;
+}
+
+.section-padding-lg {
+  @apply pt-16 pb-20 px-6 sm:px-8 lg:px-6;
+}
+
+/* ── CONTAINER SIZING ── */
+
+.container-sm {
+  @apply max-w-3xl mx-auto;
+}
+
+.container-md {
+  @apply max-w-4xl mx-auto;
+}
+
+.container-lg {
+  @apply max-w-6xl mx-auto;
+}
+
+.container-xl {
+  @apply max-w-7xl mx-auto;
+}
+
+/* ── GRID GAPS ── */
+
+.gap-standard {
+  @apply gap-5 sm:gap-6 md:gap-7;
+}
+
+.gap-compact {
+  @apply gap-3 sm:gap-4;
+}
+
+.gap-relaxed {
+  @apply gap-6 sm:gap-8;
+}
+
+/* ── CARD SPACING ── */
+
+.card-padding {
+  @apply p-6 sm:p-7 md:p-8;
+}
+
+.card-padding-sm {
+  @apply p-5 sm:p-6;
+}
+
+.card-padding-lg {
+  @apply p-7 sm:p-8 md:p-10;
+}
+
+/* ── FORM SPACING ── */
+
+.form-spacing {
+  @apply space-y-5 sm:space-y-6;
+}
+
+.form-input-height {
+  @apply h-12 sm:h-11;
+}
+
+.form-button-height {
+  @apply h-12 sm:h-11;
+}
+
+/* ── RESPONSIVE TEXT SIZING ── */
+
+.text-heading-1 {
+  @apply text-3xl sm:text-4xl lg:text-5xl;
+}
+
+.text-heading-2 {
+  @apply text-2xl sm:text-3xl lg:text-4xl;
+}
+
+.text-heading-3 {
+  @apply text-xl sm:text-2xl;
+}
+
+.text-heading-4 {
+  @apply text-base sm:text-lg;
+}
+
+.text-body {
+  @apply text-sm sm:text-base;
+}
+
+.text-small {
+  @apply text-xs sm:text-sm;
+}
+
+/* ── MOBILE OPTIMIZATIONS ── */
+
+/* Touch-friendly button sizing */
+.btn-touch {
+  @apply min-h-12 active:scale-95;
+}
+
+/* Proper spacing for touch targets */
+.touch-target {
+  @apply min-w-12 min-h-12;
+}
+
+/* Mobile-safe padding around edges */
+.mobile-safe-padding {
+  @apply p-4 sm:p-6 lg:p-8;
+}
+
+/* ── RESPONSIVE LAYOUT HELPERS ── */
+
+.flex-col-sm {
+  @apply flex flex-col sm:flex-row;
+}
+
+.grid-cols-auto-sm {
+  @apply grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   USAGE EXAMPLES:
+   
+   <section className="section-padding">
+     <div className="container-lg">
+       <!-- content -->
+     </div>
+   </section>
+   
+   <div className="grid grid-cols-auto-sm gap-standard">
+     <!-- cards -->
+   </div>
+   
+   <form className="form-spacing">
+     <!-- inputs -->
+   </form>
+   
+   ═════════════════════════════════════════════════════════════════ */
