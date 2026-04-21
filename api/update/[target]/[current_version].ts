@@ -21,11 +21,11 @@ const LATEST_VERSION = "1.2.0";
 
 const PLATFORMS: Record<string, { url: string; signature: string }> = {
   "windows-x86_64": {
-    // The NSIS installer bundle from `tauri build`
-    // IMPORTANT: Replace this URL with the actual .nsis.zip asset URL after building
-    url: "https://github.com/salmangraphics839-hue/visionmeta-releases/releases/download/1.2.0/VisionMetadata.Pro_1.2.0_x64-setup.nsis.zip",
-    // IMPORTANT: Paste the contents of the .nsis.zip.sig file here after building
-    signature: "PASTE_YOUR_SIGNATURE_HERE",
+    // The installer from `tauri build`
+    // IMPORTANT: Make sure you upload the setup.exe file to GitHub Releases exactly with this name
+    url: "https://github.com/salmangraphics839-hue/visionmeta-releases/releases/download/1.2.0/VisionMetadata.Pro_1.2.0_x64-setup.exe",
+    // This signature matches VisionMetadata Pro_1.2.0_x64-setup.exe from build
+    signature: "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVUUXg3Ni90UkhlaTB0OUx6b3dQN0RrcEpNajlHN0ZaeklaQUh5LzhlSGxnaWp4dDNaZ3pYMEt4aGlGNnVQRWhvOTRONmR3MUY5aVhOZjMvUE9GRjRrY04yWVBlaWNsemdNPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzc2NzY2NDQ1CWZpbGU6VmlzaW9uTWV0YWRhdGEgUHJvXzEuMi4wX3g2NC1zZXR1cC5leGUKTkpUYTZycElPTlRrOGswL1ZFWW9TdlpndWlPcjF1R3NXbmNkWFhZTEtBNFJXc21wejN6ZnBNWTNMaEtiY0FpSm4wUEJ3T1lyVWZpdHdSN3ZDeHhtQXc9PQo=",
   },
 };
 
