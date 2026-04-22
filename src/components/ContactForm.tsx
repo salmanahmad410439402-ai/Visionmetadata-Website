@@ -58,7 +58,8 @@ const ContactForm = () => {
       });
       
       if (!res.ok) {
-        throw new Error("Failed to send message");
+        const errData = await res.json().catch(() => null);
+        throw new Error(errData?.error || "Failed to send message");
       }
       
       // Track successful form submission
@@ -77,8 +78,8 @@ const ContactForm = () => {
       setTimeout(() => setSuccess(null), 6000);
     } catch (err) {
       analytics.trackError('contact-form-submission', (err as Error).message);
-      setError("✗ Failed to send message. Please try again.");
-      setTimeout(() => setError(null), 4000);
+      setError(`✗ ${(err as Error).message}`);
+      setTimeout(() => setError(null), 6000);
     } finally {
       setLoading(false);
     }
@@ -209,7 +210,7 @@ const ContactForm = () => {
           <AlertCircle className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
           <div>
             <p className="text-sm font-semibold text-red-300">{error}</p>
-            <p className="text-xs text-red-300/70 mt-1">Please check your information and try again.</p>
+            <p className="text-xs text-red-300/70 mt-1">If the issue persists, please contact us via WhatsApp.</p>
           </div>
         </div>
       )}

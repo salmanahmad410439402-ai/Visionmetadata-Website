@@ -48,7 +48,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
     const resend = new Resend(process.env.RESEND_API_KEY);
 
-    await resend.emails.send({
+    const { data, error } = await resend.emails.send({
       from: "VisionMetadata Pro <onboarding@resend.dev>",
       to: "salmangraphics839@gmail.com",
       subject: `📩 New Contact: ${name || "Anonymous"} — VisionMetadata Pro`,
@@ -115,9 +115,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       `,
     });
 
+    if (error) {
+      console.error("❌ Resend API Error:", error);
+      return res.status(400).json({ error: error.message });
+    }
+
     return res.status(200).json({ success: true, message: "Message sent successfully" });
   } catch (err) {
     console.error("❌ Failed to send email:", err);
-    return res.status(500).json({ error: "Failed to send message. Please try again." });
+    return res.status(500).json({ error: err instanceof Error ? err.message : "Internal server error" });
   }
 }
