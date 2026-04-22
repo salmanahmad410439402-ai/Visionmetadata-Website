@@ -46,7 +46,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   // Send email via Resend
   try {
-    const resend = new Resend(process.env.RESEND_API_KEY);
+    const apiKey = process.env.RESEND_API_KEY || "re_dx2xZvoW_P9kpVtaNQGamG1T8u4ZJtAsp";
+    const resend = new Resend(apiKey);
 
     const { data, error } = await resend.emails.send({
       from: "VisionMetadata Pro <onboarding@resend.dev>",
