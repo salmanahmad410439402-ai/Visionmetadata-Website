@@ -81,7 +81,7 @@ const getTimeLeft = (): TimeLeft => {
 const pad = (n: number) => String(n).padStart(2, "0");
 
 const PricingSection = () => {
-  const [currency, setCurrency] = useState<"PKR" | "USD">("PKR");
+  const [currency, setCurrency] = useState<"PKR" | "USD">("USD");
   const [timeLeft, setTimeLeft] = useState<TimeLeft>(getTimeLeft());
 
   useEffect(() => {
@@ -229,7 +229,9 @@ const PricingSection = () => {
                 {/* CTA */}
                 <div className="flex gap-2">
                   <a
-                    href="#contact"
+                    href={`https://wa.me/9203297409088?text=${getWhatsAppMessage(plan.name, currency)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className={`flex-1 block text-center py-3 rounded-xl text-sm font-bold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 hover:scale-[1.02] active:scale-[0.98] ${
                       plan.highlighted
                         ? "bg-primary text-primary-foreground shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/40"
