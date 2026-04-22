@@ -25,7 +25,7 @@ const PLATFORMS: Record<string, { url: string; signature: string }> = {
     // IMPORTANT: Make sure you upload the setup.exe file to GitHub Releases exactly with this name
     url: "https://github.com/salmangraphics839-hue/visionmeta-releases/releases/download/1.2.0/VisionMetadata.Pro_1.2.0_x64-setup.exe",
     // This signature matches VisionMetadata Pro_1.2.0_x64-setup.exe from build
-    signature: "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVUUXg3Ni90UkhlaTB0OUx6b3dQN0RrcEpNajlHN0ZaeklaQUh5LzhlSGxnaWp4dDNaZ3pYMEt4aGlGNnVQRWhvOTRONmR3MUY5aVhOZjMvUE9GRjRrY04yWVBlaWNsemdNPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzc2NzY2NDQ1CWZpbGU6VmlzaW9uTWV0YWRhdGEgUHJvXzEuMi4wX3g2NC1zZXR1cC5leGUKTkpUYTZycElPTlRrOGswL1ZFWW9TdlpndWlPcjF1R3NXbmNkWFhZTEtBNFJXc21wejN6ZnBNWTNMaEtiY0FpSm4wUEJ3T1lyVWZpdHdSN3ZDeHhtQXc9PQo=",
+    signature: "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVUUXg3Ni90UkhlaTF0MWZWbG5SQXJrV1phekdlekdQZHM3dklQYWkvdGhOc05md2pWRFBzNEdIVklsU21aVWZDdlZEN2JsQzZXUFJoSkZHaC9kcUdCemtrMWpnNTVRVEFVPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzc2ODIxNjY4CWZpbGU6VmlzaW9uTWV0YWRhdGEgUHJvXzEuMi4wX3g2NC1zZXR1cC5leGUKL3lzUmh5TFR1c2NMd29sU1FpaU94WkVlMDlNZXBCc0xRZjVqQ0pyM1FEWTArT2dyK1BFUFFQeWhOQVlZVzVhU1JKbFVTYnd0aTVMSEl2biszbm5vQkE9PQo=",
   },
 };
 
