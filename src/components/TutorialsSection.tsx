@@ -261,7 +261,7 @@ const TutorialsSection = () => {
           style={{ background: "linear-gradient(135deg, hsl(190 95% 50% / 0.08) 0%, hsl(220 90% 50% / 0.08) 100%)", borderColor: "hsl(190 95% 50% / 0.2)" }}>
           <h3 className="text-3xl font-bold mb-6">Ready to Get Started?</h3>
           <p className="text-lg mb-10 text-primary/80">Download VisionMetadata Pro and try the workflow.</p>
-          <a href="https://github.com/salmangraphics839-hue/visionmeta-releases/releases/download/1.2.0/VisionMetadata.Pro_1.2.0.zip" target="_blank" rel="noopener noreferrer">
+          <a href="https://github.com/salmangraphics839-hue/visionmeta-releases/releases/download/1.2.0/VisionMetadata.Pro_1.2.0_x64-setup.exe" target="_blank" rel="noopener noreferrer">
             <Button size="lg"
               className="h-16 px-12 text-lg font-bold rounded-2xl btn-shimmer shadow-[0_0_40px_hsl(190_95%_50%/0.35)] hover:shadow-[0_0_56px_hsl(190_95%_50%/0.5)] hover:scale-[1.03] transition-all duration-300">
               <Download className="w-6 h-6 mr-3" />

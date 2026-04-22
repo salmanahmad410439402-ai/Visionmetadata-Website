@@ -70,7 +70,7 @@ const DownloadSection = () => {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 mb-12">
-              <a href="https://github.com/salmangraphics839-hue/visionmeta-releases/releases/download/1.2.0/VisionMetadata.Pro_1.2.0.zip" className="flex-1 sm:flex-none" target="_blank" rel="noopener noreferrer">
+              <a href="https://github.com/salmangraphics839-hue/visionmeta-releases/releases/download/1.2.0/VisionMetadata.Pro_1.2.0_x64-setup.exe" className="flex-1 sm:flex-none" target="_blank" rel="noopener noreferrer">
                 <Button size="lg"
                   className="w-full sm:w-auto h-16 px-10 text-lg font-bold rounded-2xl btn-shimmer shadow-[0_0_40px_hsl(190_95%_50%/0.35)] hover:shadow-[0_0_56px_hsl(190_95%_50%/0.5)] hover:scale-[1.03] transition-all duration-300">
                   <Download className="w-6 h-6 mr-3" />
@@ -217,7 +217,7 @@ const DownloadSection = () => {
           <p className="text-lg mb-8" style={{ color: "hsl(215 20% 75%)" }}>
             Start your 3-day free trial today. No credit card required. Access all features immediately.
           </p>
-          <a href="https://github.com/salmangraphics839-hue/visionmeta-releases/releases/download/1.2.0/VisionMetadata.Pro_1.2.0.zip" target="_blank" rel="noopener noreferrer">
+          <a href="https://github.com/salmangraphics839-hue/visionmeta-releases/releases/download/1.2.0/VisionMetadata.Pro_1.2.0_x64-setup.exe" target="_blank" rel="noopener noreferrer">
             <Button size="lg"
               className="h-16 px-12 text-lg font-bold rounded-2xl btn-shimmer shadow-[0_0_40px_hsl(190_95%_50%/0.35)] hover:shadow-[0_0_56px_hsl(190_95%_50%/0.5)] hover:scale-[1.03] transition-all duration-300">
               <Download className="w-6 h-6 mr-3" />
