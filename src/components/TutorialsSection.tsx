@@ -206,7 +206,7 @@ const TutorialsSection = () => {
         {/* Tutorials Section */}
         <div className="text-center mb-16">
           <div className="reveal inline-flex items-center gap-2 px-4 py-2 rounded-full border mb-8"
-            style={{ background: "hsl(190 95% 50% / 0.08)", borderColor: "hsl(190 95% 50% / 0.2)" }}>
+            style={{ background: "hsl(var(--primary) / 0.08)", borderColor: "hsl(var(--primary) / 0.2)" }}>
             <span className="text-sm font-semibold uppercase tracking-widest text-primary">Step-by-Step Guides</span>
           </div>
           <h2 className="reveal text-3xl sm:text-4xl font-bold text-foreground">
@@ -248,7 +248,7 @@ const TutorialsSection = () => {
           <h2 className="text-3xl font-bold text-center mb-14">Common Questions</h2>
           <div className="grid sm:grid-cols-2 gap-6 max-w-4xl mx-auto">
             {faqs.map(({ q, a }) => (
-              <div key={q} className="reveal rounded-2xl border p-6" style={{ background: 'hsl(220 40% 8%)', borderColor: 'transparent' }}>
+              <div key={q} className="reveal rounded-2xl border p-6 bg-card-primary border-card-primary">
                 <h3 className="font-bold mb-3 text-foreground text-sm">{q}</h3>
                 <p className="text-xs leading-relaxed text-secondary">{a}</p>
               </div>
@@ -258,7 +258,7 @@ const TutorialsSection = () => {
 
         {/* CTA Section */}
         <div className="reveal text-center rounded-3xl border p-12 overflow-hidden mt-12"
-          style={{ background: "linear-gradient(135deg, hsl(190 95% 50% / 0.08) 0%, hsl(220 90% 50% / 0.08) 100%)", borderColor: "hsl(190 95% 50% / 0.2)" }}>
+          style={{ background: "linear-gradient(135deg, hsl(var(--primary) / 0.08) 0%, hsl(220 90% 50% / 0.08) 100%)", borderColor: "hsl(var(--primary) / 0.2)" }}>
           <h3 className="text-3xl font-bold mb-6">Ready to Get Started?</h3>
           <p className="text-lg mb-10 text-primary/80">Download VisionMetadata Pro and try the workflow.</p>
           <a href="https://github.com/salmangraphics839-hue/visionmeta-releases/releases/download/1.2.0/VisionMetadata.Pro_1.2.0_x64-setup.exe" target="_blank" rel="noopener noreferrer">

@@ -152,6 +152,12 @@
   background-size: 40px 40px;
 }
 
+html.light .grid-bg {
+  background-image:
+    linear-gradient(rgba(27,166,221,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(27,166,221,0.06) 1px, transparent 1px);
+}
+
 /* ── Floating glow orbs ──────────────────────────────────────── */
 @keyframes float-slow {
   0%, 100% { transform: translate(-50%, -50%) scale(1);   }
@@ -190,6 +196,13 @@
   background-clip: text;
 }
 
+html.light .text-gradient {
+  background: linear-gradient(135deg, hsl(190 95% 30%), hsl(190 95% 45%));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
 /* ── Step connector line ─────────────────────────────────────── */
 .step-connector {
   position: absolute;
@@ -203,6 +216,10 @@
 /* ── Muted foreground boost — fixes faint text ───────────────── */
 .text-muted-foreground {
   color: hsl(215 20% 65%) !important;
+}
+
+html.light .text-muted-foreground {
+  color: hsl(215 20% 40%) !important;
 }
 
 /* ── Badge pulse ring ────────────────────────────────────────── */

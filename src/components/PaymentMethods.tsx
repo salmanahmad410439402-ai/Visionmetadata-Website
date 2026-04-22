@@ -60,8 +60,7 @@ const PaymentMethods = () => {
         
         {/* Header */}
         <div className="text-center mb-16">
-          <div className="reveal inline-flex items-center gap-2 px-4 py-2 rounded-full border mb-6"
-            style={{ background: "hsl(190 95% 50% / 0.08)", borderColor: "hsl(190 95% 50% / 0.2)" }}>
+          <div className="reveal inline-flex items-center gap-2 px-4 py-2 rounded-full border mb-6 accent-cyan-light accent-cyan-border-soft">
             <CreditCard className="w-4 h-4 text-primary" />
             <span className="text-sm font-semibold uppercase tracking-widest text-primary">Payment Methods</span>
           </div>
@@ -78,8 +77,7 @@ const PaymentMethods = () => {
         {/* Payment Cards Grid */}
         <div className="reveal reveal-delay-3 grid md:grid-cols-2 gap-6 mb-12">
           {methods.map(({ icon: Icon, name, desc, details, color }, idx) => (
-            <div key={name} className={`reveal reveal-delay-${(idx % 4) + 1} rounded-2xl border p-7 overflow-hidden group hover:border-primary/50 transition-all duration-300 bg-card-primary border-card-primary`}
-              style={{ background: `linear-gradient(135deg, ${color.split(" ")[1]}, ${color.split(" ")[3]}) hsl(220 40% 8%)` }}>
+            <div key={name} className={`reveal reveal-delay-${(idx % 4) + 1} rounded-2xl border p-7 overflow-hidden group hover:border-primary/50 transition-all duration-300 bg-card-primary border-card-primary`}>
               
               <div className="flex items-center gap-4 mb-6">
                 <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 bg-accent-cyan-subtle">

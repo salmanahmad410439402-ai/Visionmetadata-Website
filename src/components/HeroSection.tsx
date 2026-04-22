@@ -22,10 +22,8 @@ const HeroSection = () => {
       className="relative min-h-screen flex items-center justify-center pt-16 overflow-hidden grid-bg"
     >
       {/* Ambient orbs */}
-      <div className="orb-1 absolute top-1/2 left-1/2 w-[650px] h-[650px] rounded-full pointer-events-none"
-        style={{ background: "radial-gradient(circle, hsl(190 95% 50% / 0.07) 0%, transparent 70%)" }} />
-      <div className="orb-2 absolute top-1/4 right-1/4 w-[350px] h-[350px] rounded-full pointer-events-none"
-        style={{ background: "radial-gradient(circle, hsl(190 95% 50% / 0.04) 0%, transparent 70%)" }} />
+      <div className="orb-1 absolute top-1/2 left-1/2 w-[650px] h-[650px] rounded-full pointer-events-none bg-[radial-gradient(circle,_hsl(190_95%_50%/0.07)_0%,_transparent_70%)]" />
+      <div className="orb-2 absolute top-1/4 right-1/4 w-[350px] h-[350px] rounded-full pointer-events-none bg-[radial-gradient(circle,_hsl(190_95%_50%/0.04)_0%,_transparent_70%)]" />
 
       <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">
 
@@ -76,17 +74,17 @@ const HeroSection = () => {
 
           {/* Friction removers */}
           <div className="flex flex-wrap justify-center items-center gap-x-4 gap-y-1 mt-1">
-            <span className="flex items-center gap-1 text-xs" style={{ color: "hsl(215 20% 58%)" }}>
+            <span className="flex items-center gap-1 text-xs text-quaternary">
               <Shield className="w-3 h-3 text-primary/60" />
               No credit card needed
             </span>
-            <span className="text-xs" style={{ color: "hsl(215 20% 38%)" }}>·</span>
-            <span className="flex items-center gap-1 text-xs" style={{ color: "hsl(215 20% 58%)" }}>
+            <span className="text-xs text-minimal-low">·</span>
+            <span className="flex items-center gap-1 text-xs text-quaternary">
               <Clock className="w-3 h-3 text-primary/60" />
               Works with free AI keys
             </span>
-            <span className="text-xs" style={{ color: "hsl(215 20% 38%)" }}>·</span>
-            <span className="text-xs" style={{ color: "hsl(215 20% 58%)" }}>
+            <span className="text-xs text-minimal-low">·</span>
+            <span className="text-xs text-quaternary">
               Windows 10 / 11
             </span>
           </div>
@@ -96,10 +94,10 @@ const HeroSection = () => {
         <div className="reveal reveal-delay-5 mt-10 flex flex-col items-center gap-2">
           <div className="flex items-center gap-1">
             {[...Array(5)].map((_, i) => (
-              <Star key={i} className="w-4 h-4 fill-current" style={{ color: "hsl(190 95% 55%)" }} />
+              <Star key={i} className="w-4 h-4 fill-current text-primary" />
             ))}
           </div>
-          <p className="text-xs font-semibold uppercase tracking-wide" style={{ color: "hsl(215 20% 60%)" }}>
+          <p className="text-xs font-semibold uppercase tracking-wide text-quaternary">
             Trusted by 200+ Stock Contributors Worldwide
           </p>
         </div>
@@ -117,7 +115,7 @@ const HeroSection = () => {
             "Supports JPG · PNG · EPS · AI · SVG · MP4 · MOV",
             "Confidence scores + risk analysis per asset",
           ].map((feat) => (
-            <div key={feat} className="flex items-start gap-2 text-xs" style={{ color: "hsl(215 20% 68%)" }}>
+            <div key={feat} className="flex items-start gap-2 text-xs text-tertiary">
               <Check className="w-3.5 h-3.5 text-primary flex-shrink-0 mt-0.5" />
               <span>{feat}</span>
             </div>
@@ -126,10 +124,9 @@ const HeroSection = () => {
 
         {/* Platform strip */}
         <div className="reveal reveal-delay-6 mt-10 flex flex-wrap justify-center items-center gap-5">
-          <span className="text-xs uppercase tracking-widest" style={{ color: "hsl(215 20% 35%)" }}>Works with</span>
+          <span className="text-xs uppercase tracking-widest text-minimal-low">Works with</span>
           {["Adobe Stock", "Shutterstock", "Freepik", "Dreamstime", "123RF", "Vecteezy"].map((name) => (
-            <span key={name} className="text-xs uppercase tracking-wider font-semibold transition-colors duration-200 hover:text-primary cursor-default"
-              style={{ color: "hsl(215 20% 42%)" }}>
+            <span key={name} className="text-xs uppercase tracking-wider font-semibold transition-colors duration-200 hover:text-primary cursor-default text-minimal">
               {name}
             </span>
           ))}

@@ -48,8 +48,7 @@ const features = [
 ];
 
 const SectionLabel = ({ text }: { text: string }) => (
-  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border text-xs font-semibold uppercase tracking-widest mb-4"
-    style={{ background: "hsl(190 95% 50% / 0.07)", borderColor: "hsl(190 95% 50% / 0.2)", color: "hsl(190 95% 65%)" }}>
+  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border text-xs font-semibold uppercase tracking-widest mb-4 accent-cyan-light accent-cyan-border-soft text-accent">
     {text}
   </div>
 );
@@ -96,7 +95,7 @@ const FeaturesGrid = () => {
             <h2 className="reveal reveal-delay-1 text-3xl sm:text-4xl font-bold text-foreground mb-4">
               Built specifically for stock contributors
             </h2>
-            <p className="reveal reveal-delay-2 max-w-xl mx-auto" style={{ color: "hsl(215 20% 65%)" }}>
+            <p className="reveal reveal-delay-2 max-w-xl mx-auto text-tertiary">
               Every feature is designed around the real workflow of a stock media producer.
             </p>
           </div>
@@ -104,22 +103,19 @@ const FeaturesGrid = () => {
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {features.map(({ icon: Icon, title, desc }, i) => (
               <div key={title}
-                className={`reveal reveal-delay-${Math.min(i % 4 + 1, 6)} card-lift card-glow rounded-2xl border p-6 hover:border-primary/50 transition-all duration-300`}
-                style={{ background: "hsl(220 40% 8%)", borderColor: "hsl(220 30% 16%)" }}>
+                className={`reveal reveal-delay-${Math.min(i % 4 + 1, 6)} card-lift card-glow rounded-2xl border p-6 hover:border-primary/50 transition-all duration-300 bg-card-primary border-card-primary`}>
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
-                    style={{ background: "hsl(190 95% 50% / 0.1)" }}>
+                  <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 accent-cyan-light">
                     <Icon className="w-4 h-4 text-primary" />
                   </div>
                   <h3 className="text-sm font-bold text-foreground">{title}</h3>
                 </div>
-                <p className="text-xs leading-relaxed" style={{ color: "hsl(215 20% 65%)" }}>{desc}</p>
+                <p className="text-xs leading-relaxed text-tertiary">{desc}</p>
               </div>
             ))}
           </div>
 
-          <div className="reveal mt-8 rounded-2xl border p-6"
-            style={{ background: "hsl(190 95% 50% / 0.04)", borderColor: "hsl(190 95% 50% / 0.15)" }}>
+          <div className="reveal mt-8 rounded-2xl border p-6 accent-cyan-ultra-light accent-cyan-border-soft">
             <p className="text-xs font-semibold text-primary text-center uppercase tracking-widest mb-5">
               100+ Supported File Formats
             </p>
@@ -136,10 +132,9 @@ const FeaturesGrid = () => {
                 { label: "MOV",        cat: "Video"  },
                 { label: "WebM",       cat: "Video"  },
               ].map(({ label, cat }) => (
-                <div key={label} className="flex flex-col items-center px-4 py-2.5 rounded-xl border hover:border-primary/50 transition-all"
-                  style={{ background: "hsl(220 40% 8%)", borderColor: "hsl(220 30% 16%)" }}>
+                <div key={label} className="flex flex-col items-center px-4 py-2.5 rounded-xl border hover:border-primary/50 transition-all bg-card-primary border-card-primary">
                   <span className="text-xs font-bold text-foreground">{label}</span>
-                  <span className="text-[10px]" style={{ color: "hsl(215 20% 55%)" }}>{cat}</span>
+                  <span className="text-[10px] text-minimal">{cat}</span>
                 </div>
               ))}
             </div>

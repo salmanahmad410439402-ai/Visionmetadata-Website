@@ -249,8 +249,32 @@ html.light {
   color: hsl(190 95% 65%);
 }
 
+html.light .text-info {
+  color: hsl(190 95% 30%);
+}
+
 .bg-info-light {
   background-color: hsl(190 95% 50% / 0.1);
+}
+
+/* ── LIGHT THEME ACCENT OVERRIDES ── */
+
+html.light .accent-cyan-light {
+  background-color: hsl(190 95% 50% / 0.1);
+}
+
+html.light .accent-cyan-subtle {
+  background-color: hsl(190 95% 50% / 0.15);
+}
+
+html.light .accent-cyan-ultra-light {
+  background-color: hsl(190 95% 50% / 0.06);
+}
+
+html.light .card-glow:hover {
+  border-color: hsl(190 95% 40% / 0.4);
+  box-shadow: 0 0 0 1px hsl(190 95% 40% / 0.15),
+              0 8px 32px hsl(190 95% 40% / 0.1);
 }
 
 /* ── SHADOW UTILITIES ── */

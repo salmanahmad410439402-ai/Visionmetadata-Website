@@ -10,8 +10,7 @@ const VideoDemoSection = () => {
         <section ref={ref as React.RefObject<HTMLElement>} className="pt-12 pb-16 px-6">
             <div className="max-w-4xl mx-auto">
                 <div className="text-center mb-12">
-                    <div className="reveal inline-flex items-center gap-2 px-3 py-1 rounded-full border text-xs font-semibold uppercase tracking-widest mb-4"
-                        style={{ background: "hsl(190 95% 50% / 0.07)", borderColor: "hsl(190 95% 50% / 0.2)", color: "hsl(190 95% 65%)" }}>
+                    <div className="reveal inline-flex items-center gap-2 px-3 py-1 rounded-full border text-xs font-semibold uppercase tracking-widest mb-4 accent-cyan-light accent-cyan-border-soft text-accent">
                         Live Demo
                     </div>
                     <h2 className="reveal reveal-delay-1 text-3xl sm:text-4xl font-bold text-foreground mb-0">
@@ -26,7 +25,6 @@ const VideoDemoSection = () => {
                         aspectRatio: "16 / 9",
                         border: "1.5px solid hsl(190 95% 50% / 0.35)",
                         boxShadow: "0 0 40px hsl(190 95% 50% / 0.15)",
-                        backgroundColor: "#0a467b",
                     }}
                 >
                     {isPlaying ? (
@@ -35,26 +33,22 @@ const VideoDemoSection = () => {
                             style={{ backgroundColor: "#000" }} />
                     ) : (
                         <button onClick={() => setIsPlaying(true)}
-                            className="absolute inset-0 w-full h-full flex flex-col items-center justify-center gap-4 cursor-pointer group transition-all duration-300"
-                            style={{ backgroundColor: "hsl(220 47% 8%)" }}
+                            className="absolute inset-0 w-full h-full flex flex-col items-center justify-center gap-4 cursor-pointer group transition-all duration-300 bg-card-primary"
                             aria-label="Play demo video">
                             <div className="relative">
-                                <div className="absolute inset-0 rounded-full opacity-30 group-hover:opacity-50 transition-opacity"
-                                    style={{ background: "hsl(190 95% 50% / 0.2)", filter: "blur(20px)", transform: "scale(1.5)" }} />
-                                <div className="relative w-20 h-20 rounded-full border-2 flex items-center justify-center group-hover:scale-110 transition-transform duration-300"
-                                    style={{ background: "hsl(190 95% 50% / 0.15)", borderColor: "hsl(190 95% 50% / 0.5)" }}>
+                                <div className="absolute inset-0 rounded-full opacity-30 group-hover:opacity-50 transition-opacity glow-cyan-md" />
+                                <div className="relative w-20 h-20 rounded-full border-2 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 bg-accent-cyan-subtle border-accent-cyan">
                                     <Play className="w-8 h-8 text-white ml-1" />
                                 </div>
                             </div>
-                            <span className="text-xs sm:text-sm uppercase tracking-widest font-semibold"
-                                style={{ color: "hsl(215 20% 60%)" }}>
+                            <span className="text-xs sm:text-sm uppercase tracking-widest font-semibold text-quaternary">
                                 Watch a Real Metadata Workflow
                             </span>
                         </button>
                     )}
                 </div>
 
-                <p className="text-center text-xs mt-5" style={{ color: "hsl(215 20% 50%)" }}>
+                <p className="text-center text-xs mt-5 text-minimal">
                     ✨ Quick workflow guide · Used daily by professional stock contributors
                 </p>
             </div>

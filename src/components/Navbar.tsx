@@ -43,7 +43,7 @@ const Navbar = () => {
           {navLinks.map((link) => (
             <NavLink key={link.to} to={link.to}
               className="text-sm font-medium transition-colors duration-200 relative group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-2 py-1"
-              style={({ isActive }) => ({ color: isActive ? "hsl(190 95% 60%)" : "hsl(215 20% 65%)" })}>
+              style={({ isActive }) => ({ color: isActive ? "hsl(var(--primary))" : "var(--text-tertiary)" })}>
               {link.label}
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary group-hover:w-full transition-all duration-300" />
             </NavLink>
@@ -94,7 +94,7 @@ const Navbar = () => {
           {navLinks.map((link) => (
             <NavLink key={link.to} to={link.to} onClick={() => setMobileOpen(false)}
               className="block py-3 px-2 text-sm font-medium transition-colors rounded hover:bg-primary/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-              style={({ isActive }) => ({ color: isActive ? "hsl(190 95% 60%)" : "hsl(215 20% 65%)" })}>
+              style={({ isActive }) => ({ color: isActive ? "hsl(var(--primary))" : "var(--text-tertiary)" })}>
               {link.label}
             </NavLink>
           ))}

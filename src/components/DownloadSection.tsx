@@ -101,18 +101,18 @@ const DownloadSection = () => {
             </div>
 
             {/* Stats */}
-            <div className="flex gap-8 mt-16 pt-12 border-t" style={{ borderColor: "hsl(220 30% 20%)" }}>
+            <div className="flex gap-8 mt-16 pt-12 border-t border-card-secondary">
               <div>
                 <p className="text-2xl font-bold text-primary">50K+</p>
-                <p className="text-xs" style={{ color: "hsl(215 20% 60%)" }}>Active Users</p>
+                <p className="text-xs text-quaternary">Active Users</p>
               </div>
               <div>
                 <p className="text-2xl font-bold text-primary">⭐ 4.8</p>
-                <p className="text-xs" style={{ color: "hsl(215 20% 60%)" }}>Average Rating</p>
+                <p className="text-xs text-quaternary">Average Rating</p>
               </div>
               <div>
                 <p className="text-2xl font-bold text-primary">1M+</p>
-                <p className="text-xs" style={{ color: "hsl(215 20% 60%)" }}>Files Processed</p>
+                <p className="text-xs text-quaternary">Files Processed</p>
               </div>
             </div>
           </div>
@@ -123,14 +123,13 @@ const DownloadSection = () => {
               <div className="absolute inset-0 rounded-3xl blur-3xl opacity-20" 
                 style={{ background: "linear-gradient(135deg, hsl(190 95% 50%) 0%, hsl(220 90% 50%) 100%)" }} />
               
-              <div className="relative rounded-3xl border p-8 overflow-hidden"
-                style={{ background: "hsl(220 40% 8%)", borderColor: "hsl(190 95% 50% / 0.3)" }}>
+              <div className="relative rounded-3xl border p-8 overflow-hidden bg-card-primary border-primary/30">
                 <div className="grid grid-cols-2 gap-4">
                   {features.map(({ icon: Icon, title, desc }) => (
-                    <div key={title} className="p-4 rounded-xl" style={{ background: "hsl(220 40% 12%)" }}>
+                    <div key={title} className="p-4 rounded-xl bg-card-secondary">
                       <Icon className="w-8 h-8 text-primary mb-3" />
                       <p className="font-semibold text-sm mb-1">{title}</p>
-                      <p className="text-xs" style={{ color: "hsl(215 20% 55%)" }}>{desc}</p>
+                      <p className="text-xs text-minimal">{desc}</p>
                     </div>
                   ))}
                 </div>
@@ -142,11 +141,10 @@ const DownloadSection = () => {
         {/* Features Grid - Mobile optimized */}
         <div className="reveal grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-32">
           {features.map(({ icon: Icon, title, desc }) => (
-            <div key={title} className="reveal rounded-2xl border p-6 hover:border-primary/50 transition-all duration-300"
-              style={{ background: "hsl(220 40% 8%)", borderColor: "hsl(220 30% 16%)" }}>
+            <div key={title} className="reveal rounded-2xl border p-6 hover:border-primary/50 transition-all duration-300 bg-card-primary border-card-primary">
               <Icon className="w-10 h-10 text-primary mb-4" />
               <h3 className="font-bold mb-2">{title}</h3>
-              <p className="text-sm" style={{ color: "hsl(215 20% 60%)" }}>{desc}</p>
+              <p className="text-sm text-quaternary">{desc}</p>
             </div>
           ))}
         </div>
@@ -159,17 +157,15 @@ const DownloadSection = () => {
               <div key={num} className="relative">
                 {/* Connection line */}
                 {idx < steps.length - 1 && (
-                  <div className="hidden lg:block absolute top-12 left-[60%] w-[calc(100%+1rem)] h-0.5" 
-                    style={{ background: "hsl(190 95% 50% / 0.2)" }} />
+                  <div className="hidden lg:block absolute top-12 left-[60%] w-[calc(100%+1rem)] h-0.5 bg-primary/20" />
                 )}
                 
                 <div className="relative z-10">
-                  <div className="w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg mb-4" 
-                    style={{ background: "hsl(190 95% 50% / 0.15)", border: "2px solid hsl(190 95% 50% / 0.5)", color: "hsl(190 95% 55%)" }}>
+                  <div className="w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg mb-4 bg-primary/15 border-2 border-primary/50 text-primary">
                     {num}
                   </div>
                   <h4 className="font-bold mb-2">{title}</h4>
-                  <p className="text-sm" style={{ color: "hsl(215 20% 60%)" }}>{desc}</p>
+                  <p className="text-sm text-quaternary">{desc}</p>
                 </div>
               </div>
             ))}
@@ -177,19 +173,17 @@ const DownloadSection = () => {
         </div>
 
         {/* System Requirements */}
-        <div className="reveal rounded-3xl border p-10 mb-32 overflow-hidden"
-          style={{ background: "hsl(220 40% 8%)", borderColor: "hsl(220 30% 16%)" }}>
+        <div className="reveal rounded-3xl border p-10 mb-32 overflow-hidden bg-card-primary border-card-primary">
           <h3 className="text-2xl font-bold mb-8">System Requirements</h3>
           <div className="grid sm:grid-cols-3 gap-8">
             {systemReqs.map(({ icon: Icon, label, value }) => (
               <div key={label} className="flex items-start gap-4">
-                <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
-                  style={{ background: "hsl(190 95% 50% / 0.1)", color: "hsl(190 95% 55%)" }}>
+                <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 accent-cyan-light text-primary">
                   <Icon className="w-6 h-6" />
                 </div>
                 <div>
                   <p className="font-bold text-sm mb-1">{label}</p>
-                  <p className="text-sm" style={{ color: "hsl(215 20% 60%)" }}>{value}</p>
+                  <p className="text-sm text-quaternary">{value}</p>
                 </div>
               </div>
             ))}
@@ -201,20 +195,18 @@ const DownloadSection = () => {
           <h3 className="text-3xl font-bold text-center mb-14">Frequently Asked Questions</h3>
           <div className="grid sm:grid-cols-2 gap-6 max-w-3xl mx-auto">
             {faqs.map(({ q, a }) => (
-              <div key={q} className="rounded-2xl border p-6"
-                style={{ background: "hsl(220 40% 8%)", borderColor: "hsl(220 30% 16%)" }}>
+              <div key={q} className="rounded-2xl border p-6 bg-card-primary border-card-primary">
                 <h4 className="font-bold mb-3 text-foreground">{q}</h4>
-                <p className="text-sm" style={{ color: "hsl(215 20% 60%)" }}>{a}</p>
+                <p className="text-sm text-quaternary">{a}</p>
               </div>
             ))}
           </div>
         </div>
 
         {/* Final CTA */}
-        <div className="reveal text-center rounded-3xl border p-12 overflow-hidden mt-12"
-          style={{ background: "linear-gradient(135deg, hsl(190 95% 50% / 0.08) 0%, hsl(220 90% 50% / 0.08) 100%)", borderColor: "hsl(190 95% 50% / 0.2)" }}>
+        <div className="reveal text-center rounded-3xl border p-12 overflow-hidden mt-12 accent-cyan-ultra-light accent-cyan-border-soft">
           <h3 className="text-3xl font-bold mb-4">Ready to Transform Your Workflow?</h3>
-          <p className="text-lg mb-8" style={{ color: "hsl(215 20% 75%)" }}>
+          <p className="text-lg mb-8 text-secondary">
             Start your 3-day free trial today. No credit card required. Access all features immediately.
           </p>
           <a href="https://github.com/salmangraphics839-hue/visionmeta-releases/releases/download/1.2.0/VisionMetadata.Pro_1.2.0_x64-setup.exe" target="_blank" rel="noopener noreferrer">

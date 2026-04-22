@@ -61,22 +61,20 @@ const WhyVisionMeta = () => {
         {/* Core Capabilities Grid */}
         <div className="mb-32">
           <div className="text-center mb-16">
-            <div className="reveal inline-flex items-center gap-2 px-3 py-1 rounded-full border text-xs font-semibold uppercase tracking-widest mb-4"
-              style={{ background: "hsl(190 95% 50% / 0.07)", borderColor: "hsl(190 95% 50% / 0.2)", color: "hsl(190 95% 65%)" }}>
+            <div className="reveal inline-flex items-center gap-2 px-3 py-1 rounded-full border text-xs font-semibold uppercase tracking-widest mb-4 accent-cyan-light accent-cyan-border-soft text-accent">
               Powerful Features
             </div>
             <h2 className="reveal reveal-delay-1 text-4xl sm:text-5xl font-bold text-foreground mb-4">
               Built for Professional Metadata
             </h2>
-            <p className="reveal reveal-delay-2 max-w-2xl mx-auto text-lg" style={{ color: "hsl(215 20% 65%)" }}>
+            <p className="reveal reveal-delay-2 max-w-2xl mx-auto text-lg text-tertiary">
               Everything you need to generate SEO-optimized metadata at scale, from single assets to 500+ file batches.
             </p>
           </div>
 
           <div className="reveal reveal-delay-3 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {coreCapabilities.map(({ icon: Icon, title, desc }) => (
-              <div key={title} className="reveal rounded-2xl border p-6 hover:border-primary/50 transition-all duration-300"
-                style={{ background: "hsl(220 40% 8%)", borderColor: "hsl(220 30% 16%)" }}>
+              <div key={title} className="reveal rounded-2xl border p-6 hover:border-primary/50 transition-all duration-300 bg-card-primary border-card-primary">
                 <Icon className="w-10 h-10 text-primary mb-4" />
                 <h3 className="font-bold text-lg mb-2">{title}</h3>
                 <p className="text-sm text-secondary">{desc}</p>
