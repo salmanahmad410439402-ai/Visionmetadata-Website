@@ -106,8 +106,8 @@ const ContactForm = () => {
             onChange={(e) => setName(e.target.value)}
             onBlur={() => setTouched({ ...touched, name: true })}
             placeholder="Full name"
-            className={`w-full px-4 py-3 rounded-lg border transition-all duration-200 text-foreground placeholder-foreground/40 focus:outline-none focus:ring-2 bg-card-secondary ${
-              nameError ? "border-red-500/50 focus:ring-red-500/50" : "border-card-secondary focus:ring-primary focus:border-primary"
+            className={`w-full px-4 py-3 rounded-lg border transition-all duration-200 text-foreground placeholder-foreground/40 focus:outline-none focus:ring-2 bg-background ${
+              nameError ? "border-red-500/50 focus:ring-red-500/50" : "border-card-primary focus:ring-primary focus:border-primary"
             }`}
           />
           {nameError && (
@@ -132,8 +132,8 @@ const ContactForm = () => {
             onChange={(e) => setEmail(e.target.value)}
             onBlur={() => setTouched({ ...touched, email: true })}
             placeholder="your@email.com"
-            className={`w-full px-4 py-3 rounded-lg border transition-all duration-200 text-foreground placeholder-foreground/40 focus:outline-none focus:ring-2 bg-card-secondary ${
-              emailError ? "border-red-500/50 focus:ring-red-500/50" : "border-card-secondary focus:ring-primary focus:border-primary"
+            className={`w-full px-4 py-3 rounded-lg border transition-all duration-200 text-foreground placeholder-foreground/40 focus:outline-none focus:ring-2 bg-background ${
+              emailError ? "border-red-500/50 focus:ring-red-500/50" : "border-card-primary focus:ring-primary focus:border-primary"
             }`}
           />
           {emailError && (
@@ -157,8 +157,8 @@ const ContactForm = () => {
             onChange={(e) => setMessage(e.target.value)}
             onBlur={() => setTouched({ ...touched, message: true })}
             placeholder="Tell us about your inquiry, feature request, or how we can help..."
-            className={`w-full px-4 py-3 rounded-lg border transition-all duration-200 text-foreground placeholder-foreground/40 focus:outline-none focus:ring-2 bg-card-secondary resize-none ${
-              messageError ? "border-red-500/50 focus:ring-red-500/50" : "border-card-secondary focus:ring-primary focus:border-primary"
+            className={`w-full px-4 py-3 rounded-lg border transition-all duration-200 text-foreground placeholder-foreground/40 focus:outline-none focus:ring-2 bg-background resize-none ${
+              messageError ? "border-red-500/50 focus:ring-red-500/50" : "border-card-primary focus:ring-primary focus:border-primary"
             }`}
             rows={5}
           />
