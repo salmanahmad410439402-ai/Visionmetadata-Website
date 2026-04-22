@@ -55,7 +55,7 @@ const HeroSection = () => {
         <div className="reveal reveal-delay-3 flex flex-wrap justify-center gap-2 mb-10">
           {[
             { icon: Globe, label: "Cloud AI — Gemini, GPT-4o, Groq, Mistral…" },
-            { icon: Cpu,   label: "100% Offline via Ollama" },
+            { icon: Cpu,   label: "Smart API Rotation System" },
             { icon: Zap,   label: "Auto-Fallback Mode" },
           ].map(({ icon: Icon, label }) => (
             <div key={label} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-medium accent-cyan-light accent-cyan-border text-accent-bright">
@@ -108,8 +108,8 @@ const HeroSection = () => {
         <div className="reveal reveal-delay-5 mt-10 grid sm:grid-cols-2 md:grid-cols-3 gap-2.5 max-w-3xl mx-auto text-left">
           {[
             "Bulk batch processing — all assets at once",
-            "6 AI providers: Gemini, GPT-4o, Groq, Mistral, OpenRouter, Ollama",
-            "Works 100% offline with local Ollama models",
+            "5 AI providers: Gemini, GPT-4o, Groq, Mistral, OpenRouter",
+            "Automatic API key rotation and rate limit protection",
             "Embeds metadata directly into your files automatically",
             "Platform-ready CSV export for 6 stock sites",
             "Trademark sniffer removes brand names automatically",

@@ -8,7 +8,7 @@ const testimonials = [
     initial: "A",
   },
   {
-    quote: "The offline Ollama mode is a game-changer for me — I'm on a slow connection in Pakistan and cloud APIs were frustrating. Now I run everything locally and the quality is still great.",
+    quote: "The API rate limit protection is a game-changer for me — I process huge folders and other tools would always crash. This handles API rotation perfectly without dropping any assets.",
     name: "Sara M.",
     role: "Shutterstock & Freepik Contributor",
     initial: "S",

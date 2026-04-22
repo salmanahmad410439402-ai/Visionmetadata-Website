@@ -29,9 +29,9 @@ const steps = [
 ];
 
 const features = [
-  { icon: Cpu,           title: "Multi-Provider AI",     desc: "Use Gemini, GPT-4o, Groq (Llama 4), Mistral, or local Ollama. Add unlimited API keys and run multiple AI providers in parallel." },
-  { icon: Shield,        title: "Complete Offline Mode",  desc: "No internet required with local AI via Ollama. Run vision models entirely on your machine. Zero data leaves your PC." },
-  { icon: Sparkles,      title: "Smart Processing Modes", desc: "Three options: Cloud-only for speed, Offline-only for privacy, or Auto mode that tries cloud first and falls back to local." },
+  { icon: Cpu,           title: "Multi-Provider AI",     desc: "Use Gemini, GPT-4o, Groq (Llama 4), OpenRouter, or Mistral. Add unlimited API keys and run multiple AI providers in parallel." },
+  { icon: Shield,        title: "Rate Limit Protection",  desc: "Automatically rotates through your API keys and providers when limits are hit. Never stop processing because of a single exhausted key." },
+  { icon: Sparkles,      title: "Smart Parallel Queueing", desc: "Intelligent API queueing ensures optimal speed and parallel processing. Maximize your processing throughput with multiple API keys." },
   { icon: BarChart3,     title: "Batch Processing at Scale", desc: "Process 100+ to 500+ assets in a single batch. Parallel workers with live progress, auto-retry on failures, and cancellation support." },
   { icon: AlertTriangle, title: "Trademark & Brand Sniffer", desc: "AI-powered system detects 100+ brand names and trademarked terms. Auto-removes them and replaces with safe generic alternatives." },
   { icon: Tag,           title: "Series & Event Context",  desc: "Mark assets as a series to auto-append Part 01/02/03 sequences. Use event context to theme all metadata around a specific event or collection." },

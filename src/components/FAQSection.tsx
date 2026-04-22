@@ -20,11 +20,11 @@ const faqs = [
     },
     {
         question: "Which AI providers are supported?",
-        answer: "VisionMetadata Pro supports 6 AI providers: Google Gemini (Flash & Pro), OpenAI GPT-4o, Groq (Llama 4 Scout), Mistral AI, OpenRouter (300+ models including free ones), and local Ollama models. You can add multiple API keys and the system automatically rotates between them when rate limits are hit.",
+        answer: "VisionMetadata Pro supports 5 AI providers: Google Gemini (Flash & Pro), OpenAI GPT-4o, Groq (Llama 4 Scout), Mistral AI, and OpenRouter (300+ models including free ones). You can add multiple API keys and the system automatically rotates between them when rate limits are hit.",
     },
     {
-        question: "Can I use VisionMetadata Pro without an internet connection?",
-        answer: "Yes. Switch to 'Ollama Only' mode in Settings to run entirely offline using local vision models on your PC. The software will process files locally without sending any data to the cloud. For best results on most PCs, we recommend llava:7b which requires around 5 GB of RAM.",
+        question: "Are there any hard limits on how many files I can process at once?",
+        answer: "No, there are no artificial limits. You can drag and drop folders containing hundreds or thousands of files. The speed of processing depends entirely on your API providers and how many API keys you have added. VisionMetadata Pro handles the queueing smoothly.",
     },
     {
         question: "What happens when my API key hits a rate limit?",
@@ -52,7 +52,7 @@ const faqs = [
     },
     {
         question: "How does the licensing work?",
-        answer: "VisionMetadata Pro is available in four plans: 1 Month, 3 Months, 6 Months, and 1 Year. You purchase a license key for your chosen duration — when it expires you can renew at any time. The AI generation uses your own API keys (which have their own free tiers — Gemini offers a generous free quota) or Ollama locally. You are never billed per generation by VisionMetadata Pro.",
+        answer: "VisionMetadata Pro is available in four plans: 1 Month, 3 Months, 6 Months, and 1 Year. You purchase a license key for your chosen duration — when it expires you can renew at any time. The AI generation uses your own API keys (which have their own free tiers — Gemini offers a generous free quota). You are never billed per generation by VisionMetadata Pro.",
     },
 ];
 

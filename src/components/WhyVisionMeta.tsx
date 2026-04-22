@@ -23,7 +23,7 @@ const coreCapabilities = [
   {
     icon: Brain,
     title: "Multi-AI Support",
-    desc: "Connect Gemini, GPT-4, Groq, Mistral, or run locally with Ollama. Use multiple providers simultaneously.",
+    desc: "Connect Gemini, GPT-4, Groq, OpenRouter, or Mistral. Use multiple providers simultaneously.",
   },
   {
     icon: FileStack,
