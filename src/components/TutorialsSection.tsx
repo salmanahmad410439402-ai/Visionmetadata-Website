@@ -30,9 +30,9 @@ const tutorials = [
   },
   {
     num: "04",
-    icon: Settings,
-    title: "Bulk Processing & Export",
-    desc: "Process 100+ files in one batch. Export ready-to-upload CSVs for all major stock platforms.",
+    icon: Upload,
+    title: "Upload & Watch the Magic",
+    desc: "Upload the exported ZIP file to Adobe Stock and watch the magic. VisionMetadata Pro embeds metadata directly into your files.",
     duration: "5:40",
     videoFile: "demo4.mp4",
   },
