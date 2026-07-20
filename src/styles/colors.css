@@ -1,0 +1,315 @@
+/* ═══════════════════════════════════════════════════════════════
+   VISIONMETADATA PRO - STANDARDIZED COLOR CLASSES
+   Replaces scattered inline HSL values for consistency & maintainability
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── CSS COLOR VARIABLES ── */
+:root {
+  /* Dark theme (default) */
+  --text-primary: hsl(243 75% 75%);
+  --text-secondary: hsl(210 40% 85%);
+  --text-tertiary: hsl(210 40% 70%);
+  --text-quaternary: hsl(210 40% 60%);
+  --text-minimal: hsl(210 40% 50%);
+  --text-minimal-low: hsl(210 40% 40%);
+  --text-accent: hsl(160 84% 45%);
+  --text-accent-bright: hsl(160 84% 55%);
+  
+  --bg-card-primary: hsl(222 47% 8%);
+  --bg-card-secondary: hsl(222 47% 12%);
+  
+  --border-card-primary: hsl(215 27% 16%);
+  --border-card-secondary: hsl(215 27% 20%);
+  --border-muted: hsl(215 27% 14%);
+  
+  --bg-body: #0f172a;
+  --color-foreground: #f8fafc;
+  
+  color-scheme: dark;
+}
+
+/* Light theme */
+html.light {
+  --text-primary: hsl(243 75% 45%);
+  --text-secondary: hsl(222 47% 30%);
+  --text-tertiary: hsl(222 47% 40%);
+  --text-quaternary: hsl(222 47% 50%);
+  --text-minimal: hsl(222 47% 60%);
+  --text-minimal-low: hsl(222 47% 70%);
+  --text-accent: hsl(160 84% 35%);
+  --text-accent-bright: hsl(160 84% 45%);
+  
+  --bg-card-primary: hsl(210 40% 98%);
+  --bg-card-secondary: hsl(210 40% 95%);
+  
+  --border-card-primary: hsl(214 32% 85%);
+  --border-card-secondary: hsl(214 32% 80%);
+  --border-muted: hsl(214 32% 90%);
+  
+  --bg-body: #f8fafc;
+  --color-foreground: #0f172a;
+  
+  color-scheme: light;
+}
+
+/* ── TEXT COLORS ── */
+
+/* Primary text - full brightness */
+.text-primary-bright {
+  color: var(--text-primary);
+}
+
+/* Secondary text - standard muted */
+.text-secondary {
+  color: var(--text-secondary);
+}
+
+/* Tertiary text - more muted */
+.text-tertiary {
+  color: var(--text-tertiary);
+}
+
+/* Quaternary text - very muted */
+.text-quaternary {
+  color: var(--text-quaternary);
+}
+
+/* Minimal text - footer level */
+.text-minimal {
+  color: var(--text-minimal);
+}
+
+/* Very low contrast */
+.text-minimal-low {
+  color: var(--text-minimal-low);
+}
+
+/* Accent text - indigo */
+.text-accent {
+  color: var(--text-accent);
+}
+
+/* Bright accent */
+.text-accent-bright {
+  color: var(--text-accent-bright);
+}
+
+/* ── BACKGROUND COLORS ── */
+
+/* Primary card background */
+.bg-card-primary {
+  background-color: var(--bg-card-primary);
+}
+
+/* Secondary card background - slightly lighter */
+.bg-card-secondary {
+  background-color: var(--bg-card-secondary);
+}
+
+/* ── BORDER COLORS ── */
+
+/* Primary border - standard card border */
+.border-card-primary {
+  border-color: var(--border-card-primary);
+}
+
+/* Secondary border - lighter variant */
+.border-card-secondary {
+  border-color: var(--border-card-secondary);
+}
+
+/* Muted border */
+.border-muted {
+  border-color: var(--border-muted);
+}
+
+/* Interactive border - indigo hover state */
+.border-interactive {
+  border-color: hsl(243 75% 59%);
+}
+
+/* ── ACCENT/HIGHLIGHT COLORS ── */
+
+/* Indigo accent - full opacity */
+.accent-indigo {
+  background-color: hsl(243 75% 59%);
+}
+
+/* Indigo accent - semi-transparent for backgrounds */
+.accent-indigo-light {
+  background-color: hsl(243 75% 59% / 0.08);
+}
+
+/* Indigo accent - ultra-light for subtle backgrounds */
+.accent-indigo-ultra-light {
+  background-color: hsl(243 75% 59% / 0.04);
+}
+
+/* Indigo accent - with 25% opacity for borders */
+.accent-indigo-border {
+  border-color: hsl(243 75% 59% / 0.25);
+}
+
+/* Indigo accent - with 20% opacity for borders */
+.accent-indigo-border-soft {
+  border-color: hsl(243 75% 59% / 0.2);
+}
+
+/* Indigo accent - with 50% opacity for interactive states */
+.accent-indigo-interactive {
+  color: hsl(243 75% 59% / 0.5);
+}
+
+/* Indigo accent - with 12% opacity for very subtle backgrounds */
+.accent-indigo-subtle {
+  background-color: hsl(243 75% 59% / 0.12);
+}
+
+/* Indigo glow shadow */
+.glow-indigo {
+  box-shadow: 0 0 24px hsl(243 75% 59% / 0.08);
+}
+
+/* Indigo glow shadow - medium */
+.glow-indigo-md {
+  box-shadow: 0 0 30px hsl(243 75% 59% / 0.25);
+}
+
+/* Indigo glow shadow - strong */
+.glow-indigo-lg {
+  box-shadow: 0 0 40px hsl(243 75% 59% / 0.35);
+}
+
+/* Indigo glow shadow - extra strong (hover state) */
+.glow-indigo-xl {
+  box-shadow: 0 0 56px hsl(243 75% 59% / 0.5);
+}
+
+/* ── INPUT STATES ── */
+
+/* Valid input state */
+.input-valid {
+  border-color: hsl(142 71% 45%);
+}
+
+/* Invalid input state */
+.input-invalid {
+  border-color: hsl(0 84% 60%);
+}
+
+.input-invalid:focus {
+  outline: none;
+  ring: 2px;
+  ring-color: hsl(0 84% 60% / 0.5);
+}
+
+/* ── INTERACTIVE STATE COLORS ── */
+
+/* Hover state background - subtle indigo tint */
+.bg-hover-indigo {
+  background-color: hsl(243 75% 59% / 0.05);
+}
+
+/* Focus state - indigo glow */
+.focus-indigo {
+  outline: 2px solid hsl(243 75% 59%);
+  outline-offset: 2px;
+}
+
+/* ── SEMANTIC COLORS ── */
+
+/* Success/check state */
+.text-success {
+  color: hsl(142 71% 45%);
+}
+
+.bg-success-light {
+  background-color: hsl(120 50% 20% / 0.3);
+}
+
+.border-success {
+  border-color: hsl(120 100% 50%);
+}
+
+/* Error/warning state */
+.text-error {
+  color: hsl(0 84% 60%);
+}
+
+.bg-error-light {
+  background-color: hsl(0 100% 20% / 0.3);
+}
+
+.border-error {
+  border-color: hsl(0 100% 50%);
+}
+
+/* Info state */
+.text-info {
+  color: hsl(243 75% 75%);
+}
+
+html.light .text-info {
+  color: hsl(243 75% 40%);
+}
+
+.bg-info-light {
+  background-color: hsl(243 75% 59% / 0.1);
+}
+
+/* ── LIGHT THEME ACCENT OVERRIDES ── */
+
+html.light .accent-indigo-light {
+  background-color: hsl(243 75% 59% / 0.1);
+}
+
+html.light .accent-indigo-subtle {
+  background-color: hsl(243 75% 59% / 0.15);
+}
+
+html.light .accent-indigo-ultra-light {
+  background-color: hsl(243 75% 59% / 0.06);
+}
+
+html.light .card-glow:hover {
+  border-color: hsl(243 75% 45% / 0.4);
+  box-shadow: 0 0 0 1px hsl(243 75% 45% / 0.15),
+              0 8px 32px hsl(243 75% 45% / 0.1);
+}
+
+/* ── SHADOW UTILITIES ── */
+
+/* Subtle shadow */
+.shadow-subtle {
+  box-shadow: 0 1px 2px hsl(0 0% 0% / 0.2);
+}
+
+/* Standard shadow */
+.shadow-standard {
+  box-shadow: 0 4px 6px hsl(0 0% 0% / 0.1);
+}
+
+/* Elevated shadow */
+.shadow-elevated {
+  box-shadow: 0 10px 15px hsl(0 0% 0% / 0.2);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   USAGE EXAMPLES:
+   
+   <div className="bg-card-primary border border-card-primary">
+     <p className="text-secondary">Standard text</p>
+   </div>
+   
+   <button className="bg-primary hover:glow-indigo-lg">
+     Download
+   </button>
+   
+   <input className="border border-card-secondary focus:border-interactive input-invalid" />
+   
+   <div className="rounded-lg p-4 bg-success-light border border-success text-success">
+     Success message here
+   </div>
+   
+   ═════════════════════════════════════════════════════════════════ */
+

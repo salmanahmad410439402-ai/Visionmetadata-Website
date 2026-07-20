@@ -1,0 +1,669 @@
+================================================================================
+  VISIONMETADATA PRO — COMPLETE FEATURE & FUNCTION REFERENCE
+  Built with: React (Vite) + TypeScript + Tauri (Rust) + Electron fallback
+  Target: Windows desktop app (Tauri-packaged) + Web fallback
+================================================================================
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. APPLICATION SHELL & ARCHITECTURE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1.1  Global Error Boundary
+     - React class component wraps the entire app tree
+     - Catches any unhandled render errors and shows a friendly recovery UI
+     - Displays error message in monospace, offers "Reload Application" button
+     - Prevents blank white screen crashes
+
+1.2  License Gate (LicenseGate.tsx + src-tauri/src/license.rs)
+     - Wraps the entire app; blocks access until a valid license or trial is confirmed
+     - LOCAL-FIRST startup: reads DPAPI-encrypted license.dat via Tauri IPC before
+       network call, so the app opens instantly on reconnect
+     - Background server verification via Supabase RPC after local pass
+     - 3-day trial system: check_trial Supabase RPC, trial end stored in license.dat
+       and mirrored to localStorage (vm_trial_end / vm_trial_active)
+     - 12-second startup timeout fallback — shows activation screen if both IPC
+       and network are unavailable (prevents infinite spinner)
+     - License revocation: background verification can revoke an already-activated app
+     - Lockout mode: shows locked UI when license is invalid/revoked
+     - Activation modal: user enters license key, validated against Supabase
+
+1.3  Trial Banner (TrialBanner component inside Dashboard)
+     - Fixed bottom banner shown only during active trial
+     - Shows remaining days ("X days remaining") or "Trial Expired"
+     - Stale-value guard: discards localStorage trial end dates > 4 days from now
+       (prevents a v1.0.0 bug where 8-day values lingered)
+     - "Activate" button dispatches custom event to open activation modal
+     - Listens for vm_trial_end_updated (same-tab) and storage (cross-tab) events
+
+1.4  Routing & Context Providers
+     - HashRouter (electron-compatible) with / → Dashboard and * → NotFound
+     - QueryClientProvider (TanStack Query) for data fetching
+     - SettingsProvider: global AI config, API keys, metadata settings
+     - AssetsProvider: asset list, processing queue, selection state
+     - TooltipProvider, Toaster (shadcn), Sonner (toast notifications)
+
+1.5  Dark Theme
+     - Dark mode applied globally on mount via document.documentElement.classList
+     - Deep Navy (#0A467B) / Cyan (#1BA6DD) / Slate (#1E293B) color palette
+     - Tailwind CSS with custom CSS variables for theming
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2. ASSET UPLOAD & FILE PROCESSING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+2.1  Upload Zone (UploadZone.tsx)
+     - Animated drag-and-drop zone with cyan accent styling (Framer Motion)
+     - Click-to-browse file picker
+     - Global drag-over detection: dragging anywhere on Dashboard auto-opens zone
+     - Supports: JPEG, PNG, WebP (images), MP4 (video), AI/EPS/SVG (vectors)
+     - Multiple file upload in a single operation
+
+2.2  Image Processing (imageProcessor.ts)
+     - Client-side image downsizing to 1000px on long edge before AI submission
+     - Uses Canvas API in-browser — no server required
+     - Preserves aspect ratio during resize
+     - Outputs base64 data URL for AI provider payload
+     - Displays both original and compressed file sizes on the asset card
+     - EXIF data extraction via piexifjs for embedded metadata reading
+
+2.3  Video Processing (videoProcessor.ts)
+     - MP4 upload with in-browser frame extraction using FFmpeg.wasm
+     - Extracts 4 frames at 0%, 33%, 66%, 100% of video duration
+     - Combines frames into a 2×2 grid image for AI analysis
+     - Aspect ratio detection: vertical (9:16) vs horizontal
+     - Motion type classification: Static, Panning, Dolly/Zoom, Drone/Aerial,
+       Slow Motion — injected into AI prompt for specialized metadata
+     - Gemini Pro auto-selected for video assets (higher capability)
+
+2.4  Vector File Support (AI/EPS/SVG)
+     - Vectors use their rasterized thumbnail for AI submission (not raw bytes)
+     - Ghost script integration (Tauri bundled binary: gswin64c.exe) for
+       high-quality rasterization of AI/EPS files
+     - SVG rendered via browser canvas
+
+2.5  File Processing Service (FileProcessingService.ts)
+     - Unified pipeline: receives raw File objects, routes to image/video/vector handler
+     - Generates unique asset IDs
+     - Tracks processing state transitions: uploading → ready → generating → complete/error
+
+2.6  Related Asset Pairs
+     - Assets can be linked via relatedAssetIds (e.g. horizontal + vertical crops)
+     - When metadata is generated for a primary asset, it is automatically synced
+       to all related assets
+     - isPrimaryOfPair flag controls which asset is shown in the UI / batch queue
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+3. MULTI-PROVIDER AI INTEGRATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+3.1  Supported AI Providers & Models (ai/providers.ts, ai/config.ts)
+     Gemini (Google):
+       - gemini-3-flash-preview  (default for images)
+       - gemini-3-pro-preview    (auto-selected for videos)
+       - REST endpoint: generativelanguage.googleapis.com/v1beta/models/{model}:generateContent
+       - API key passed as URL parameter (not Bearer token)
+       - Retry logic: up to 3 retries on 503 errors for video assets
+
+     OpenAI:
+       - gpt-4o, gpt-4o-mini
+       - Standard Bearer token auth
+       - Endpoint: api.openai.com/v1/chat/completions
+
+     Groq (speed-optimized):
+       - meta-llama/llama-4-scout-17b-16e-instruct
+       - OpenAI-compatible payload, Bearer auth
+       - Endpoint: api.groq.com/openai/v1/chat/completions
+
+     Mistral (direct API):
+       - mistral-large-2512 (Mistral Large 3)
+       - mistral-medium-2508 (Mistral Medium 3.1)
+       - mistral-small-2506 (Mistral Small 3.2)
+       - ministral-14b-2512, ministral-8b-2512, ministral-3b-2512
+       - Quality badges: Best / Better / Good / Fair / Basic
+       - Keys imported via dedicated Mistral key field or CSV bulk import
+
+     Ollama (local/offline):
+       - Any locally-running Ollama model (configurable host + model name)
+       - 2-image batching per request (sends 2 images simultaneously)
+       - 2 concurrent Ollama workers during batch processing
+       - Test connection button with live status indicator
+       - No API key required — fully offline capable
+
+3.2  AI Mode Selection
+     - Auto Mode: Processes first asset with Ollama, then splits remaining 50/50
+       between Ollama and API keys running in parallel
+     - API-Only Mode: All assets go through API key rotation pipeline
+     - Ollama-Only Mode: All assets processed locally via Ollama batching
+     - Mode persisted in settings, affects both single and batch generation
+
+3.3  API Key Management (ai/keyRotation.ts)
+     - Add multiple keys per provider — unlimited
+     - Auto-detection of provider from key format:
+         AIzaSy / AIza → Gemini
+         sk- → OpenAI
+         gsk_ → Groq
+         Mistral: dedicated import field
+     - Keys masked in UI with show/hide toggle per key
+     - Enable/disable individual keys without deleting them
+     - "Clear All Keys" with confirmation
+     - Bulk import from .txt file (one key per line)
+     - Round-robin key rotation across all active keys
+     - 5-image-per-key quota system (resets per batch)
+     - markKeyExhausted / markKeySuccess reactive rotation
+     - LAST-CREDIT SQUEEZE: after all keys rate-limited, waits up to 16s for
+       the soonest-recovering key and retries rather than failing immediately
+     - isRateLimitError / isAuthError detection for smart error routing
+     - resetAllKeyStatuses / resetRoundRobinCounter / resetAllQuotas on retry
+     - Auto-select optimal model when a key is added (per provider defaults)
+
+3.4  AI Response Validation (aiService.ts — validateAndNormalizeResponse)
+     - Validates title (min 5 chars), description (min 10 chars),
+       keywords array (min 3 valid strings)
+     - Strips hallucinated "- Part 01/02" suffixes from titles
+       (prohibited on Adobe Stock / Shutterstock)
+     - Fills all optional fields with safe defaults to prevent UI crashes
+     - Error messages surfaced to user via toast with sanitized text
+
+3.5  Quality Check (checkMetadataQuality — on-demand, per asset card)
+     - Separate AI call after initial generation
+     - Returns confidence breakdown, risk flags, platform readiness
+     - Triggered manually from asset card "Quality Check" button
+     - Result stored in asset.qualityReport, displayed in ConfidenceTooltip
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+4. SEO RULES ENGINE & AI PROMPT SYSTEM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+4.1  System Prompt Builder (seoPrompts.ts — getSystemPrompt)
+     - Anti-Rejection Title Formula: [Subject] + [Action] + [Unique Differentiator] + [Context]
+     - Forces factual unique details (angle, color, style)
+     - Bans artistic fluff words (beautiful, amazing, stunning, breathtaking)
+     - Configurable keyword strategy: Single-Word / Multi-Word / Mixed
+     - Configurable keyword count (5–50, default 50)
+     - Configurable title length range (20–30 words)
+     - Configurable description length range (30–50 words)
+     - Market mode switching: Adobe (10–15 word descriptive) vs Freepik (35–100 char punchy)
+
+4.2  "Power 10" Keyword Strategy
+     - First 10 keywords: most specific terms extracted from the title
+     - Exactly 50 keywords total (adjustable by user)
+     - Auto-inject "No People" keyword when no humans detected in image
+     - Diversity mix enforced: Literal + Conceptual + Technical terms
+
+4.3  Trademark Sniffer (trademarkSniffer.ts — cleanKeywords)
+     - 3-layer defense system:
+         Layer 1: Hard blacklist (Apple, Nike, Tesla, Instagram, iPhone, Coca-Cola, etc.)
+         Layer 2: Regex patterns for brand name detection
+         Layer 3: AI semantic replacement (iPhone → "modern smartphone")
+     - Applied to all generated keywords before saving to asset state
+
+4.4  Confidence Scoring System
+     - 4 components, 0–25 points each (total 0–100):
+         Subject Clarity
+         Differentiator Strength
+         Keyword Precision
+         Compliance Safety
+     - Color-coded confidence badge on each asset card:
+         Green (90+), Yellow (80–89), Orange (70–79), Red (<70)
+     - ConfidenceTooltip: Framer Motion hover card showing component breakdown
+
+4.5  Rejection Risk Flags
+     - Displayed only when confidence < 85%
+     - Flag types: possible_similar_content, weak_differentiator, generic_concept,
+       ambiguous_subject, trademark_risk
+     - Each flag includes reviewer reasoning text
+
+4.6  Platform Readiness Scoring
+     - Per-platform status for Adobe Stock, Freepik, Shutterstock:
+         READY / REVIEW / REJECT
+     - "READY TO SUBMIT" badge shown when: confidence ≥ 85%, no flags, metadata embedded
+
+4.7  Search Intent Classification
+     - Categories: Commercial, Editorial, Conceptual, Technical, Background/UI
+     - Auto-biases keyword ordering based on detected intent
+
+4.8  AI Disclosure Compliance (Adobe 2026 rules)
+     - Auto-adds "Generative AI" keyword for AI-created assets
+     - Never includes disclosure in title (per Adobe 2026 rules)
+     - C2PA Transparency: IPTC:DigitalSourceType = "trainedAlgorithmicMedia"
+       written during metadata embedding
+
+4.9  Editorial Failsafe
+     - Flags recognizable landmarks or unreleased tech
+     - "CONSIDER EDITORIAL" warning display
+
+4.10 Freepik Re-creation Prompt
+     - Structured format: Subject + Camera + Lighting + Style + Mood + Technical constraints
+     - Includes model attribution (e.g., "Gemini 3 Flash")
+     - Aesthetic classification field
+
+4.11 Event Context System (EventContextPanel.tsx / eventContext.ts)
+     - Toggle to inject a named event/series context into AI prompts
+     - Event name is appended to system prompt so all generated metadata
+       reflects the event theme
+     - Prevents "Part 01/02" hallucinations while still contextualizing content
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+5. BATCH PROCESSING ENGINE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+5.1  Generate All (handleGenerateAll)
+     - Processes all "ready" assets (skips error/generating/complete)
+     - Skips non-primary related assets to prevent duplicate metadata
+     - Chooses processing track based on aiMode:
+         AUTO: first asset → Ollama; remaining split 50/50 between Ollama + API
+         OLLAMA-ONLY: all via Ollama 2-image batching
+         API-ONLY: all via API key rotation pipeline
+     - Parallel tracks run via Promise.allSettled in AUTO mode
+     - Round-robin key counter and quotas reset at start of every batch
+
+5.2  Concurrency Management
+     - API track: 3 concurrent workers (normal) / up to 12 (batch mode, scales with key count)
+     - Stagger delay: 1500ms (normal) / 200ms (batch mode) between worker starts
+     - Ollama track: 2 concurrent workers, 100ms stagger
+
+5.3  Cancellation System
+     - isCancelledRef (React ref, not state) — read synchronously by worker closures
+     - "Cancel" button in BatchProgress sets ref to true
+     - Workers check ref before starting each new asset (not mid-asset)
+     - Toast: "Stopping… current assets will finish, no new ones will start"
+
+5.4  Progress Tracking (BatchProgress.tsx)
+     - Live progress bar with completed / total / failed counts
+     - Active worker count display
+     - Elapsed time (startTime tracked in batchState)
+     - Delta-based progress: each worker reports +1 on completion, not running total
+       (prevents triple-counting bug)
+     - Progress bar closes when batch finishes or is cancelled
+     - Safety clamp: completed + failed never exceeds total
+
+5.5  Auto-Retry on Failure
+     - Controlled by autoRetry setting toggle in Settings
+     - After batch completion, if any assets failed:
+         Shows toast with failed count
+         Waits 3 seconds, then calls handleRetryAllFailed via pendingAutoRetry effect
+     - Auto-retry resets all key statuses, round-robin counter, and quotas
+
+5.6  Retry All Failed (handleRetryAllFailed)
+     - Re-queues all assets with status "error" back to "ready"
+     - Resets all key exhaustion flags, round-robin, and per-key quotas
+     - Uses same concurrency logic (1 worker for Ollama-only, 10 for API mode)
+     - Supports cancellation via isCancelledRef
+     - If autoRetry is enabled and retried assets still fail, schedules another retry
+
+5.7  Unattended Mode (startUnattendedTimer)
+     - Activated automatically after a successful batch completes
+     - 5-minute countdown timer
+     - If user is idle (no mousemove / keydown / click), auto-downloads a Master ZIP
+     - Activity detection immediately cancels the timer with a toast notification
+     - Cleanup: removes all event listeners on component unmount (prevents memory leaks)
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+6. ASSET CARD & GRID DISPLAY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+6.1  Asset Card (AssetCard.tsx)
+     - Image/video thumbnail with file size overlay (original vs compressed)
+     - Status badges: PROCESSING (blue spinner), Ready for AI (green), % CONFIDENCE (color-coded)
+     - Editable Title, Description, and Keywords fields with inline edit toggle
+     - Keywords rendered as interactive pills — click X to remove individual keywords
+     - Individual "Copy" buttons for Title, Description, and Keywords
+     - "Generate" button per card (triggers single-asset AI call)
+     - "Download with Metadata" button (cyan outline) — embeds EXIF/IPTC via Tauri IPC
+     - "Quality Check" button — on-demand second AI pass for confidence/risk scoring
+     - Success checkmark indicator when metadata has been embedded
+     - Delete button (trash icon) with hover confirmation
+     - Video indicator badge for MP4 assets
+     - Framer Motion entry animation
+
+6.2  AssetCardEdit (AssetCardEdit.tsx)
+     - Inline editing mode for title, description, keywords
+     - Keywords edit as comma-separated text or individual pill removal
+     - Save/cancel buttons
+     - Changes saved to AssetContext via updateAsset
+
+6.3  Asset Grid (AssetGrid.tsx)
+     - Responsive CSS grid layout
+     - View Toggle: Grid view ↔ List/Spreadsheet view
+     - Virtualized grid for performance with large asset counts (VirtualizedAssetGrid.tsx)
+     - Multi-select mode with checkboxes on each card
+     - "Select All" / "Clear Selection" controls
+     - "Delete Selected" with ConfirmDialog before executing
+
+6.4  Asset List Item (AssetListItem.tsx)
+     - Compact row layout for spreadsheet-style view
+     - Shows thumbnail, filename, status, title, keyword count, confidence badge
+     - Inline copy and generate buttons
+
+6.5  View Toggle (ViewToggle.tsx)
+     - Grid / List toggle button group in Navbar
+     - Persists view preference in component state
+
+6.6  Confidence Tooltip (ConfidenceTooltip.tsx)
+     - Framer Motion hover card on confidence badge
+     - Shows 4-component bar chart breakdown
+     - Displays risk flags below the bars when present
+     - Only renders when quality report is available (on-demand quality check)
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+7. BULK EDITOR MODAL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+7.1  Spreadsheet / Table View (BulkEditorModal.tsx)
+     - Tabular display of all assets with generated metadata
+     - Columns: Thumbnail, Title, Description, Keywords (all inline-editable)
+     - Sortable columns (Title, Description, Keywords) with asc/desc toggle
+     - Local edit buffer: edits are staged per-asset before saving
+     - Row checkboxes for multi-row selection
+     - "Select All" / deselect all support
+     - Save All / Discard All buttons
+
+7.2  Find & Replace
+     - Search text input, replace text input
+     - Target field toggles: apply to Title, Description, and/or Keywords independently
+     - Operates on selected rows only (or all rows if none selected)
+     - Case-insensitive string replacement
+
+7.3  Append / Prepend
+     - Text field + append/prepend mode toggle
+     - Target field selector (Title, Description, Keywords)
+     - Operates on selected rows; useful for batch-adding keywords or suffixes
+
+7.4  Remove Words
+     - Bulk word/phrase removal across Title, Description, and/or Keywords
+     - Target field toggles
+     - Useful for bulk trademark removal after trademark sniffer misses edge cases
+
+7.5  Delete Selected Rows
+     - Removes selected assets from the global asset list
+     - ConfirmDialog before executing
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+8. SETTINGS MODAL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+8.1  General Tab — API Key Management
+     - Auto-detect provider from key format (no dropdown needed)
+     - Expandable key list (collapsed by default for cleaner UI)
+     - Per-key enable/disable toggle
+     - Per-key delete button
+     - Show/hide individual key values (eye icon toggle)
+     - Bulk import from .txt file (one key per line)
+     - Mistral dedicated key field + separate bulk import
+     - "Clear All Keys" danger button
+
+8.2  AI Model Selection
+     - Custom dropdown showing all providers and models with quality labels
+     - "Auto (recommended)" option — chooses best model per provider at runtime
+     - Model auto-selected when first key of a provider is added
+     - Per-provider color badges (blue=Gemini, green=OpenAI, purple=Groq, rose=Mistral)
+
+8.3  AI Mode Selection
+     - Auto / API-Only / Ollama-Only radio toggle
+     - Explains routing logic in UI tooltips
+
+8.4  Metadata Configuration
+     - Keyword Strategy: Single-Word / Multi-Word / Mixed (radio buttons)
+     - Keyword Count slider: 5–50 (default 50)
+     - Title length dual-handle slider: 20–30 words
+     - Description length dual-handle slider: 30–50 words
+     - Market Mode: Adobe Stock vs Freepik title style toggle
+     - Auto-Embed on Download toggle
+     - Batch Mode toggle: enables higher concurrency for faster processing
+     - Auto-Retry toggle: automatically retries failed assets after batch
+     - Series Mode toggle: consistent metadata style across a batch
+
+8.5  Negative Keywords
+     - User-defined list of words to never appear in generated keywords
+     - Add / remove individually
+     - "Clear All" button
+     - Applied by SEO prompt engine at generation time
+
+8.6  Event Context Panel (EventContextPanel.tsx)
+     - Toggle to enable/disable event context injection
+     - Text field for event name (e.g., "Eid 2025", "Christmas Collection")
+     - Injected into system prompt to theme all metadata around the event
+     - EventContextToggle.tsx: compact toggle button in Navbar
+
+8.7  Ollama Tab
+     - Host URL field (default: http://localhost:11434)
+     - Model name field (e.g., llava, bakllava, moondream)
+     - "Test Connection" button with live status (idle / testing / success / error)
+     - No API key required
+
+8.8  Settings Validation (settingsValidator.ts)
+     - SettingsValidator class validates all settings before saving
+     - Reports field-level validation errors shown inline in the modal
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+9. EXPORT & DOWNLOAD SYSTEM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+9.1  Export Modal (ExportModal.tsx + csvExporter.ts)
+     Supported CSV export formats:
+       Adobe Stock:
+         - Title (10–15 words, descriptive)
+         - Keywords (comma-separated, no commas inside keywords)
+         - Category field
+         - 2026 compliance rules applied
+       Shutterstock:
+         - Enforced column order
+         - Dual category columns
+         - Editorial flag for recognizable content
+       Dreamstime:
+         - Image Name column
+         - Full description field
+         - Category mapping
+       123RF:
+         - Numeric category codes
+         - Editorial flag
+       Vecteezy:
+         - Free / Pro license toggle (affects CSV license column)
+       Freepik:
+         - Punchy titles (35–100 chars)
+         - Recreation prompt field
+         - AI model disclosure field
+         - Toggle: Is AI Generated + AI Tool Name (required when AI is on)
+       Export All: downloads all 6 platform CSVs in one click
+
+9.2  Individual Asset Download (metadataEmbedder.ts + Tauri IPC)
+     - "Download with Metadata" on each asset card
+     - For JPEG/PNG/WebP/TIFF: ExifTool overwrites in-place with:
+         XMP-dc:Title, XMP-dc:Description, XMP-dc:Subject
+         IPTC:ObjectName, IPTC:Caption-Abstract, IPTC:Keywords
+         XMP-dc:Rights = "All rights reserved"
+         IPTC:DigitalSourceType for C2PA compliance
+     - Temp directory isolation per embed operation (timestamped folder)
+       with auto-cleanup via Rust Drop trait
+     - File passed to Tauri via buffer (base64) or file path IPC
+     - Returns processed file bytes to renderer for download
+
+9.3  Batch ZIP Download (zipExporter.ts — downloadAllAsZip)
+     - "Download ZIP" button in Navbar
+     - Collects all assets with metadata
+     - Embeds metadata into each file
+     - Packages all files into a single ZIP
+     - Progress callback for optional progress display
+
+9.4  Master Unattended ZIP (downloadMasterUnattendedZip)
+     - Auto-triggered by Unattended Mode timer (5 minutes idle after batch)
+     - Same as batch ZIP but with summary metadata JSON included
+     - Logs total processed / failed counts in ZIP filename
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+10. NATIVE TOOL INTEGRATION (Tauri / Rust — commands.rs)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+10.1 Bundled Binaries (bin/win/)
+     - exiftool.exe — EXIF/IPTC/XMP metadata embedding
+     - ffmpeg.exe — video frame extraction
+     - ffprobe.exe — video metadata probing
+     - Ghostscript (ghostscript/bin/gswin64c.exe) — AI/EPS rasterization
+
+10.2 check_native_tools (Tauri command)
+     - Checks presence of all 4 bundled binaries
+     - Returns NativeToolsCheck struct { exiftool, ffmpeg, ffprobe, ghostscript }
+     - Used on startup to warn user if any tool is missing
+
+10.3 embed_metadata (Tauri command)
+     - Receives: filename, mimeType, file path or buffer bytes, metadata struct
+     - Creates isolated temp directory (vmeta-{timestamp})
+     - Calls ExifTool with all IPTC/XMP arguments via CREATE_NO_WINDOW flag
+       (no console flash on Windows)
+     - sanitize_metadata(): trims whitespace, joins keyword array with ", "
+     - No shell injection risk: uses Rust Command API (args passed directly
+       to Windows CreateProcess, not evaluated by shell)
+     - Auto-cleanup via TempDirCleanup (Rust Drop) even on error
+     - Returns processed file bytes
+
+10.4 FTP Upload (ftp.rs)
+     - Basic FTP client for uploading processed assets to a remote server
+     - Configurable host/user/password/remote path
+
+10.5 ZIP creation (zip.rs)
+     - Native ZIP archiving from Rust side (used by batch export pipeline)
+
+10.6 Crypto utilities (crypto.rs)
+     - DPAPI-based encryption/decryption for license.dat on Windows
+     - Ensures license key is machine-bound and not readable in plain text
+
+10.7 License verification (license.rs)
+     - readLicense IPC: reads and decrypts license.dat
+     - writeLicense IPC: encrypts and writes license data to disk
+     - verifyLaunchState: checks local license file validity without network
+     - Used for offline grace period during trial
+
+10.8 Windows-specific
+     - CREATE_NO_WINDOW (0x08000000) flag on all child processes
+     - add_exclusion.ps1: PowerShell script to add Windows Defender exclusion
+       for the app directory (prevents false-positive AV blocks on ExifTool)
+     - NSIS installer with custom header.bmp and sidebar.bmp branding
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+11. OFFLINE DETECTION & RESILIENCE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+11.1 OfflineDetection (offlineDetection.ts)
+     - Monitors navigator.onLine via window events
+     - onOnline / onOffline subscription callbacks
+     - Dashboard subscribes: shows "Connection restored" / "Connection lost" toasts
+     - Tracks failed asset count at the time of disconnect
+     - On reconnect: reports how many assets failed during offline period
+     - isOnline prop passed to Navbar for visual indicator
+
+11.2 Offline Grace (license.rs + LicenseGate)
+     - Trial users allowed to work offline using local license.dat
+     - No network required once locally validated
+     - Background verification queued for next online moment
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+12. NAVBAR & GLOBAL ACTIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+12.1 Navbar (Navbar.tsx)
+     - VisionMeta logo with PRO badge (cyan glow, stylized iris/camera shutter)
+     - Upload Assets button → opens UploadZone with animation
+     - Generate All button → triggers batch processing
+     - Cancel Generation button → shown during batch, sets isCancelledRef
+     - Retry Failed button → shown when error count > 0
+     - Bulk Edit button → opens BulkEditorModal
+     - Export CSV button → opens ExportModal
+     - Download ZIP button → triggers batch ZIP download with loading spinner
+     - Settings gear icon → opens SettingsModal
+     - Error count badge → shows number of failed assets
+     - Online/Offline indicator
+     - Event Context Toggle (compact version of EventContextToggle)
+     - Search bar (centered in navbar)
+
+12.2 ConfirmDialog (ConfirmDialog.tsx)
+     - Reusable confirmation dialog for destructive actions
+     - ConfirmDialogPresets: pre-built configs for common confirm scenarios
+     - isDangerous prop: renders confirm button in destructive red style
+     - isLoading prop: disables buttons and shows spinner while async action runs
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+13. DATA PERSISTENCE & STATE MANAGEMENT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+13.1 SettingsContext (contexts/SettingsContext.tsx)
+     - Stores: apiKeys, disabledKeyIds, metadataSettings, selectedModel,
+       aiMode, ollamaHost, ollamaModel, eventEnabled, eventName,
+       negativeKeywords, isSettingsOpen
+     - Persisted to localStorage on every change
+     - Provides: addApiKey, removeApiKey, clearAllKeys, toggleKeyEnabled,
+       updateMetadataSettings, addNegativeKeyword, removeNegativeKeyword,
+       clearNegativeKeywords, setSelectedModel, setAiMode, setOllamaHost,
+       setOllamaModel, setEventEnabled, setEventName
+
+13.2 AssetsContext (contexts/AssetsContext.tsx)
+     - Stores: assets array, processingQueue, selectedAssets
+     - Provides: addAsset, updateAsset, removeAsset, addToQueue, removeFromQueue,
+       toggleSelectAsset, selectAllAssets, clearSelection
+     - filteredAssets: search-filtered view of assets array
+     - getRelatedAssets(id): returns related asset objects
+
+13.3 Database (db.ts + database_schema.sql)
+     - Local SQLite via Tauri (optional — primary state is React context + localStorage)
+     - Supabase used for license/trial verification only (not asset storage)
+     - databaseTransactions.ts: helper wrappers for DB operations
+
+13.4 Error Sanitization (errorSanitizer.ts)
+     - formatErrorForUser: strips internal stack traces and API error details
+       before showing to user
+     - safeConsoleError: logs errors without exposing sensitive data in console
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+14. UI COMPONENT LIBRARY (src/components/ui/)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Full shadcn/ui component set installed and themed to dark navy/cyan palette:
+accordion, alert, alert-dialog, aspect-ratio, avatar, badge, breadcrumb,
+button, calendar, card, carousel, chart, checkbox, collapsible, command,
+context-menu, dialog, drawer, dropdown-menu, form, hover-card, input,
+input-otp, label, menubar, navigation-menu, pagination, popover, progress,
+radio-group, resizable, scroll-area, select, separator, sheet, sidebar,
+skeleton, slider, sonner, switch, table, tabs, textarea, toast, toggle,
+toggle-group, tooltip
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+15. TECHNICAL STACK SUMMARY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Frontend:       React 18 + TypeScript, Vite bundler
+Styling:        Tailwind CSS v3, shadcn/ui, custom CSS variables
+Animations:     Framer Motion
+State:          React Context API + localStorage
+Tables:         TanStack Table (spreadsheet view)
+AI (cloud):     Gemini 3, OpenAI GPT-4o, Groq Llama 4, Mistral (client-side calls)
+AI (local):     Ollama (any vision-capable model)
+Image:          Canvas API for resize, piexifjs for EXIF read
+Video:          FFmpeg.wasm (browser-side frame extraction)
+Desktop shell:  Tauri 2 (Rust) — primary distribution target
+Installer:      NSIS (Windows) with custom branding assets
+Metadata embed: ExifTool (bundled .exe, called from Rust)
+License:        Supabase RPC + DPAPI-encrypted local license file
+Testing:        Vitest with example test setup
+Linting:        ESLint with TypeScript rules
+Build:          Vite + Tauri bundler for Windows .exe/.msi
+
+================================================================================
+  END OF FEATURE REFERENCE
+  Total source files analyzed: 253
+  Current Version: v1.2.0 (LIVE)
+  Last updated: 2026-04-15
+================================================================================

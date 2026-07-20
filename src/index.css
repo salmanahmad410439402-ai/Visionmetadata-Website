@@ -1,0 +1,329 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@layer base {
+  :root {
+    --background: 222 47% 5%;
+    --foreground: 210 40% 98%;
+
+    --card: 222 47% 8%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222 47% 8%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 243 75% 65%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 222 47% 12%;
+    --secondary-foreground: 210 40% 90%;
+
+    --muted: 222 47% 12%;
+    --muted-foreground: 215 20% 65%;
+
+    --accent: 160 84% 45%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 30% 96%;
+
+    --border: 215 27% 16%;
+    --input: 215 27% 16%;
+    --ring: 243 75% 65%;
+
+    --radius: 1rem;
+
+    --sidebar-background: 222 47% 5%;
+    --sidebar-foreground: 210 40% 90%;
+    --sidebar-primary: 243 75% 65%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 222 47% 12%;
+    --sidebar-accent-foreground: 210 40% 90%;
+    --sidebar-border: 215 27% 16%;
+    --sidebar-ring: 243 75% 65%;
+  }
+
+  /* Light theme overrides */
+  html.light {
+    --background: 210 40% 98%;
+    --foreground: 222 47% 11%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+    --primary: 243 75% 59%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222 47% 11%;
+
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
+
+    --accent: 160 84% 39%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 243 75% 59%;
+
+    --sidebar-background: 210 40% 98%;
+    --sidebar-foreground: 222 47% 11%;
+    --sidebar-primary: 243 75% 59%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 210 40% 96%;
+    --sidebar-accent-foreground: 222 47% 11%;
+    --sidebar-border: 214 32% 91%;
+    --sidebar-ring: 243 75% 59%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Outfit', 'Inter', system-ui, sans-serif;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* ── Scroll-reveal animations ─────────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-delay-1 { transition-delay: 0.08s; }
+.reveal-delay-2 { transition-delay: 0.16s; }
+.reveal-delay-3 { transition-delay: 0.24s; }
+.reveal-delay-4 { transition-delay: 0.32s; }
+.reveal-delay-5 { transition-delay: 0.40s; }
+.reveal-delay-6 { transition-delay: 0.48s; }
+
+/* ── Shimmer on CTA button ────────────────────────────────────── */
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+
+.btn-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+.btn-shimmer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(255,255,255,0.12) 50%,
+    transparent 60%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2.8s linear infinite;
+  pointer-events: none;
+}
+
+/* ── Animated grid background ─────────────────────────────────── */
+.grid-bg {
+  background-image:
+    linear-gradient(rgba(79,70,229,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(79,70,229,0.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+html.light .grid-bg {
+  background-image:
+    linear-gradient(rgba(79,70,229,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(79,70,229,0.06) 1px, transparent 1px);
+}
+
+/* ── Modern Glassmorphism ─────────────────────────────────────── */
+/* Dark mode: clearly elevated card surface — distinct from the ~3% background */
+.glass-panel {
+  background: hsl(222 47% 12% / 0.90);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid hsl(215 27% 24%);
+  box-shadow: 0 8px 32px -4px rgba(0, 0, 0, 0.7),
+              0 0 0 1px hsl(215 27% 28% / 0.3),
+              inset 0 1px 0 hsl(215 27% 28% / 0.5);
+}
+/* Light mode: solid white card with a clear shadow so it floats off the page */
+html.light .glass-panel {
+  background: #ffffff;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border: 1px solid hsl(214 32% 86%);
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.10),
+              0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+/* ── Glowing border on focus cards ──────────────────────────── */
+/* (Deleted duplicate .card-glow:hover) */
+
+/* ── Floating glow orbs ──────────────────────────────────────── */
+@keyframes float-slow {
+  0%, 100% { transform: translate(-50%, -50%) scale(1);   }
+  50%       { transform: translate(-50%, -54%) scale(1.06); }
+}
+@keyframes float-slow-rev {
+  0%, 100% { transform: translate(0, 0) scale(1);    }
+  50%       { transform: translate(8px, -12px) scale(1.04); }
+}
+
+.orb-1 { animation: float-slow     7s ease-in-out infinite; }
+.orb-2 { animation: float-slow-rev 9s ease-in-out infinite; }
+
+/* ── Card hover lift ─────────────────────────────────────────── */
+.card-lift {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.3s ease;
+}
+.card-lift:hover {
+  transform: translateY(-4px);
+}
+
+/* ── Glowing border on focus cards ──────────────────────────── */
+.card-glow:hover {
+  border-color: hsl(243 75% 59% / 0.35);
+  box-shadow: 0 0 0 1px hsl(243 75% 59% / 0.1),
+              0 8px 32px hsl(243 75% 59% / 0.08);
+}
+
+/* ── Gradient text ───────────────────────────────────────────── */
+.text-gradient {
+  background: linear-gradient(135deg, hsl(var(--primary)) 0%, #10B981 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-flow {
+  background: linear-gradient(to right, #10B981, #4F46E5, #3b82f6);
+  background-size: 200% auto;
+  color: #000;
+  background-clip: text;
+  text-fill-color: transparent;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientFlow 4s linear infinite;
+}
+
+@keyframes gradientFlow {
+  to {
+    background-position: 200% center;
+  }
+}
+
+.bg-gradient-flow {
+  background: linear-gradient(to right, #10B981, #4F46E5, #3b82f6);
+  background-size: 200% auto;
+  color: white;
+  animation: gradientFlow 4s linear infinite;
+}
+.bg-gradient-flow:hover {
+  background-position: right center;
+}
+
+/* ── Neon Hover Cards ───────────────────────────────────────────── */
+.neon-hover-card {
+  transition: all 0.3s ease;
+}
+.neon-hover-card:hover {
+  border-color: var(--card-color);
+  box-shadow: 0 0 45px color-mix(in srgb, var(--card-color) 50%, transparent),
+              0 0 80px color-mix(in srgb, var(--card-color) 20%, transparent);
+  transform: translateY(-4px);
+}
+.neon-hover-card:hover .neon-icon-wrapper {
+  background-color: color-mix(in srgb, var(--card-color) 20%, transparent);
+  border-color: color-mix(in srgb, var(--card-color) 50%, transparent);
+  box-shadow: 0 0 15px color-mix(in srgb, var(--card-color) 40%, transparent);
+}
+.neon-hover-card:hover .neon-title {
+  color: var(--card-color);
+}
+.neon-icon {
+  color: var(--card-color);
+}
+.neon-icon-wrapper {
+  background-color: color-mix(in srgb, var(--card-color) 10%, transparent);
+  border-color: color-mix(in srgb, var(--card-color) 20%, transparent);
+}
+
+html.light .text-gradient {
+  background: linear-gradient(135deg, hsl(243 75% 59%), hsl(160 84% 39%));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Step connector line ─────────────────────────────────────── */
+.step-connector {
+  position: absolute;
+  top: 22px;
+  right: -50%;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, hsl(var(--border)), transparent);
+}
+
+/* ── Muted foreground boost — fixes faint text ───────────────── */
+.text-muted-foreground {
+  color: hsl(215 20% 65%) !important;
+}
+
+html.light .text-muted-foreground {
+  color: hsl(215 20% 40%) !important;
+}
+
+/* ── Badge pulse ring ────────────────────────────────────────── */
+@keyframes ping-slow {
+  75%, 100% { transform: scale(2); opacity: 0; }
+}
+.ping-slow { animation: ping-slow 2s cubic-bezier(0,0,0.2,1) infinite; }
+
+/* ── Section divider line ────────────────────────────────────── */
+.section-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, hsl(var(--border)), transparent);
+  margin: 0 auto;
+  max-width: 600px;
+}
+
+/* ── Stat counter shimmer ────────────────────────────────────── */
+@keyframes count-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0);   }
+}
+.stat-item.visible {
+  animation: count-up 0.5s ease forwards;
+}
