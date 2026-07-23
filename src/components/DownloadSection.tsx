@@ -70,7 +70,7 @@ const DownloadSection = () => {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 mb-12">
-              <a href="https://github.com/salmangraphics839-hue/visionmeta-releases/releases/download/1.3.5/VisionMetadata.Pro_1.3.5_x64-setup.exe" className="flex-1 sm:flex-none" target="_blank" rel="noopener noreferrer">
+              <a href="https://github.com/salmangraphics839-hue/visionmeta-releases/releases/download/1.3.5/VisionMetadata.Pro_1.3.6_x64-setup.exe" className="flex-1 sm:flex-none" target="_blank" rel="noopener noreferrer">
                 <Button size="lg"
                   className="w-full sm:w-auto h-16 px-10 text-lg font-bold rounded-2xl btn-shimmer bg-gradient-flow text-white shadow-[0_0_40px_hsl(var(--primary)/0.4)] hover:shadow-[0_0_60px_hsl(var(--primary)/0.6)] hover:scale-[1.02] transition-all duration-300 border-0">
                   <Download className="w-6 h-6 mr-3" />
@@ -211,7 +211,7 @@ const DownloadSection = () => {
           <p className="text-base sm:text-lg mb-8 text-secondary">
             Start your 3-day free trial today. No credit card required. Access all features immediately.
           </p>
-          <a href="https://github.com/salmangraphics839-hue/visionmeta-releases/releases/download/1.3.5/VisionMetadata.Pro_1.3.5_x64-setup.exe" target="_blank" rel="noopener noreferrer" className="block sm:inline-block w-full sm:w-auto">
+          <a href="https://github.com/salmangraphics839-hue/visionmeta-releases/releases/download/1.3.5/VisionMetadata.Pro_1.3.6_x64-setup.exe" target="_blank" rel="noopener noreferrer" className="block sm:inline-block w-full sm:w-auto">
             <Button size="lg"
               className="h-14 sm:h-16 w-full sm:w-auto px-4 sm:px-12 text-sm sm:text-lg font-bold rounded-2xl btn-shimmer bg-gradient-flow text-white shadow-[0_0_40px_hsl(var(--primary)/0.4)] hover:shadow-[0_0_60px_hsl(var(--primary)/0.6)] hover:scale-[1.02] transition-all duration-300 whitespace-normal text-center h-auto py-3 border-0">
               <Download className="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3 shrink-0" />

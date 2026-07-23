@@ -17,19 +17,19 @@ import { VercelRequest, VercelResponse } from "@vercel/node";
  */
 
 // ── Current latest release ───────────────────────────────────────
-const LATEST_VERSION = "1.3.5";
+const LATEST_VERSION = "1.3.6";
 
 const PLATFORMS: Record<string, { url: string; signature: string }> = {
   "windows-x86_64": {
     // The installer from `tauri build`
     // IMPORTANT: Make sure you upload the setup.exe file to GitHub Releases exactly with this name
-    url: "https://github.com/salmangraphics839-hue/visionmeta-releases/releases/download/1.3.5/VisionMetadata.Pro_1.3.5_x64-setup.exe",
-    // This signature matches VisionMetadata Pro_1.3.5_x64-setup.exe from build
+    url: "https://github.com/salmangraphics839-hue/visionmeta-releases/releases/download/1.3.5/VisionMetadata.Pro_1.3.6_x64-setup.exe",
+    // This signature matches VisionMetadata Pro_1.3.6_x64-setup.exe from build
     signature: "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVTNG9wNmsvV0wrdmtKbHZIL3I4SE1iaDhnd0V1RnpaK2NUYlBPQ013Z0F1cStyVU1CVVE1aGJhVUtwNWtqSFdsOG5xdDNvem5qWXJPZTVTc09qbzh6RVBoL1VTOHQrL2dBPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzg0NTUyMTYzCWZpbGU6VmlzaW9uTWV0YWRhdGEgUHJvXzEuMy41X3g2NC1zZXR1cC5leGUKMi92a1N2ZmNjMGtndjFTSmlzRjhWS3VaY2dxczd5UVdVMVJmL1RKTGlCT01TNUdjazR3RmVicnBCSnJMeng5U3pmei9UQisvMDlXTjMxdVp1dzhWRFE9PQo=",
   },
 };
 
-const RELEASE_NOTES = "Version 1.3.5 - Added Green Screen mode support, fixed .png masquerading as .jpg uploads, and updated dependencies.";
+const RELEASE_NOTES = "Version 1.3.6 - Added Green Screen mode support, fixed .png masquerading as .jpg uploads, and updated dependencies.";
 const PUB_DATE = "2026-07-20T12:00:00.000Z";
 // ─────────────────────────────────────────────────────────────────
 
