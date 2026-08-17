@@ -302,7 +302,7 @@ const TutorialsSection = () => {
           style={{ background: "linear-gradient(135deg, hsl(var(--primary) / 0.08) 0%, hsl(220 90% 50% / 0.08) 100%)", borderColor: "hsl(var(--primary) / 0.2)" }}>
           <h3 className="text-2xl sm:text-3xl font-bold mb-6">Ready to Get Started?</h3>
           <p className="text-base sm:text-lg mb-10 text-primary/80">Download VisionMetadata Pro and try the workflow.</p>
-          <a href="https://github.com/salmangraphics839-hue/visionmeta-releases/releases/download/1.3.5/VisionMetadata.Pro_1.3.6_x64-setup.exe" target="_blank" rel="noopener noreferrer" className="block sm:inline-block w-full sm:w-auto">
+          <a href="https://github.com/salmangraphics839-hue/visionmeta-releases/releases/download/1.3.6/Tagyfy_Pro_1.3.6_x64-setup.exe" target="_blank" rel="noopener noreferrer" className="block sm:inline-block w-full sm:w-auto">
             <Button size="lg"
               className="h-14 sm:h-16 w-full sm:w-auto px-4 sm:px-12 text-sm sm:text-lg font-bold rounded-2xl btn-shimmer shadow-[0_0_40px_hsl(243_75%_59%/0.35)] hover:shadow-[0_0_56px_hsl(243_75%_59%/0.5)] hover:scale-[1.03] transition-all duration-300 whitespace-normal text-center h-auto py-3">
               <Download className="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3 shrink-0" />

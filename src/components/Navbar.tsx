@@ -71,7 +71,7 @@ const Navbar = () => {
           </button>
 
           {/* Download CTA */}
-          <a href="https://github.com/salmangraphics839-hue/visionmeta-releases/releases/download/1.3.5/VisionMetadata.Pro_1.3.6_x64-setup.exe" target="_blank" rel="noopener noreferrer"
+          <a href="https://github.com/salmangraphics839-hue/visionmeta-releases/releases/download/1.3.6/Tagyfy_Pro_1.3.6_x64-setup.exe" target="_blank" rel="noopener noreferrer"
             onClick={() => analytics.trackCTAClick('download', 'navbar')}
             className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-primary text-primary-foreground text-sm font-bold hover:opacity-90 hover:scale-[1.03] transition-all duration-200 shadow-[0_0_16px_hsl(243_75%_59%/0.25)]">
             <Download className="w-3.5 h-3.5" />
@@ -120,7 +120,7 @@ const Navbar = () => {
             </button>
 
             {/* Download CTA */}
-            <a href="https://github.com/salmangraphics839-hue/visionmeta-releases/releases/download/1.3.5/VisionMetadata.Pro_1.3.6_x64-setup.exe" target="_blank" rel="noopener noreferrer"
+            <a href="https://github.com/salmangraphics839-hue/visionmeta-releases/releases/download/1.3.6/Tagyfy_Pro_1.3.6_x64-setup.exe" target="_blank" rel="noopener noreferrer"
               onClick={() => analytics.trackCTAClick('download', 'navbar-mobile')}
               className="flex-1 flex items-center justify-center gap-2 py-3 rounded-lg bg-primary text-primary-foreground text-sm font-bold transition-all hover:scale-[1.01] active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background">
               <Download className="w-4 h-4" /> Download

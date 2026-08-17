@@ -38,7 +38,7 @@ const HeroSection = () => {
 
         {/* CTA */}
         <div className="reveal reveal-delay-3 flex flex-col sm:flex-row items-center gap-5 justify-center mb-8">
-          <a href="https://github.com/salmangraphics839-hue/visionmeta-releases/releases/download/1.3.5/VisionMetadata.Pro_1.3.6_x64-setup.exe" target="_blank" rel="noopener noreferrer">
+          <a href="https://github.com/salmangraphics839-hue/visionmeta-releases/releases/download/1.3.6/Tagyfy_Pro_1.3.6_x64-setup.exe" target="_blank" rel="noopener noreferrer">
             <Button size="lg" className="w-full sm:w-auto h-16 px-10 text-lg font-bold rounded-2xl btn-shimmer bg-gradient-flow text-white shadow-[0_0_40px_hsl(var(--primary)/0.4)] hover:shadow-[0_0_60px_hsl(var(--primary)/0.6)] hover:scale-[1.02] transition-all duration-300 border border-white/10 border-0">
               <Download className="w-6 h-6 mr-3" />
               Download for Windows
