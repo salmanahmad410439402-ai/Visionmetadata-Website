@@ -53,14 +53,14 @@ async function sendEvent(event: AnalyticsEvent): Promise<void> {
     console.log('[Analytics]', event.type, event.name, event.properties);
   }
 
-  // Uncomment to integrate with Google Analytics
-  // if (window.gtag) {
-  //   window.gtag('event', event.name, {
-  //     event_category: event.type,
-  //     event_label: event.section,
-  //     ...event.properties,
-  //   });
-  // }
+  // Integrate with Google Analytics
+  if (typeof window !== 'undefined' && (window as any).gtag) {
+    (window as any).gtag('event', event.name, {
+      event_category: event.type,
+      event_label: event.section,
+      ...event.properties,
+    });
+  }
 
   // Uncomment to integrate with Mixpanel
   // if (window.mixpanel) {
