@@ -17,6 +17,10 @@ import ContactPage from "./pages/Contact";
 import FAQ from "./pages/FAQ";
 import Tutorials from "./pages/Tutorials";
 import ChromeExtension from "./pages/ChromeExtension";
+import AboutUs from "./pages/AboutUs";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsOfService from "./pages/TermsOfService";
+import RefundPolicy from "./pages/RefundPolicy";
 
 const queryClient = new QueryClient();
 
@@ -39,9 +43,13 @@ const App = () => {
               <Route path="/pricing" element={<Pricing />} />
               <Route path="/download" element={<DownloadPage />} />
               <Route path="/tutorials" element={<Tutorials />} />
+              <Route path="/about" element={<AboutUs />} />
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/faq" element={<FAQ />} />
               <Route path="/chrome-extension" element={<ChromeExtension />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+              <Route path="/terms" element={<TermsOfService />} />
+              <Route path="/refund-policy" element={<RefundPolicy />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
