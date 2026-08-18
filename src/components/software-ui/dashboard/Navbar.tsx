@@ -1,7 +1,6 @@
 import { Search, Download, Sparkles, Upload, Settings, FileArchive, Loader2, Table, Square, Wifi, WifiOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Logo } from "@/components/Logo";
 import { useSettings } from "@/contexts/SettingsContext";
 import { useAssets } from "@/contexts/AssetsContext";
 import { motion } from "framer-motion";
@@ -38,9 +37,6 @@ export const Navbar = ({ onUpload, onExportCSV, onBulkEdit, onGenerateAll, onRet
     >
       <div className="w-full px-4 md:px-8">
         <div className="flex h-16 items-center justify-between gap-4">
-          {/* Logo */}
-          <Logo size="md" />
-
           {/* Search Bar */}
           <div className="relative flex-1 max-w-md">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
