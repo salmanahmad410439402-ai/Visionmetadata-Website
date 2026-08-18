@@ -195,12 +195,12 @@ If you trip certain invisible tripwires three times, your account doesn't just g
 Here are the 7 deadly mistakes that trigger account termination, and the exact rules you need to follow to keep your portfolio safe forever.`,
       sections: [
         {
-          heading: "Mistake #1: The 'Hidden' Trademark Trap You Didn't Know Was a Brand",
+          heading: "Mistake #1: The Hidden Trademark Trap You Didn't Know Was a Brand",
           subheading: "You scrubbed the Nike swoosh, but did you remove the shoe's three stripes or the iPhone camera bump?",
           body: [
             "Most creators know not to put a giant Apple or Coca-Cola logo in their image. But trademark law protects industrial design and proprietary geometry, not just logos.",
             "Here are the stealth brand traps that trigger instant IP strikes:",
-            "• Car front grilles (BMW's twin kidney shape, Jeep's 7-slot vertical grille, Rolls-Royce vertical slats).",
+            "• Car front grilles (BMW twin kidney shape, Jeep 7-slot vertical grille, Rolls-Royce vertical slats).",
             "• Smartphone camera clusters (the distinct triangular 3-lens iPhone camera bump).",
             "• Footwear silhouette patterns (Adidas 3 stripes, Christian Louboutin red soles, Converse star ankle patches).",
             "• Copyrighted modern architecture (the Eiffel Tower lit up at night, the Sydney Opera House exterior, the Hollywood Sign).",
@@ -210,7 +210,7 @@ Here are the 7 deadly mistakes that trigger account termination, and the exact r
           tip: "Always inspect your files at 100% zoom. Blur or clone out all distinct button layouts, steering wheel emblems, and shoe patterns before uploading."
         },
         {
-          heading: "Mistake #2: Forgetting to Check the 'Generative AI' Toggle",
+          heading: "Mistake #2: Forgetting to Check the Generative AI Toggle",
           subheading: "Adobe loves AI content—but they will ban you instantly if you hide it.",
           body: [
             "Adobe Stock is one of the friendliest platforms for AI art, but they have zero tolerance for deception under the international C2PA standard.",
@@ -220,7 +220,7 @@ Here are the 7 deadly mistakes that trigger account termination, and the exact r
           tip: "Always check the 'Created using generative AI tools' toggle upon upload, and include tags like 'generative ai, synthetic media, digital illustration' in your keyword list."
         },
         {
-          heading: "Mistake #3: The '50 Variations of One Prompt' Flooding Trap",
+          heading: "Mistake #3: The 50 Variations of One Prompt Flooding Trap",
           subheading: "Reviewers call this 'queue spamming'—and it's an express ticket to a ban.",
           body: [
             "With AI tools, you can generate 100 images in 10 minutes. So why not upload all 100?",
@@ -331,31 +331,31 @@ Here is the exact metadata blueprint that changed everything.`,
             "Most creators write titles like this: 'Business team meeting in office' (32 characters).",
             "Why is this terrible? Because it gives the search engine almost zero indexing surface. It doesn't tell the buyer who is in the meeting, what kind of office, what the lighting is, or what commercial concept it represents.",
             "On the other extreme, writing a 250-character comma-separated keyword dump gets flagged as spam.",
-            "Through testing across tens of thousands of bestselling assets, the sweet spot is **180 to 190 characters**.",
+            "Through testing across tens of thousands of bestselling assets, the sweet spot is 180 to 190 characters.",
             "A winning 185-character title always contains four distinct layers:",
-            "1. **Core Subject (First 3–5 words)**: e.g. 'Diverse business team brainstorming'",
-            "2. **Setting & Environment**: e.g. 'around glass conference table in modern sunlit skyscraper office'",
-            "3. **Style & Composition**: e.g. 'overhead high angle view with natural daylight and copy space'",
-            "4. **Commercial Concept**: e.g. 'for corporate leadership, startup teamwork and collaboration concept'"
+            "1. Core Subject (First 3–5 words): e.g. 'Diverse business team brainstorming'",
+            "2. Setting & Environment: e.g. 'around glass conference table in modern sunlit skyscraper office'",
+            "3. Style & Composition: e.g. 'overhead high angle view with natural daylight and copy space'",
+            "4. Commercial Concept: e.g. 'for corporate leadership, startup teamwork and collaboration concept'"
           ],
           example: {
             badTitle: "Business meeting, office, teamwork, colleagues, corporate, strategy, brainstorm",
             goodTitle: "Diverse business team collaborating around glass conference table in modern sunlit office, aerial high angle view with copy space for startup leadership and corporate strategy concept",
             explanation: "The optimized title reaches 186 characters, giving the algorithm high-intent search hooks for diversity, office type, camera angle, copy space, and business leadership."
           },
-          tip: "Never use special characters like pipes (|), asterisks (*), or semicolons (;). Write clean, grammatical English that reads naturally."
+          tip: "Never use special characters like pipes (|), asterisks, or semicolons. Write clean, grammatical English that reads naturally."
         },
         {
           heading: "The 5-Tier Keyword Ladder: Algorithm Weight Hierarchy",
           subheading: "Keywords placed in slots 1–10 carry up to 70% of your initial search weight.",
           body: [
             "Did you know Adobe Stock, Shutterstock, and Freepik evaluate keyword position? Words at the beginning of your tag list have exponentially higher search relevance than words at the end.",
-            "Never alphabetize or randomize your tags. Structure your 50 keywords using the **5-Tier Ladder**:",
-            "• **Tier 1 (Keywords 1–3) — Core Focal Points**: The primary subject without fluff (e.g. 'solar panel, renewable energy, engineer').",
-            "• **Tier 2 (Keywords 4–7) — Action & Location**: What is happening and where (e.g. 'installing rooftop, blue sky, safety helmet, technical maintenance').",
-            "• **Tier 3 (Keywords 8–15) — Lighting & Framing**: Visual aesthetics (e.g. 'bright daylight, aerial drone shot, high angle, modern architecture').",
-            "• **Tier 4 (Keywords 16–35) — Commercial Concepts**: Metaphors buyers search for (e.g. 'sustainability, clean power, green technology, climate change, future industry').",
-            "• **Tier 5 (Keywords 36–50) — Broad Industry Synonyms**: Secondary descriptive tags (e.g. 'electricity, power plant, technician, utility, sustainable development')."
+            "Never alphabetize or randomize your tags. Structure your 50 keywords using the 5-Tier Ladder:",
+            "• Tier 1 (Keywords 1–3) — Core Focal Points: The primary subject without fluff (e.g. 'solar panel, renewable energy, engineer').",
+            "• Tier 2 (Keywords 4–7) — Action & Location: What is happening and where (e.g. 'installing rooftop, blue sky, safety helmet, technical maintenance').",
+            "• Tier 3 (Keywords 8–15) — Lighting & Framing: Visual aesthetics (e.g. 'bright daylight, aerial drone shot, high angle, modern architecture').",
+            "• Tier 4 (Keywords 16–35) — Commercial Concepts: Metaphors buyers search for (e.g. 'sustainability, clean power, green technology, climate change, future industry').",
+            "• Tier 5 (Keywords 36–50) — Broad Industry Synonyms: Secondary descriptive tags (e.g. 'electricity, power plant, technician, utility, sustainable development')."
           ],
           warning: "Never put generic filler tags like 'photo,' 'background,' 'wallpaper,' or 'illustration' in positions 1–10. They waste your most powerful ranking real estate."
         },
@@ -365,7 +365,7 @@ Here is the exact metadata blueprint that changed everything.`,
           body: [
             "A huge myth is that putting 'young woman drinking hot coffee in winter cafe' in a single tag helps rank for that phrase.",
             "In reality, stock search algorithms tokenize tags. Long phrases get penalized for phrase density.",
-            "**The Golden Rule**: Keep every keyword tag to a maximum of **1 or 2 words** (e.g. 'coffee cup', 'morning routine', 'steam', 'ceramic mug').",
+            "The Golden Rule: Keep every keyword tag to a maximum of 1 or 2 words (e.g. 'coffee cup', 'morning routine', 'steam', 'ceramic mug').",
             "This allows the search engine to mix and match your keywords dynamically across hundreds of different buyer searches."
           ]
         },
@@ -374,9 +374,9 @@ Here is the exact metadata blueprint that changed everything.`,
           subheading: "How to make your Christmas and Black Friday files sell in July.",
           body: [
             "Most creators tag Christmas assets with 50 Christmas keywords. Result? They sell for 3 weeks in December and earn $0 for the remaining 49 weeks of the year.",
-            "Top earners use the **Dual-Strategy**:",
-            "• **Zone A (Keywords 1–12)**: 100% focused on the holiday (e.g. 'Christmas 2026, xmas holiday, festive gift, tree ornaments, winter celebration').",
-            "• **Zone B (Keywords 13–50)**: Evergreen emotional and lifestyle terms (e.g. 'family gathering, surprise gift, happy emotion, cozy living room, warm fireplace, celebration concept').",
+            "Top earners use the Dual-Strategy:",
+            "• Zone A (Keywords 1–12): 100% focused on the holiday (e.g. 'Christmas 2026, xmas holiday, festive gift, tree ornaments, winter celebration').",
+            "• Zone B (Keywords 13–50): Evergreen emotional and lifestyle terms (e.g. 'family gathering, surprise gift, happy emotion, cozy living room, warm fireplace, celebration concept').",
             "When December passes, the asset continues ranking and selling as a generic happy family / cozy home image all year long!"
           ],
           tip: "Use the 'Event / Series Context' toggle in Tagyfy Pro to automatically generate a perfectly balanced Dual-Strategy keyword set."
@@ -386,7 +386,7 @@ Here is the exact metadata blueprint that changed everything.`,
           subheading: "Why top contributors never touch CSV files anymore.",
           body: [
             "Uploading media and then matching CSV spreadsheets is slow, messy, and prone to column delimiter errors.",
-            "With Tagyfy Pro, titles, descriptions, and 50 ranked keywords are written **directly into the binary header** of your files (`.JPG`, `.PNG`, `.AI`, `.EPS`, `.SVG`, `.MP4`).",
+            "With Tagyfy Pro, titles, descriptions, and 50 ranked keywords are written directly into the binary header of your files (.JPG, .PNG, .AI, .EPS, .SVG, .MP4).",
             "When you drag and drop your files onto Adobe Stock, the server reads the metadata instantly. All fields populate in 1 second flat. Zero manual copy-pasting."
           ]
         }

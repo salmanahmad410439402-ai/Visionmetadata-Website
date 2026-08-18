@@ -8,12 +8,10 @@ import {
   ArrowRight, 
   ArrowLeft, 
   CheckCircle2, 
-  AlertTriangle, 
   Lightbulb, 
   Share2, 
   Sparkles, 
   ShieldAlert, 
-  Tag, 
   Download,
   Bookmark,
   Check
@@ -24,6 +22,51 @@ import { Badge } from "@/components/ui/badge";
 import { BLOG_POSTS, BlogPost } from "@/data/blogPosts";
 import { useReveal } from "@/hooks/useReveal";
 import { toast } from "sonner";
+
+/**
+ * Parses and formats text, replacing markdown asterisks (**bold** or *italic*)
+ * with native HTML strong/em elements and stripping any stray asterisks.
+ */
+function renderFormattedText(text: string): React.ReactNode {
+  if (!text) return "";
+
+  // Strip or convert markdown bold (**text**) and italic (*text*)
+  if (text.includes("**") || text.includes("*")) {
+    const parts: React.ReactNode[] = [];
+    const regex = /(\*\*([^*]+)\*\*|\*([^*]+)\*)/g;
+    let lastIndex = 0;
+    let match: RegExpExecArray | null;
+    let key = 0;
+
+    while ((match = regex.exec(text)) !== null) {
+      if (match.index > lastIndex) {
+        parts.push(text.substring(lastIndex, match.index));
+      }
+      if (match[2]) {
+        parts.push(
+          <strong key={`b-${key++}`} className="font-bold text-foreground">
+            {match[2]}
+          </strong>
+        );
+      } else if (match[3]) {
+        parts.push(
+          <em key={`i-${key++}`} className="italic font-medium text-foreground/90">
+            {match[3]}
+          </em>
+        );
+      }
+      lastIndex = regex.lastIndex;
+    }
+
+    if (lastIndex < text.length) {
+      parts.push(text.substring(lastIndex));
+    }
+
+    return parts;
+  }
+
+  return text;
+}
 
 const Blogs = () => {
   const ref = useReveal();
@@ -145,7 +188,7 @@ const Blogs = () => {
             {/* Article Intro Excerpt */}
             <div className="bg-muted/20 border-l-4 border-primary rounded-r-2xl p-5 sm:p-6 mb-10 text-sm sm:text-base leading-relaxed text-foreground font-medium space-y-3 shadow-inner">
               {currentPost.content.intro.split("\n\n").map((para, idx) => (
-                <p key={idx}>{para}</p>
+                <p key={idx}>{renderFormattedText(para)}</p>
               ))}
             </div>
 
@@ -155,12 +198,12 @@ const Blogs = () => {
                 <div key={idx} className="space-y-4">
                   <h2 className="text-xl sm:text-2xl font-black text-foreground tracking-tight flex items-start gap-3">
                     <span className="text-primary opacity-80">{idx + 1}.</span>
-                    <span>{section.heading.replace(/^\d+\.\s*/, "").replace(/^Truth #\d+:\s*/, "")}</span>
+                    <span>{section.heading.replace(/^\d+\.\s*/, "").replace(/^Truth #\d+:\s*/, "").replace(/^Mistake #\d+:\s*/, "")}</span>
                   </h2>
 
                   {section.subheading && (
                     <p className="text-sm sm:text-base font-semibold text-primary/90">
-                      {section.subheading}
+                      {renderFormattedText(section.subheading)}
                     </p>
                   )}
 
@@ -169,7 +212,7 @@ const Blogs = () => {
                       if (paragraph.startsWith("### ")) {
                         return (
                           <h3 key={pIdx} className="text-base sm:text-lg font-bold text-foreground pt-3 text-primary">
-                            {paragraph.replace(/^###\s*/, "")}
+                            {renderFormattedText(paragraph.replace(/^###\s*/, ""))}
                           </h3>
                         );
                       }
@@ -177,7 +220,7 @@ const Blogs = () => {
                         return (
                           <div key={pIdx} className="flex items-start gap-2.5 pl-2 text-foreground/90 font-medium">
                             <span className="text-primary font-bold">•</span>
-                            <span>{paragraph.replace(/^[•-]\s*/, "")}</span>
+                            <span>{renderFormattedText(paragraph.replace(/^[•-]\s*/, ""))}</span>
                           </div>
                         );
                       }
@@ -188,7 +231,7 @@ const Blogs = () => {
                           </div>
                         );
                       }
-                      return <p key={pIdx}>{paragraph}</p>;
+                      return <p key={pIdx}>{renderFormattedText(paragraph)}</p>;
                     })}
                   </div>
 
@@ -198,7 +241,7 @@ const Blogs = () => {
                       <ShieldAlert className="w-5 h-5 shrink-0 mt-0.5 text-destructive" />
                       <div>
                         <strong className="font-bold block mb-0.5">Critical Compliance Warning:</strong>
-                        <span className="text-destructive/90">{section.warning}</span>
+                        <span className="text-destructive/90">{renderFormattedText(section.warning)}</span>
                       </div>
                     </div>
                   )}
@@ -209,7 +252,7 @@ const Blogs = () => {
                       <Lightbulb className="w-5 h-5 shrink-0 mt-0.5 text-emerald-400" />
                       <div>
                         <strong className="font-bold block mb-0.5">Expert Pro Tip:</strong>
-                        <span className="text-emerald-300/90">{section.tip}</span>
+                        <span className="text-emerald-300/90">{renderFormattedText(section.tip)}</span>
                       </div>
                     </div>
                   )}
@@ -259,7 +302,7 @@ const Blogs = () => {
 
                       {section.example.explanation && (
                         <p className="text-xs text-secondary italic">
-                          💡 {section.example.explanation}
+                          💡 {renderFormattedText(section.example.explanation)}
                         </p>
                       )}
                     </div>
@@ -277,7 +320,7 @@ const Blogs = () => {
                 </h3>
                 {currentPost.content.conclusion.split("\n\n").map((cPara, cIdx) => (
                   <p key={cIdx} className="text-sm sm:text-base text-secondary leading-relaxed font-medium">
-                    {cPara}
+                    {renderFormattedText(cPara)}
                   </p>
                 ))}
               </div>
@@ -300,7 +343,7 @@ const Blogs = () => {
                       <div className="w-5 h-5 rounded-full bg-primary/20 border border-primary/40 flex items-center justify-center shrink-0 mt-0.5 text-primary text-xs font-bold">
                         ✓
                       </div>
-                      <span className="leading-snug">{item}</span>
+                      <span className="leading-snug">{renderFormattedText(item)}</span>
                     </div>
                   ))}
                 </div>
@@ -363,7 +406,7 @@ const Blogs = () => {
               
               {/* Category Pills */}
               <div className="flex flex-wrap items-center gap-1.5 w-full sm:w-auto">
-                {["All", "Compliance & Safety", "SEO & Metadata"].map(cat => (
+                {["All", "Compliance & Safety", "SEO & Metadata", "Stock Strategy"].map(cat => (
                   <button
                     key={cat}
                     onClick={() => setSelectedCategory(cat)}
