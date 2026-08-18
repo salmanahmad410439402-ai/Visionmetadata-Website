@@ -37,6 +37,132 @@ export interface BlogPost {
 
 export const BLOG_POSTS: BlogPost[] = [
   {
+    id: "why-best-photo-rejected-adobe-stock-secret",
+    slug: "why-does-your-best-photo-keep-getting-rejected-adobe-stock-secret",
+    title: "Why Does Your Best Photo Keep Getting Rejected? (The Hidden Secret Behind Adobe Stock)",
+    subtitle: "It was 2 AM, and I saw 'Similar Content' rejections on my best shots. Here is the 10-second review decision and search formula top contributors quietly follow.",
+    category: "Stock Strategy",
+    readTime: "6 min read",
+    publishDate: "August 2026",
+    author: {
+      name: "Tagyfy Contributor Insights",
+      role: "Senior Stock Strategist & Contributor",
+      avatar: "💡",
+    },
+    summary: "Stock photography isn't just photography—it's a search game. Discover why reviewers reject high-quality photos in the first 10 seconds, the 60-30-10 keyword rule, and the title formula top earners use daily.",
+    tags: ["Adobe Stock", "Rejection Secrets", "Title Strategy", "Keyword Formula", "Stock Photography"],
+    content: {
+      intro: `It was 2 AM, and I was checking my Adobe Stock portfolio. What I saw broke my heart.
+
+"Similar Content" — rejected.
+"Similar Content" — rejected.
+"Similar Content" — rejected.
+
+My photo was good. The composition was right, the lighting was perfect, the subject was strong. So why was it still getting rejected?
+
+Because the problem was never the photo. The problem was in that 10-second decision the reviewer makes just by glancing at the title and keywords — and I was losing that decision before my photo was even really looked at.
+
+That night, I understood something important: stock photography isn't just photography. It's a search game. And if you don't know how to play it, no matter how good your photo is, it will never really be seen — not by the reviewer, and not by the buyer either.
+
+Here's the whole system I learned — the one top-earning contributors quietly follow every single day.`,
+      sections: [
+        {
+          heading: "Truth #1: Your Title Is an Ad, Not a Caption",
+          subheading: "Most people just stuff keywords into their title. That's a red flag telling the algorithm 'this is robotic, auto-generated content.'",
+          body: [
+            "Most people just stuff keywords into their title:",
+            "\"sunset, beach, palm tree, tropical, vacation, ocean, waves\"",
+            "That's not a title. That's a red flag telling the algorithm 'this is robotic, auto-generated content.'",
+            "A winning title looks more like this:",
+            "\"Tropical beach sunset panoramic landscape. Golden hour waves on sandy shore with palm trees and dramatic sky. Scenic coastal photography for travel and tourism.\"",
+            "See the difference? This reads like something a human actually wrote — because it is. And it quietly contains the three things every winning title needs:",
+            "1. Subject — what the asset actually is",
+            "2. Action or Setting — what's happening, or where it's happening",
+            "3. Style — is it a photo, a vector, a 3D render?",
+            "And here's the most important part: the first 3–5 words need to carry the main subject. Why? Because Adobe's algorithm — just like Google's — gives the strongest weight to the opening words. If your main keyword shows up at word 6 or 7, you've already lost the race."
+          ],
+          example: {
+            badTitle: "sunset, beach, palm tree, tropical, vacation, ocean, waves",
+            goodTitle: "Tropical beach sunset panoramic landscape. Golden hour waves on sandy shore with palm trees and dramatic sky. Scenic coastal photography for travel and tourism.",
+            explanation: "Notice how the opening 3–5 words carry the primary subject and read naturally like human prose instead of repetitive comma-separated spam."
+          }
+        },
+        {
+          heading: "Truth #2: Writing 'Beautiful' Makes You Look Like an Amateur",
+          subheading: "Subjective adjectives tell buyers and algorithms nothing.",
+          body: [
+            "This seems small, but a lot of people get it wrong.",
+            "\"Beautiful sunset.\" \"Amazing landscape.\" \"Stunning view.\" \"Gorgeous flowers.\"",
+            "These words tell buyers nothing. Beautiful according to who? It's subjective, not searchable. No buyer types 'amazing' into a search bar — they type 'golden hour beach photography.'",
+            "Top contributors permanently cut these words from their vocabulary: beautiful, amazing, stunning, gorgeous, breathtaking, perfect, incredible, fantastic.",
+            "Instead, write specific, visual, searchable details. What color is it? What time of day? What's the mood? These are the things that actually sell — not adjectives."
+          ],
+          tip: "Replace subjective fluff with tangible details: lighting (golden hour, backlit), composition (aerial, close-up), palette (warm neutral tones), and setting."
+        },
+        {
+          heading: "Truth #3: There's a Hidden Formula Inside Your Keywords",
+          subheading: "Say you write 30 keywords. Every keyword carries a radically different algorithm weight.",
+          body: [
+            "This is the part 90% of contributors get wrong.",
+            "Say you write 30 keywords. Do you think every keyword carries the same weight? Not even close.",
+            "Position Matters More Than You Think:",
+            "• Positions 1–10 — carry the most weight. These should only be the most specific, content-describing words.",
+            "• Positions 11–30 — conceptual and use-case words (like 'corporate,' 'wellness,' 'innovation').",
+            "• Positions 31+ — generic type words like 'photo,' 'vector,' 'illustration'.",
+            "If your main keyword lands at position 11 or later, its ranking potential drops significantly — no matter how relevant that keyword actually is.",
+            "The 60-30-10 Rule:",
+            "A strong keyword list is a mix of three types of words:",
+            "• 60% Literal — what's actually visible in the asset.",
+            "• 30% Conceptual — what the asset represents or communicates.",
+            "• 10% Technical — how it was made (when relevant).",
+            "The Biggest Trap: Putting Generic Words at the Top:",
+            "\"Vector,\" \"icon,\" \"illustration,\" \"design,\" \"background,\" \"template\" — these words are so generic that competition for them is massive. Never put them in your top 10. They should always come last."
+          ],
+          warning: "Never put generic filler tags like 'background' or 'design' in your top 10 keywords. High-competition generic tags waste your most valuable ranking slots."
+        },
+        {
+          heading: "Truth #4: 'No People' Is an Important Signal",
+          subheading: "A high-conversion filter commercial buyers use every day.",
+          body: [
+            "If your asset doesn't contain any humans, make sure 'no people' appears somewhere in your last 10 keywords.",
+            "This is a filter buyers actually use — especially when they specifically need people-free content, like pure landscapes or abstract concepts."
+          ],
+          tip: "Always include 'no people, copy space, indoors/outdoors' in your secondary tags when applicable."
+        },
+        {
+          heading: "Truth #5: Trademarks Are a Silent Killer",
+          subheading: "One trademarked term puts your whole asset at risk.",
+          body: [
+            "One mistake — a keyword like 'iPhone-style smartphone' or 'Nike-style shoes' — and the entire asset becomes legally risky, no matter how good the photo is.",
+            "Brand names, product names, character names — always stay away from these. It's not just a rejection risk; it can become a copyright issue too."
+          ],
+          warning: "Stock platforms use automated visual and text sniffer bots. Even adding '-style' to a brand name triggers instant rejection."
+        }
+      ],
+      conclusion: `Success in stock photography comes down to a simple formula:
+
+Great content + Smart metadata = Visibility
+Great content + Weak metadata = Invisible
+
+No matter how good your photo is, if a reviewer or algorithm can't "understand" it, it will never reach a buyer.
+
+The day I changed how I wrote titles and structured my keywords using this system, my rejection rate dropped immediately — and my views started climbing.
+
+This isn't magic. It's just a system that very few people actually know — and now, you do too.
+
+Next step? Before your next upload, read your title out loud. Does it sound like something a human would say — or does it sound like a pile of keywords? If it's the second one, that's exactly where to start fixing it.`,
+      checklist: [
+        "Read your title out loud — ensure it sounds like human prose, not comma-separated tag stuffing",
+        "Place the primary visual subject within the first 3–5 words of the title",
+        "Eliminate subjective fluff words (beautiful, amazing, stunning, gorgeous)",
+        "Place your top 10 most specific, high-relevance keywords in slots 1–10",
+        "Apply the 60-30-10 rule (60% literal, 30% conceptual, 10% technical)",
+        "Add 'no people' to secondary keywords if the image is people-free",
+        "Scrub all brand names, product references, and trademarked geometry"
+      ]
+    }
+  },
+  {
     id: "adobe-stock-account-suspension-mistakes",
     slug: "common-mistakes-account-suspension-adobe-stock",
     title: "7 Critical Mistakes That Lead to Adobe Stock Account Suspension (And How to Protect Your Portfolio)",

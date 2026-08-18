@@ -143,8 +143,10 @@ const Blogs = () => {
             </div>
 
             {/* Article Intro Excerpt */}
-            <div className="bg-muted/20 border-l-4 border-primary rounded-r-2xl p-5 sm:p-6 mb-10 text-sm sm:text-base leading-relaxed text-foreground font-medium">
-              {currentPost.content.intro}
+            <div className="bg-muted/20 border-l-4 border-primary rounded-r-2xl p-5 sm:p-6 mb-10 text-sm sm:text-base leading-relaxed text-foreground font-medium space-y-3 shadow-inner">
+              {currentPost.content.intro.split("\n\n").map((para, idx) => (
+                <p key={idx}>{para}</p>
+              ))}
             </div>
 
             {/* Article Sections */}
@@ -153,7 +155,7 @@ const Blogs = () => {
                 <div key={idx} className="space-y-4">
                   <h2 className="text-xl sm:text-2xl font-black text-foreground tracking-tight flex items-start gap-3">
                     <span className="text-primary opacity-80">{idx + 1}.</span>
-                    <span>{section.heading.replace(/^\d+\.\s*/, "")}</span>
+                    <span>{section.heading.replace(/^\d+\.\s*/, "").replace(/^Truth #\d+:\s*/, "")}</span>
                   </h2>
 
                   {section.subheading && (
@@ -163,9 +165,31 @@ const Blogs = () => {
                   )}
 
                   <div className="space-y-3 text-sm sm:text-base text-secondary leading-relaxed">
-                    {section.body.map((paragraph, pIdx) => (
-                      <p key={pIdx}>{paragraph}</p>
-                    ))}
+                    {section.body.map((paragraph, pIdx) => {
+                      if (paragraph.startsWith("### ")) {
+                        return (
+                          <h3 key={pIdx} className="text-base sm:text-lg font-bold text-foreground pt-3 text-primary">
+                            {paragraph.replace(/^###\s*/, "")}
+                          </h3>
+                        );
+                      }
+                      if (paragraph.startsWith("• ") || paragraph.startsWith("- ")) {
+                        return (
+                          <div key={pIdx} className="flex items-start gap-2.5 pl-2 text-foreground/90 font-medium">
+                            <span className="text-primary font-bold">•</span>
+                            <span>{paragraph.replace(/^[•-]\s*/, "")}</span>
+                          </div>
+                        );
+                      }
+                      if (paragraph.startsWith('"') && paragraph.endsWith('"') && paragraph.length < 160) {
+                        return (
+                          <div key={pIdx} className="p-3 bg-muted/40 rounded-xl border border-border/50 font-mono text-xs text-foreground/90 my-2">
+                            {paragraph}
+                          </div>
+                        );
+                      }
+                      return <p key={pIdx}>{paragraph}</p>;
+                    })}
                   </div>
 
                   {/* Warning Callout Box */}
@@ -209,7 +233,7 @@ const Blogs = () => {
                       {section.example.goodTitle && (
                         <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-xs">
                           <span className="font-bold text-emerald-400 flex items-center gap-1.5 mb-1">
-                            ✅ 185-Char Optimized Title:
+                            ✅ Winning Optimized Title:
                           </span>
                           <p className="text-foreground font-mono font-medium">{section.example.goodTitle}</p>
                         </div>
@@ -243,6 +267,21 @@ const Blogs = () => {
                 </div>
               ))}
             </div>
+
+            {/* Article Conclusion */}
+            {currentPost.content.conclusion && (
+              <div className="glass-panel rounded-3xl p-6 sm:p-8 border border-border/80 mb-10 space-y-3 shadow-sm bg-card/40">
+                <h3 className="text-lg font-bold text-foreground mb-2 flex items-center gap-2">
+                  <Bookmark className="w-5 h-5 text-primary" />
+                  Key Takeaways
+                </h3>
+                {currentPost.content.conclusion.split("\n\n").map((cPara, cIdx) => (
+                  <p key={cIdx} className="text-sm sm:text-base text-secondary leading-relaxed font-medium">
+                    {cPara}
+                  </p>
+                ))}
+              </div>
+            )}
 
             {/* Conclusion & Actionable Checklist */}
             {currentPost.content.checklist && currentPost.content.checklist.length > 0 && (
