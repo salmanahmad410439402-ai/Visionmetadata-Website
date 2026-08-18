@@ -1,4 +1,4 @@
-import { Download, Shield, Zap, Cpu, Globe, Check, Clock, Star, Gift } from "lucide-react";
+import { Download, Shield, Zap, Cpu, Globe, Check, Clock, Star, Gift, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useReveal } from "@/hooks/useReveal";
 
@@ -37,16 +37,22 @@ const HeroSection = () => {
         </p>
 
         {/* CTA */}
-        <div className="reveal reveal-delay-3 flex flex-col sm:flex-row items-center gap-5 justify-center mb-8">
+        <div className="reveal reveal-delay-3 flex flex-col sm:flex-row items-center gap-4 justify-center mb-8">
+          <a href="/tool">
+            <Button size="lg" className="w-full sm:w-auto h-16 px-8 text-base font-bold rounded-2xl btn-shimmer bg-gradient-flow text-white shadow-[0_0_40px_hsl(var(--primary)/0.4)] hover:shadow-[0_0_60px_hsl(var(--primary)/0.6)] hover:scale-[1.02] transition-all duration-300 border-0">
+              <Sparkles className="w-5 h-5 mr-2" />
+              Try Free Online Tool
+            </Button>
+          </a>
           <a href="https://github.com/salmangraphics839-hue/visionmeta-releases/releases/download/1.3.6/Tagyfy_Pro_1.3.6_x64-setup.exe" target="_blank" rel="noopener noreferrer">
-            <Button size="lg" className="w-full sm:w-auto h-16 px-10 text-lg font-bold rounded-2xl btn-shimmer bg-gradient-flow text-white shadow-[0_0_40px_hsl(var(--primary)/0.4)] hover:shadow-[0_0_60px_hsl(var(--primary)/0.6)] hover:scale-[1.02] transition-all duration-300 border border-white/10 border-0">
-              <Download className="w-6 h-6 mr-3" />
+            <Button size="lg" variant="outline" className="w-full sm:w-auto h-16 px-8 text-base font-bold rounded-2xl border-white/10 hover:bg-primary/5 transition-all duration-300 hover:scale-[1.02] glass-panel text-foreground">
+              <Download className="w-5 h-5 mr-2" />
               Download for Windows
             </Button>
           </a>
           <a href="/pricing">
-            <Button size="lg" variant="outline" className="w-full sm:w-auto h-16 px-10 text-lg font-bold rounded-2xl border-white/10 hover:bg-primary/5 transition-all duration-300 hover:scale-[1.02] glass-panel text-foreground">
-              View Pricing
+            <Button size="lg" variant="ghost" className="w-full sm:w-auto h-16 px-6 text-sm font-semibold rounded-2xl text-muted-foreground hover:text-foreground">
+              Pricing
             </Button>
           </a>
         </div>

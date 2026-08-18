@@ -5,6 +5,7 @@ import { useTheme } from "@/hooks/useTheme.tsx";
 import { analytics } from "@/lib/analytics";
 
 const navLinks = [
+  { label: "Free Web Tool", to: "/tool" },
   { label: "Features", to: "/features" },
   { label: "Pricing",  to: "/pricing"  },
   { label: "Download", to: "/download" },
