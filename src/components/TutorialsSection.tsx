@@ -10,9 +10,9 @@ const tutorials = [
     icon: Download,
     title: "Complete Workflow Guide",
     desc: "Complete guide from installation, setting configuration, generating metadata, to uploading embedded files on Adobe Stock and Shutterstock.",
-    duration: "4:09",
-    videoFile: "https://www.youtube.com/embed/o6g0n9b-6yg",
-    youtubeId: "o6g0n9b-6yg",
+    duration: "Full Tutorial",
+    videoFile: "https://www.youtube.com/embed/MoeprdBnpes",
+    youtubeId: "MoeprdBnpes",
   },
   {
     num: "02",
@@ -20,8 +20,8 @@ const tutorials = [
     title: "Using Batch Mode",
     desc: "Process hundreds of files lightning fast. Toggle Batch Mode in settings to utilize parallel processing for massive asset batches.",
     duration: "Quick Guide",
-    videoFile: "https://www.youtube.com/embed/o6g0n9b-6yg",
-    youtubeId: "o6g0n9b-6yg",
+    videoFile: "https://www.youtube.com/embed/MoeprdBnpes",
+    youtubeId: "MoeprdBnpes",
   },
   {
     num: "03",
@@ -29,8 +29,8 @@ const tutorials = [
     title: "Event & Series Context",
     desc: "Working on a specific event like New Year or Eid? Toggle Event Context to generate Dual-Strategy metadata optimized for both the event and general searches.",
     duration: "Strategy Guide",
-    videoFile: "https://www.youtube.com/embed/o6g0n9b-6yg",
-    youtubeId: "o6g0n9b-6yg",
+    videoFile: "https://www.youtube.com/embed/MoeprdBnpes",
+    youtubeId: "MoeprdBnpes",
   },
   {
     num: "04",
@@ -38,8 +38,8 @@ const tutorials = [
     title: "Upload & Watch the Magic",
     desc: "Upload your exported files to Adobe Stock and Shutterstock. Watch as all your generated metadata is perfectly read and embedded.",
     duration: "Upload Guide",
-    videoFile: "https://www.youtube.com/embed/o6g0n9b-6yg",
-    youtubeId: "o6g0n9b-6yg",
+    videoFile: "https://www.youtube.com/embed/MoeprdBnpes",
+    youtubeId: "MoeprdBnpes",
   },
 ];
 
@@ -209,7 +209,7 @@ const TutorialsSection = () => {
             {isPlayingDemo ? (
               <iframe 
                 className="absolute inset-0 w-full h-full bg-black"
-                src="https://www.youtube.com/embed/o6g0n9b-6yg?autoplay=1&mute=0&rel=0&showinfo=0" 
+                src="https://www.youtube.com/embed/MoeprdBnpes?autoplay=1&mute=0&rel=0&showinfo=0" 
                 title="Tagyfy Pro Demo"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 referrerPolicy="strict-origin-when-cross-origin"
