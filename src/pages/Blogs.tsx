@@ -179,7 +179,7 @@ const Blogs = () => {
                   {currentPost.author.avatar}
                 </div>
                 <div>
-                  <p className="text-sm font-bold text-foreground">{currentPost.author.name}</p>
+                  <p className="text-sm font-bold text-foreground">Written by {currentPost.author.name}</p>
                   <p className="text-xs text-muted-foreground">{currentPost.author.role}</p>
                 </div>
               </div>
@@ -472,9 +472,12 @@ const Blogs = () => {
                   </div>
 
                   <div className="pt-6 mt-6 border-t border-border/50 flex items-center justify-between">
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2.5">
                       <span className="text-sm">{post.author.avatar}</span>
-                      <span className="text-xs font-semibold text-muted-foreground">{post.author.name}</span>
+                      <div>
+                        <span className="text-xs font-bold text-foreground block">Written by {post.author.name}</span>
+                        <span className="text-[10px] text-muted-foreground block">{post.author.role}</span>
+                      </div>
                     </div>
 
                     <span className="text-xs font-bold text-primary flex items-center gap-1 group-hover:translate-x-1 transition-transform">
