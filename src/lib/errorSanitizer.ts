@@ -105,7 +105,11 @@ export function formatErrorForUser(error: Error | unknown): string {
     if (message.includes("memory")) {
       return "Out of memory. Please close other applications and try again.";
     }
-    // Generic fallback for unknown errors
+    // Return sanitized message if available
+    const sanitized = sanitizeErrorMessage(error.message);
+    if (sanitized && sanitized.length > 5 && sanitized.length < 250) {
+      return sanitized;
+    }
     return "An unexpected error occurred. Please try again.";
   }
   

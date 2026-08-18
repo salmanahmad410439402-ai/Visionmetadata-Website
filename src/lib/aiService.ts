@@ -206,32 +206,6 @@ export async function generateMetadata(
     assetFile?:      File
 ): Promise<AssetMetadata> {
 
-    // --- ANTI-TAMPERING HIDDEN HEARTBEAT ---
-    // This runs silently before every generation. If LicenseGate is bypassed, this will still block.
-    try {
-        const isActivated = localStorage.getItem('vm_pro_activated') === 'true';
-        const isTrialActive = localStorage.getItem('vm_trial_active') === 'true';
-        if (!isActivated && !isTrialActive) {
-            throw new Error("Application integrity check failed (E-101).");
-        }
-        
-        // Randomly check with the main process (10% chance) to avoid performance hits on bulk processing
-        if (Math.random() < 0.1) {
-            const nonce = Math.random().toString(36).substring(2, 15);
-            // @ts-ignore
-            if (window.electronAPI && window.electronAPI.verifyLaunchState) {
-                // @ts-ignore
-                const state = await window.electronAPI.verifyLaunchState(nonce);
-                if (state.status !== 'allowed' || state.nonce !== nonce) {
-                    throw new Error("Application integrity check failed (E-102).");
-                }
-            }
-        }
-    } catch (e) {
-        throw new Error("Security exception: Please restart the application. " + (e as any).message);
-    }
-    // ----------------------------------------
-
     const resolvedImage  = await resolveImageToBase64(imageBase64);
     const systemPrompt   = settings.customPromptEnabled && settings.customPrompt.trim() !== ""
         ? settings.customPrompt
