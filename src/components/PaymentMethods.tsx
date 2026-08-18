@@ -48,7 +48,7 @@ const PaymentMethods = () => {
       name: "Skrill (International)",
       desc: "Global payment & remittance",
       details: [
-        { label: "Email", value: "salmangraphics839@gmail.com" },
+        { label: "Email", value: "alhamdstudio839@gmail.com" },
       ],
       color: "from-indigo-500/20 to-emerald-500/20",
     },

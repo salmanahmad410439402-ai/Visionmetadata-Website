@@ -127,8 +127,8 @@ const PrivacyPolicy = () => {
               If you have questions regarding this Privacy Policy or wish to exercise any data rights, please contact us:
             </p>
             <div className="bg-primary/5 rounded-2xl p-5 border border-primary/20 text-sm space-y-1">
-              <p><strong>Email:</strong> <a href="mailto:salmangraphics839@gmail.com" className="text-primary hover:underline">salmangraphics839@gmail.com</a></p>
-              <p><strong>WhatsApp Support:</strong> +92 329 7090888</p>
+              <p><strong>Email:</strong> <a href="mailto:alhamdstudio839@gmail.com" className="text-primary hover:underline">alhamdstudio839@gmail.com</a></p>
+              <p><strong>WhatsApp Support:</strong> +92 325 9640429</p>
               <p><strong>Website:</strong> https://tagyfy.com</p>
             </div>
           </section>

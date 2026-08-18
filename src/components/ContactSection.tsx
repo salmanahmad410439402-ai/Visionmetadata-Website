@@ -26,12 +26,12 @@ const ContactSection = () => {
         {/* Quick contact buttons */}
         <div className="reveal reveal-delay-3 grid sm:grid-cols-2 gap-4 mb-20">
           {/* WhatsApp */}
-          <a href="https://wa.me/923297409088" target="_blank" rel="noopener noreferrer"
+          <a href="https://wa.me/923259640429" target="_blank" rel="noopener noreferrer"
             className="group relative overflow-hidden rounded-xl border p-6 transition-all duration-300 hover:border-green-500/50 hover:shadow-[0_0_20px_rgba(34,197,94,0.1)] bg-green-500/10 border-green-500/20">
             <div className="flex items-center justify-between relative z-10">
               <div>
                 <h3 className="text-sm font-bold text-green-600 dark:text-green-400 mb-1">WhatsApp (Fastest)</h3>
-                <p className="text-lg font-semibold text-foreground">+92 329 7090888</p>
+                <p className="text-lg font-semibold text-foreground">+92 325 9640429</p>
                 <p className="text-xs mt-2 text-minimal">Instant responses · License keys delivered in minutes</p>
               </div>
               <Phone className="w-8 h-8 text-green-500/60 group-hover:text-green-500 transition-colors" />
@@ -39,12 +39,12 @@ const ContactSection = () => {
           </a>
 
           {/* Email */}
-          <a href="mailto:salmangraphics839@gmail.com"
+          <a href="mailto:alhamdstudio839@gmail.com"
             className="group relative overflow-hidden rounded-xl border p-6 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_20px_hsl(243_75%_59%/0.1)] bg-card-primary border-card-primary">
             <div className="flex items-center justify-between relative z-10">
               <div>
                 <h3 className="text-sm font-bold text-primary mb-1">Email Support</h3>
-                <p className="text-lg font-semibold text-foreground">salmangraphics839@gmail.com</p>
+                <p className="text-lg font-semibold text-foreground">alhamdstudio839@gmail.com</p>
                 <p className="text-xs mt-2 text-minimal">General inquiries · Technical support · Partnerships</p>
               </div>
               <Mail className="w-8 h-8 text-primary/60 group-hover:text-primary transition-colors" />

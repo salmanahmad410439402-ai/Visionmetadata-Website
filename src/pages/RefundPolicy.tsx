@@ -83,8 +83,8 @@ const RefundPolicy = () => {
               To request assistance or submit a refund request, please contact our support desk with your license key or order transaction ID:
             </p>
             <div className="bg-primary/5 rounded-2xl p-5 border border-primary/20 text-sm space-y-1">
-              <p><strong>WhatsApp Support (Fastest):</strong> +92 329 7090888</p>
-              <p><strong>Email Support:</strong> <a href="mailto:salmangraphics839@gmail.com" className="text-primary hover:underline">salmangraphics839@gmail.com</a></p>
+              <p><strong>WhatsApp Support (Fastest):</strong> +92 325 9640429</p>
+              <p><strong>Email Support:</strong> <a href="mailto:alhamdstudio839@gmail.com" className="text-primary hover:underline">alhamdstudio839@gmail.com</a></p>
               <p><strong>Response Time:</strong> Typically within 2 to 6 hours.</p>
             </div>
           </section>

@@ -272,7 +272,7 @@ const PricingSection = () => {
                 {/* CTA */}
                 <div className="flex gap-2">
                   <a
-                    href={`https://wa.me/9203297409088?text=${getWhatsAppMessage(plan.name, currency)}`}
+                    href={`https://wa.me/923259640429?text=${getWhatsAppMessage(plan.name, currency)}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className={`flex-1 flex items-center justify-center py-3.5 rounded-xl text-sm font-bold transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] ${
@@ -284,7 +284,7 @@ const PricingSection = () => {
                     Get {plan.name}
                   </a>
                   <a
-                    href={`https://wa.me/9203297409088?text=${getWhatsAppMessage(plan.name, currency)}`}
+                    href={`https://wa.me/923259640429?text=${getWhatsAppMessage(plan.name, currency)}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center justify-center w-12 rounded-xl border border-green-500/30 bg-green-500/10 hover:bg-green-500/20 transition-all duration-200"
