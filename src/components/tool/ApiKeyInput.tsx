@@ -15,7 +15,7 @@ export const ApiKeyInput: React.FC<ApiKeyInputProps> = ({ apiKey, onChange }) =>
   const [rememberKey, setRememberKey] = useState(false);
 
   useEffect(() => {
-    const saved = localStorage.getItem('visionmeta_byok_key');
+    const saved = localStorage.getItem('tagyfy_byok_key');
     if (saved && !apiKey) {
       onChange(saved);
       setRememberKey(true);
@@ -25,16 +25,16 @@ export const ApiKeyInput: React.FC<ApiKeyInputProps> = ({ apiKey, onChange }) =>
   const handleKeyChange = (val: string) => {
     onChange(val);
     if (rememberKey) {
-      localStorage.setItem('visionmeta_byok_key', val);
+      localStorage.setItem('tagyfy_byok_key', val);
     }
   };
 
   const handleRememberToggle = (checked: boolean) => {
     setRememberKey(checked);
     if (checked && apiKey) {
-      localStorage.setItem('visionmeta_byok_key', apiKey);
+      localStorage.setItem('tagyfy_byok_key', apiKey);
     } else {
-      localStorage.removeItem('visionmeta_byok_key');
+      localStorage.removeItem('tagyfy_byok_key');
     }
   };
 

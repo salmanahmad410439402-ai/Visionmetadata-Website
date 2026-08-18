@@ -63,7 +63,7 @@ const DownloadSection = () => {
             </h2>
             
             <p className="text-xl mb-3 text-secondary">
-              Get VisionMetadata Pro running in under a minute. Full access for 3 days, completely free.
+              Get Tagyfy Pro running in under a minute. Full access for 3 days, completely free.
             </p>
             <p className="text-base mb-12 text-quaternary">
               Process 100+ videos, vectors, and images. Extract metadata, generate previews, export anything. No credit card required.

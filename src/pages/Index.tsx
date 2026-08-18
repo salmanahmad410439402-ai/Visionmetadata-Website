@@ -63,7 +63,7 @@ const Index = () => {
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-14">
               <h2 className="reveal text-3xl sm:text-4xl font-black text-foreground mb-4">
-                Explore <span className="text-gradient-flow">VisionMetadata Pro</span>
+                Explore <span className="text-gradient-flow">Tagyfy Pro</span>
               </h2>
               <p className="reveal reveal-delay-1 max-w-2xl mx-auto text-muted-foreground">
                 Learn more about features, pricing, and how it works.

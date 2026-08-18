@@ -31,7 +31,7 @@ const TermsOfService = () => {
               1. Acceptance of Terms
             </h2>
             <p>
-              By downloading, installing, accessing, or using <strong>Tagyfy Pro</strong> (and VisionMetadata Pro products) or visiting <a href="https://tagyfy.com" className="text-primary hover:underline">tagyfy.com</a>, you agree to be bound by these Terms of Service. If you disagree with any part of these terms, you may not use our software or website.
+              By downloading, installing, accessing, or using <strong>Tagyfy Pro</strong> or visiting <a href="https://tagyfy.com" className="text-primary hover:underline">tagyfy.com</a>, you agree to be bound by these Terms of Service. If you disagree with any part of these terms, you may not use our software or website.
             </p>
           </section>
 

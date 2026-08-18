@@ -19,7 +19,7 @@ const ContactSection = () => {
             Contact & Support
           </h2>
           <p className="reveal reveal-delay-2 max-w-2xl mx-auto text-lg text-tertiary">
-            Have questions about VisionMeta? Need a license key? Our team responds quickly on WhatsApp & email.
+            Have questions about Tagyfy Pro? Need a license key? Our team responds quickly on WhatsApp & email.
           </p>
         </div>
 

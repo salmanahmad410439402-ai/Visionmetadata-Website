@@ -2,7 +2,7 @@ import { useReveal } from "@/hooks/useReveal";
 
 const testimonials = [
   {
-    quote: "I used to spend 2–3 hours manually entering titles and keywords for every batch upload. VisionMetadata Pro does the same work in minutes. It's honestly embarrassing how much time I wasted before.",
+    quote: "I used to spend 2–3 hours manually entering titles and keywords for every batch upload. Tagyfy Pro does the same work in minutes. It's honestly embarrassing how much time I wasted before.",
     name: "Ahmed K.",
     role: "Adobe Stock Contributor · 1,200+ files",
     initial: "A",

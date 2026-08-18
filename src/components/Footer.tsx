@@ -37,7 +37,7 @@ const Footer = () => {
 
         {/* Copyright */}
         <div className="border-t border-border/50 pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-minimal-low gap-3">
-          <p>© {new Date().getFullYear()} Tagyfy Pro / VisionMetadata Pro · All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Tagyfy Pro · All rights reserved.</p>
           <p className="text-[11px]">Built for Adobe Stock, Shutterstock, Freepik & Vecteezy Contributors</p>
         </div>
       </div>

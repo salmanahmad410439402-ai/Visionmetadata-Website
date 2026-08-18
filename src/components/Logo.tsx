@@ -40,8 +40,8 @@ export const Logo = ({ size = "md", showPro = true }: LogoProps) => {
 
       {/* Text */}
       <div className="flex items-center gap-1.5">
-        <span className={`${text} font-bold text-foreground`}>Vision</span>
-        <span className={`${text} font-bold text-gradient`}>Metadata</span>
+        <span className={`${text} font-bold text-foreground`}>Tagyfy</span>
+        <span className={`${text} font-bold text-gradient`}>Pro</span>
         
         {showPro && (
           <motion.span
@@ -50,7 +50,7 @@ export const Logo = ({ size = "md", showPro = true }: LogoProps) => {
             animate={{ scale: 1 }}
             transition={{ delay: 0.3, type: "spring" }}
           >
-            PRO
+            AI
           </motion.span>
         )}
       </div>

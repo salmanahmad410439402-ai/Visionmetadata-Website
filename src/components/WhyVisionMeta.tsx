@@ -126,7 +126,7 @@ const WhyVisionMeta = () => {
                 <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 bg-accent-indigo-dark">
                   <Check className="w-5 h-5 text-primary" />
                 </div>
-                <h3 className="text-lg font-bold text-primary">With VisionMetadata Pro</h3>
+                <h3 className="text-lg font-bold text-primary">With Tagyfy Pro</h3>
               </div>
               <ul className="space-y-4">
                 {after.map((item) => (

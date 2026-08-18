@@ -11,8 +11,8 @@ import { analytics } from "@/lib/analytics";
 
 const faqs = [
     {
-        question: "Does VisionMetadata Pro embed metadata directly into files?",
-        answer: "Yes. VisionMetadata Pro embeds metadata directly into your files — no extra software required. This works for JPG, PNG, EPS, AI, SVG, MP4, MOV, and more. Stock platforms read the embedded data automatically on upload.",
+        question: "Does Tagyfy Pro embed metadata directly into files?",
+        answer: "Yes. Tagyfy Pro embeds metadata directly into your files — no extra software required. This works for JPG, PNG, EPS, AI, SVG, MP4, MOV, and more. Stock platforms read the embedded data automatically on upload.",
     },
     {
         question: "Will stock platforms automatically detect this metadata?",
@@ -20,11 +20,11 @@ const faqs = [
     },
     {
         question: "Which AI providers are supported?",
-        answer: "VisionMetadata Pro supports 5 AI providers: Google Gemini (Flash & Pro), OpenAI GPT-4o, Groq (Llama 4 Scout), Mistral AI, and OpenRouter (300+ models including free ones). You can add multiple API keys and the system automatically rotates between them when rate limits are hit.",
+        answer: "Tagyfy Pro supports 5 AI providers: Google Gemini (Flash & Pro), OpenAI GPT-4o, Groq (Llama 4 Scout), Mistral AI, and OpenRouter (300+ models including free ones). You can add multiple API keys and the system automatically rotates between them when rate limits are hit.",
     },
     {
         question: "Are there any hard limits on how many files I can process at once?",
-        answer: "No, there are no artificial limits. You can drag and drop folders containing hundreds or thousands of files. The speed of processing depends entirely on your API providers and how many API keys you have added. VisionMetadata Pro handles the queueing smoothly.",
+        answer: "No, there are no artificial limits. You can drag and drop folders containing hundreds or thousands of files. The speed of processing depends entirely on your API providers and how many API keys you have added. Tagyfy Pro handles the queueing smoothly.",
     },
     {
         question: "What happens when my API key hits a rate limit?",
@@ -44,15 +44,15 @@ const faqs = [
     },
     {
         question: "How does the CSV export work?",
-        answer: "VisionMetadata Pro generates platform-specific CSV files verified against the official upload specs for Adobe Stock, Shutterstock, Dreamstime, Freepik, 123RF, and Vecteezy. Each platform gets the correct column headers, category IDs, and keyword formatting. No truncation is ever applied — your full keyword list and title are always exported.",
+        answer: "Tagyfy Pro generates platform-specific CSV files verified against the official upload specs for Adobe Stock, Shutterstock, Dreamstime, Freepik, 123RF, and Vecteezy. Each platform gets the correct column headers, category IDs, and keyword formatting. No truncation is ever applied — your full keyword list and title are always exported.",
     },
     {
         question: "Is my API key safe inside the app?",
-        answer: "Yes. Your API keys are stored locally on your own PC using encrypted storage — they are never sent to VisionMetadata Pro servers because there are no VisionMetadata Pro servers. The app calls AI providers (Gemini, OpenAI, etc.) directly from your machine, just like a browser would. VisionMetadata Pro never sees, logs, or transmits your keys.",
+        answer: "Yes. Your API keys are stored locally on your own PC using encrypted storage — they are never sent to Tagyfy Pro servers because there are no Tagyfy Pro servers. The app calls AI providers (Gemini, OpenAI, etc.) directly from your machine, just like a browser would. Tagyfy Pro never sees, logs, or transmits your keys.",
     },
     {
         question: "How does the licensing work?",
-        answer: "VisionMetadata Pro is available in four plans: 1 Month, 3 Months, 6 Months, and 1 Year. You purchase a license key for your chosen duration — when it expires you can renew at any time. The AI generation uses your own API keys (which have their own free tiers — Gemini offers a generous free quota). You are never billed per generation by VisionMetadata Pro.",
+        answer: "Tagyfy Pro is available in four plans: 1 Month, 3 Months, 6 Months, and 1 Year. You purchase a license key for your chosen duration — when it expires you can renew at any time. The AI generation uses your own API keys (which have their own free tiers — Gemini offers a generous free quota). You are never billed per generation by Tagyfy Pro.",
     },
 ];
 

@@ -35,9 +35,9 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-6 h-16 sm:h-20 flex items-center justify-between">
 
         {/* Logo */}
-        <a href="#" className="text-xl font-black tracking-tight text-foreground select-none">
-          Vision<span className="text-primary">Metadata</span>
-          <span className="ml-1 text-xs font-semibold px-1.5 py-0.5 rounded bg-primary/15 text-primary border border-primary/25">PRO</span>
+        <a href="/" className="text-xl font-black tracking-tight text-foreground select-none">
+          Tagyfy<span className="text-primary"> Pro</span>
+          <span className="ml-1 text-xs font-semibold px-1.5 py-0.5 rounded bg-primary/15 text-primary border border-primary/25">AI</span>
         </a>
 
         {/* Desktop links */}

@@ -120,7 +120,7 @@ const ChromeExtension = () => {
             <div className="mt-12 p-6 rounded-2xl bg-yellow-500/10 border border-yellow-500/20 backdrop-blur-md">
               <p className="text-yellow-200/90 text-sm flex items-center gap-3 font-semibold">
                 <Zap className="w-5 h-5 text-yellow-500 flex-shrink-0" />
-                Note: Chrome may occasionally ask if you want to disable extensions running in Developer Mode. Simply click "Cancel" to keep using the VisionMetadata extension.
+                Note: Chrome may occasionally ask if you want to disable extensions running in Developer Mode. Simply click "Cancel" to keep using the Tagyfy Pro extension.
               </p>
             </div>
           </div>
