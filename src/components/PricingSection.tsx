@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { Check, Clock, Gift } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Check, Clock, Gift, Sparkles } from "lucide-react";
 import { useReveal } from "@/hooks/useReveal";
 
 const TRIAL_END = new Date("2026-03-22T15:40:21.162Z");
@@ -131,24 +132,27 @@ const PricingSection = () => {
         {/* Discount banners removed */}
         {/* ─── END BANNER ─── */}
 
-        {/* ─── BOGO OFFER BANNER ─── */}
-        <div className="reveal mt-8 mb-16 flex flex-col sm:flex-row items-center sm:items-start gap-5 glass-panel rounded-3xl p-5 sm:px-8 max-w-2xl mx-auto transform hover:scale-[1.02] transition-transform cursor-default relative overflow-hidden group">
+        {/* ─── CHROME EXTENSION 100% FREE BANNER ─── */}
+        <Link to="/chrome-extension" className="reveal mt-8 mb-16 flex flex-col sm:flex-row items-center sm:items-start gap-5 glass-panel rounded-3xl p-5 sm:px-8 max-w-2xl mx-auto transform hover:scale-[1.02] transition-all duration-300 relative overflow-hidden group border-primary/20 hover:border-primary/50 hover:shadow-[0_0_30px_hsl(var(--primary)/0.2)]">
           <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-          <div className="absolute top-0 right-0 bg-primary text-primary-foreground text-[10px] font-black uppercase px-3 py-1 rounded-bl-xl shadow-sm z-10">
-            Only 50 Spots Left!
+          <div className="absolute top-0 right-0 bg-green-500 text-slate-950 text-[10px] font-black uppercase px-3 py-1 rounded-bl-xl shadow-sm z-10">
+            100% FREE EXTENSION
           </div>
-          <div className="w-14 h-14 rounded-2xl bg-primary/20 flex items-center justify-center flex-shrink-0 border border-primary/30 shadow-inner z-10 relative mt-2 sm:mt-0 animate-pulse">
-            <Gift className="w-7 h-7 text-primary" />
+          <div className="w-14 h-14 rounded-2xl bg-primary/20 flex items-center justify-center flex-shrink-0 border border-primary/30 shadow-inner z-10 relative mt-2 sm:mt-0 group-hover:scale-110 transition-transform">
+            <Sparkles className="w-7 h-7 text-primary" />
           </div>
           <div className="text-center sm:text-left mt-2 sm:mt-0 z-10 relative">
-            <p className="text-xl font-black text-foreground tracking-tight">Buy One, Get One <span className="text-primary">FREE!</span></p>
-            <p className="text-sm text-secondary mt-1.5 leading-relaxed">Purchase the software today and get the Adobe Stock Chrome Extension completely free.</p>
-            <p className="text-xs font-bold text-primary mt-2.5 flex items-center justify-center sm:justify-start gap-1.5">
-              <Clock className="w-3.5 h-3.5" /> Limited Time Offer — First 50 lucky users only!
+            <p className="text-xl font-black text-foreground tracking-tight flex items-center justify-center sm:justify-start gap-2">
+              Looking for Browser Automation?
+              <span className="text-sm text-primary font-bold hidden sm:inline-block group-hover:translate-x-1 transition-transform">→</span>
+            </p>
+            <p className="text-sm text-secondary mt-1.5 leading-relaxed">The Tagyfy Pro Chrome Extension for Adobe Stock is completely <strong>100% FREE</strong> for all contributors. No license key needed!</p>
+            <p className="text-xs font-bold text-green-400 mt-2.5 flex items-center justify-center sm:justify-start gap-1.5">
+              <Check className="w-3.5 h-3.5" /> Direct In-Browser Tagging • Update Approved Assets • Free Forever
             </p>
           </div>
-        </div>
-        {/* ─── END BOGO BANNER ─── */}
+        </Link>
+        {/* ─── END FREE EXTENSION BANNER ─── */}
 
         {/* Currency toggle */}
         <div className="flex justify-center mb-20">
@@ -249,8 +253,8 @@ const PricingSection = () => {
                 {/* Features */}
                 <ul className="space-y-4 mb-6 mt-4">
                   <li className="flex items-center gap-2 text-sm font-bold text-primary bg-primary/10 px-3 py-2 rounded-lg mb-4 border border-primary/20">
-                    <Gift className="w-4 h-4 flex-shrink-0" />
-                    + Free Extension License
+                    <Sparkles className="w-4 h-4 flex-shrink-0" />
+                    Native File Metadata Embedding
                   </li>
                   {[
                     "Platform-ready CSVs for Adobe, SS, DT & Freepik",

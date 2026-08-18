@@ -1,4 +1,5 @@
 import { Download, Shield, Zap, Cpu, Globe, Check, Clock, Star, Gift, Sparkles } from "lucide-react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useReveal } from "@/hooks/useReveal";
 
@@ -88,23 +89,26 @@ const HeroSection = () => {
           ))}
         </div>
 
-        {/* BOGO Banner */}
-        <div className="reveal reveal-delay-5 mt-4 flex flex-col sm:flex-row items-center sm:items-start gap-5 glass-panel rounded-3xl p-5 sm:px-8 max-w-xl mx-auto transform hover:scale-[1.02] transition-transform cursor-default relative overflow-hidden group">
+        {/* 100% Free Chrome Extension Banner */}
+        <Link to="/chrome-extension" className="reveal reveal-delay-5 mt-4 flex flex-col sm:flex-row items-center sm:items-start gap-5 glass-panel rounded-3xl p-5 sm:px-8 max-w-xl mx-auto transform hover:scale-[1.02] transition-all duration-300 relative overflow-hidden group border-primary/20 hover:border-primary/50 hover:shadow-[0_0_30px_hsl(var(--primary)/0.2)]">
           <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-          <div className="absolute top-0 right-0 bg-primary text-primary-foreground text-[10px] font-black uppercase px-3 py-1 rounded-bl-xl shadow-sm z-10">
-            Only 50 Spots Left!
+          <div className="absolute top-0 right-0 bg-green-500 text-slate-950 text-[10px] font-black uppercase px-3 py-1 rounded-bl-xl shadow-sm z-10">
+            100% FREE FOR ALL
           </div>
-          <div className="w-12 h-12 rounded-2xl bg-primary/20 flex items-center justify-center flex-shrink-0 border border-primary/30 shadow-inner z-10 relative mt-2 sm:mt-0">
-            <Gift className="w-6 h-6 text-primary" />
+          <div className="w-12 h-12 rounded-2xl bg-primary/20 flex items-center justify-center flex-shrink-0 border border-primary/30 shadow-inner z-10 relative mt-2 sm:mt-0 group-hover:scale-110 transition-transform">
+            <Sparkles className="w-6 h-6 text-primary" />
           </div>
           <div className="text-center sm:text-left mt-2 sm:mt-0 z-10 relative">
-            <p className="text-base font-black text-foreground tracking-tight">Buy One, Get One FREE!</p>
-            <p className="text-sm text-secondary mt-1 leading-relaxed">Purchase the software today and get the Adobe Stock Chrome Extension completely free.</p>
-            <p className="text-xs font-bold text-primary mt-2 flex items-center justify-center sm:justify-start gap-1.5">
-              <Clock className="w-3.5 h-3.5" /> Limited Time Offer — First 50 lucky users only!
+            <p className="text-base font-black text-foreground tracking-tight flex items-center justify-center sm:justify-start gap-2">
+              Adobe Stock Chrome Extension is Free!
+              <span className="text-xs text-primary font-bold hidden sm:inline-block group-hover:translate-x-1 transition-transform">→</span>
+            </p>
+            <p className="text-sm text-secondary mt-1 leading-relaxed">Automate titles & keywords for new uploads and update approved assets in 1-click.</p>
+            <p className="text-xs font-bold text-green-400 mt-2 flex items-center justify-center sm:justify-start gap-1.5">
+              <Check className="w-3.5 h-3.5" /> No License Required • Multi-AI Vision • 100% Free
             </p>
           </div>
-        </div>
+        </Link>
 
         {/* Social proof strip */}
         <div className="reveal reveal-delay-6 mt-14 flex flex-col items-center gap-2">

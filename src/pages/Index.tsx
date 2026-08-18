@@ -22,10 +22,10 @@ const Index = () => {
     
     if (!hasSeenToast) {
       const timer = setTimeout(() => {
-        toast("🚀 New Update Released!", {
-          description: "Our highly anticipated Adobe Stock Chrome Extension is now live. Get it for free with our limited BOGO offer!",
+        toast("🎉 Free Chrome Extension Released!", {
+          description: "Tagyfy Pro Adobe Stock Chrome Extension is now live & 100% FREE for all contributors!",
           action: {
-            label: "View Offer",
+            label: "Get Extension",
             onClick: () => navigate("/chrome-extension"),
           },
           duration: 10000,
@@ -61,18 +61,18 @@ const Index = () => {
           <div className="absolute right-0 top-0 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2 pointer-events-none" />
           <div className="max-w-5xl mx-auto relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
             <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/30 mb-4 bg-primary/10 text-primary">
-                <Chrome className="w-4 h-4 text-primary" />
-                <span className="text-xs font-bold uppercase tracking-widest text-primary">BOGO Limited Offer</span>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-green-500/30 mb-4 bg-green-500/10 text-green-400">
+                <Chrome className="w-4 h-4 text-green-400" />
+                <span className="text-xs font-bold uppercase tracking-widest text-green-400">100% Free Tool</span>
               </div>
               <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-2">Adobe Stock Chrome Extension</h2>
               <p className="text-muted-foreground max-w-xl">
-                Update approved assets and generate fresh metadata directly inside the Adobe Stock contributor dashboard using Gemini, ChatGPT, Groq, and Mistral.
+                Update approved assets and generate fresh metadata directly inside the Adobe Stock contributor dashboard using Gemini, ChatGPT, Groq, and Mistral. 100% free with no license required.
               </p>
             </div>
             <Link to="/chrome-extension" className="shrink-0">
               <Button size="lg" className="h-13 px-8 text-sm font-bold rounded-xl bg-primary text-primary-foreground hover:scale-[1.02] transition-all shadow-[0_0_25px_hsl(var(--primary)/0.4)]">
-                Explore Extension & BOGO
+                Get Free Extension
               </Button>
             </Link>
           </div>

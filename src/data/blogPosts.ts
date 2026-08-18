@@ -566,5 +566,118 @@ Stop uploading in the dark. Give your portfolio the metadata it deserves.`,
         "Embed metadata directly into file headers to skip manual CSV management"
       ]
     }
+  },
+  {
+    id: "5",
+    slug: "why-approved-photos-not-selling-update-metadata",
+    title: "Why Your Best Approved Photos Aren't Selling (And How Updating Old Metadata Unlocked 4x Sales)",
+    subtitle: "You spent weeks shooting and retouching. Adobe accepted every photo. Six months later: zero downloads. Here's why stale metadata kills sales — and how refreshing it brings dead assets back to page one.",
+    category: "Stock Strategy",
+    readTime: "7 min read",
+    date: "March 2026",
+    author: {
+      name: "Salman Ahmad",
+      role: "Stock Contributor & Logo Designer",
+      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=256&q=80",
+      bio: "Stock contributor, vector artist, and metadata architect. Helping contributors worldwide rank on page one and scale passive royalties."
+    },
+    featured: false,
+    summary: "If you have approved photos sitting on Adobe Stock with zero sales, the issue isn't your photography — it's search decay. Discover how rewriting outdated titles and keyword tiers can wake up dead portfolio assets, and how you can automate the entire update process in 1-click using our free Tagyfy Pro Chrome Extension.",
+    tags: ["Portfolio Growth", "Adobe Stock SEO", "Metadata Update", "Search Algorithm", "Tagyfy Extension"],
+    content: {
+      storyHook: `I opened my Adobe Stock Contributor dashboard and filtered by "All-Time Views".
+
+There they were: 450 photos from a shoot I did two years ago. High quality, sharp focus, vibrant natural lighting, accepted on the first attempt by the reviewer.
+
+Total downloads in the last 12 months? **Two.**
+
+Two downloads across 450 commercial photos. That is not just disappointing — it is heartbreaking when you know how much effort went into creating that work.
+
+For a long time, I assumed the market had simply moved on. I thought buyers didn't want that concept anymore. But then I looked at the titles and keywords I had written back in 2023.
+
+My title was: *"Young businesswoman working on laptop in modern office."* (9 words. 57 characters.)
+My first 5 keywords were: *"business, office, woman, laptop, work."*
+
+That was the moment the truth hit me: **My photos weren't failing because they were bad. They were failing because the Adobe Stock algorithm had buried them under 800,000 newer assets with far more specific metadata.**
+
+Here is the exact strategy I used to update my approved portfolio assets — and how doing this can instantly unlock sales from photos you thought were dead forever.`,
+      sections: [
+        {
+          title: "The Silent Killer: Algorithm Search Decay",
+          storyText: `When you upload a new photo to Adobe Stock, the algorithm gives it a temporary "freshness boost" for a few weeks. If buyers click and license it during that window, its rank sticks.
+
+But if your metadata was vague or too generic, nobody clicks. The freshness boost expires, and your photo falls from page 3 to page 47. Once an asset drops past page 5 on Adobe Stock, it receives virtually zero organic impressions.
+
+The good news? **Adobe Stock allows you to edit the title and keywords of already-approved assets at any time without re-submitting them for review.**
+
+When you update an approved asset with high-intent, 185-character search metadata, Adobe's search indexing engine re-scrapes the asset. Within 48 to 72 hours, dead assets can jump back to page one for high-value long-tail buyer queries.`,
+          takeaway: "Approved assets that aren't selling are not 'dead' — they are simply indexed under outdated keywords that modern enterprise buyers never search for.",
+          codeSnippet: `// The Search Decay Lifecycle
+1. Upload with 8-word title: "Business team meeting in boardroom"
+2. Freshness window passes without conversions (competing against 2M exact matches)
+3. Asset drops to Page 40+ (Zero impressions)
+4. Update to 185-char intent title: "Corporate strategy meeting with diverse executive team reviewing financial data on digital tablet. Modern glass boardroom setting with natural daylight. Professional collaborative workflow concept."
+5. Re-indexed for 14 new specific search terms -> Rank jumps back to Page 1-3.`
+        },
+        {
+          title: "The Difference Between a 'Description' and a 'Buyer Query'",
+          storyText: `The biggest mistake contributors make when tagging approved assets is describing what the image *is* rather than what the buyer is *typing into the search bar*.
+
+An art director at a marketing agency does not search for *"happy woman on computer"*.
+
+They have a specific project brief. They search for:
+- *"Remote customer support agent wearing wireless headset"*
+- *"Fintech app user checking investment balance on smartphone"*
+- *"Female entrepreneur analyzing quarterly revenue forecast"*
+
+When your approved assets contain 180–190 characters of context — including the subject, specific action, lighting, and commercial use-case — you capture dozens of specific long-tail buyer queries instead of competing for one overcrowded 1-word search.`,
+          takeaway: "Never write titles for reviewers. Write titles for marketing directors with strict project deadlines and corporate purchase budgets."
+        },
+        {
+          title: "Why You Must Re-Order Your Top 10 Keywords",
+          storyText: `Adobe Stock's search algorithm places up to 80% of its indexing weight on your **first 10 keywords**.
+
+If your old approved photos have generic words in positions 1 to 10 (like *"photo"*, *"image"*, *"background"*, *"vector"*, or *"concept"*), you are wasting your most powerful ranking real estate.
+
+When updating old assets, follow this strict priority:
+1. **Slots 1 to 3**: The exact primary subject depicted (e.g. *telemedicine consultation, virtual doctor appointment, digital stethoscope*).
+2. **Slots 4 to 10**: The specific environment, tangible objects, and actions.
+3. **Slots 11 to 30**: Commercial concepts, emotions, and industry terms.
+4. **Slots 31 to 49**: Broad categories and format styles.`,
+          takeaway: "Audit your existing portfolio. If words like 'background' or 'design' are in your top 10 tags, move them to the end immediately."
+        },
+        {
+          title: "How to Update Approved Assets in 1-Click with Our Free Extension",
+          storyText: `Manually opening 500 approved assets on Adobe Stock, clicking the edit pencil, thinking of new 185-character titles, and rearranging 50 keywords one by one would take weeks of exhausting manual work.
+
+That is why we built the **Tagyfy Pro Chrome Extension** — and made it **100% FREE for all contributors**.
+
+Inside the extension:
+1. Navigate to your Adobe Stock **Portfolio** page.
+2. Toggle to **Portfolio Mode** inside Tagyfy Pro.
+3. Select your asset range (e.g. Assets #1 to #50).
+4. Click **Start Processing**.
+
+The extension uses advanced computer vision (Gemini 3.5 Flash, GPT-4o Mini, Groq, or Mistral) to analyze each existing image, generates an optimized 185-character search-first title and 50 tiered keywords, and saves the updates directly to Adobe Stock automatically.
+
+You can download the free extension right now on our [Tagyfy Pro Chrome Extension Page](/chrome-extension).`,
+          takeaway: "Automating your portfolio updates turns a 40-hour manual chore into a 15-minute background task that runs while you grab coffee."
+        }
+      ],
+      conclusion: `Your existing portfolio is your most valuable digital real estate.
+
+Do not let hundreds of approved photos sit in darkness with outdated 2021 metadata. By updating your approved assets with search-intent titles and tiered keywords, you give your older work a second life and compound your monthly royalty income without shooting a single new photo.
+
+Ready to wake up your portfolio? Head over to the [Tagyfy Pro Chrome Extension](/chrome-extension) page, download the free extension, and start reviving your approved assets today.`,
+      checklist: [
+        "Audit your approved assets for short or generic titles (< 100 characters)",
+        "Check that your first 10 keywords contain zero generic format words",
+        "Rewrite titles to 180–190 characters covering subject, setting, and commercial use-case",
+        "Target specific long-tail buyer queries instead of single broad keywords",
+        "Download the free [Tagyfy Pro Chrome Extension](/chrome-extension) to batch-update portfolio assets automatically",
+        "Allow 48–72 hours after updating for Adobe's search algorithm to re-index your refreshed metadata"
+      ]
+    }
   }
 ];
+
