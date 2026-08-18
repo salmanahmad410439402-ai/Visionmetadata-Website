@@ -742,6 +742,16 @@ export const Dashboard = () => {
               <p className="text-muted-foreground/80 max-w-md leading-relaxed">
                 Upload your images and videos to generate optimized metadata for Adobe Stock, Freepik, and Shutterstock.
               </p>
+
+              <div className="max-w-md mx-auto p-3 rounded-xl bg-primary/5 border border-primary/20 text-xs text-secondary text-left space-y-1 mt-2">
+                <p className="font-bold text-primary flex items-center gap-1.5 text-xs">
+                  <span>💡 Vector Contributor Tip (EPS & AI):</span>
+                </p>
+                <p className="text-[11px] leading-relaxed text-muted-foreground">
+                  Always upload your vector file alongside its same-named JPG preview (e.g. <code className="font-mono text-primary font-bold">design.eps</code> + <code className="font-mono text-primary font-bold">design.jpg</code>) so AI vision can analyze the artwork and embed metadata.
+                </p>
+              </div>
+
               <button
                 onClick={handleUpload}
                 className="mt-6 px-8 py-3.5 btn-primary-glow rounded-xl font-semibold"

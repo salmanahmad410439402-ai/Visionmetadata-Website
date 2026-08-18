@@ -1,5 +1,5 @@
 import { useCallback, useRef, useState, useEffect } from "react";
-import { Upload, X, Image, Video, FileText } from "lucide-react";
+import { Upload, X, Image, Video, FileText, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAssets } from "@/contexts/AssetsContext";
 import { motion } from "framer-motion";
@@ -492,6 +492,17 @@ export const UploadZone = ({ onClose }: UploadZoneProps) => {
               <span>AI · EPS · SVG</span>
               <span className="text-[10px] text-amber-400/70 font-medium ml-0.5">(SVG: no embed)</span>
             </div>
+          </div>
+
+          {/* Vector File Pairing Notice */}
+          <div className="w-full max-w-xl mx-auto mt-2 p-3.5 rounded-xl bg-primary/10 border border-primary/25 text-left text-xs space-y-1.5 shadow-sm">
+            <div className="flex items-center gap-2 font-bold text-primary text-xs sm:text-sm">
+              <Sparkles className="w-4 h-4 shrink-0 text-primary" />
+              <span>Vector Files (EPS & AI) Requirement:</span>
+            </div>
+            <p className="text-secondary leading-relaxed pl-6 text-[11px] sm:text-xs font-medium">
+              AI Vision cannot analyze raw vector code directly. When uploading <strong>Vector files (.eps / .ai)</strong>, always upload them paired with their <strong>JPG preview image</strong> using the exact same name (e.g. <code className="px-1.5 py-0.5 rounded bg-background/80 font-mono text-primary font-bold">a.eps</code> + <code className="px-1.5 py-0.5 rounded bg-background/80 font-mono text-primary font-bold">a.jpg</code>). The AI reads the JPG to generate metadata and automatically attaches it to your vector!
+            </p>
           </div>
         </div>
       </div>
