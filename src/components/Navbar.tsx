@@ -10,6 +10,7 @@ const navLinks = [
   { label: "Pricing",  to: "/pricing"  },
   { label: "Download", to: "/download" },
   { label: "Extension", to: "/chrome-extension" },
+  { label: "Blog",     to: "/blogs"    },
   { label: "Tutorials", to: "/tutorials" },
   { label: "FAQ",      to: "/faq"      },
   { label: "Contact",  to: "/contact"  },

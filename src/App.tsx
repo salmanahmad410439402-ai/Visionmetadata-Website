@@ -22,6 +22,7 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import RefundPolicy from "./pages/RefundPolicy";
 import ToolPage from "./pages/Tool";
+import Blogs from "./pages/Blogs";
 
 const queryClient = new QueryClient();
 
@@ -44,6 +45,8 @@ const App = () => {
               <Route path="/pricing" element={<Pricing />} />
               <Route path="/download" element={<DownloadPage />} />
               <Route path="/tutorials" element={<Tutorials />} />
+              <Route path="/blogs" element={<Blogs />} />
+              <Route path="/blog" element={<Blogs />} />
               <Route path="/about" element={<AboutUs />} />
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/faq" element={<FAQ />} />
