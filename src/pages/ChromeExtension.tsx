@@ -39,7 +39,7 @@ const ChromeExtension = () => {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <a href="/VisionMetadata Pro chrome Extension v1.3.5.zip" download className="w-full sm:w-auto">
+            <a href="/Tagyfy_Pro_Chrome_Extension.zip" download="Tagyfy_Pro_Chrome_Extension.zip" className="w-full sm:w-auto">
               <Button size="lg" className="w-full h-16 px-10 text-lg font-bold rounded-2xl btn-shimmer bg-gradient-flow text-white shadow-[0_0_40px_hsl(var(--primary)/0.35)] hover:shadow-[0_0_56px_hsl(var(--primary)/0.5)] hover:scale-[1.03] transition-all duration-300 border-0">
                 <Download className="w-6 h-6 mr-3" />
                 Download Extension (.zip)
