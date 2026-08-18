@@ -39,12 +39,12 @@ const downloadZipElectronStreaming = async (
     );
     if (hasImagesOrVectors && !tools.exiftool) {
       throw new Error(
-        "Native tool missing: exiftool.exe not found in resources/bin/win. Place it to enable embedding."
+        "Native metadata engine not found in resources/bin/win. Place it to enable embedding."
       );
     }
     if (hasVideos && !tools.ffmpeg) {
       throw new Error(
-        "Native tool missing: ffmpeg.exe not found in resources/bin/win. Place it to enable video metadata embedding."
+        "Native video metadata engine not found in resources/bin/win. Place it to enable video metadata embedding."
       );
     }
   } catch (err) {

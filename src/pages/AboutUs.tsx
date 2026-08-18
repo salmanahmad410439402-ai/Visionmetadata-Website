@@ -42,7 +42,7 @@ const AboutUs = () => {
               The Tagyfy Solution
             </h2>
             <p className="text-secondary leading-relaxed">
-              Tagyfy Pro is a desktop-native application engineered with modern Rust and React. It brings together state-of-the-art vision models (Google Gemini 2.5/3.5, OpenAI GPT-4o, Groq, Mistral) and native ExifTool/FFmpeg pipelines to automatically analyze, describe, and directly write metadata into files in bulk.
+              Tagyfy Pro is a desktop-native application engineered with modern Rust and React. It brings together state-of-the-art vision models (Google Gemini 2.5/3.5, OpenAI GPT-4o, Groq, Mistral) and high-speed native binary embedding pipelines to automatically analyze, describe, and directly write metadata into files in bulk.
             </p>
           </div>
         </div>

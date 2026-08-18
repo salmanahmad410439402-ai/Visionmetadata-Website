@@ -28,7 +28,7 @@ export const DirectEmbeddingShowcase = () => {
     {
       feature: "JPEG, PNG & WebP File Embedding",
       web: "Browser Native",
-      desktop: "Native ExifTool Engine",
+      desktop: "Tagyfy Native Binary Engine",
       highlight: false,
     },
     {
@@ -40,7 +40,7 @@ export const DirectEmbeddingShowcase = () => {
     {
       feature: "Direct .MP4 & .MOV Video Embedding",
       web: "Supported via CSV",
-      desktop: "⚡ Direct Native FFmpeg Embedding",
+      desktop: "⚡ Direct Native Video Engine",
       highlight: true,
     },
     {
@@ -115,7 +115,7 @@ export const DirectEmbeddingShowcase = () => {
                 <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/25">.MP4 · .MOV · .WebM</span>
               </div>
               <p className="text-sm text-secondary leading-relaxed font-medium mb-4">
-                High-performance video metadata encoding via built-in native FFmpeg. Embeds rich titles, descriptions, and 50 ranked tags directly into video atom containers.
+                High-performance proprietary video metadata encoding engine. Embeds rich titles, descriptions, and 50 ranked tags directly into video atom containers.
               </p>
             </div>
             <div className="pt-4 border-t border-border/50 flex items-center gap-2 text-xs font-semibold text-emerald-400">

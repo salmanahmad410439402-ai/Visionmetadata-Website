@@ -1000,7 +1000,7 @@ export const downloadAssetWithMetadata = async (asset: Asset): Promise<void> => 
     const needsExifTool = !isVideo;
     const needsFfmpeg = isVideo;
     if (needsFfmpeg && isDesktop() && !tools.ffmpeg) {
-      toast.error("ffmpeg.exe missing in resources/bin/win. Video metadata embedding cannot proceed.");
+      toast.error("Video embedding engine missing in resources/bin/win. Video metadata embedding cannot proceed.");
     }
   } catch { }
 
@@ -1074,7 +1074,7 @@ export const prepareAssetForZip = async (
     const needsExifTool = !isVideo;
     const needsFfmpeg = isVideo;
     if (needsFfmpeg && isDesktop() && !tools.ffmpeg) {
-      toast.error(`ffmpeg.exe missing. "${asset.file.name}" video metadata embedding cannot proceed.`);
+      toast.error(`Video embedding engine missing. "${asset.file.name}" video metadata embedding cannot proceed.`);
     }
   } catch { }
 
