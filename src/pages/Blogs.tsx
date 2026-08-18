@@ -406,7 +406,7 @@ const Blogs = () => {
               
               {/* Category Pills */}
               <div className="flex flex-wrap items-center gap-1.5 w-full sm:w-auto">
-                {["All", "Compliance & Safety", "SEO & Metadata", "Stock Strategy"].map(cat => (
+                {["All", "Compliance & Safety", "SEO & Metadata", "Stock Strategy", "AI & Prompting"].map(cat => (
                   <button
                     key={cat}
                     onClick={() => setSelectedCategory(cat)}

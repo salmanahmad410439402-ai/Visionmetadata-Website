@@ -3,7 +3,7 @@ export interface BlogPost {
   slug: string;
   title: string;
   subtitle: string;
-  category: "Compliance & Safety" | "SEO & Metadata" | "Stock Strategy";
+  category: "Compliance & Safety" | "SEO & Metadata" | "Stock Strategy" | "AI & Prompting";
   readTime: string;
   publishDate: string;
   author: {
@@ -36,6 +36,144 @@ export interface BlogPost {
 }
 
 export const BLOG_POSTS: BlogPost[] = [
+  {
+    id: "how-ai-actually-sees-your-prompt-guide",
+    slug: "i-wasted-200-generations-how-ai-actually-sees-prompts",
+    title: "I Wasted 200 Generations Before I Understood How AI Actually \"Sees\" Your Prompt",
+    subtitle: "I typed 'a beautiful woman in a forest' and got generic flat noise. Here is how AI image generators actually parse words—and the 7 prompt engineering truths that change everything.",
+    category: "AI & Prompting",
+    readTime: "7 min read",
+    publishDate: "August 2026",
+    author: {
+      name: "Tagyfy Prompt Engineering Labs",
+      role: "Generative AI & Visual Prompt Specialist",
+      avatar: "🎨",
+    },
+    summary: "AI doesn't understand what you mean—it only understands what you say. Discover the 6-part prompt architecture, lighting secrets, front-loading rules, and the director's iteration method that turns flat AI outputs into stunning commercial art.",
+    tags: ["AI Prompting", "Midjourney Tips", "Stable Diffusion", "Generative Art", "Prompt Engineering"],
+    content: {
+      intro: `I still remember my first week with an AI image generator. I typed "a beautiful woman in a forest" and hit generate.
+
+The result? Generic. Flat. Forgettable. Something you'd scroll past in half a second.
+
+So I tried again. And again. Fifty generations later, still nothing that felt intentional. It all looked like... noise dressed up as art.
+
+Then I changed one thing. Instead of describing a feeling, I described a scene — camera angle, lighting, material, mood, color palette, everything. And the next image stopped me in my tracks.
+
+That's when it clicked: AI doesn't understand what you mean. It only understands what you say. And there's a real skill to saying it right.
+
+Here's everything I wish someone had told me on day one.`,
+      sections: [
+        {
+          heading: "Truth #1: Vague Words Produce Vague Images",
+          subheading: "Words like 'beautiful' or 'epic' have no shape, color, or texture.",
+          body: [
+            "\"Beautiful,\" \"amazing,\" \"epic,\" \"cool\" — these words feel powerful to us, but to an AI model they're almost meaningless. They don't point to anything visual. There's no shape, no color, no texture behind them.",
+            "Compare these two prompts:",
+            "❌ \"A beautiful sunset over the ocean\"",
+            "✅ \"A wide-angle shot of a golden-orange sunset over a calm ocean, soft clouds streaked with pink, gentle waves reflecting the light, shot at golden hour\"",
+            "The second one isn't longer for the sake of being longer — every word is doing a job. That's the difference between a prompt that describes and a prompt that directs.",
+            "Rule of thumb: if a word could describe a hundred different images, it's not pulling its weight. Replace it with something specific."
+          ],
+          example: {
+            badTitle: "A beautiful sunset over the ocean",
+            goodTitle: "A wide-angle shot of a golden-orange sunset over a calm ocean, soft clouds streaked with pink, gentle waves reflecting the light, shot at golden hour",
+            explanation: "The second prompt directs camera angle, color spectrum, cloud texture, and exact lighting temperature."
+          }
+        },
+        {
+          heading: "Truth #2: Structure Beats Length",
+          subheading: "More words doesn't mean better results. What matters is order and architectural shape.",
+          body: [
+            "New prompters think \"more words = better result.\" Not true. What actually matters is order and structure, not word count.",
+            "A strong image prompt usually follows this shape:",
+            "[Subject] + [Action/Pose] + [Setting/Environment] + [Lighting] + [Style/Medium] + [Camera/Composition details]",
+            "For example:",
+            "\"A lone astronaut, standing at the edge of a cliff, overlooking an alien jungle at dusk, cinematic lighting, digital painting style, wide shot, dramatic composition\"",
+            "Notice how each piece answers a different question: Who? Doing what? Where? Lit how? Looking like what? Shot how? That's what gives the model a complete picture instead of scattered fragments."
+          ],
+          tip: "Memorize the 6-part prompt architecture: Subject → Pose/Action → Setting → Lighting → Medium → Camera Angle."
+        },
+        {
+          heading: "Truth #3: The Model Reads Left to Right — So Front-Load What Matters",
+          subheading: "Image models give strongest attention weight to the earlier parts of a prompt.",
+          body: [
+            "Just like search engines weigh the first words of a title more heavily, image models tend to give stronger attention to the earlier parts of a prompt.",
+            "If the subject of your image is a dragon, don't bury \"dragon\" in the middle of a long sentence about clouds and mountains. Start with it:",
+            "✅ \"A massive red dragon perched on a mountain peak, storm clouds behind it, lightning in the sky, fantasy digital art\"",
+            "❌ \"A dramatic sky with storm clouds and lightning over mountains, where a massive red dragon is perched, fantasy digital art\"",
+            "Same content, but the first version tells the model — instantly — what matters most."
+          ]
+        },
+        {
+          heading: "Truth #4: Lighting and Mood Words Do More Work Than You Think",
+          subheading: "Lighting is the model's version of setting the emotional tone of a scene.",
+          body: [
+            "This is the most underused trick. Two prompts can have the exact same subject and produce completely different emotional results just because of lighting language.",
+            "Try adding one of these to any prompt and notice how much it changes the output:",
+            "• Soft diffused lighting → calm, gentle, editorial aesthetic",
+            "• Harsh dramatic shadows → intense, cinematic, moody",
+            "• Golden hour lighting → warm, nostalgic, romantic",
+            "• Neon backlighting → futuristic, edgy, cyberpunk",
+            "• Overcast, muted light → somber, quiet, documentary-style",
+            "Lighting is basically the model's version of setting the emotional tone of a scene — use it on purpose, not as an afterthought."
+          ],
+          tip: "Never leave lighting to chance. Always specify lighting direction (backlit, side-lit), quality (soft, harsh), and source (golden hour, studio strobe, neon)."
+        },
+        {
+          heading: "Truth #5: Always Tell It What Medium You Want",
+          subheading: "If you don't specify the medium, the model guesses—and usually guesses something generic.",
+          body: [
+            "One of the biggest mistakes beginners make is forgetting to specify style or medium — and letting the model guess. It usually guesses something generic.",
+            "Be explicit:",
+            "• \"Digital painting with smooth brushwork\"",
+            "• \"35mm film photography, Kodak Portra 400 color grain\"",
+            "• \"Watercolor illustration on textured paper\"",
+            "• \"3D render, octane style with raytraced reflections\"",
+            "• \"Flat vector illustration, minimalist lines\"",
+            "• \"Oil painting, thick textured impasto brushstrokes\"",
+            "This one phrase can completely transform the texture and feel of your output — from a photo-real image to a stylized illustration in seconds."
+          ]
+        },
+        {
+          heading: "Truth #6: Negative Prompts Are Your Quiet Superpower",
+          subheading: "Telling the model what to avoid cleans up noise and directs generation power.",
+          body: [
+            "Most people only think about what they want to see. But telling the model what to avoid is just as powerful, especially for cleaning up common issues:",
+            "Negative prompt: \"blurry, low quality, extra limbs, distorted hands, watermark, text, oversaturated, deformed anatomy, cropped\"",
+            "This won't fix every flaw, but it dramatically reduces the noise and lets the model focus its effort on what you actually asked for."
+          ],
+          tip: "In Tagyfy Pro, the Negative Keywords system automatically strips prohibited words and visual artifacts from generated metadata."
+        },
+        {
+          heading: "Truth #7: Iterate Like a Director, Not a Gambler",
+          subheading: "Professionals adjust one variable at a time instead of slot-machine re-rolling.",
+          body: [
+            "Beginners treat prompting like a slot machine — pull the lever, hope for luck, try a totally different prompt if it fails.",
+            "Professionals treat it like directing a scene. They generate an image, look at what's almost right, and adjust one variable at a time:",
+            "• Didn't like the lighting? Change only the lighting words.",
+            "• Composition feels off? Adjust only the camera angle description.",
+            "• Style isn't quite right? Swap only the medium.",
+            "This controlled iteration is what separates people who 'got lucky once' from people who can consistently produce the image they had in their head."
+          ]
+        }
+      ],
+      conclusion: `A prompt isn't a wish. It's a set of instructions for a camera operator who has never seen the real world — only trained on billions of images and their descriptions. The more precisely you describe what you want, the more precisely it can deliver it.
+
+The difference between a forgettable AI image and a striking one is rarely the tool. It's almost always the prompt.
+
+Next time you sit down to generate an image, don't ask "what do I want to see?" Ask "how would I describe this to a photographer who's never been in the room?" That single shift in thinking will change your results more than any tool upgrade ever could.`,
+      checklist: [
+        "Eliminate subjective buzzwords (beautiful, epic, cool) and replace with concrete physical descriptions",
+        "Follow the 6-part prompt formula: Subject + Action + Setting + Lighting + Medium + Composition",
+        "Front-load the primary subject within the first 5 words of your prompt",
+        "Always specify lighting style (golden hour, soft diffused, dramatic studio)",
+        "Explicitly declare the artistic medium (35mm film photo, vector art, 3D render)",
+        "Use negative prompts to strip artifacts, blur, and malformed anatomy",
+        "Iterate scientifically by changing only one variable at a time"
+      ]
+    }
+  },
   {
     id: "why-best-photo-rejected-adobe-stock-secret",
     slug: "why-does-your-best-photo-keep-getting-rejected-adobe-stock-secret",
