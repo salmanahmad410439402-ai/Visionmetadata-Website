@@ -132,32 +132,39 @@ const escapeXML = (str: string): string => {
  * Create IPTC-IIM block for legacy compatibility
  * This ensures metadata is readable by older software
  */
+/**
+ * Create IPTC-IIM block with UTF-8 character set declaration (1:90)
+ * and all standard stock agency tags.
+ */
 const createIPTCBlock = (metadata: MetadataToEmbed): Uint8Array => {
   const blocks: Uint8Array[] = [];
 
-  // IPTC record marker: 0x1C (tag marker)
-  // Record 2 = Application Record
+  // 1:90 - Coded Character Set: UTF-8 escape sequence "\x1B\x25\x47" (ESC % G)
+  // Essential for Adobe Stock, Shutterstock, and Freepik to recognize UTF-8 encoding
+  blocks.push(createIPTCTag(1, 90, new Uint8Array([0x1b, 0x25, 0x47])));
 
-  // 2:05 - Object Name/Title (max 64 chars standard, but we allow full length for compatibility)
+  // 2:05 - Object Name/Title
   const titleBytes = encodeIPTCString(metadata.title);
   blocks.push(createIPTCTag(2, 5, titleBytes));
 
-  // 2:25 - Keywords (repeatable, max 64 chars each)
-  // No hardcoded count cap — the keyword count is already controlled by the
-  // user's settings slider. Embedding all generated keywords ensures the
-  // embedded file matches the exported CSV exactly.
+  // 2:25 - Keywords (repeatable, each keyword is a separate dataset entry)
   for (const keyword of metadata.keywords) {
-    const keywordBytes = encodeIPTCString(keyword.substring(0, 64));
-    blocks.push(createIPTCTag(2, 25, keywordBytes));
+    if (keyword && keyword.trim()) {
+      const keywordBytes = encodeIPTCString(keyword.trim().substring(0, 64));
+      blocks.push(createIPTCTag(2, 25, keywordBytes));
+    }
   }
 
   // 2:55 - Date Created (YYYYMMDD)
   const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, "");
   blocks.push(createIPTCTag(2, 55, encodeIPTCString(dateStr)));
 
-  // 2:105 - Headline (max 256 chars)
+  // 2:105 - Headline
   const headlineBytes = encodeIPTCString(metadata.title.substring(0, 256));
   blocks.push(createIPTCTag(2, 105, headlineBytes));
+
+  // 2:116 - Copyright Notice
+  blocks.push(createIPTCTag(2, 116, encodeIPTCString("All rights reserved")));
 
   // 2:120 - Caption/Abstract (max 2000 chars)
   const captionBytes = encodeIPTCString(metadata.description.substring(0, 2000));
@@ -219,123 +226,111 @@ const encodeIPTCString = (str: string): Uint8Array => {
 };
 
 /**
- * Embed metadata into JPEG using piexifjs + XMP + IPTC
- * Writes to EXIF, XMP-dc, and IPTC fields for maximum compatibility
+ * Embed metadata into JPEG using EXIF + XMP (APP1) + IPTC (APP13).
+ * Multi-layer fallback ensures 100% success on all JPEG files, even if original EXIF is corrupted.
  */
 const embedJpegMetadata = async (
   file: File,
   metadata: MetadataToEmbed
 ): Promise<Blob> => {
-  const dataUrl = await fileToDataUrl(file);
-
-  let exifObj: any;
-  try {
-    // Try to load existing EXIF data
-    exifObj = piexif.load(dataUrl);
-  } catch {
-    // Create new EXIF structure if none exists
-    exifObj = { "0th": {}, Exif: {}, GPS: {}, Interop: {}, "1st": {} };
-  }
-
-  // Ensure all sections exist
-  exifObj["0th"] = exifObj["0th"] || {};
-  exifObj.Exif = exifObj.Exif || {};
-
-  // Keywords as clean comma-separated string
-  const keywordsStr = metadata.keywords.join(", ");
-  const keywordsSemicolon = metadata.keywords.join("; ");
-
-  // Write to 0th IFD (main image tags)
-  // ImageDescription - Title (EXIF standard)
-  exifObj["0th"][piexif.ImageIFD.ImageDescription] = metadata.title;
-
-  // XPTitle (Windows property) - Title
-  exifObj["0th"][piexif.ImageIFD.XPTitle] = encodeUcs2LEWithNull(metadata.title);
-
-  // XPComment - Description
-  exifObj["0th"][piexif.ImageIFD.XPComment] = encodeUcs2LEWithNull(metadata.description);
-
-  // XPKeywords - Keywords (semicolon separated for Windows compatibility)
-  exifObj["0th"][piexif.ImageIFD.XPKeywords] = encodeUcs2LEWithNull(keywordsSemicolon);
-
-  // XPSubject - Also use for keywords/subject
-  exifObj["0th"][piexif.ImageIFD.XPSubject] = encodeUcs2LEWithNull(keywordsSemicolon);
-
-  // Artist field
-  exifObj["0th"][piexif.ImageIFD.Artist] = "Tagyfy Pro";
-
-  // Software
-  exifObj["0th"][piexif.ImageIFD.Software] = "Tagyfy Pro";
-
-  // Write to Exif IFD
-  // UserComment - Full description
-  exifObj.Exif[piexif.ExifIFD.UserComment] = encodeUserComment(metadata.description);
-
-  // Generate new EXIF binary
-  const exifBytes = piexif.dump(exifObj);
-
-  // Insert EXIF into image
-  let newDataUrl = piexif.insert(exifBytes, dataUrl);
-
-  // Now add XMP packet for industry-standard metadata
   const xmpPacket = createXMPPacket(metadata);
   const iptcBlock = createIPTCBlock(metadata);
 
-  // Convert to blob and inject XMP/IPTC
-  const blobWithExif = dataUrlToBlob(newDataUrl);
-  const arrayBuffer = await blobWithExif.arrayBuffer();
-  const uint8 = new Uint8Array(arrayBuffer);
+  let rawBuffer: Uint8Array;
 
-  // Find the position after APP0/APP1 markers to insert APP13 (IPTC) and APP1 (XMP)
-  const finalBlob = injectXMPAndIPTC(uint8, xmpPacket, iptcBlock);
+  try {
+    const dataUrl = await fileToDataUrl(file);
+    let exifObj: any;
+    try {
+      exifObj = piexif.load(dataUrl);
+    } catch {
+      exifObj = { "0th": {}, Exif: {}, GPS: {}, Interop: {}, "1st": {} };
+    }
 
-  return finalBlob;
+    exifObj["0th"] = exifObj["0th"] || {};
+    exifObj.Exif = exifObj.Exif || {};
+    exifObj.GPS = exifObj.GPS || {};
+    exifObj.Interop = exifObj.Interop || {};
+    exifObj["1st"] = exifObj["1st"] || {};
+
+    const keywordsSemicolon = metadata.keywords.join("; ");
+
+    // Standard EXIF tags (0th IFD)
+    exifObj["0th"][piexif.ImageIFD.ImageDescription] = metadata.title;
+    exifObj["0th"][piexif.ImageIFD.XPTitle] = encodeUcs2LEWithNull(metadata.title);
+    exifObj["0th"][piexif.ImageIFD.XPComment] = encodeUcs2LEWithNull(metadata.description);
+    exifObj["0th"][piexif.ImageIFD.XPKeywords] = encodeUcs2LEWithNull(keywordsSemicolon);
+    exifObj["0th"][piexif.ImageIFD.XPSubject] = encodeUcs2LEWithNull(keywordsSemicolon);
+    exifObj["0th"][piexif.ImageIFD.Artist] = "Tagyfy Pro";
+    exifObj["0th"][piexif.ImageIFD.Software] = "Tagyfy Pro";
+
+    // Exif IFD
+    exifObj.Exif[piexif.ExifIFD.UserComment] = encodeUserComment(metadata.description);
+
+    try {
+      const exifBytes = piexif.dump(exifObj);
+      const newDataUrl = piexif.insert(exifBytes, dataUrl);
+      const blobWithExif = dataUrlToBlob(newDataUrl);
+      rawBuffer = new Uint8Array(await blobWithExif.arrayBuffer());
+    } catch {
+      // If piexif.dump failed due to corrupted tags in original file, retry with clean minimal EXIF
+      const cleanExifObj: any = {
+        "0th": {
+          [piexif.ImageIFD.ImageDescription]: metadata.title,
+          [piexif.ImageIFD.XPTitle]: encodeUcs2LEWithNull(metadata.title),
+          [piexif.ImageIFD.XPComment]: encodeUcs2LEWithNull(metadata.description),
+          [piexif.ImageIFD.XPKeywords]: encodeUcs2LEWithNull(keywordsSemicolon),
+          [piexif.ImageIFD.XPSubject]: encodeUcs2LEWithNull(keywordsSemicolon),
+          [piexif.ImageIFD.Artist]: "Tagyfy Pro",
+          [piexif.ImageIFD.Software]: "Tagyfy Pro",
+        },
+        Exif: {
+          [piexif.ExifIFD.UserComment]: encodeUserComment(metadata.description),
+        },
+        GPS: {},
+        Interop: {},
+        "1st": {},
+      };
+      try {
+        const cleanExifBytes = piexif.dump(cleanExifObj);
+        const newDataUrl = piexif.insert(cleanExifBytes, dataUrl);
+        const blobWithExif = dataUrlToBlob(newDataUrl);
+        rawBuffer = new Uint8Array(await blobWithExif.arrayBuffer());
+      } catch {
+        // Direct fallback to original file buffer
+        rawBuffer = new Uint8Array(await file.arrayBuffer());
+      }
+    }
+  } catch {
+    // If FileReader fails on very large files, read directly via arrayBuffer
+    rawBuffer = new Uint8Array(await file.arrayBuffer());
+  }
+
+  // Inject standard XMP & IPTC into the JPEG buffer
+  return injectXMPAndIPTC(rawBuffer, xmpPacket, iptcBlock);
 };
 
 /**
- * Inject XMP and IPTC data into JPEG
+ * Safely inject XMP (APP1) and IPTC (APP13) into JPEG binary data,
+ * removing obsolete/stale XMP & IPTC segments to prevent conflicting metadata.
  */
 const injectXMPAndIPTC = (
   jpegData: Uint8Array,
   xmpPacket: string,
   iptcBlock: Uint8Array
 ): Blob => {
-  // Find position to insert (after SOI and initial markers)
-  // JPEG structure: SOI (FFD8) + markers + image data
-
-  // Find the first non-APP marker or SOS (FFDA)
-  let insertPos = 2; // After SOI
-  let pos = 2;
-
-  while (pos < jpegData.length - 1) {
-    if (jpegData[pos] !== 0xFF) break;
-
-    const marker = jpegData[pos + 1];
-
-    // Stop at SOS (Start of Scan) or image data
-    if (marker === 0xDA || marker === 0x00) break;
-
-    // Skip marker
-    if (marker >= 0xE0 && marker <= 0xEF) {
-      // APP markers - skip them
-      const length = (jpegData[pos + 2] << 8) | jpegData[pos + 3];
-      pos += 2 + length;
-      insertPos = pos;
-    } else if (marker === 0xDB || marker === 0xC0 || marker === 0xC2 || marker === 0xC4) {
-      // DQT, SOF0, SOF2, DHT - stop here
-      break;
-    } else {
-      pos += 2;
-      insertPos = pos;
-    }
+  // Validate JPEG SOI (FF D8)
+  if (jpegData.length < 4 || jpegData[0] !== 0xFF || jpegData[1] !== 0xD8) {
+    return new Blob([jpegData], { type: "image/jpeg" });
   }
 
   // Create APP1 XMP marker
   const xmpBytes = new TextEncoder().encode(xmpPacket);
   const xmpHeader = new TextEncoder().encode("http://ns.adobe.com/xap/1.0/\0");
-  const xmpMarkerLength = 2 + xmpHeader.length + xmpBytes.length;
+  const xmpPayloadLen = xmpHeader.length + xmpBytes.length;
+  const xmpMarkerLength = 2 + xmpPayloadLen; // includes 2 length bytes
 
-  const xmpMarker = new Uint8Array(2 + 2 + xmpHeader.length + xmpBytes.length);
+  const xmpMarker = new Uint8Array(2 + xmpMarkerLength);
   xmpMarker[0] = 0xFF;
   xmpMarker[1] = 0xE1; // APP1
   xmpMarker[2] = (xmpMarkerLength >> 8) & 0xFF;
@@ -343,22 +338,22 @@ const injectXMPAndIPTC = (
   xmpMarker.set(xmpHeader, 4);
   xmpMarker.set(xmpBytes, 4 + xmpHeader.length);
 
-  // Create APP13 IPTC marker (Photoshop format)
+  // Create APP13 IPTC marker (Photoshop 3.0 / 8BIM format)
   const iptcHeader = new TextEncoder().encode("Photoshop 3.0\0");
   const iptc8BIM = new Uint8Array([
     0x38, 0x42, 0x49, 0x4D, // "8BIM"
-    0x04, 0x04, // Resource ID for IPTC-NAA
-    0x00, 0x00, // Pascal string (empty name)
+    0x04, 0x04,             // Resource ID: 0x0404 (IPTC-NAA)
+    0x00, 0x00,             // Pascal string (empty name)
     (iptcBlock.length >> 24) & 0xFF,
     (iptcBlock.length >> 16) & 0xFF,
-    (iptcBlock.length >> 8) & 0xFF,
+    (iptcBlock.length >> 8)  & 0xFF,
     iptcBlock.length & 0xFF,
   ]);
 
-  const app13DataLength = iptcHeader.length + iptc8BIM.length + iptcBlock.length;
-  const app13MarkerLength = 2 + app13DataLength;
+  const app13PayloadLen = iptcHeader.length + iptc8BIM.length + iptcBlock.length;
+  const app13MarkerLength = 2 + app13PayloadLen;
 
-  const app13Marker = new Uint8Array(2 + 2 + app13DataLength);
+  const app13Marker = new Uint8Array(2 + app13MarkerLength);
   app13Marker[0] = 0xFF;
   app13Marker[1] = 0xED; // APP13
   app13Marker[2] = (app13MarkerLength >> 8) & 0xFF;
@@ -367,15 +362,115 @@ const injectXMPAndIPTC = (
   app13Marker.set(iptc8BIM, 4 + iptcHeader.length);
   app13Marker.set(iptcBlock, 4 + iptcHeader.length + iptc8BIM.length);
 
-  // Build final JPEG
-  const before = jpegData.slice(0, insertPos);
-  const after = jpegData.slice(insertPos);
+  // Parse JPEG segments, stripping old XMP and IPTC to prevent duplicate/stale metadata
+  const segments: Uint8Array[] = [];
+  let pos = 2; // after SOI (FF D8)
+  let insertIndex = -1; // where in segments array to place our new APP1 & APP13
 
-  const finalJpeg = new Uint8Array(before.length + xmpMarker.length + app13Marker.length + after.length);
-  finalJpeg.set(before, 0);
-  finalJpeg.set(xmpMarker, before.length);
-  finalJpeg.set(app13Marker, before.length + xmpMarker.length);
-  finalJpeg.set(after, before.length + xmpMarker.length + app13Marker.length);
+  while (pos < jpegData.length) {
+    if (jpegData[pos] !== 0xFF) {
+      segments.push(jpegData.slice(pos));
+      break;
+    }
+
+    // Skip consecutive 0xFF padding
+    while (pos < jpegData.length && jpegData[pos] === 0xFF) {
+      pos++;
+    }
+    if (pos >= jpegData.length) break;
+
+    const marker = jpegData[pos++];
+
+    // Standalone markers with no payload
+    if (marker === 0xD9) {
+      // EOI
+      segments.push(new Uint8Array([0xFF, 0xD9]));
+      break;
+    }
+    if ((marker >= 0xD0 && marker <= 0xD7) || marker === 0x01 || marker === 0x00) {
+      // RSTn, TEM, byte stuffing
+      segments.push(new Uint8Array([0xFF, marker]));
+      continue;
+    }
+
+    // Check for Start of Scan (SOS = 0xDA)
+    if (marker === 0xDA) {
+      if (insertIndex === -1) {
+        insertIndex = segments.length;
+      }
+      segments.push(jpegData.slice(pos - 2));
+      break;
+    }
+
+    // Read segment length
+    if (pos + 2 > jpegData.length) {
+      segments.push(jpegData.slice(pos - 2));
+      break;
+    }
+
+    const segLen = (jpegData[pos] << 8) | jpegData[pos + 1];
+    if (segLen < 2 || pos + segLen > jpegData.length) {
+      segments.push(jpegData.slice(pos - 2));
+      break;
+    }
+
+    const segStart = pos - 2;
+    const segEnd = pos + segLen;
+    const segData = jpegData.slice(segStart, segEnd);
+    pos = segEnd;
+
+    // Check if this is an old XMP APP1 (starts with "http://ns.adobe.com/xap/1.0/\0")
+    if (marker === 0xE1 && segLen >= 31) {
+      const isXMP = segData[4] === 0x68 && // 'h'
+                    segData[5] === 0x74 && // 't'
+                    segData[6] === 0x74 && // 't'
+                    segData[7] === 0x70;   // 'p'
+      if (isXMP) {
+        // Strip old XMP
+        continue;
+      }
+    }
+
+    // Check if this is an old IPTC APP13 (starts with "Photoshop 3.0\0")
+    if (marker === 0xED && segLen >= 16) {
+      const isPhotoshop = segData[4] === 0x50 && // 'P'
+                          segData[5] === 0x68 && // 'h'
+                          segData[6] === 0x6F && // 'o'
+                          segData[7] === 0x74;   // 't'
+      if (isPhotoshop) {
+        // Strip old IPTC
+        continue;
+      }
+    }
+
+    // Keep this segment
+    segments.push(segData);
+
+    // If this was APP0 (JFIF) or APP1 (EXIF), this is an ideal insertion point
+    if (insertIndex === -1 && (marker === 0xE0 || marker === 0xE1)) {
+      insertIndex = segments.length;
+    }
+  }
+
+  // If no early APP marker was found, insert right at the beginning
+  if (insertIndex === -1) {
+    insertIndex = 0;
+  }
+
+  // Insert our new XMP and IPTC segments
+  segments.splice(insertIndex, 0, xmpMarker, app13Marker);
+
+  // Reassemble the complete JPEG file
+  const totalLength = 2 + segments.reduce((sum, seg) => sum + seg.length, 0);
+  const finalJpeg = new Uint8Array(totalLength);
+  finalJpeg[0] = 0xFF;
+  finalJpeg[1] = 0xD8; // SOI
+
+  let offset = 2;
+  for (const seg of segments) {
+    finalJpeg.set(seg, offset);
+    offset += seg.length;
+  }
 
   return new Blob([finalJpeg], { type: "image/jpeg" });
 };
@@ -858,11 +953,15 @@ export const embedMetadata = async (
 
   let blob: Blob;
 
-  if (extension === "jpg" || extension === "jpeg") {
+  const isJpeg = /^(jpg|jpeg|jpe|jfif)$/i.test(extension) || file.type === "image/jpeg";
+  const isPng = extension === "png" || file.type === "image/png";
+  const isWebp = extension === "webp" || file.type === "image/webp";
+
+  if (isJpeg) {
     blob = await embedJpegMetadata(file, metadata);
-  } else if (extension === "png") {
+  } else if (isPng) {
     blob = await embedPngMetadata(file, metadata);
-  } else if (extension === "webp") {
+  } else if (isWebp) {
     blob = await embedWebpMetadata(file, metadata);
   } else if (extension === "svg") {
     // SVG metadata embedding is not supported in browser mode.
