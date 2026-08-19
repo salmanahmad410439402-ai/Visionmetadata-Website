@@ -89,14 +89,29 @@ function validateAndNormalizeResponse(raw: any): AIResponse {
     // ── Normalize — fill missing optional fields with safe defaults ───────
     return {
         // Strip any hallucinated "- Part 01" suffixes (prohibited on Adobe Stock / Shutterstock)
+        // Also ensure title does NOT end with a full stop (period)
         title: (() => {
-            const t = raw.title.trim();
-            return t ? t.replace(/\s*[-–]?\s*Part\s+\d{1,3}\s*$/i, "").trim() || "Untitled Asset" : "Untitled Asset";
+            let t = raw.title.trim();
+            t = t.replace(/\s*[--]?\s*Part\s+\d{1,3}\s*$/i, "").trim();
+            if (t.endsWith('.')) {
+                t = t.slice(0, -1).trim();
+            }
+            return t || "Untitled Asset";
         })(),
         description: raw.description.trim(),
-        keywords: raw.keywords
-            .filter((k: any) => typeof k === "string" && k.trim())
-            .map((k: string) => k.trim()),
+        keywords: (() => {
+            let kw = Array.isArray(raw.keywords)
+                ? raw.keywords.filter((k: any) => typeof k === "string").map((k: string) => k.trim())
+                : [];
+            
+            // Move "no people" to the end of the array (last 10 keywords)
+            const noPeopleIdx = kw.findIndex((k) => k.toLowerCase() === "no people");
+            if (noPeopleIdx !== -1) {
+                const noPeopleStr = kw.splice(noPeopleIdx, 1)[0];
+                kw.push(noPeopleStr);
+            }
+            return kw;
+        })(),
         // confidence / riskAnalysis / platformReadiness are NOT returned by the metadata
         // generation prompt — they were moved to the on-demand Quality Check feature.
         // Always populate with empty/neutral defaults so the DB doesn't contain misleading

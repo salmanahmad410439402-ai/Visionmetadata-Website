@@ -166,9 +166,9 @@ ${maxKeywordWords && maxKeywordWords <= 2 ? `\n### MAXIMUM KEYWORD LENGTH (STRIC
 
 ### "NO PEOPLE" RULE (MANDATORY WHEN APPLICABLE)
 If the asset contains no humans:
-- The keyword "no people" MUST appear within the Top 10
+- The keyword "no people" MUST appear within the LAST 10 keywords (positions 40-50)
 - Set "noPeopleDetected": true in your response
-- Buyers heavily rely on this filter during search
+- Buyers heavily rely on this filter during search, and placing it at the end preserves top slots for descriptive keywords.
 
 ### PERFECT KEYWORD MIX (MANDATORY RATIO)
 Generate keywords using the following balance:
@@ -186,6 +186,7 @@ The order of keywords determines search ranking weight. You MUST follow this tie
 
 - Positions 11–30: Conceptual and use-case keywords.
   Examples: "legal consultation", "regulatory compliance", "future technology", "ethical AI"
+  🚨 STRICT RELEVANCE RULE: Do NOT hallucinate conceptual keywords that have no logical connection to the asset. Every conceptual keyword MUST be a direct, logical extension of what is visibly happening.
 
 - Positions 31+: Generic format/type keywords go LAST.
   Examples: "vector", "icon", "symbol", "sign", "pictogram", "glyph", "illustration",
@@ -222,7 +223,7 @@ Before outputting metadata, confirm:
 - Subject appears within first 3–5 words
 - Title follows the Core 3 Rule
 - Primary keyword appears in Top 3–5 keywords
-- "no people" is included in Top 10 if applicable
+- "no people" is included in the LAST 10 keywords (if applicable)
 - Keywords are relevant, ordered, and policy-safe
 
 ${isVertical ? `
