@@ -379,9 +379,7 @@ export const Dashboard = () => {
     let activeWorkers = 0;
 
     // Concurrency based on batch mode
-    const CONCURRENCY_LIMIT = metadataSettings.batchMode
-      ? Math.min(Math.max(activeApiKeys.length * 2, 6), 12)
-      : 3;
+    const CONCURRENCY_LIMIT = metadataSettings.batchMode ? 4 : 1;
     const STAGGER_DELAY_MS = metadataSettings.batchMode ? 200 : 1500;
 
     return new Promise((resolve) => {
