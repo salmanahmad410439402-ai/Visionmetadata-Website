@@ -948,21 +948,40 @@ export const embedMetadata = async (
   file: File,
   metadata: MetadataToEmbed
 ): Promise<{ blob: Blob; filename: string }> => {
-  const extension = file.name.split(".").pop()?.toLowerCase() || "";
-  const filename = file.name;
+  let extension = file.name.split(".").pop()?.toLowerCase() || "";
+  let filename = file.name;
+  let fileToProcess = file;
+
+  // Auto-correct fake PNGs (JPEGs disguised as PNGs) or vice versa by checking magic bytes
+  try {
+    const buffer = await file.slice(0, 4).arrayBuffer();
+    const bytes = new Uint8Array(buffer);
+    
+    // Check for JPEG magic bytes (FF D8 FF)
+    if (bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff) {
+      if (extension !== "jpg" && extension !== "jpeg") {
+        extension = "jpg";
+        const baseName = file.name.includes(".") ? file.name.substring(0, file.name.lastIndexOf(".")) : file.name;
+        filename = baseName + ".jpg";
+        fileToProcess = new File([file], filename, { type: "image/jpeg", lastModified: file.lastModified });
+      }
+    }
+  } catch (e) {
+    // Ignore array buffer read errors
+  }
 
   let blob: Blob;
 
-  const isJpeg = /^(jpg|jpeg|jpe|jfif)$/i.test(extension) || file.type === "image/jpeg";
-  const isPng = extension === "png" || file.type === "image/png";
-  const isWebp = extension === "webp" || file.type === "image/webp";
+  const isJpeg = /^(jpg|jpeg|jpe|jfif)$/i.test(extension) || fileToProcess.type === "image/jpeg";
+  const isPng = extension === "png" || fileToProcess.type === "image/png";
+  const isWebp = extension === "webp" || fileToProcess.type === "image/webp";
 
   if (isJpeg) {
-    blob = await embedJpegMetadata(file, metadata);
+    blob = await embedJpegMetadata(fileToProcess, metadata);
   } else if (isPng) {
-    blob = await embedPngMetadata(file, metadata);
+    blob = await embedPngMetadata(fileToProcess, metadata);
   } else if (isWebp) {
-    blob = await embedWebpMetadata(file, metadata);
+    blob = await embedWebpMetadata(fileToProcess, metadata);
   } else if (extension === "svg") {
     // SVG metadata embedding is not supported in browser mode.
     // SVG files use XML-based XMP injection which requires ExifTool (desktop/native mode).
