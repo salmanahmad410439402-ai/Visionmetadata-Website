@@ -170,69 +170,49 @@ export const ExportModal = ({ open, onOpenChange, assets }: ExportModalProps) =>
                   )}
                 </Button>
               </motion.div>
-            ))}
-          </div>
-
-          {/* ── Vecteezy — Free / Pro license toggle ──────────────────────── */}
-          <motion.div whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }}>
-            <div className="w-full border border-green-500/40 rounded-lg overflow-hidden">
-              {/* Top row: click to export */}
+            {/* ── Vecteezy in Grid ──────────────────────── */}
+            <motion.div
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
               <Button
-                variant="ghost"
-                className="w-full justify-between h-auto py-3 px-4 rounded-none hover:bg-muted/50"
+                variant="outline"
+                className="w-full justify-between h-auto py-2 px-3 border-green-500/30 hover:bg-green-500/5"
                 onClick={() => handleExport("vecteezy")}
                 disabled={exporting}
+                title="Filename · title · description · keywords · license"
               >
-                <div className="text-left">
-                  <div className="flex items-center gap-2">
-                    <span className="font-medium">Vecteezy</span>
-                    <Badge variant="outline" className="bg-green-500/20 text-green-400 border-green-500/30">CSV</Badge>
-                    <Badge variant="outline" className={
-                      vecteezyLicense === "Pro"
-                        ? "bg-amber-500/20 text-amber-400 border-amber-500/30 text-[10px]"
-                        : "bg-muted text-muted-foreground border-border text-[10px]"
-                    }>
-                      {vecteezyLicense}
+                <div className="flex flex-col items-start gap-0.5">
+                  <div className="flex items-center gap-1.5">
+                    <span className="font-medium text-sm">Vecteezy</span>
+                  </div>
+                  <div className="flex gap-1 items-center">
+                    <Badge variant="outline" className="bg-green-500/20 text-green-400 border-green-500/30 text-[9px] px-1 py-0 h-4">CSV</Badge>
+                    <Badge 
+                      variant="outline" 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setVecteezyLicense(prev => prev === "Free" ? "Pro" : "Free");
+                      }}
+                      title="Click to toggle Free/Pro"
+                      className={`text-[9px] px-1 py-0 h-4 cursor-pointer hover:opacity-80 transition-opacity ${
+                        vecteezyLicense === "Pro"
+                          ? "bg-amber-500/20 text-amber-400 border-amber-500/30"
+                          : "bg-muted text-muted-foreground border-border hover:bg-muted/80"
+                      }`}
+                    >
+                      {vecteezyLicense} ▾
                     </Badge>
                   </div>
-                  <p className="text-xs text-muted-foreground mt-1">Filename · title · description · keywords · license</p>
                 </div>
                 {exported === "vecteezy" ? (
-                  <Check className="w-5 h-5 text-accent" />
+                  <Check className="w-4 h-4 text-accent shrink-0" />
                 ) : (
-                  <Download className="w-5 h-5 text-muted-foreground" />
+                  <Download className="w-4 h-4 text-muted-foreground shrink-0" />
                 )}
               </Button>
-
-              {/* License selector */}
-              <div className="flex items-center gap-3 px-4 py-2 bg-muted/30 border-t border-green-500/20">
-                <span className="text-xs text-muted-foreground">License:</span>
-                <div className="flex rounded-md overflow-hidden border border-border">
-                  <button
-                    onClick={() => setVecteezyLicense("Free")}
-                    className={`text-xs px-3 py-1 transition-colors ${
-                      vecteezyLicense === "Free"
-                        ? "bg-green-500/20 text-green-400 font-medium"
-                        : "text-muted-foreground hover:bg-muted"
-                    }`}
-                  >
-                    Free
-                  </button>
-                  <button
-                    onClick={() => setVecteezyLicense("Pro")}
-                    className={`text-xs px-3 py-1 transition-colors border-l border-border ${
-                      vecteezyLicense === "Pro"
-                        ? "bg-amber-500/20 text-amber-400 font-medium"
-                        : "text-muted-foreground hover:bg-muted"
-                    }`}
-                  >
-                    Pro
-                  </button>
-                </div>
-                <span className="text-[10px] text-muted-foreground ml-auto">Toggle then click download</span>
-              </div>
-            </div>
-          </motion.div>
+            </motion.div>
+          </div>
 
           {/* ── Freepik — AI content options ──────────────────────────────── */}
           <div className="w-full border border-primary/40 rounded-lg overflow-hidden">
