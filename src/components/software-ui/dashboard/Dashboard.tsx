@@ -200,8 +200,9 @@ export const Dashboard = () => {
 
     try {
       setIsDownloadingZip(true);
-      if (isDesktop()) {
-        toast.info(`Preparing to save ${assetsWithMeta.length} assets...`);
+      // Use folder streaming logic on Desktop, or on Web if File System Access is supported and batch is > 5 files
+      if (isDesktop() || ('showDirectoryPicker' in window && assetsWithMeta.length > 5)) {
+        toast.info(`Preparing to save ${assetsWithMeta.length} assets to folder...`);
         
         // Initialize Dynamic Island for folder saving
         setBatchState({

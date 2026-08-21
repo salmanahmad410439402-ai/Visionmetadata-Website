@@ -253,30 +253,24 @@ export const embedAndSaveToFolder = async (
     throw new Error("No assets with metadata to save");
   }
 
-  if (!isDesktop()) {
-    throw new Error("Direct folder export is only supported on desktop");
+  // On Web, use the File System Access API
+  if (!('showDirectoryPicker' in window)) {
+    throw new Error("Your browser does not support folder saving. Please use Google Chrome or Edge.");
   }
 
   // 1. Open directory selector dialog
-  let selectedPath: string | null = null;
+  let dirHandle: any = null;
   try {
-    // const { open } = await import('@tauri-apps/plugin-dialog');
-    const folder = await open({
-      directory: true,
-      multiple: false,
-      title: "Select Destination Directory to Save Embedded Files"
+    dirHandle = await (window as any).showDirectoryPicker({
+      mode: 'readwrite',
     });
-    if (folder) {
-      selectedPath = folder as string;
+  } catch (err: any) {
+    if (err.name === 'AbortError') {
+      toast.info("Export cancelled.");
+      return;
     }
-  } catch (err) {
     console.error("Open directory dialog failed:", err);
-    throw new Error("Failed to open folder selector dialog: " + (err instanceof Error ? err.message : String(err)));
-  }
-
-  if (!selectedPath) {
-    toast.info("Export cancelled.");
-    return;
+    throw new Error("Failed to open folder selector dialog: " + (err.message || String(err)));
   }
 
   let processed = 0;
@@ -284,8 +278,6 @@ export const embedAndSaveToFolder = async (
   const failedFiles: string[] = [];
 
   // Process files in parallel with limited concurrency for much faster embedding.
-  // ExifTool/FFmpeg are I/O-bound external processes, so overlapping them gives
-  // a ~3x speedup without any quality loss — the output is byte-identical.
   const CONCURRENCY = 3;
   let queueIndex = 0;
 
@@ -293,7 +285,7 @@ export const embedAndSaveToFolder = async (
     while (queueIndex < assetsWithMetadata.length) {
       const asset = assetsWithMetadata[queueIndex++];
       try {
-        // 2. Prepare asset with embedded metadata (Exiftool / Browser fallback)
+        // 2. Prepare asset with embedded metadata (Browser fallback)
         const { filename, blob } = await prepareAssetForZip(asset);
 
         if (blob.size === 0) {
@@ -302,8 +294,10 @@ export const embedAndSaveToFolder = async (
 
         // 3. Write file to destination directory using streaming to avoid
         // holding the full file buffer in the JS heap (prevents OOM crashes)
-        const filePath = await join(selectedPath!, filename);
-        await writeFile(filePath, blob.stream());
+        const fileHandle = await dirHandle.getFileHandle(filename, { create: true });
+        const writable = await fileHandle.createWritable();
+        await writable.write(blob);
+        await writable.close();
       } catch (error) {
         const msg = error instanceof Error ? error.message : String(error);
         console.error(`Failed to save ${asset.file.name}:`, msg);
@@ -316,8 +310,7 @@ export const embedAndSaveToFolder = async (
     }
   };
 
-  // Launch concurrent workers — each one pulls the next file from the queue
-  // when it finishes its current file, keeping all workers busy
+  // Launch concurrent workers
   await Promise.all(
     Array.from(
       { length: Math.min(CONCURRENCY, assetsWithMetadata.length) },
@@ -330,7 +323,7 @@ export const embedAndSaveToFolder = async (
       `${failedFiles.length} file${failedFiles.length > 1 ? "s" : ""} could not be saved.`
     );
   } else {
-    toast.success(`Successfully saved ${processed} files to: ${selectedPath}`);
+    toast.success(`Successfully saved ${processed} files to folder!`);
   }
 };
 

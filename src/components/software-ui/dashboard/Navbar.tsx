@@ -83,9 +83,13 @@ export const Navbar = ({ onUpload, onExportCSV, onBulkEdit, onGenerateAll, onRet
                 <FileArchive className="h-4 w-4" />
               )}
               <span className="hidden lg:inline">
-                {isDownloadingZip 
-                  ? (isDesktop() ? "Saving Files..." : "Creating Zip...") 
-                  : (isDesktop() ? `Embed & Save Files (${completeCount})` : `Download Zip (${completeCount})`)}
+                {(() => {
+                  const useFolder = isDesktop() || (typeof window !== 'undefined' && 'showDirectoryPicker' in window && completeCount > 5);
+                  if (isDownloadingZip) {
+                    return useFolder ? "Saving Files..." : "Creating Zip...";
+                  }
+                  return useFolder ? `Embed & Save Files (${completeCount})` : `Download Zip (${completeCount})`;
+                })()}
               </span>
             </Button>
 
