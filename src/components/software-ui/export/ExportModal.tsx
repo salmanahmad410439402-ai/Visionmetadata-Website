@@ -196,10 +196,10 @@ export const ExportModal = ({ open, onOpenChange, assets }: ExportModalProps) =>
                         setVecteezyLicense(prev => prev === "Free" ? "Pro" : "Free");
                       }}
                       title="Click to toggle Free/Pro"
-                      className={`text-[9px] px-1 py-0 h-4 cursor-pointer hover:opacity-80 transition-opacity ${
+                      className={`text-[9px] px-1 py-0 h-4 cursor-pointer transition-opacity ${
                         vecteezyLicense === "Pro"
-                          ? "bg-amber-500/20 text-amber-400 border-amber-500/30"
-                          : "bg-muted text-muted-foreground border-border hover:bg-muted/80"
+                          ? "bg-amber-100 text-amber-800 border-amber-300 dark:bg-amber-500/20 dark:text-amber-300 dark:border-amber-500/30 hover:opacity-80"
+                          : "bg-slate-100 text-slate-700 border-slate-300 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700 hover:opacity-80"
                       }`}
                     >
                       {vecteezyLicense} ▾
