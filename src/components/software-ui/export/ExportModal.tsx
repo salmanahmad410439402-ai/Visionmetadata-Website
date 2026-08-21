@@ -170,6 +170,7 @@ export const ExportModal = ({ open, onOpenChange, assets }: ExportModalProps) =>
                   )}
                 </Button>
               </motion.div>
+            ))}
             {/* ── Vecteezy in Grid ──────────────────────── */}
             <motion.div
               whileHover={{ scale: 1.02 }}
