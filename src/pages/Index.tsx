@@ -11,6 +11,7 @@ import { useReveal } from "@/hooks/useReveal";
 import { useEffect } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { AdSense } from "@/components/AdSense";
 
 const Index = () => {
   const ref = useReveal();
@@ -115,6 +116,13 @@ const Index = () => {
                 </Button>
               </a>
             </div>
+          </div>
+        </section>
+
+        {/* AdSense Middle Landing Page */}
+        <section className="py-8 px-6 max-w-4xl mx-auto w-full">
+          <div className="w-full bg-slate-900/10 border border-border/40 rounded-2xl overflow-hidden min-h-[90px] flex items-center justify-center p-2">
+            <AdSense format="horizontal" />
           </div>
         </section>
 

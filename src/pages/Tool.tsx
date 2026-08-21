@@ -6,6 +6,7 @@ import { Dashboard } from '@/components/software-ui/dashboard/Dashboard';
 import { Play, Sparkles, X, Video } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
+import { AdSense } from '@/components/AdSense';
 
 export const ToolPage: React.FC = () => {
   const navigate = useNavigate();
@@ -57,9 +58,25 @@ export const ToolPage: React.FC = () => {
             </div>
           )}
 
-          {/* Main Desktop Software Dashboard Engine */}
-          <main className="flex-1 w-full max-w-[1920px] mx-auto px-2 sm:px-4 lg:px-6 py-4">
-            <Dashboard />
+          {/* Main Desktop Software Dashboard Engine with Ads Layout */}
+          <main className="flex-1 w-full max-w-[1920px] mx-auto px-2 sm:px-4 lg:px-6 py-4 flex flex-col xl:flex-row gap-4">
+            
+            <div className="flex-1 flex flex-col min-w-0">
+              {/* Top Ad (Horizontal) */}
+              <div className="w-full bg-slate-900/40 border border-slate-800 rounded-xl mb-4 overflow-hidden min-h-[90px] flex items-center justify-center p-2">
+                 <AdSense format="horizontal" />
+              </div>
+              
+              <Dashboard />
+            </div>
+
+            {/* Side Ad (Vertical, visible on Desktop) */}
+            <aside className="hidden xl:flex flex-col w-[300px] shrink-0 gap-4">
+              <div className="w-full bg-slate-900/40 border border-slate-800 rounded-xl h-[600px] sticky top-24 overflow-hidden flex items-center justify-center p-2">
+                 <AdSense format="vertical" className="h-full" />
+              </div>
+            </aside>
+            
           </main>
         </div>
       </AssetsProvider>
