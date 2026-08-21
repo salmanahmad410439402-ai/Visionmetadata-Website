@@ -661,13 +661,39 @@ export async function exportAssets(
     vecteezyLicense?: "free" | "pro" | "editorial";
     freepikIsAI?: boolean;
     freepikAiTool?: string;
+    includeVectorEps?: boolean;
+    includeVectorAi?: boolean;
+    includeVectorSvg?: boolean;
   }
 ): Promise<void> {
   const timestamp = new Date().toISOString().split("T")[0];
-  const assetsWithMeta = assets.filter(a => a.metadata);
+  let assetsWithMeta = assets.filter(a => a.metadata);
 
   if (assetsWithMeta.length === 0) {
     throw new Error("No assets with generated metadata to export");
+  }
+
+  // Generate vector rows if requested
+  if (options?.includeVectorEps || options?.includeVectorAi || options?.includeVectorSvg) {
+    const expandedAssets: Asset[] = [];
+    assetsWithMeta.forEach(a => {
+      // Original file
+      expandedAssets.push(a);
+
+      const baseName = a.file.name.substring(0, a.file.name.lastIndexOf('.')) || a.file.name;
+      
+      // Inject pseudo-assets with vector extensions for CSV generation
+      if (options.includeVectorEps) {
+        expandedAssets.push({ ...a, file: { name: `${baseName}.eps` } as File });
+      }
+      if (options.includeVectorAi) {
+        expandedAssets.push({ ...a, file: { name: `${baseName}.ai` } as File });
+      }
+      if (options.includeVectorSvg) {
+        expandedAssets.push({ ...a, file: { name: `${baseName}.svg` } as File });
+      }
+    });
+    assetsWithMeta = expandedAssets;
   }
 
   // Individual platform exports (each shows its own Save As dialog on desktop)

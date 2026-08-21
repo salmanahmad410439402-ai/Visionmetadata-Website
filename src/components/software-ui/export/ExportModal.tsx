@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Asset } from "@/contexts/AssetsContext";
 import { exportAssets } from "@/lib/csvExporter";
 import { Download, FileSpreadsheet, Check } from "lucide-react";
@@ -36,6 +37,11 @@ export const ExportModal = ({ open, onOpenChange, assets }: ExportModalProps) =>
   const [freepikIsAI, setFreepikIsAI] = useState(false);
   const [freepikAiTool, setFreepikAiTool] = useState("");
 
+  // ── Additional Vector Files options ────────────────────────────────────────
+  const [includeVectorEps, setIncludeVectorEps] = useState(false);
+  const [includeVectorAi, setIncludeVectorAi] = useState(false);
+  const [includeVectorSvg, setIncludeVectorSvg] = useState(false);
+
   const handleExport = async (format: ExportFormat) => {
     // Validate: if exporting Freepik with AI on, require the tool name
     if ((format === "freepik" || format === "all") && freepikIsAI && !freepikAiTool.trim()) {
@@ -49,6 +55,9 @@ export const ExportModal = ({ open, onOpenChange, assets }: ExportModalProps) =>
         vecteezyLicense,
         freepikIsAI,
         freepikAiTool: freepikAiTool.trim(),
+        includeVectorEps,
+        includeVectorAi,
+        includeVectorSvg
       });
       setExported(format);
       toast.success(`Exported ${assets.length} assets for ${format === "all" ? "all platforms" : format}`);
@@ -108,6 +117,30 @@ export const ExportModal = ({ open, onOpenChange, assets }: ExportModalProps) =>
         </DialogHeader>
 
         <div className="space-y-3 py-4">
+
+          {/* ── Global CSV Options (Vector Support) ───────────────────────── */}
+          <div className="bg-muted/30 border border-border rounded-lg p-3 space-y-2 mb-2">
+            <div>
+              <Label className="text-sm font-medium">Additional File Types</Label>
+              <p className="text-xs text-muted-foreground leading-tight mt-0.5">
+                Automatically generate metadata rows for your vector files alongside JPGs. This saves you from uploading heavy vector files to the app.
+              </p>
+            </div>
+            <div className="flex items-center gap-4 pt-1">
+              <div className="flex items-center space-x-2">
+                <Checkbox id="opt-eps" checked={includeVectorEps} onCheckedChange={(c) => setIncludeVectorEps(!!c)} />
+                <Label htmlFor="opt-eps" className="text-sm cursor-pointer font-medium">.eps</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Checkbox id="opt-ai" checked={includeVectorAi} onCheckedChange={(c) => setIncludeVectorAi(!!c)} />
+                <Label htmlFor="opt-ai" className="text-sm cursor-pointer font-medium">.ai</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Checkbox id="opt-svg" checked={includeVectorSvg} onCheckedChange={(c) => setIncludeVectorSvg(!!c)} />
+                <Label htmlFor="opt-svg" className="text-sm cursor-pointer font-medium">.svg</Label>
+              </div>
+            </div>
+          </div>
 
           {/* ── Simple platforms (no options) ─────────────────────────────── */}
           {simplePlatforms.map((platform) => (

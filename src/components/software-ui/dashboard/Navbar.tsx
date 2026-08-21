@@ -84,11 +84,11 @@ export const Navbar = ({ onUpload, onExportCSV, onBulkEdit, onGenerateAll, onRet
               )}
               <span className="hidden lg:inline">
                 {(() => {
-                  const useFolder = isDesktop() || (typeof window !== 'undefined' && 'showDirectoryPicker' in window && completeCount > 5);
+                  const useFolder = isDesktop() || (typeof window !== 'undefined' && 'showDirectoryPicker' in window);
                   if (isDownloadingZip) {
-                    return useFolder ? "Saving Files..." : "Creating Zip...";
+                    return useFolder ? "Saving JPG/PNG..." : "Creating Zip...";
                   }
-                  return useFolder ? `Embed & Save Files (${completeCount})` : `Download Zip (${completeCount})`;
+                  return useFolder ? `Embed & Save (JPG/PNG) (${completeCount})` : `Download Zip (${completeCount})`;
                 })()}
               </span>
             </Button>
