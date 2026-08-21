@@ -105,7 +105,7 @@ export const ExportModal = ({ open, onOpenChange, assets }: ExportModalProps) =>
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md bg-popover border-border">
+      <DialogContent className="max-w-md bg-popover border-border max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <FileSpreadsheet className="w-5 h-5 text-primary" />
@@ -143,33 +143,35 @@ export const ExportModal = ({ open, onOpenChange, assets }: ExportModalProps) =>
           </div>
 
           {/* ── Simple platforms (no options) ─────────────────────────────── */}
-          {simplePlatforms.map((platform) => (
-            <motion.div
-              key={platform.id}
-              whileHover={{ scale: 1.01 }}
-              whileTap={{ scale: 0.99 }}
-            >
-              <Button
-                variant="outline"
-                className="w-full justify-between h-auto py-3 px-4"
-                onClick={() => handleExport(platform.id)}
-                disabled={exporting}
+          <div className="grid grid-cols-2 gap-2 mb-2">
+            {simplePlatforms.map((platform) => (
+              <motion.div
+                key={platform.id}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
               >
-                <div className="text-left">
-                  <div className="flex items-center gap-2">
-                    <span className="font-medium">{platform.name}</span>
-                    <Badge variant="outline" className={platform.color}>CSV</Badge>
+                <Button
+                  variant="outline"
+                  className="w-full justify-between h-auto py-2 px-3"
+                  onClick={() => handleExport(platform.id)}
+                  disabled={exporting}
+                  title={platform.desc}
+                >
+                  <div className="flex flex-col items-start gap-0.5">
+                    <div className="flex items-center gap-1.5">
+                      <span className="font-medium text-sm">{platform.name}</span>
+                    </div>
+                    <Badge variant="outline" className={`${platform.color} text-[9px] px-1 py-0 h-4`}>CSV</Badge>
                   </div>
-                  <p className="text-xs text-muted-foreground mt-1">{platform.desc}</p>
-                </div>
-                {exported === platform.id ? (
-                  <Check className="w-5 h-5 text-accent" />
-                ) : (
-                  <Download className="w-5 h-5 text-muted-foreground" />
-                )}
-              </Button>
-            </motion.div>
-          ))}
+                  {exported === platform.id ? (
+                    <Check className="w-4 h-4 text-accent shrink-0" />
+                  ) : (
+                    <Download className="w-4 h-4 text-muted-foreground shrink-0" />
+                  )}
+                </Button>
+              </motion.div>
+            ))}
+          </div>
 
           {/* ── Vecteezy — Free / Pro license toggle ──────────────────────── */}
           <motion.div whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }}>
