@@ -1,7 +1,6 @@
 import { Download, CheckCircle2, Bot, Chrome, RefreshCw, Sparkles, FolderDown, FileCode, Puzzle, Zap, ArrowDown, ShieldCheck, Key, Cpu, HelpCircle, Layers, Check, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useReveal } from "@/hooks/useReveal";
-import { AdSense } from "@/components/AdSense";
 
 const ChromeExtension = () => {
   const ref = useReveal();
@@ -127,11 +126,6 @@ const ChromeExtension = () => {
           </div>
         </div>
 
-        {/* AdSense Top Extension Page */}
-        <div className="w-full bg-slate-900/10 border border-border/40 rounded-2xl overflow-hidden min-h-[90px] flex items-center justify-center p-2 mb-16">
-          <AdSense format="horizontal" />
-        </div>
-
         {/* ─── FEATURES GRID ─── */}
         <div className="mb-24">
           <div className="text-center mb-12">
@@ -217,11 +211,6 @@ const ChromeExtension = () => {
               </p>
             </div>
           </div>
-        </div>
-
-        {/* AdSense Middle Extension Page */}
-        <div className="w-full bg-slate-900/10 border border-border/40 rounded-2xl overflow-hidden min-h-[90px] flex items-center justify-center p-2 mb-16">
-          <AdSense format="horizontal" />
         </div>
 
         {/* ─── FREQUENTLY ASKED QUESTIONS ─── */}

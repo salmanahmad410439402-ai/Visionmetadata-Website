@@ -22,7 +22,6 @@ import { Badge } from "@/components/ui/badge";
 import { BLOG_POSTS, BlogPost } from "@/data/blogPosts";
 import { useReveal } from "@/hooks/useReveal";
 import { toast } from "sonner";
-import { AdSense } from "@/components/AdSense";
 
 /**
  * Parses and formats text, replacing markdown links ([text](url)),
@@ -215,11 +214,6 @@ const Blogs = () => {
               </div>
             </div>
 
-            {/* AdSense Top Article */}
-            <div className="w-full bg-slate-900/20 border border-border/40 rounded-2xl mb-10 overflow-hidden min-h-[90px] flex items-center justify-center p-2">
-              <AdSense format="horizontal" />
-            </div>
-
             {/* Article Intro Excerpt */}
             <div className="bg-muted/20 border-l-4 border-primary rounded-r-2xl p-5 sm:p-6 mb-10 text-sm sm:text-base leading-relaxed text-foreground font-medium space-y-3 shadow-inner">
               {currentPost.content.intro.split("\n\n").map((para, idx) => (
@@ -385,11 +379,6 @@ const Blogs = () => {
               </div>
             )}
 
-            {/* AdSense Bottom Article */}
-            <div className="w-full bg-slate-900/20 border border-border/40 rounded-2xl mb-12 overflow-hidden min-h-[90px] flex items-center justify-center p-2">
-              <AdSense format="horizontal" />
-            </div>
-
             {/* Bottom Conversion CTA Card */}
             <div className="glass-panel rounded-3xl p-6 sm:p-8 border border-border/80 text-center space-y-4 shadow-2xl relative overflow-hidden">
               <div className="w-12 h-12 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary mx-auto">
@@ -471,11 +460,6 @@ const Blogs = () => {
                   className="pl-9 text-xs rounded-xl bg-background/70 border-border/80 h-9"
                 />
               </div>
-            </div>
-
-            {/* AdSense Middle Directory */}
-            <div className="w-full bg-slate-900/10 border border-border/40 rounded-2xl overflow-hidden min-h-[90px] flex items-center justify-center p-2">
-              <AdSense format="horizontal" />
             </div>
 
             {/* Posts Grid */}
