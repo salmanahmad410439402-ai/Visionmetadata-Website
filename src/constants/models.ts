@@ -19,8 +19,6 @@ export const GEMINI_MODELS = {
   FLASH_3_PREVIEW: "gemini-3-flash-preview",
   /** Most cost-effective 3.1 tier — maximum metadata per token */
   FLASH_3_1_LITE: "gemini-3.1-flash-lite",
-  /** Advanced reasoning — free with strict rate limits */
-  PRO_3_PREVIEW: "gemini-3-pro-preview",
   /** Default recommended model — cheapest with great metadata quality */
   DEFAULT: "gemini-3.5-flash-lite",
 } as const;
