@@ -388,10 +388,7 @@ export const SettingsModal = ({ open, onOpenChange, firstRunSetupProps }: Settin
                                 { value: "gemini-3.5-flash" as AIModel, label: "Gemini 3.5 Flash", quality: "Latest & Ultra-fast", badge: "text-purple-400" },
                                 { value: "gemini-3.1-flash-lite" as AIModel, label: "Gemini 3.1 Flash-Lite", quality: "Most Cheap", badge: "text-green-400" },
                                 { value: "gemini-3-flash-preview" as AIModel, label: "Gemini 3 Flash", quality: "Fast & frontier", badge: "text-emerald-400" },
-                                { value: "gemini-2.5-flash" as AIModel, label: "Gemini 2.5 Flash", quality: "Stable & reliable", badge: "text-blue-400" },
-                                { value: "gemini-2.5-flash-lite" as AIModel, label: "Gemini 2.5 Flash-Lite", quality: "Lightweight", badge: "text-emerald-400" },
-                                { value: "gemini-3.1-pro-preview" as AIModel, label: "Gemini 3.1 Pro", quality: "Pro Tier", badge: "text-purple-400" },
-                                { value: "gemini-2.5-pro" as AIModel, label: "Gemini 2.5 Pro", quality: "Complex reasoning", badge: "text-blue-400" },
+                                { value: "gemini-3-pro-preview" as AIModel, label: "Gemini 3 Pro", quality: "Advanced reasoning", badge: "text-blue-400" },
                               ].map(m => (
                                 <button
                                   key={m.value}
