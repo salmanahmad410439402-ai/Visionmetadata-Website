@@ -2,7 +2,9 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 
 export type AIModel =
   | "gemini-3.5-flash"
+  | "gemini-3.5-flash-lite"
   | "gemini-3-flash-preview"
+  | "gemini-3.1-flash-lite"
   | "gemini-2.5-flash"
   | "gemini-2.5-flash-lite"
   | "gemini-3.1-pro-preview"
@@ -234,7 +236,7 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
 
   const [selectedModel, setSelectedModel] = useState<AIModel>(() => {
     const saved = localStorage.getItem("tagyfy_selected_model");
-    if (!saved || saved === "auto") return "gemini-3-flash-preview";
+    if (!saved || saved === "auto") return "gemini-3.5-flash-lite";
     // Migrate stale model names (e.g. "llama3-70b-8192" -> "meta-llama/llama-4-scout-17b-16e-instruct")
     // so the UI shows the correct button selected after an app update.
     const migrations: Record<string, AIModel> = {
@@ -263,7 +265,7 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
       "llama3-8b-8192":   "meta-llama/llama-4-scout-17b-16e-instruct",
       "llama-4-scout":    "meta-llama/llama-4-scout-17b-16e-instruct",
       "meta-llama/llama-4-maverick": "meta-llama/llama-4-scout-17b-16e-instruct",
-      "auto": "gemini-3-flash-preview",
+      "auto": "gemini-3.5-flash-lite",
     };
     return (migrations[saved] || saved) as AIModel;
   });

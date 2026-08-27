@@ -384,7 +384,9 @@ export const SettingsModal = ({ open, onOpenChange, firstRunSetupProps }: Settin
                             {/* Submenu for Desktop hover / Mobile tap */}
                             <div className={`${mobileSubmenu === "gemini" ? "block" : "hidden"} md:group-hover/gemini:block md:absolute md:left-full md:top-0 md:ml-1 w-full md:min-w-[240px] bg-popover/95 md:border border-border/80 rounded-xl md:shadow-xl py-1 z-50`}>
                               {[
+                                { value: "gemini-3.5-flash-lite" as AIModel, label: "Gemini 3.5 Flash-Lite", quality: "Most Cheap · Default", badge: "text-green-400" },
                                 { value: "gemini-3.5-flash" as AIModel, label: "Gemini 3.5 Flash", quality: "Latest & Ultra-fast", badge: "text-purple-400" },
+                                { value: "gemini-3.1-flash-lite" as AIModel, label: "Gemini 3.1 Flash-Lite", quality: "Most Cheap", badge: "text-green-400" },
                                 { value: "gemini-3-flash-preview" as AIModel, label: "Gemini 3 Flash", quality: "Fast & frontier", badge: "text-emerald-400" },
                                 { value: "gemini-2.5-flash" as AIModel, label: "Gemini 2.5 Flash", quality: "Stable & reliable", badge: "text-blue-400" },
                                 { value: "gemini-2.5-flash-lite" as AIModel, label: "Gemini 2.5 Flash-Lite", quality: "Lightweight", badge: "text-emerald-400" },

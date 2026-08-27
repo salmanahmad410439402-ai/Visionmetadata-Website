@@ -125,7 +125,7 @@ export const getOptimalModel = (isVideo: boolean, preferredModel?: AIModel, avai
     if (availableProvider) {
         switch (availableProvider) {
             case "gemini":
-                return isVideo ? "gemini-3-pro-preview" : "gemini-3-flash-preview";
+                return isVideo ? "gemini-3-pro-preview" : "gemini-3.5-flash-lite";
             case "openai":
                 return isVideo ? "gpt-4o" : "gpt-4o-mini";
             case "groq":
