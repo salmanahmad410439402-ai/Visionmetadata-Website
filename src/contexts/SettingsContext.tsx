@@ -7,9 +7,8 @@ export type AIModel =
   | "gemini-3.1-flash-lite"
   | "gpt-4o"
   | "gpt-4o-mini"
-  | "meta-llama/llama-prompt-guard-2-86m"
-  | "meta-llama/llama-prompt-guard-2-22m"
-  | "openai/gpt-oss-20b"
+  | "qwen/qwen3.6-27b"
+  | "qwen/qwen3.8-27b"
   // Mistral direct API models (require a Mistral API key from platform.mistral.ai)
   | "mistral-large-2512"
   | "mistral-medium-2508"
@@ -233,7 +232,7 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
 
   const [selectedModel, setSelectedModel] = useState<AIModel>(() => {
     const saved = localStorage.getItem("tagyfy_selected_model");
-    if (!saved || saved === "auto") return "meta-llama/llama-prompt-guard-2-86m";
+    if (!saved || saved === "auto") return "qwen/qwen3.6-27b";
     // Migrate stale model names (e.g. "llama3-70b-8192" -> "meta-llama/llama-4-scout-17b-16e-instruct")
     // so the UI shows the correct button selected after an app update.
     const migrations: Record<string, AIModel> = {
@@ -258,12 +257,15 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
       "o3":            "gpt-4o",
       "o4-mini":       "gpt-4o-mini",
       // ── Legacy Llama ─────────────────────────────────────────────────────
-      "llama3-70b-8192":  "meta-llama/llama-prompt-guard-2-86m",
-      "llama3-8b-8192":   "meta-llama/llama-prompt-guard-2-86m",
-      "llama-4-scout":    "meta-llama/llama-prompt-guard-2-86m",
-      "meta-llama/llama-4-maverick": "meta-llama/llama-prompt-guard-2-86m",
-      "meta-llama/llama-4-scout-17b-16e-instruct": "meta-llama/llama-prompt-guard-2-86m",
-      "auto": "meta-llama/llama-prompt-guard-2-86m",
+      "llama3-70b-8192":  "qwen/qwen3.6-27b",
+      "llama3-8b-8192":   "qwen/qwen3.6-27b",
+      "llama-4-scout":    "qwen/qwen3.6-27b",
+      "meta-llama/llama-4-maverick": "qwen/qwen3.6-27b",
+      "meta-llama/llama-4-scout-17b-16e-instruct": "qwen/qwen3.6-27b",
+      "meta-llama/llama-prompt-guard-2-86m": "qwen/qwen3.6-27b",
+      "meta-llama/llama-prompt-guard-2-22m": "qwen/qwen3.6-27b",
+      "openai/gpt-oss-20b": "qwen/qwen3.6-27b",
+      "auto": "qwen/qwen3.6-27b",
     };
     return (migrations[saved] || saved) as AIModel;
   });

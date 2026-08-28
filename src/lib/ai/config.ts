@@ -82,7 +82,7 @@ export const AI_RESPONSE_SCHEMA = {
 export function getProviderFromModel(model: AIModel): AIProvider {
     // Direct Mistral API models
     if (model.startsWith("mistral-") || model.startsWith("ministral-")) return "mistral";
-    if (model === "openai/gpt-oss-20b") return "groq";
+    if (model.startsWith("qwen/")) return "groq";
     if (model.startsWith("gemini")) return "gemini";
     if (model.startsWith("gpt")) return "openai";
     if (model.startsWith("meta-llama/") || model.startsWith("llama")) return "groq";
@@ -112,11 +112,14 @@ export function migrateModelName(model: AIModel): AIModel {
         "o3":             "gpt-4o",
         "o4-mini":        "gpt-4o-mini",
         // ── Legacy Llama ─────────────────────────────────────────────────────
-        "llama3-70b-8192":  "meta-llama/llama-prompt-guard-2-86m",
-        "llama3-8b-8192":   "meta-llama/llama-prompt-guard-2-86m",
-        "llama-4-scout":    "meta-llama/llama-prompt-guard-2-86m",
-        "llama-4-maverick": "meta-llama/llama-prompt-guard-2-86m",
-        "meta-llama/llama-4-scout-17b-16e-instruct": "meta-llama/llama-prompt-guard-2-86m",
+        "llama3-70b-8192":  "qwen/qwen3.6-27b",
+        "llama3-8b-8192":   "qwen/qwen3.6-27b",
+        "llama-4-scout":    "qwen/qwen3.6-27b",
+        "llama-4-maverick": "qwen/qwen3.6-27b",
+        "meta-llama/llama-4-scout-17b-16e-instruct": "qwen/qwen3.6-27b",
+        "meta-llama/llama-prompt-guard-2-86m": "qwen/qwen3.6-27b",
+        "meta-llama/llama-prompt-guard-2-22m": "qwen/qwen3.6-27b",
+        "openai/gpt-oss-20b": "qwen/qwen3.6-27b",
     };
     return (migrations[model] || model) as AIModel;
 }
@@ -130,7 +133,7 @@ export const getOptimalModel = (isVideo: boolean, preferredModel?: AIModel, avai
             case "openai":
                 return isVideo ? "gpt-4o" : "gpt-4o-mini";
             case "groq":
-                return "meta-llama/llama-prompt-guard-2-86m";
+                return "qwen/qwen3.6-27b";
             case "mistral":
                 return "mistral-large-2512";
         }

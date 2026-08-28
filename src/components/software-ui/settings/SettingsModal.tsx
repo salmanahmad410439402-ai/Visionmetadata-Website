@@ -133,9 +133,8 @@ export const SettingsModal = ({ open, onOpenChange, firstRunSetupProps }: Settin
     if (selectedModel === "gemini-2.5-pro") return "Gemini 2.5 Pro";
     if (selectedModel === "gpt-4o")      return "ChatGPT · GPT-4o";
     if (selectedModel === "gpt-4o-mini") return "ChatGPT · GPT-4o Mini";
-    if (selectedModel === "meta-llama/llama-prompt-guard-2-86m") return "Groq · groq1";
-    if (selectedModel === "meta-llama/llama-prompt-guard-2-22m") return "Groq · groq2";
-    if (selectedModel === "openai/gpt-oss-20b") return "Groq · groq3";
+    if (selectedModel === "qwen/qwen3.6-27b") return "Groq · groq1";
+    if (selectedModel === "qwen/qwen3.8-27b") return "Groq · groq2";
     const mistralMatch = MISTRAL_MODELS.find(m => m.value === selectedModel);
     if (mistralMatch) return `Mistral · ${mistralMatch.label}`;
     return selectedModel;
@@ -450,9 +449,8 @@ export const SettingsModal = ({ open, onOpenChange, firstRunSetupProps }: Settin
                             </button>
                             <div className={`${mobileSubmenu === "groq" ? "block" : "hidden"} md:group-hover/groq:block md:absolute md:left-full md:top-0 md:ml-1 w-full md:min-w-[240px] bg-popover/95 md:border border-border/80 rounded-xl md:shadow-xl py-1 z-50`}>
                               {[
-                                { value: "meta-llama/llama-prompt-guard-2-86m" as AIModel, label: "groq1", quality: "Cheaper & Higher Limit", badge: "text-green-400" },
-                                { value: "meta-llama/llama-prompt-guard-2-22m" as AIModel, label: "groq2", quality: "Cheaper & Higher Limit", badge: "text-green-400" },
-                                { value: "openai/gpt-oss-20b" as AIModel, label: "groq3", quality: "Standard", badge: "text-purple-400" },
+                                { value: "qwen/qwen3.6-27b" as AIModel, label: "groq1", quality: "Cheapest · Vision", badge: "text-green-400" },
+                                { value: "qwen/qwen3.8-27b" as AIModel, label: "groq2", quality: "Powerful · Vision", badge: "text-purple-400" },
                               ].map(m => (
                                 <button
                                   key={m.value}
