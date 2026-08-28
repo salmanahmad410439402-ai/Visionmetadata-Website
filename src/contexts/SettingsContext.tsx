@@ -65,6 +65,7 @@ export interface MetadataSettings {
   customPromptEnabled: boolean;
   customPrompt: string;
   greenScreenVideos: boolean;
+  freeKeyMode: boolean;  // When ON: throttle API requests to provider's free-tier RPM limit
 }
 
 const defaultSettings: MetadataSettings = {
@@ -84,6 +85,7 @@ const defaultSettings: MetadataSettings = {
   customPromptEnabled: false,
   customPrompt: "",
   greenScreenVideos: false,
+  freeKeyMode: true,
 };
 
 interface SettingsContextType {

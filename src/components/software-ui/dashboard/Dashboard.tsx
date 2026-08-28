@@ -9,6 +9,7 @@ import { useSettings } from "@/contexts/SettingsContext";
 import { useAssets } from "@/contexts/AssetsContext";
 import { generateMetadata } from "@/lib/aiService";
 import { resetAllKeyStatuses, resetRoundRobinCounter, resetAllQuotas } from "@/lib/ai/keyRotation";
+import { getFreeTierRPM } from "@/lib/ai/config";
 import { getSystemPrompt, getUserPrompt } from "@/lib/seoPrompts";
 import { downloadAllAsZip, downloadMasterUnattendedZip, embedAndSaveToFolder } from "@/lib/zipExporter";
 import { isDesktop } from "@/lib/env";
@@ -379,9 +380,20 @@ export const Dashboard = () => {
     let currentIndex = 0;
     let activeWorkers = 0;
 
-    // Concurrency based on batch mode
-    const CONCURRENCY_LIMIT = metadataSettings.batchMode ? 4 : 1;
-    const STAGGER_DELAY_MS = metadataSettings.batchMode ? 200 : 1500;
+    // When freeKeyMode is ON, throttle requests to the model's free-tier RPM limit
+    // by processing sequentially with calculated delay between requests.
+    // When OFF (paid keys), use full batch concurrency.
+    let CONCURRENCY_LIMIT: number;
+    let STAGGER_DELAY_MS: number;
+
+    if (metadataSettings.freeKeyMode) {
+      const rpm = getFreeTierRPM(selectedModel);
+      CONCURRENCY_LIMIT = 1; // Sequential to avoid bursting free-tier limits
+      STAGGER_DELAY_MS = Math.ceil(60000 / rpm); // e.g. 30 RPM → 2000ms delay
+    } else {
+      CONCURRENCY_LIMIT = metadataSettings.batchMode ? 4 : 1;
+      STAGGER_DELAY_MS = metadataSettings.batchMode ? 200 : 1500;
+    }
 
     return new Promise((resolve) => {
       const startNextWorker = async () => {
@@ -422,8 +434,12 @@ export const Dashboard = () => {
           // onProgress uses += so passing the running total would make
           // completedCount grow as 1+2+3+...+n instead of n.
           onProgress(workerDeltaCompleted, workerDeltaFailed);
-          // Continue with next
-          startNextWorker();
+          // In freeKeyMode, wait the calculated delay before starting next request
+          if (metadataSettings.freeKeyMode) {
+            setTimeout(() => startNextWorker(), STAGGER_DELAY_MS);
+          } else {
+            startNextWorker();
+          }
         }
       };
 
@@ -433,7 +449,7 @@ export const Dashboard = () => {
         setTimeout(() => startNextWorker(), i * STAGGER_DELAY_MS);
       }
     });
-  }, [activeApiKeys.length, metadataSettings.batchMode, handleGenerateSingle]);
+  }, [activeApiKeys.length, metadataSettings.batchMode, metadataSettings.freeKeyMode, selectedModel, handleGenerateSingle]);
 
   const handleGenerateAll = useCallback(async () => {
     const readyAssets = assets.filter((a) => {

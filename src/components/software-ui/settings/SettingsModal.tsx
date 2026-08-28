@@ -48,6 +48,7 @@ import {
   AIModel,
   KeywordStrategy
 } from "@/contexts/SettingsContext";
+import { getFreeTierRPM } from "@/lib/ai/config";
 import { motion, AnimatePresence } from "framer-motion";
 import { SettingsValidator } from "@/lib/settingsValidator";
 import { EventContextToggle } from "./EventContextToggle";
@@ -652,6 +653,37 @@ export const SettingsModal = ({ open, onOpenChange, firstRunSetupProps }: Settin
                     <Sparkles className="w-4 h-4 text-primary" />
                     Metadata Rules & Limits
                   </h3>
+
+                  {/* Free / Paid API Key Toggle */}
+                  <div className="space-y-2 pb-1">
+                    <div className="flex items-center justify-between">
+                      <Label className="text-xs sm:text-sm font-medium text-foreground">API Key Type</Label>
+                      <Badge variant="secondary" className={`font-mono font-bold px-2 py-0.5 text-[10px] ${metadataSettings.freeKeyMode ? "text-green-500 bg-green-500/10 border-green-500/20" : "text-purple-500 bg-purple-500/10 border-purple-500/20"}`}>
+                        {metadataSettings.freeKeyMode ? `${getFreeTierRPM(selectedModel)} req/min` : "Unlimited"}
+                      </Badge>
+                    </div>
+                    <div className="flex rounded-lg border border-border/60 overflow-hidden">
+                      <button
+                        type="button"
+                        onClick={() => updateMetadataSettings({ freeKeyMode: true })}
+                        className={`flex-1 px-3 py-1.5 text-xs font-semibold transition-colors ${metadataSettings.freeKeyMode ? "bg-green-500/15 text-green-600 dark:text-green-400 border-r border-border/60" : "bg-transparent text-muted-foreground hover:bg-muted/40 border-r border-border/60"}`}
+                      >
+                        🆓 Free Key
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => updateMetadataSettings({ freeKeyMode: false })}
+                        className={`flex-1 px-3 py-1.5 text-xs font-semibold transition-colors ${!metadataSettings.freeKeyMode ? "bg-purple-500/15 text-purple-600 dark:text-purple-400" : "bg-transparent text-muted-foreground hover:bg-muted/40"}`}
+                      >
+                        💎 Paid Key
+                      </button>
+                    </div>
+                    <p className="text-[10px] text-muted-foreground leading-tight">
+                      {metadataSettings.freeKeyMode
+                        ? "Requests are throttled to stay within the selected model's free-tier rate limit."
+                        : "No rate limiting — full speed batch processing with paid API keys."}
+                    </p>
+                  </div>
 
                   {/* Keyword Strategy */}
                   <div className="space-y-2.5">

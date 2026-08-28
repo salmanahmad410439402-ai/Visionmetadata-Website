@@ -140,3 +140,22 @@ export const getOptimalModel = (isVideo: boolean, preferredModel?: AIModel, avai
     }
     return isVideo ? "gemini-3-pro-preview" : "gemini-3-flash-preview";
 };
+
+/**
+ * Returns the free-tier RPM (Requests Per Minute) limit for a given model.
+ * Used when freeKeyMode is ON to throttle batch processing.
+ */
+export function getFreeTierRPM(model: AIModel): number {
+    // ── Gemini Flash-Lite models: higher free-tier RPM ──
+    if (model === "gemini-3.5-flash-lite" || model === "gemini-3.1-flash-lite") return 15;
+    // ── Gemini Flash models: moderate free-tier RPM ──
+    if (model === "gemini-3.5-flash" || model === "gemini-3-flash-preview") return 10;
+    // ── Groq (Qwen models): 30 RPM free tier ──
+    if (model === "qwen/qwen3.6-27b" || model === "qwen/qwen3.8-27b") return 30;
+    // ── OpenAI: no free tier, but conservative default ──
+    if (model === "gpt-4o" || model === "gpt-4o-mini") return 10;
+    // ── Mistral: ~30 RPM free tier ──
+    if (model.startsWith("mistral-") || model.startsWith("ministral-")) return 30;
+    // ── Fallback ──
+    return 10;
+}
