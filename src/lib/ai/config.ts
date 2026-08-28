@@ -112,10 +112,11 @@ export function migrateModelName(model: AIModel): AIModel {
         "o3":             "gpt-4o",
         "o4-mini":        "gpt-4o-mini",
         // ── Legacy Llama ─────────────────────────────────────────────────────
-        "llama3-70b-8192":  "meta-llama/llama-4-scout-17b-16e-instruct",
-        "llama3-8b-8192":   "meta-llama/llama-4-scout-17b-16e-instruct",
-        "llama-4-scout":    "meta-llama/llama-4-scout-17b-16e-instruct",
-        "llama-4-maverick": "meta-llama/llama-4-scout-17b-16e-instruct",
+        "llama3-70b-8192":  "meta-llama/llama-prompt-guard-2-86m",
+        "llama3-8b-8192":   "meta-llama/llama-prompt-guard-2-86m",
+        "llama-4-scout":    "meta-llama/llama-prompt-guard-2-86m",
+        "llama-4-maverick": "meta-llama/llama-prompt-guard-2-86m",
+        "meta-llama/llama-4-scout-17b-16e-instruct": "meta-llama/llama-prompt-guard-2-86m",
     };
     return (migrations[model] || model) as AIModel;
 }

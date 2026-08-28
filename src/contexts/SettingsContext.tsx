@@ -10,7 +10,6 @@ export type AIModel =
   | "meta-llama/llama-prompt-guard-2-86m"
   | "meta-llama/llama-prompt-guard-2-22m"
   | "openai/gpt-oss-20b"
-  | "meta-llama/llama-4-scout-17b-16e-instruct"
   // Mistral direct API models (require a Mistral API key from platform.mistral.ai)
   | "mistral-large-2512"
   | "mistral-medium-2508"
@@ -259,10 +258,11 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
       "o3":            "gpt-4o",
       "o4-mini":       "gpt-4o-mini",
       // ── Legacy Llama ─────────────────────────────────────────────────────
-      "llama3-70b-8192":  "meta-llama/llama-4-scout-17b-16e-instruct",
-      "llama3-8b-8192":   "meta-llama/llama-4-scout-17b-16e-instruct",
-      "llama-4-scout":    "meta-llama/llama-4-scout-17b-16e-instruct",
-      "meta-llama/llama-4-maverick": "meta-llama/llama-4-scout-17b-16e-instruct",
+      "llama3-70b-8192":  "meta-llama/llama-prompt-guard-2-86m",
+      "llama3-8b-8192":   "meta-llama/llama-prompt-guard-2-86m",
+      "llama-4-scout":    "meta-llama/llama-prompt-guard-2-86m",
+      "meta-llama/llama-4-maverick": "meta-llama/llama-prompt-guard-2-86m",
+      "meta-llama/llama-4-scout-17b-16e-instruct": "meta-llama/llama-prompt-guard-2-86m",
       "auto": "meta-llama/llama-prompt-guard-2-86m",
     };
     return (migrations[saved] || saved) as AIModel;

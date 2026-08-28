@@ -133,7 +133,9 @@ export const SettingsModal = ({ open, onOpenChange, firstRunSetupProps }: Settin
     if (selectedModel === "gemini-2.5-pro") return "Gemini 2.5 Pro";
     if (selectedModel === "gpt-4o")      return "ChatGPT · GPT-4o";
     if (selectedModel === "gpt-4o-mini") return "ChatGPT · GPT-4o Mini";
-    if (selectedModel === "meta-llama/llama-4-scout-17b-16e-instruct") return "Groq · Llama 4 Scout";
+    if (selectedModel === "meta-llama/llama-prompt-guard-2-86m") return "Groq · groq1";
+    if (selectedModel === "meta-llama/llama-prompt-guard-2-22m") return "Groq · groq2";
+    if (selectedModel === "openai/gpt-oss-20b") return "Groq · groq3";
     const mistralMatch = MISTRAL_MODELS.find(m => m.value === selectedModel);
     if (mistralMatch) return `Mistral · ${mistralMatch.label}`;
     return selectedModel;
@@ -451,7 +453,6 @@ export const SettingsModal = ({ open, onOpenChange, firstRunSetupProps }: Settin
                                 { value: "meta-llama/llama-prompt-guard-2-86m" as AIModel, label: "groq1", quality: "Cheaper & Higher Limit", badge: "text-green-400" },
                                 { value: "meta-llama/llama-prompt-guard-2-22m" as AIModel, label: "groq2", quality: "Cheaper & Higher Limit", badge: "text-green-400" },
                                 { value: "openai/gpt-oss-20b" as AIModel, label: "groq3", quality: "Standard", badge: "text-purple-400" },
-                                { value: "meta-llama/llama-4-scout-17b-16e-instruct" as AIModel, label: "Groq (Llama 4)", quality: "Ultra-fast", badge: "text-purple-400" },
                               ].map(m => (
                                 <button
                                   key={m.value}
