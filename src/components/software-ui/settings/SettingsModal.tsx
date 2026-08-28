@@ -109,7 +109,7 @@ export const SettingsModal = ({ open, onOpenChange, firstRunSetupProps }: Settin
 
   // Custom model dropdown state
   const [isModelMenuOpen, setIsModelMenuOpen] = useState(false);
-  const [mobileSubmenu, setMobileSubmenu] = useState<"gemini" | "chatgpt" | "mistral" | null>(null);
+  const [mobileSubmenu, setMobileSubmenu] = useState<"gemini" | "chatgpt" | "groq" | "mistral" | null>(null);
   const modelMenuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -433,18 +433,38 @@ export const SettingsModal = ({ open, onOpenChange, firstRunSetupProps }: Settin
                             </div>
                           </div>
 
-                          {/* Groq Llama 4 Scout */}
-                          <button
-                            type="button"
-                            onClick={() => { setSelectedModel("meta-llama/llama-4-scout-17b-16e-instruct"); setIsModelMenuOpen(false); }}
-                            className={`w-full px-3 py-2 text-xs sm:text-sm text-left hover:bg-muted/60 flex items-center justify-between ${selectedModel === "meta-llama/llama-4-scout-17b-16e-instruct" ? "bg-primary/10 text-primary font-bold" : ""}`}
-                          >
-                            <span className="flex items-center gap-2">
-                              <span className="w-2 h-2 rounded-full bg-purple-400 shrink-0" />
-                              <span className="font-semibold text-foreground">Groq (Llama 4)</span>
-                            </span>
-                            <span className="text-[10px] text-purple-400 font-semibold">Ultra-fast</span>
-                          </button>
+                          {/* Groq Menu Item */}
+                          <div className="relative group/groq">
+                            <button
+                              type="button"
+                              onClick={() => setMobileSubmenu(mobileSubmenu === "groq" ? null : "groq")}
+                              className="w-full px-3 py-2 text-xs sm:text-sm text-left hover:bg-muted/60 flex items-center justify-between transition-colors"
+                            >
+                              <span className="flex items-center gap-2">
+                                <span className="w-2 h-2 rounded-full bg-purple-400 shrink-0" />
+                                <span className="font-semibold text-foreground">Groq Models</span>
+                              </span>
+                              <ChevronRight className="w-3.5 h-3.5 opacity-50" />
+                            </button>
+                            <div className={`${mobileSubmenu === "groq" ? "block" : "hidden"} md:group-hover/groq:block md:absolute md:left-full md:top-0 md:ml-1 w-full md:min-w-[240px] bg-popover/95 md:border border-border/80 rounded-xl md:shadow-xl py-1 z-50`}>
+                              {[
+                                { value: "meta-llama/llama-prompt-guard-2-86m" as AIModel, label: "groq1", quality: "Cheaper & Higher Limit", badge: "text-green-400" },
+                                { value: "meta-llama/llama-prompt-guard-2-22m" as AIModel, label: "groq2", quality: "Cheaper & Higher Limit", badge: "text-green-400" },
+                                { value: "openai/gpt-oss-20b" as AIModel, label: "groq3", quality: "Standard", badge: "text-purple-400" },
+                                { value: "meta-llama/llama-4-scout-17b-16e-instruct" as AIModel, label: "Groq (Llama 4)", quality: "Ultra-fast", badge: "text-purple-400" },
+                              ].map(m => (
+                                <button
+                                  key={m.value}
+                                  type="button"
+                                  onClick={() => { setSelectedModel(m.value); setIsModelMenuOpen(false); setMobileSubmenu(null); }}
+                                  className={`w-full px-3 py-1.5 text-xs text-left hover:bg-muted/60 flex items-center justify-between ${selectedModel === m.value ? "bg-primary/10 text-primary font-bold" : ""}`}
+                                >
+                                  <span>{m.label}</span>
+                                  <span className={`text-[10px] font-semibold ${m.badge}`}>{m.quality}</span>
+                                </button>
+                              ))}
+                            </div>
+                          </div>
 
                           {/* Mistral Menu Item */}
                           <div className="relative group/mistral">

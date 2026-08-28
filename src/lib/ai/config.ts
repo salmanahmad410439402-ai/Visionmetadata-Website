@@ -82,7 +82,7 @@ export const AI_RESPONSE_SCHEMA = {
 export function getProviderFromModel(model: AIModel): AIProvider {
     // Direct Mistral API models
     if (model.startsWith("mistral-") || model.startsWith("ministral-")) return "mistral";
-    // Direct-provider models
+    if (model === "openai/gpt-oss-20b") return "groq";
     if (model.startsWith("gemini")) return "gemini";
     if (model.startsWith("gpt")) return "openai";
     if (model.startsWith("meta-llama/") || model.startsWith("llama")) return "groq";
@@ -129,7 +129,7 @@ export const getOptimalModel = (isVideo: boolean, preferredModel?: AIModel, avai
             case "openai":
                 return isVideo ? "gpt-4o" : "gpt-4o-mini";
             case "groq":
-                return "meta-llama/llama-4-scout-17b-16e-instruct";
+                return "meta-llama/llama-prompt-guard-2-86m";
             case "mistral":
                 return "mistral-large-2512";
         }

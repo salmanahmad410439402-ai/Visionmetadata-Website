@@ -7,6 +7,9 @@ export type AIModel =
   | "gemini-3.1-flash-lite"
   | "gpt-4o"
   | "gpt-4o-mini"
+  | "meta-llama/llama-prompt-guard-2-86m"
+  | "meta-llama/llama-prompt-guard-2-22m"
+  | "openai/gpt-oss-20b"
   | "meta-llama/llama-4-scout-17b-16e-instruct"
   // Mistral direct API models (require a Mistral API key from platform.mistral.ai)
   | "mistral-large-2512"
@@ -231,7 +234,7 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
 
   const [selectedModel, setSelectedModel] = useState<AIModel>(() => {
     const saved = localStorage.getItem("tagyfy_selected_model");
-    if (!saved || saved === "auto") return "gemini-3.5-flash-lite";
+    if (!saved || saved === "auto") return "meta-llama/llama-prompt-guard-2-86m";
     // Migrate stale model names (e.g. "llama3-70b-8192" -> "meta-llama/llama-4-scout-17b-16e-instruct")
     // so the UI shows the correct button selected after an app update.
     const migrations: Record<string, AIModel> = {
@@ -260,7 +263,7 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
       "llama3-8b-8192":   "meta-llama/llama-4-scout-17b-16e-instruct",
       "llama-4-scout":    "meta-llama/llama-4-scout-17b-16e-instruct",
       "meta-llama/llama-4-maverick": "meta-llama/llama-4-scout-17b-16e-instruct",
-      "auto": "gemini-3.5-flash-lite",
+      "auto": "meta-llama/llama-prompt-guard-2-86m",
     };
     return (migrations[saved] || saved) as AIModel;
   });
