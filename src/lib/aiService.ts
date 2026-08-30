@@ -254,8 +254,17 @@ export async function generateMetadata(
             if (!apiKey) break; // no keys configured at all
 
             // If getValidApiKey returned a rate-limited key (Phase 3 path),
-            // skip it here — Phase 3 (last-credit squeeze) handles that below.
-            if (attemptedKeys.has(apiKey.key)) break;
+            // it means all available keys are exhausted. Break the loop so Phase 3
+            // (last-credit squeeze) handles the waiting below.
+            if (cooldownRemaining(apiKey) > 0) {
+                break;
+            }
+
+            // If we've looped back to a key we already tried in this exact session
+            // (e.g., due to round-robin on auth errors), we've run out of available keys.
+            if (attemptedKeys.has(apiKey.key)) {
+                break;
+            }
 
             attemptedKeys.add(apiKey.key);
 

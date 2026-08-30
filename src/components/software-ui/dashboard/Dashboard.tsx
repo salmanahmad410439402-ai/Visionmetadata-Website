@@ -543,9 +543,8 @@ export const Dashboard = () => {
     }
 
     // Reset cancel flag and clear errors. Do NOT reset RR counter/quotas globally.
-    // We only reset key statuses here so they can be tried freshly for this retry batch.
+    // Allow the native 5-15s cooldowns to naturally dictate key availability.
     isCancelledRef.current = false;
-    resetAllKeyStatuses();
     
     failedAssets.forEach((asset) => {
       updateAsset(asset.id, { status: "ready", error: undefined });
