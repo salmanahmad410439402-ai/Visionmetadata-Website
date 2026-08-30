@@ -63,9 +63,6 @@ export interface KeyStatus {
 // ── Single unified status map ─────────────────────────────────────────────
 const keyStatusMap = new Map<string, KeyStatus>();
 
-// ── Round-robin counter (shared across all concurrent batch workers) ──────
-let _rrCounter = 0;
-
 // ─────────────────────────────────────────────────────────────────────────
 //  Internal helpers
 // ─────────────────────────────────────────────────────────────────────────
@@ -83,13 +80,6 @@ function getOrCreate(apiKey: APIKey): KeyStatus {
         });
     }
     return keyStatusMap.get(apiKey.key)!;
-}
-
-/** Atomically increments the round-robin counter and returns the old value. */
-function nextRR(): number {
-    const val = _rrCounter;
-    _rrCounter = (_rrCounter + 1) % ROUND_ROBIN_CAP;
-    return val;
 }
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -173,10 +163,8 @@ export const resetAllKeyStatuses = (): void => {
     keyStatusMap.clear();
 };
 
-/** Reset round-robin counter — call at the start of each batch. */
-export const resetRoundRobinCounter = (): void => {
-    _rrCounter = 0;
-};
+/** Alias kept for backward-compat with Dashboard imports. */
+export const resetRoundRobinCounter = (): void => {};
 
 /** Alias kept for backward-compat with Dashboard imports. */
 export const resetAllQuotas = resetAllKeyStatuses;
@@ -185,27 +173,20 @@ export const resetAllQuotas = resetAllKeyStatuses;
 //  Public — key selection
 // ─────────────────────────────────────────────────────────────────────────
 
+let _stickyKeyId: string | null = null;
+
 /**
  * getValidApiKey — The core key-selection function.
  *
- * Algorithm (three phases):
- *
- * Phase 1 — Preferred provider keys (if preferredProvider is set).
- *   Round-robin across available keys for that provider.
- *
- * Phase 2 — All other available keys in PROVIDER_PRIORITY order.
- *   Round-robin across available keys from all other providers.
- *
- * Phase 3 — LAST-CREDIT SQUEEZE.
- *   Every key is currently rate-limited. Instead of returning null and
- *   dropping the image, return the key whose cooldown expires SOONEST.
- *   The caller (aiService) can wait cooldownRemaining() ms and retry —
- *   squeezing the very last credit out of every key pool.
+ * Algorithm (Sticky Exhaustion):
+ * Uses a single API key repeatedly until it hits a rate-limit (429).
+ * Only when it is exhausted does it switch to the next available key.
+ * This prevents distributing requests across 50 keys simultaneously,
+ * reducing IP-based blocking and honoring the provider's native RPM limits.
  *
  * @param apiKeys          Full list of user-configured keys.
  * @param preferredProvider Optional provider to try first.
  * @returns The best available key, or the soonest-recovering key, or null
- *          if the user has no keys at all.
  */
 export const getValidApiKey = (
     apiKeys: APIKey[],
@@ -213,13 +194,25 @@ export const getValidApiKey = (
 ): APIKey | null => {
     if (apiKeys.length === 0) return null;
 
+    // ── STICKY PHASE: Check if the currently active key is still healthy ──
+    if (_stickyKeyId) {
+        const sticky = apiKeys.find(k => k.key === _stickyKeyId);
+        if (sticky && isKeyAvailable(sticky)) {
+            // Must also match preferred provider if strictly requested
+            if (!preferredProvider || sticky.provider === preferredProvider) {
+                return sticky;
+            }
+        }
+    }
+
     // ── Phase 1: preferred provider ──────────────────────────────────────
     if (preferredProvider) {
         const pool = apiKeys.filter(
             k => k.provider === preferredProvider && isKeyAvailable(k),
         );
         if (pool.length > 0) {
-            return pool[nextRR() % pool.length];
+            _stickyKeyId = pool[0].key;
+            return pool[0];
         }
     }
 
@@ -233,7 +226,8 @@ export const getValidApiKey = (
         available.push(...providerPool);
     }
     if (available.length > 0) {
-        return available[nextRR() % available.length];
+        _stickyKeyId = available[0].key;
+        return available[0];
     }
 
     // ── Phase 3: LAST-CREDIT SQUEEZE ─────────────────────────────────────
