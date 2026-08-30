@@ -40,7 +40,8 @@ import {
   FileText,
   Video,
   ShieldCheck,
-  Cpu
+  Cpu,
+  Download
 } from "lucide-react";
 import {
   useSettings,
@@ -908,6 +909,25 @@ export const SettingsModal = ({ open, onOpenChange, firstRunSetupProps }: Settin
                         checked={metadataSettings.batchMode}
                         onCheckedChange={(checked) =>
                           updateMetadataSettings({ batchMode: checked })
+                        }
+                      />
+                    </div>
+
+                    {/* Auto Download CSV */}
+                    <div className="flex items-center justify-between py-2 border-b border-border/40">
+                      <div className="space-y-0.5 max-w-[80%]">
+                        <Label className="text-xs sm:text-sm font-semibold flex items-center gap-1.5 cursor-pointer">
+                          <Download className="w-4 h-4 text-emerald-500 shrink-0" />
+                          Auto-Download CSV
+                        </Label>
+                        <p className="text-[11px] text-muted-foreground">
+                          Automatically downloads a Master CSV of all generated metadata immediately when a batch completes.
+                        </p>
+                      </div>
+                      <Switch
+                        checked={metadataSettings.autoDownloadCsv}
+                        onCheckedChange={(checked) =>
+                          updateMetadataSettings({ autoDownloadCsv: checked })
                         }
                       />
                     </div>

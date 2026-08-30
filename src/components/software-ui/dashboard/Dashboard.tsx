@@ -12,6 +12,7 @@ import { resetAllKeyStatuses, resetRoundRobinCounter, resetAllQuotas } from "@/l
 import { getFreeTierRPM } from "@/lib/ai/config";
 import { getSystemPrompt, getUserPrompt } from "@/lib/seoPrompts";
 import { downloadAllAsZip, downloadMasterUnattendedZip, embedAndSaveToFolder } from "@/lib/zipExporter";
+import { exportAssets } from "@/lib/csvExporter";
 import { isDesktop } from "@/lib/env";
 import { motion, AnimatePresence } from "framer-motion";
 import { DynamicIsland } from "./DynamicIsland";
@@ -466,10 +467,11 @@ export const Dashboard = () => {
       return;
     }
 
-    // Reset cancellation flag and key rotation at the start of every batch.
+    // Reset cancellation flag.
+    // NOTE: We deliberately DO NOT reset round-robin counter or key quotas here.
+    // This allows the load balancer to distribute requests perfectly across multiple batches
+    // and remember rate-limit cooldowns globally.
     isCancelledRef.current = false;
-    resetRoundRobinCounter();
-    resetAllQuotas(); // NEW: Reset the 5-image-per-key quotas
 
     const total = readyAssets.length;
     let completedCount = 0;
@@ -515,6 +517,9 @@ export const Dashboard = () => {
         }, 3000);
       } else {
         toast.success(`Batch processing complete! ${completedCount} succeeded, ${failedCount} failed.`);
+        if (metadataSettings.autoDownloadCsv && completedCount > 0) {
+          exportAssets(assetsRef.current, "general").catch(e => console.error("Auto CSV failed:", e));
+        }
         startUnattendedTimer(total, failedCount);
       }
     } catch (error) {
@@ -537,11 +542,11 @@ export const Dashboard = () => {
       return;
     }
 
-    // Reset cancel flag, key exhaustion statuses, quotas, and failed assets
+    // Reset cancel flag and clear errors. Do NOT reset RR counter/quotas globally.
+    // We only reset key statuses here so they can be tried freshly for this retry batch.
     isCancelledRef.current = false;
-    resetAllKeyStatuses();     // Reset exhaustion state on all keys
-    resetRoundRobinCounter();  // Restart round-robin distribution from key[0]
-    resetAllQuotas();          // Reset 5-image-per-key quotas
+    resetAllKeyStatuses();
+    
     failedAssets.forEach((asset) => {
       updateAsset(asset.id, { status: "ready", error: undefined });
     });
@@ -590,6 +595,9 @@ export const Dashboard = () => {
         }, 3000);
       } else {
         toast.success(`Retry processing complete! ${completedCount} succeeded, ${failedCount} failed.`);
+        if (metadataSettings.autoDownloadCsv && completedCount > 0) {
+          exportAssets(assetsRef.current, "general").catch(e => console.error("Auto CSV failed:", e));
+        }
         startUnattendedTimer(assets.length, failedCount);
       }
     } catch (error) {

@@ -66,6 +66,7 @@ export interface MetadataSettings {
   customPrompt: string;
   greenScreenVideos: boolean;
   freeKeyMode: boolean;  // When ON: throttle API requests to provider's free-tier RPM limit
+  autoDownloadCsv: boolean;
 }
 
 const defaultSettings: MetadataSettings = {
@@ -86,6 +87,7 @@ const defaultSettings: MetadataSettings = {
   customPrompt: "",
   greenScreenVideos: false,
   freeKeyMode: true,
+  autoDownloadCsv: false,
 };
 
 interface SettingsContextType {
