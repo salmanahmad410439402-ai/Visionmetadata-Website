@@ -31,10 +31,10 @@ function renderFormattedText(text: string): React.ReactNode {
   if (!text) return "";
 
   // Check if formatting is present
-  const hasFormatting = text.includes("[") || text.includes("**") || text.includes("*");
+  const hasFormatting = text.includes("![") || text.includes("[") || text.includes("**") || text.includes("*");
   if (!hasFormatting) return text;
 
-  const regex = /(\[([^\]]+)\]\(([^)]+)\)|\*\*([^*]+)\*\*|\*([^*]+)\*)/g;
+  const regex = /(!\[([^\]]*)\]\(([^)]+)\)|\[([^\]]+)\]\(([^)]+)\)|\*\*([^*]+)\*\*|\*([^*]+)\*)/g;
   const parts: React.ReactNode[] = [];
   let lastIndex = 0;
   let match: RegExpExecArray | null;
@@ -148,6 +148,23 @@ const Blogs = () => {
     }
   };
 
+
+  // Update document title and meta for SEO when viewing a post
+  useEffect(() => {
+    if (activePost) {
+      document.title = activePost.title + ' | Tagyfy Blog';
+      let meta = document.querySelector("meta[name='description']");
+      if (!meta) {
+        meta = document.createElement('meta');
+        meta.setAttribute('name', 'description');
+        document.head.appendChild(meta);
+      }
+      meta.setAttribute('content', activePost.summary);
+    } else {
+      document.title = 'Stock Contributor Knowledge Base | Tagyfy';
+    }
+  }, [activePost]);
+
   return (
     <div className="min-h-screen bg-background pt-28 pb-20 px-4 sm:px-6">
       <div className="max-w-6xl mx-auto">
@@ -239,14 +256,48 @@ const Blogs = () => {
                   <div className="space-y-3 text-sm sm:text-base text-secondary leading-relaxed">
                     {section.body.map((paragraph, pIdx) => {
                       if (paragraph.startsWith("### ")) {
-                        return (
+                      
+  // Update document title and meta for SEO when viewing a post
+  useEffect(() => {
+    if (activePost) {
+      document.title = activePost.title + ' | Tagyfy Blog';
+      let meta = document.querySelector("meta[name='description']");
+      if (!meta) {
+        meta = document.createElement('meta');
+        meta.setAttribute('name', 'description');
+        document.head.appendChild(meta);
+      }
+      meta.setAttribute('content', activePost.summary);
+    } else {
+      document.title = 'Stock Contributor Knowledge Base | Tagyfy';
+    }
+  }, [activePost]);
+
+  return (
                           <h3 key={pIdx} className="text-base sm:text-lg font-bold text-foreground pt-3 text-primary">
                             {renderFormattedText(paragraph.replace(/^###\s*/, ""))}
                           </h3>
                         );
                       }
                       if (paragraph.startsWith("• ") || paragraph.startsWith("- ")) {
-                        return (
+                      
+  // Update document title and meta for SEO when viewing a post
+  useEffect(() => {
+    if (activePost) {
+      document.title = activePost.title + ' | Tagyfy Blog';
+      let meta = document.querySelector("meta[name='description']");
+      if (!meta) {
+        meta = document.createElement('meta');
+        meta.setAttribute('name', 'description');
+        document.head.appendChild(meta);
+      }
+      meta.setAttribute('content', activePost.summary);
+    } else {
+      document.title = 'Stock Contributor Knowledge Base | Tagyfy';
+    }
+  }, [activePost]);
+
+  return (
                           <div key={pIdx} className="flex items-start gap-2.5 pl-2 text-foreground/90 font-medium">
                             <span className="text-primary font-bold">•</span>
                             <span>{renderFormattedText(paragraph.replace(/^[•-]\s*/, ""))}</span>
@@ -254,7 +305,24 @@ const Blogs = () => {
                         );
                       }
                       if (paragraph.startsWith('"') && paragraph.endsWith('"') && paragraph.length < 160) {
-                        return (
+                      
+  // Update document title and meta for SEO when viewing a post
+  useEffect(() => {
+    if (activePost) {
+      document.title = activePost.title + ' | Tagyfy Blog';
+      let meta = document.querySelector("meta[name='description']");
+      if (!meta) {
+        meta = document.createElement('meta');
+        meta.setAttribute('name', 'description');
+        document.head.appendChild(meta);
+      }
+      meta.setAttribute('content', activePost.summary);
+    } else {
+      document.title = 'Stock Contributor Knowledge Base | Tagyfy';
+    }
+  }, [activePost]);
+
+  return (
                           <div key={pIdx} className="p-3 bg-muted/40 rounded-xl border border-border/50 font-mono text-xs text-foreground/90 my-2">
                             {paragraph}
                           </div>
