@@ -151,19 +151,19 @@ const Blogs = () => {
 
   // Update document title and meta for SEO when viewing a post
   useEffect(() => {
-    if (activePost) {
-      document.title = activePost.title + ' | Tagyfy Blog';
+    if (currentPost) {
+      document.title = currentPost.title + ' | Tagyfy Blog';
       let meta = document.querySelector("meta[name='description']");
       if (!meta) {
         meta = document.createElement('meta');
         meta.setAttribute('name', 'description');
         document.head.appendChild(meta);
       }
-      meta.setAttribute('content', activePost.summary);
+      meta.setAttribute('content', currentPost.summary);
     } else {
       document.title = 'Stock Contributor Knowledge Base | Tagyfy';
     }
-  }, [activePost]);
+  }, [currentPost]);
 
   return (
     <div className="min-h-screen bg-background pt-28 pb-20 px-4 sm:px-6">
@@ -259,19 +259,19 @@ const Blogs = () => {
                       
   // Update document title and meta for SEO when viewing a post
   useEffect(() => {
-    if (activePost) {
-      document.title = activePost.title + ' | Tagyfy Blog';
+    if (currentPost) {
+      document.title = currentPost.title + ' | Tagyfy Blog';
       let meta = document.querySelector("meta[name='description']");
       if (!meta) {
         meta = document.createElement('meta');
         meta.setAttribute('name', 'description');
         document.head.appendChild(meta);
       }
-      meta.setAttribute('content', activePost.summary);
+      meta.setAttribute('content', currentPost.summary);
     } else {
       document.title = 'Stock Contributor Knowledge Base | Tagyfy';
     }
-  }, [activePost]);
+  }, [currentPost]);
 
   return (
                           <h3 key={pIdx} className="text-base sm:text-lg font-bold text-foreground pt-3 text-primary">
@@ -283,19 +283,19 @@ const Blogs = () => {
                       
   // Update document title and meta for SEO when viewing a post
   useEffect(() => {
-    if (activePost) {
-      document.title = activePost.title + ' | Tagyfy Blog';
+    if (currentPost) {
+      document.title = currentPost.title + ' | Tagyfy Blog';
       let meta = document.querySelector("meta[name='description']");
       if (!meta) {
         meta = document.createElement('meta');
         meta.setAttribute('name', 'description');
         document.head.appendChild(meta);
       }
-      meta.setAttribute('content', activePost.summary);
+      meta.setAttribute('content', currentPost.summary);
     } else {
       document.title = 'Stock Contributor Knowledge Base | Tagyfy';
     }
-  }, [activePost]);
+  }, [currentPost]);
 
   return (
                           <div key={pIdx} className="flex items-start gap-2.5 pl-2 text-foreground/90 font-medium">
@@ -308,19 +308,19 @@ const Blogs = () => {
                       
   // Update document title and meta for SEO when viewing a post
   useEffect(() => {
-    if (activePost) {
-      document.title = activePost.title + ' | Tagyfy Blog';
+    if (currentPost) {
+      document.title = currentPost.title + ' | Tagyfy Blog';
       let meta = document.querySelector("meta[name='description']");
       if (!meta) {
         meta = document.createElement('meta');
         meta.setAttribute('name', 'description');
         document.head.appendChild(meta);
       }
-      meta.setAttribute('content', activePost.summary);
+      meta.setAttribute('content', currentPost.summary);
     } else {
       document.title = 'Stock Contributor Knowledge Base | Tagyfy';
     }
-  }, [activePost]);
+  }, [currentPost]);
 
   return (
                           <div key={pIdx} className="p-3 bg-muted/40 rounded-xl border border-border/50 font-mono text-xs text-foreground/90 my-2">
