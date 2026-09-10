@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import { Sparkles, Users, Award, Target, Cpu, CheckCircle2, ArrowRight } from "lucide-react";
 import { useReveal } from "@/hooks/useReveal";
 import { Link } from "react-router-dom";
@@ -8,6 +9,13 @@ const AboutUs = () => {
 
   return (
     <div className="min-h-screen bg-background pt-28 pb-20 px-6">
+      <Helmet>
+        <title>About Us — Our Mission & Story | Tagyfy Pro</title>
+        <meta
+          name="description"
+          content="Learn about Tagyfy Pro, the AI-powered metadata generator built to help stock media contributors automate titles, keywords, and IPTC embedding for Adobe Stock, Shutterstock, and Freepik."
+        />
+      </Helmet>
       <div className="max-w-5xl mx-auto" ref={ref as React.RefObject<HTMLDivElement>}>
         
         {/* Hero Header */}

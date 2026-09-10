@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import { FileCheck, ShieldCheck, HelpCircle, AlertCircle } from "lucide-react";
 import { useReveal } from "@/hooks/useReveal";
 
@@ -6,6 +7,13 @@ const TermsOfService = () => {
 
   return (
     <div className="min-h-screen bg-background pt-28 pb-20 px-6">
+      <Helmet>
+        <title>Terms of Service | Tagyfy Pro</title>
+        <meta
+          name="description"
+          content="Terms and conditions for using Tagyfy Pro desktop application, web tool, and Chrome extension. Read our service agreement, license terms, and usage policies."
+        />
+      </Helmet>
       <div className="max-w-4xl mx-auto" ref={ref as React.RefObject<HTMLDivElement>}>
         
         {/* Header */}

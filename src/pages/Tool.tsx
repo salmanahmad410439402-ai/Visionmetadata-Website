@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Helmet } from "react-helmet-async";
 import { Link, useNavigate } from 'react-router-dom';
 import { SettingsProvider } from '@/contexts/SettingsContext';
 import { AssetsProvider } from '@/contexts/AssetsContext';
@@ -29,6 +30,13 @@ export const ToolPage: React.FC = () => {
 
   return (
     <SettingsProvider>
+      <Helmet>
+        <title>Free Online Metadata Generator Tool | Tagyfy Pro</title>
+        <meta
+          name="description"
+          content="Generate optimized titles and keywords for your stock photos, vectors, and videos directly in your browser. Free AI-powered metadata tool with no signup required."
+        />
+      </Helmet>
       <AssetsProvider>
         <div className="min-h-screen bg-background text-foreground flex flex-col justify-between pt-16 sm:pt-20">
           

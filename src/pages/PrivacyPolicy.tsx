@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import { Shield, Lock, Eye, Cookie, FileText, CheckCircle2 } from "lucide-react";
 import { useReveal } from "@/hooks/useReveal";
 
@@ -6,6 +7,13 @@ const PrivacyPolicy = () => {
 
   return (
     <div className="min-h-screen bg-background pt-28 pb-20 px-6">
+      <Helmet>
+        <title>Privacy Policy | Tagyfy Pro</title>
+        <meta
+          name="description"
+          content="Tagyfy Pro privacy policy. Learn how we handle your data, API keys, and media files. All processing happens locally on your device — your files never touch our servers."
+        />
+      </Helmet>
       <div className="max-w-4xl mx-auto" ref={ref as React.RefObject<HTMLDivElement>}>
         
         {/* Header */}

@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import { Link, useNavigate } from "react-router-dom";
 import HeroSection from "@/components/HeroSection";
 import StatsBar from "@/components/StatsBar";
@@ -40,6 +41,13 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <Helmet>
+        <title>Tagyfy Pro | AI-Powered Metadata Generator for Adobe Stock</title>
+        <meta
+          name="description"
+          content="Generate, optimize, and embed titles, descriptions, and keywords into your stock images, vectors, and videos in bulk using AI. Free online tool and Windows desktop app."
+        />
+      </Helmet>
       <main className="space-y-0">
         {/* 1. Hero Section */}
         <HeroSection />

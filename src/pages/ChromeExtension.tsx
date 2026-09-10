@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import { Download, CheckCircle2, Bot, Chrome, RefreshCw, Sparkles, FolderDown, FileCode, Puzzle, Zap, ArrowDown, ShieldCheck, Key, Cpu, HelpCircle, Layers, Check, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useReveal } from "@/hooks/useReveal";
@@ -75,6 +76,13 @@ const ChromeExtension = () => {
 
   return (
     <div className="min-h-screen bg-background pt-24 pb-16 px-6">
+      <Helmet>
+        <title>Free Adobe Stock Chrome Extension | Tagyfy Pro</title>
+        <meta
+          name="description"
+          content="100% free Chrome extension for Adobe Stock contributors. Update approved assets and generate fresh metadata directly inside the contributor dashboard using Gemini, ChatGPT, Groq, and Mistral."
+        />
+      </Helmet>
       <main className="max-w-6xl mx-auto" ref={ref as React.RefObject<HTMLElement>}>
         
         {/* ─── HERO SECTION ─── */}

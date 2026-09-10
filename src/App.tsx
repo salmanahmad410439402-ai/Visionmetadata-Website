@@ -23,6 +23,7 @@ import TermsOfService from "./pages/TermsOfService";
 import RefundPolicy from "./pages/RefundPolicy";
 import ToolPage from "./pages/Tool";
 import Blogs from "./pages/Blogs";
+import BlogPost from "./pages/BlogPost";
 
 const queryClient = new QueryClient();
 
@@ -47,6 +48,7 @@ const App = () => {
               <Route path="/tutorials" element={<Tutorials />} />
               <Route path="/blogs" element={<Blogs />} />
               <Route path="/blog" element={<Blogs />} />
+              <Route path="/blog/:slug" element={<BlogPost />} />
               <Route path="/about" element={<AboutUs />} />
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/faq" element={<FAQ />} />

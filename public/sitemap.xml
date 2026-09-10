@@ -2,74 +2,136 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://tagyfy.com/</loc>
-    <lastmod>2026-08-17</lastmod>
+    <lastmod>2026-09-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://tagyfy.com/features</loc>
-    <lastmod>2026-08-17</lastmod>
+    <lastmod>2026-09-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://tagyfy.com/pricing</loc>
-    <lastmod>2026-08-17</lastmod>
+    <lastmod>2026-09-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://tagyfy.com/download</loc>
-    <lastmod>2026-08-17</lastmod>
+    <lastmod>2026-09-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://tagyfy.com/tool</loc>
+    <lastmod>2026-09-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://tagyfy.com/tutorials</loc>
-    <lastmod>2026-08-17</lastmod>
+    <lastmod>2026-09-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://tagyfy.com/blogs</loc>
+    <lastmod>2026-09-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://tagyfy.com/about</loc>
-    <lastmod>2026-08-17</lastmod>
+    <lastmod>2026-09-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://tagyfy.com/contact</loc>
-    <lastmod>2026-08-17</lastmod>
+    <lastmod>2026-09-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://tagyfy.com/faq</loc>
-    <lastmod>2026-08-17</lastmod>
+    <lastmod>2026-09-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://tagyfy.com/chrome-extension</loc>
+    <lastmod>2026-09-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://tagyfy.com/privacy-policy</loc>
-    <lastmod>2026-08-17</lastmod>
+    <lastmod>2026-09-10</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://tagyfy.com/terms</loc>
-    <lastmod>2026-08-17</lastmod>
+    <lastmod>2026-09-10</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://tagyfy.com/refund-policy</loc>
-    <lastmod>2026-08-17</lastmod>
+    <lastmod>2026-09-10</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
+
+  <!-- Individual Blog Posts -->
   <url>
-    <loc>https://tagyfy.com/chrome-extension</loc>
+    <loc>https://tagyfy.com/blog/i-wasted-200-generations-how-ai-actually-sees-prompts</loc>
     <lastmod>2026-08-17</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://tagyfy.com/blog/why-does-your-best-photo-keep-getting-rejected-adobe-stock-secret</loc>
+    <lastmod>2026-08-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://tagyfy.com/blog/common-mistakes-account-suspension-adobe-stock</loc>
+    <lastmod>2026-08-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://tagyfy.com/blog/mastering-stock-metadata-title-seo-keyword-guide</loc>
+    <lastmod>2026-08-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://tagyfy.com/blog/why-approved-photos-not-selling-update-metadata</loc>
+    <lastmod>2026-08-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://tagyfy.com/blog/free-adobe-stock-metadata-generator</loc>
+    <lastmod>2026-08-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://tagyfy.com/blog/adobe-stock-title-keyword-strategy</loc>
+    <lastmod>2026-08-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://tagyfy.com/blog/adobe-stock-icon-pack-strategy</loc>
+    <lastmod>2026-08-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
 </urlset>

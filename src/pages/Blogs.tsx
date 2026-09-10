@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import { useState, useEffect, useMemo } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { 
@@ -151,6 +152,13 @@ const Blogs = () => {
 
 return (
     <div className="min-h-screen bg-background pt-28 pb-20 px-4 sm:px-6">
+      <Helmet>
+        <title>Blog — Stock Contributor Knowledge Base | Tagyfy Pro</title>
+        <meta
+          name="description"
+          content="In-depth guides, marketplace compliance rules, and advanced metadata SEO strategies to help stock media contributors scale their passive earnings on Adobe Stock and beyond."
+        />
+      </Helmet>
       <div className="max-w-6xl mx-auto">
         
         {/* ─── SCENARIO A: SINGLE ARTICLE READER VIEW ─── */}

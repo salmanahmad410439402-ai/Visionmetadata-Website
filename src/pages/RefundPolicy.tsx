@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import { RotateCcw, ShieldCheck, HelpCircle, CheckCircle2, Clock } from "lucide-react";
 import { useReveal } from "@/hooks/useReveal";
 import { Link } from "react-router-dom";
@@ -8,6 +9,13 @@ const RefundPolicy = () => {
 
   return (
     <div className="min-h-screen bg-background pt-28 pb-20 px-6">
+      <Helmet>
+        <title>Refund Policy | Tagyfy Pro</title>
+        <meta
+          name="description"
+          content="Tagyfy Pro refund policy. Understand our refund process, eligibility criteria, and how to request a refund for your license purchase."
+        />
+      </Helmet>
       <div className="max-w-4xl mx-auto" ref={ref as React.RefObject<HTMLDivElement>}>
         
         {/* Header */}

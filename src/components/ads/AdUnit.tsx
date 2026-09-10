@@ -30,7 +30,7 @@ export const AdUnit: React.FC<AdUnitProps> = ({
         <ins
           className="adsbygoogle w-full block"
           style={{ display: 'block' }}
-          data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+          data-ad-client="ca-pub-3078074422458018"
           data-ad-slot={slotId}
           data-ad-format={format}
           data-full-width-responsive="true"
