@@ -1,9 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 
 export type AIModel =
-  | "gemini-3.5-flash"
   | "gemini-3.5-flash-lite"
-  | "gemini-3-flash-preview"
   | "gemini-3.1-flash-lite"
   | "gpt-4o"
   | "gpt-4o-mini"

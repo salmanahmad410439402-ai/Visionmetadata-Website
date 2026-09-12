@@ -92,15 +92,17 @@ export function getProviderFromModel(model: AIModel): AIProvider {
 export function migrateModelName(model: AIModel): AIModel {
     const migrations: Record<string, AIModel> = {
         // ── Legacy Gemini names
-        "gemini-1.5-flash":               GEMINI_MODELS.FLASH_3_PREVIEW,
-        "gemini-1.5-pro":                 GEMINI_MODELS.PRO_3_PREVIEW,
-        "gemini-2.0-flash":               GEMINI_MODELS.FLASH_3_PREVIEW,
+        "gemini-1.5-flash":               GEMINI_MODELS.FLASH_3_5_LITE,
+        "gemini-1.5-pro":                 GEMINI_MODELS.FLASH_3_5_LITE,
+        "gemini-2.0-flash":               GEMINI_MODELS.FLASH_3_5_LITE,
         // ── Legacy internal names
-        "gemini-3.5-flash-high":          GEMINI_MODELS.FLASH_3_5,
-        "gemini-3.5-flash-medium":        GEMINI_MODELS.FLASH_3_5,
-        "gemini-3.5-flash-low":           GEMINI_MODELS.FLASH_3_5,
-        "gemini-3.1-flash-lite-preview":  GEMINI_MODELS.FLASH_2_5_LITE,
-        "gemini-3.1-deep-think":          GEMINI_MODELS.PRO_3_PREVIEW,
+        "gemini-3.5-flash-high":          GEMINI_MODELS.FLASH_3_5_LITE,
+        "gemini-3.5-flash-medium":        GEMINI_MODELS.FLASH_3_5_LITE,
+        "gemini-3.5-flash-low":           GEMINI_MODELS.FLASH_3_5_LITE,
+        "gemini-3.5-flash":               GEMINI_MODELS.FLASH_3_5_LITE,
+        "gemini-3-flash-preview":         GEMINI_MODELS.FLASH_3_5_LITE,
+        "gemini-3.1-flash-lite-preview":  GEMINI_MODELS.FLASH_3_1_LITE,
+        "gemini-3.1-deep-think":          GEMINI_MODELS.FLASH_3_5_LITE,
         // ── Invented GPT-5.4 / GPT-4.1 names from buggy build → real names ──
         "gpt-5.4":        "gpt-4o",
         "gpt-5.4-pro":    "gpt-4o",
@@ -121,7 +123,7 @@ export function migrateModelName(model: AIModel): AIModel {
         "meta-llama/llama-prompt-guard-2-22m": "qwen/qwen3.6-27b",
         "openai/gpt-oss-20b": "qwen/qwen3.6-27b",
     };
-    return (migrations[model] || model) as AIModel;
+    return (migrations[model as string] || model) as AIModel;
 }
 
 export const getOptimalModel = (isVideo: boolean, preferredModel?: AIModel, availableProvider?: AIProvider): AIModel => {
@@ -129,7 +131,7 @@ export const getOptimalModel = (isVideo: boolean, preferredModel?: AIModel, avai
     if (availableProvider) {
         switch (availableProvider) {
             case "gemini":
-                return isVideo ? "gemini-3.5-flash" : "gemini-3.5-flash-lite";
+                return "gemini-3.5-flash-lite";
             case "openai":
                 return isVideo ? "gpt-4o" : "gpt-4o-mini";
             case "groq":
@@ -138,7 +140,7 @@ export const getOptimalModel = (isVideo: boolean, preferredModel?: AIModel, avai
                 return "mistral-large-2512";
         }
     }
-    return isVideo ? "gemini-3-pro-preview" : "gemini-3-flash-preview";
+    return "gemini-3.5-flash-lite";
 };
 
 /**
@@ -148,8 +150,6 @@ export const getOptimalModel = (isVideo: boolean, preferredModel?: AIModel, avai
 export function getFreeTierRPM(model: AIModel): number {
     // ── Gemini Flash-Lite models: higher free-tier RPM ──
     if (model === "gemini-3.5-flash-lite" || model === "gemini-3.1-flash-lite") return 15;
-    // ── Gemini Flash models: moderate free-tier RPM ──
-    if (model === "gemini-3.5-flash" || model === "gemini-3-flash-preview") return 10;
     // ── Groq (Qwen models): 30 RPM free tier ──
     if (model === "qwen/qwen3.6-27b" || model === "qwen/qwen3.8-27b") return 30;
     // ── OpenAI: no free tier, but conservative default ──

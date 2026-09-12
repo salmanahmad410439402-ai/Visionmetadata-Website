@@ -11,12 +11,8 @@
  */
 
 export const GEMINI_MODELS = {
-  /** Latest & fastest — next-gen intelligence */
-  FLASH_3_5: "gemini-3.5-flash",
   /** Most cost-effective 3.5 tier — maximum metadata per token */
   FLASH_3_5_LITE: "gemini-3.5-flash-lite",
-  /** Frontier-class intelligence built for speed */
-  FLASH_3_PREVIEW: "gemini-3-flash-preview",
   /** Most cost-effective 3.1 tier — maximum metadata per token */
   FLASH_3_1_LITE: "gemini-3.1-flash-lite",
   /** Default recommended model — cheapest with great metadata quality */

@@ -49,7 +49,7 @@ const ChromeExtension = () => {
   ];
 
   const steps = [
-    { num: "1", icon: FolderDown, title: "Download Extension Archive", desc: "Scroll to the download section at the bottom of this page and grab the latest Tagyfy_Pro_Chrome_Extension.zip file." },
+    { num: "1", icon: FolderDown, title: "Download Extension Archive", desc: "Scroll to the download section at the bottom of this page and grab the latest Tagyfy_Pro_Chrome_Extension_V1.3.6.zip file." },
     { num: "2", icon: FileCode, title: "Extract the .ZIP File", desc: "Right-click the downloaded .zip file and extract it to a permanent folder on your computer (e.g. Documents/Tagyfy-Extension)." },
     { num: "3", icon: Chrome, title: "Enable Developer Mode", desc: "Open Google Chrome, navigate to chrome://extensions/ in your URL bar, and toggle 'Developer mode' in the top-right corner." },
     { num: "4", icon: Puzzle, title: "Load Unpacked", desc: "Click 'Load unpacked' at top left, select your extracted folder, and pin Tagyfy Pro to your Chrome extensions toolbar." },
@@ -266,8 +266,8 @@ const ChromeExtension = () => {
               {/* The ONLY Download Link on the Entire Website for the Extension */}
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
                 <a
-                  href="/Tagyfy_Pro_Chrome_Extension.zip"
-                  download="Tagyfy_Pro_Chrome_Extension.zip"
+                  href="/Tagyfy_Pro_Chrome_Extension_V1.3.6.zip"
+                  download="Tagyfy_Pro_Chrome_Extension_V1.3.6.zip"
                   className="w-full sm:w-auto"
                 >
                   <Button
