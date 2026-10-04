@@ -4,9 +4,10 @@ import HeroSection from "@/components/HeroSection";
 import StatsBar from "@/components/StatsBar";
 import { DirectEmbeddingShowcase } from "@/components/DirectEmbeddingShowcase";
 import HowItWorks from "@/components/HowItWorks";
+import FeatureHighlights from "@/components/FeatureHighlights";
 import WhyVisionMeta from "@/components/WhyVisionMeta";
 import Testimonials from "@/components/Testimonials";
-import FAQSection from "@/components/FAQSection";
+import FAQPreview from "@/components/FAQPreview";
 import { ArrowRight, Zap, DollarSign, HelpCircle, Mail, Download, Chrome, Sparkles } from "lucide-react";
 import { useReveal } from "@/hooks/useReveal";
 import { useEffect } from "react";
@@ -47,7 +48,8 @@ const Index = () => {
           name="description"
           content="Generate, optimize, and embed titles, descriptions, and keywords into your stock images, vectors, and videos in bulk using AI. Free online tool and Windows desktop app."
         />
-      </Helmet>
+      <link rel="canonical" href="https://tagyfy.com/" />
+    </Helmet>
       <main className="space-y-0">
         {/* 1. Hero Section */}
         <HeroSection />
@@ -58,8 +60,11 @@ const Index = () => {
         {/* 3. Breakthrough Direct Vector & Video Embedding Showcase (Superpower of Desktop App + Web Tool) */}
         <DirectEmbeddingShowcase />
 
-        {/* 4. How It Works (4-Step Workflow & Feature Grid) */}
+        {/* 4. How It Works (4-Step Workflow) */}
         <HowItWorks />
+
+        {/* 4b. Short feature highlights — full catalogue lives on /features */}
+        <FeatureHighlights />
 
         {/* 5. Before vs After Comparison */}
         <WhyVisionMeta />
@@ -89,8 +94,8 @@ const Index = () => {
         {/* 7. Real Contributor Testimonials */}
         <Testimonials />
 
-        {/* 8. Frequently Asked Questions */}
-        <FAQSection />
+        {/* 8. Frequently Asked Questions (short preview — full list on /faq) */}
+        <FAQPreview />
 
         {/* 9. Final High-Converting Dual Action Banner */}
         <section className="py-20 px-6 relative overflow-hidden bg-gradient-to-b from-background via-primary/5 to-background border-t border-border/60">

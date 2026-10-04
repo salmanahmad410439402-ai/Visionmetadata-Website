@@ -36,7 +36,8 @@ export const ToolPage: React.FC = () => {
           name="description"
           content="Generate optimized titles and keywords for your stock photos, vectors, and videos directly in your browser. Free AI-powered metadata tool with no signup required."
         />
-      </Helmet>
+      <link rel="canonical" href="https://tagyfy.com/tool" />
+    </Helmet>
       <AssetsProvider>
         <div className="min-h-screen bg-background text-foreground flex flex-col justify-between pt-16 sm:pt-20">
           

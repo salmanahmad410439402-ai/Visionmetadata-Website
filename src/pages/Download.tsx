@@ -9,6 +9,7 @@ const DownloadPage = () => (
         name="description"
         content="Download the Tagyfy Pro desktop application for Windows 10 and 11. Full-access 3-day free trial with AI-powered metadata generation and direct file embedding."
       />
+      <link rel="canonical" href="https://tagyfy.com/download" />
     </Helmet>
     <main>
       <DownloadSection />

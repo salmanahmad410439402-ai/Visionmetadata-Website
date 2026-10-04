@@ -13,7 +13,8 @@ const TermsOfService = () => {
           name="description"
           content="Terms and conditions for using Tagyfy Pro desktop application, web tool, and Chrome extension. Read our service agreement, license terms, and usage policies."
         />
-      </Helmet>
+      <link rel="canonical" href="https://tagyfy.com/terms" />
+    </Helmet>
       <div className="max-w-4xl mx-auto" ref={ref as React.RefObject<HTMLDivElement>}>
         
         {/* Header */}

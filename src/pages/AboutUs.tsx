@@ -15,7 +15,8 @@ const AboutUs = () => {
           name="description"
           content="Learn about Tagyfy Pro, the AI-powered metadata generator built to help stock media contributors automate titles, keywords, and IPTC embedding for Adobe Stock, Shutterstock, and Freepik."
         />
-      </Helmet>
+      <link rel="canonical" href="https://tagyfy.com/about" />
+    </Helmet>
       <div className="max-w-5xl mx-auto" ref={ref as React.RefObject<HTMLDivElement>}>
         
         {/* Hero Header */}

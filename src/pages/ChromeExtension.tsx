@@ -82,7 +82,8 @@ const ChromeExtension = () => {
           name="description"
           content="100% free Chrome extension for Adobe Stock contributors. Update approved assets and generate fresh metadata directly inside the contributor dashboard using Gemini, ChatGPT, Groq, and Mistral."
         />
-      </Helmet>
+      <link rel="canonical" href="https://tagyfy.com/chrome-extension" />
+    </Helmet>
       <main className="max-w-6xl mx-auto" ref={ref as React.RefObject<HTMLElement>}>
         
         {/* ─── HERO SECTION ─── */}

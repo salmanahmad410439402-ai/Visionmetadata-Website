@@ -158,7 +158,8 @@ return (
           name="description"
           content="In-depth guides, marketplace compliance rules, and advanced metadata SEO strategies to help stock media contributors scale their passive earnings on Adobe Stock and beyond."
         />
-      </Helmet>
+      <link rel="canonical" href="https://tagyfy.com/blogs" />
+    </Helmet>
       <div className="max-w-6xl mx-auto">
         
         {/* ─── SCENARIO A: SINGLE ARTICLE READER VIEW ─── */}

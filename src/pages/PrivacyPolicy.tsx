@@ -13,7 +13,8 @@ const PrivacyPolicy = () => {
           name="description"
           content="Tagyfy Pro privacy policy. Learn how we handle your data, API keys, and media files. All processing happens locally on your device — your files never touch our servers."
         />
-      </Helmet>
+      <link rel="canonical" href="https://tagyfy.com/privacy-policy" />
+    </Helmet>
       <div className="max-w-4xl mx-auto" ref={ref as React.RefObject<HTMLDivElement>}>
         
         {/* Header */}

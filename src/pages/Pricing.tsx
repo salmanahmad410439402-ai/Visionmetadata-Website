@@ -1,7 +1,7 @@
 import { Helmet } from "react-helmet-async";
 import PricingSection from "@/components/PricingSection";
-import Testimonials from "@/components/Testimonials";
 import PaymentMethods from "@/components/PaymentMethods";
+import PricingGuarantees from "@/components/PricingGuarantees";
 
 const Pricing = () => (
   <div className="min-h-screen bg-background">
@@ -11,11 +11,12 @@ const Pricing = () => (
         name="description"
         content="Transparent pricing for Tagyfy Pro with lifetime and monthly license options. No hidden fees, free 3-day trial, and a 100% free Chrome extension for all contributors."
       />
+      <link rel="canonical" href="https://tagyfy.com/pricing" />
     </Helmet>
     <main>
       <PricingSection />
       <PaymentMethods />
-      <Testimonials />
+      <PricingGuarantees />
     </main>
   </div>
 );
