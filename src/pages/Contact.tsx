@@ -9,6 +9,7 @@ const ContactPage = () => (
         name="description"
         content="Get help with Tagyfy Pro license keys, bulk processing, or technical support. Reach our team directly for fast assistance with your stock metadata workflow."
       />
+      <link rel="canonical" href="https://tagyfy.com/contact" />
     </Helmet>
     <main>
       <ContactSection />

@@ -15,7 +15,8 @@ const RefundPolicy = () => {
           name="description"
           content="Tagyfy Pro refund policy. Understand our refund process, eligibility criteria, and how to request a refund for your license purchase."
         />
-      </Helmet>
+      <link rel="canonical" href="https://tagyfy.com/refund-policy" />
+    </Helmet>
       <div className="max-w-4xl mx-auto" ref={ref as React.RefObject<HTMLDivElement>}>
         
         {/* Header */}

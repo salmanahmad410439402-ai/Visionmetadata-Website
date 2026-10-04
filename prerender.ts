@@ -37,25 +37,13 @@ const CONTENT_HOME = `
 <li>100% private — no file uploads ever</li>
 </ul>
 
-<h2>Built Specifically for Stock Contributors — 16 Features</h2>
-<p>Every feature is designed around the real workflow of a stock media producer.</p>
+<h2>A Quick Look at What's Inside</h2>
+<p>A small sample of the 16 production features — see the full catalogue and supported file formats on the Features page.</p>
 <ul>
-<li><strong>Multi-Provider AI:</strong> Use Gemini, GPT-4o, Groq (Llama 4), OpenRouter, or Mistral. Add unlimited API keys and run multiple AI providers in parallel.</li>
-<li><strong>Rate Limit Protection:</strong> Automatically rotates through your API keys and providers when limits are hit. Never stop processing because of a single exhausted key.</li>
-<li><strong>Smart Parallel Queueing:</strong> Intelligent API queueing ensures optimal speed and parallel processing. Maximize your processing throughput with multiple API keys.</li>
-<li><strong>Batch Processing at Scale:</strong> Process 100+ to 500+ assets in a single batch. Parallel workers with live progress, auto-retry on failures, and cancellation support.</li>
-<li><strong>Trademark and Brand Sniffer:</strong> AI-powered system detects 100+ brand names and trademarked terms. Auto-removes them and replaces with safe generic alternatives.</li>
-<li><strong>Series and Event Context:</strong> Mark assets as a series to auto-append Part 01/02/03 sequences. Use event context to theme all metadata around a specific event or collection.</li>
-<li><strong>Confidence and Risk Scores:</strong> Every asset gets a 0-100 confidence score with 4-axis breakdown. Identifies compliance risks before uploading to stock platforms.</li>
-<li><strong>Platform Readiness Checks:</strong> Instant READY / REVIEW / NOT READY rating for Adobe Stock, Freepik, and Shutterstock. Know exactly which assets to submit where.</li>
-<li><strong>Bulk Metadata Editor:</strong> Spreadsheet-style view of all assets. Find and replace, append/prepend text, remove words across multiple assets at once.</li>
-<li><strong>Negative Keywords:</strong> Define words you never want in metadata. They are automatically stripped from every generated output.</li>
-<li><strong>Keyword Strategy Control:</strong> Choose Single-Word, Multi-Word, or Mixed keyword strategies. Enforce max keyword length. Customize keyword count (5-50).</li>
-<li><strong>Native File Metadata:</strong> Embeds metadata directly into JPEG, PNG, WebP, TIFF, MP4 and vector files. Platforms automatically read it on upload.</li>
-<li><strong>6-Platform CSV Export:</strong> Adobe Stock, Shutterstock, Freepik, Dreamstime, 123RF, Vecteezy. Each CSV is formatted exactly as required by each platform.</li>
-<li><strong>AI Disclosure Compliance:</strong> Auto-adds Generative AI keywords for AI-created content. Adobe 2026 rule compliant.</li>
-<li><strong>Unattended Mode:</strong> After batch processing completes, automatically download a ZIP with all metadata-embedded files if idle for 5 minutes.</li>
-<li><strong>Quality Check on Demand:</strong> Manual quality pass on any asset for detailed confidence breakdown, risk flags, and platform readiness insights.</li>
+<li><strong>Multi-Provider AI Engine:</strong> Run Gemini, GPT-4o, Groq, Mistral, and OpenRouter side by side with automatic key rotation.</li>
+<li><strong>Trademark and Brand Sniffer:</strong> Flags 100+ brand names before upload so your assets never get rejected for trademarked terms.</li>
+<li><strong>Confidence and Risk Scoring:</strong> Every asset gets a 0-100 readiness score across four compliance dimensions before you submit it.</li>
+<li><strong>6-Platform CSV Export:</strong> One click produces correctly formatted CSVs for Adobe Stock, Shutterstock, Freepik, and more.</li>
 </ul>
 
 <h2>Before vs After — See What Changes</h2>
@@ -85,8 +73,16 @@ const CONTENT_HOME = `
 <blockquote><p>"The API rate limit protection is a game-changer for me — I process huge folders and other tools would always crash. This handles API rotation perfectly without dropping any assets." — Sara M., Shutterstock and Freepik Contributor</p></blockquote>
 <blockquote><p>"The trademark sniffer alone saved me from several rejections. I had no idea how many brand names were slipping into my keywords. Now every upload goes through clean." — Tariq R., Stock Vector Designer, 3,000+ vectors</p></blockquote>
 
-<h2>Supported File Formats</h2>
-<p>JPG, JPEG, PNG, WebP, TIFF, SVG, EPS, AI, MP4, MOV, WebM — 100+ supported file formats for images, vectors, and video.</p>
+<h2>A Few Quick Questions</h2>
+<p>The four questions new visitors ask most. See the full, searchable FAQ page for licensing, rate limits, trademark detection, and more.</p>
+<h3>Does Tagyfy Pro embed metadata directly into files?</h3>
+<p>Yes — natively, with no extra software. Adobe Stock, Shutterstock, and other marketplaces pick up the written IPTC/XMP data the moment you upload.</p>
+<h3>Which AI providers are supported?</h3>
+<p>Google Gemini, OpenAI GPT-4o, Groq, Mistral AI, and OpenRouter, with automatic key rotation across multiple API keys.</p>
+<h3>Is my API key safe inside the app?</h3>
+<p>Yes. API keys are stored locally on your own PC and are never sent to Tagyfy Pro servers.</p>
+<h3>How does the licensing work?</h3>
+<p>Four plans are available — 1 Month, 3 Months, 6 Months, and 1 Year — and you are never billed per generation.</p>
 
 <h2>Adobe Stock Chrome Extension — 100% Free</h2>
 <p>Update approved assets and generate fresh metadata directly inside the Adobe Stock contributor dashboard using Gemini, ChatGPT, Groq, and Mistral. 100% free with no license required.</p>
@@ -118,18 +114,19 @@ const CONTENT_ABOUT = `
 `;
 
 const CONTENT_FEATURES = `
-<h1>Features — Batch Processing, Trademark Filter and More</h1>
-<p>Explore Tagyfy Pro features: multi-AI vision analysis, batch metadata generation, direct IPTC/XMP embedding, trademark sniffer, confidence scoring, and platform-specific CSV exports.</p>
+<h1>Every Feature, In Full Detail</h1>
+<p>This page is the complete, up-to-date reference for everything Tagyfy Pro ships with today — the core capabilities, the full 16-feature catalogue, and every supported file format. For the four-step onboarding walkthrough, visit the homepage.</p>
 
-<h2>How It Works — Four Steps</h2>
-<h3>Step 1: Upload Your Assets</h3>
-<p>Drag and drop images, videos, vectors, or entire folders. Batch upload 100+ files at once. Supports JPG, PNG, WebP, EPS, AI, SVG, MP4, and more.</p>
-<h3>Step 2: AI Analyzes and Generates</h3>
-<p>Vision AI analyzes every file and generates SEO-optimized titles, rich descriptions, and up to 50 ranked keywords — tailored to each platform's requirements.</p>
-<h3>Step 3: Review, Refine and Check Quality</h3>
-<p>Edit metadata inline, use bulk editor for batch changes, check confidence scores and risk flags per asset. Get platform readiness ratings before upload.</p>
-<h3>Step 4: Embed and Export Ready</h3>
-<p>Metadata embeds directly into your files. Export platform-ready CSVs for Adobe Stock, Freepik, Shutterstock, Dreamstime, 123RF, and Vecteezy in seconds.</p>
+<h2>Built for Professional Metadata</h2>
+<p>Everything you need to generate SEO-optimized metadata at scale, from single assets to 500+ file batches.</p>
+<ul>
+<li><strong>Multi-AI Support:</strong> Connect Gemini, GPT-4, Groq, OpenRouter, or Mistral. Use multiple providers simultaneously.</li>
+<li><strong>100+ File Types:</strong> JPEG, PNG, WebP, MP4 videos, AI vectors, EPS, SVG, TIFF. Process anything in one batch.</li>
+<li><strong>SEO Confidence Scoring:</strong> Every asset gets a confidence score (0-100) with risk flags to prevent platform rejection.</li>
+<li><strong>Trademark Protection:</strong> AI-powered sniffer automatically removes brand names and replaces them with safe alternatives.</li>
+<li><strong>Smart Batch Processing:</strong> Process 100+ files at once with automatic retry on failure and unattended mode support.</li>
+<li><strong>Platform Export:</strong> Export formatted CSV for Adobe Stock, Shutterstock, Freepik, Dreamstime, 123RF, Vecteezy.</li>
+</ul>
 
 <h2>16 Powerful Features Built for Stock Contributors</h2>
 <ul>
@@ -150,9 +147,6 @@ const CONTENT_FEATURES = `
 <li><strong>Unattended Mode:</strong> Automatically downloads a ZIP with all metadata-embedded files after processing.</li>
 <li><strong>Quality Check on Demand:</strong> Manual quality pass on any asset for detailed confidence breakdown.</li>
 </ul>
-
-<h2>Built for Professional Metadata</h2>
-<p>Everything you need to generate SEO-optimized metadata at scale, from single assets to 500+ file batches. Connect Gemini, GPT-4, Groq, OpenRouter, or Mistral. Use multiple providers simultaneously. Process JPEG, PNG, WebP, MP4 videos, AI vectors, EPS, SVG, TIFF in one batch.</p>
 
 <h2>Supported File Formats</h2>
 <p>JPG, JPEG, PNG, WebP, TIFF, SVG, EPS, AI, MP4, MOV, WebM — over 100 supported file formats for images, vectors, and video content.</p>
@@ -187,6 +181,15 @@ const CONTENT_PRICING = `
 
 <h2>Free Chrome Extension</h2>
 <p>Looking for browser automation? The Tagyfy Pro Chrome Extension for Adobe Stock is completely 100% FREE for all contributors. No license key needed! Direct in-browser tagging, update approved assets, free forever.</p>
+
+<h2>Buy with Confidence</h2>
+<p>Straightforward terms for every license, with no hidden conditions.</p>
+<ul>
+<li><strong>3-Day Free Trial:</strong> Every plan starts with a full-access trial. No credit card required to test the complete feature set.</li>
+<li><strong>Instant License Delivery:</strong> Keys are generated and sent within minutes of payment confirmation.</li>
+<li><strong>7-Day Technical Refund:</strong> If our team can't resolve a technical incompatibility within 7 days of purchase, you get a full refund.</li>
+<li><strong>One License, One Device:</strong> Simple, transparent licensing. No recurring charges, no auto-renewal surprises.</li>
+</ul>
 
 <p>Early adopter pricing — prices will increase as features expand.</p>
 `;

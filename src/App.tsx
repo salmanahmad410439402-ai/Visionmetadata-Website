@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import { initializeAnalytics } from "@/lib/analytics";
 import Index from "./pages/Index";
@@ -47,7 +47,8 @@ const App = () => {
               <Route path="/download" element={<DownloadPage />} />
               <Route path="/tutorials" element={<Tutorials />} />
               <Route path="/blogs" element={<Blogs />} />
-              <Route path="/blog" element={<Blogs />} />
+              {/* /blog redirects to the canonical /blogs listing to avoid serving duplicate content at two URLs */}
+              <Route path="/blog" element={<Navigate to="/blogs" replace />} />
               <Route path="/blog/:slug" element={<BlogPost />} />
               <Route path="/about" element={<AboutUs />} />
               <Route path="/contact" element={<ContactPage />} />
