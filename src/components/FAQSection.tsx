@@ -12,11 +12,11 @@ import { analytics } from "@/lib/analytics";
 const faqs = [
     {
         question: "Does Tagyfy Pro embed metadata directly into files?",
-        answer: "Yes. Tagyfy Pro embeds metadata directly into your files — no extra software required. This works for JPG, PNG, EPS, AI, SVG, MP4, MOV, and more. Stock platforms read the embedded data automatically on upload.",
+        answer: "Yes. Tagyfy Pro writes supported IPTC/XMP fields into compatible files. Many stock workflows can read that metadata on upload, but behavior varies by file format and marketplace, so confirm the current platform requirements.",
     },
     {
         question: "Will stock platforms automatically detect this metadata?",
-        answer: "Yes. Adobe Stock, Shutterstock, Dreamstime, Freepik, 123RF, and Vecteezy all read embedded metadata during upload. Your title and keywords will auto-populate without any manual entry.",
+        answer: "Many stock workflows can read supported embedded metadata during upload, but behavior varies by file format and marketplace. Confirm the current platform requirements and review the title and keywords before submitting.",
     },
     {
         question: "Which AI providers are supported?",
@@ -48,7 +48,7 @@ const faqs = [
     },
     {
         question: "Is my API key safe inside the app?",
-        answer: "Yes. Your API keys are stored locally on your own PC using encrypted storage — they are never sent to Tagyfy Pro servers because there are no Tagyfy Pro servers. The app calls AI providers (Gemini, OpenAI, etc.) directly from your machine, just like a browser would. Tagyfy Pro never sees, logs, or transmits your keys.",
+        answer: "For the Windows app, keys stay in local encrypted storage and requests go directly to the provider you choose. The browser tool keeps a key locally only when you opt in and sends the selected file directly to that AI provider; Tagyfy does not proxy or store the media.",
     },
     {
         question: "How does the licensing work?",

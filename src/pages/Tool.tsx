@@ -16,7 +16,7 @@ export const ToolPage: React.FC = () => {
     // Show top notification toast when webapp is opened
     const timer = setTimeout(() => {
       toast("🎬 Watch Step-by-Step Tutorial", {
-        description: "Learn how to generate high-converting metadata and embed files in seconds.",
+        description: "Learn how to generate metadata drafts and embed files in the Tagyfy workflow.",
         action: {
           label: "Watch Tutorial",
           onClick: () => navigate("/tutorials"),
@@ -34,7 +34,7 @@ export const ToolPage: React.FC = () => {
         <title>Free Online Metadata Generator Tool | Tagyfy Pro</title>
         <meta
           name="description"
-          content="Generate optimized titles and keywords for your stock photos, vectors, and videos directly in your browser. Free AI-powered metadata tool with no signup required."
+          content="Generate draft titles, descriptions, and keywords for supported stock images and videos in your browser. Bring your own AI provider key and review every result before submission."
         />
       <link rel="canonical" href="https://tagyfy.com/tool" />
     </Helmet>
@@ -65,6 +65,10 @@ export const ToolPage: React.FC = () => {
               </button>
             </div>
           )}
+
+          <p className="mx-auto max-w-5xl px-4 pb-2 text-center text-[11px] leading-relaxed text-muted-foreground">
+            Privacy note: this browser tool sends the selected file directly to the AI provider you choose. Tagyfy does not proxy or store your media, but provider terms apply. Use the Windows app when your files must remain on your device.
+          </p>
 
           {/* Main Desktop Software Dashboard Engine */}
           <main className="flex-1 w-full max-w-[1920px] mx-auto px-2 sm:px-4 lg:px-6 py-4">

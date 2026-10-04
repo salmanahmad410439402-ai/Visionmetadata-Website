@@ -10,13 +10,13 @@ const ChromeExtension = () => {
     {
       icon: RefreshCw,
       title: "Revive Approved Assets",
-      desc: "Update titles and keywords on existing approved photos to boost search ranking and revive stalled sales.",
+      desc: "Review and update titles and keywords on existing approved photos without repeating the same manual form entry.",
       color: "#4F46E5",
     },
     {
       icon: Sparkles,
       title: "Auto-Tag New Uploads",
-      desc: "Generate commercial titles and 50 high-converting keywords automatically for newly uploaded batches.",
+      desc: "Generate descriptive titles and up to 50 relevant keywords for newly uploaded batches.",
       color: "#10B981",
     },
     {
@@ -66,7 +66,7 @@ const ChromeExtension = () => {
     },
     {
       q: "Will this get my Adobe Stock account in trouble?",
-      a: "No. The extension only fills standard form fields (Title and Keywords) on your dashboard just as if you were typing them manually. It adheres strictly to Adobe Stock metadata compliance guidelines.",
+      a: "The extension fills standard form fields such as Title and Keywords. You remain responsible for checking accuracy and following Adobe Stock's current contributor guidelines before saving changes.",
     },
     {
       q: "What is the difference between this extension and the Desktop Software?",
@@ -98,7 +98,7 @@ const ChromeExtension = () => {
           </h1>
           
           <p className="text-lg sm:text-xl mb-10 text-secondary max-w-2xl mx-auto leading-relaxed">
-            Generate search-first 185-character titles, 50 structured keywords, and revive old approved assets directly inside your contributor dashboard — 100% free with no license keys needed.
+            Generate descriptive titles and up to 50 structured keywords, then review them inside your contributor dashboard — free to install with no Tagyfy license key needed.
           </p>
 
           {/* Smooth Scroll Button to Bottom */}
@@ -139,7 +139,7 @@ const ChromeExtension = () => {
         <div className="mb-24">
           <div className="text-center mb-12">
             <h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-3">Core Automation Features</h2>
-            <p className="text-secondary text-sm sm:text-base max-w-xl mx-auto">Everything you need to eliminate manual tagging and rank higher on Adobe Stock.</p>
+            <p className="text-secondary text-sm sm:text-base max-w-xl mx-auto">Tools to reduce repetitive tagging while keeping the contributor in control of the final submission.</p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {features.map(({ icon: Icon, title, desc, color }) => (

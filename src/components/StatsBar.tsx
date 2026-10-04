@@ -1,12 +1,12 @@
 import { useReveal } from "@/hooks/useReveal";
-import { Tag, Package, Rocket, Brain, Lock } from "lucide-react";
+import { Tag, Package, Rocket, Brain, ShieldCheck } from "lucide-react";
 
 const stats = [
-  { icon: Tag,       number: "50",    unit: "keywords",    label: "SEO-ranked per asset"        },
-  { icon: Package,   number: "500+",  unit: "files",       label: "batch process in one go"    },
-  { icon: Rocket,    number: "< 10",  unit: "seconds",     label: "per asset, end to end"      },
-  { icon: Brain,     number: "6",     unit: "AI models",   label: "choose what you use"        },
-  { icon: Lock,      number: "100%",  unit: "private",     label: "no file uploads ever"       },
+  { icon: Tag,         number: "Up to 50", unit: "keywords",       label: "configurable per asset"            },
+  { icon: Package,     number: "500+",     unit: "files",          label: "desktop batch queue target"       },
+  { icon: Rocket,      number: "4",        unit: "workflow steps", label: "upload, generate, review, export" },
+  { icon: Brain,       number: "5",        unit: "AI providers",   label: "bring your own API key"           },
+  { icon: ShieldCheck, number: "Local",    unit: "file work",      label: "desktop embedding stays on-device"   },
 ];
 
 const StatsBar = () => {

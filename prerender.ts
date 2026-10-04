@@ -28,13 +28,13 @@ const CONTENT_HOME = `
 <h3>Step 4: Embed and Export Ready</h3>
 <p>Metadata embeds directly into your files. Export platform-ready CSVs for Adobe Stock, Freepik, Shutterstock, Dreamstime, 123RF, and Vecteezy in seconds.</p>
 
-<h2>Key Stats</h2>
+<h2>Product Facts</h2>
 <ul>
-<li>50 keywords — SEO-ranked per asset</li>
-<li>500+ files — batch process in one go</li>
-<li>Less than 10 seconds per asset, end to end</li>
-<li>6 AI models — choose what you use</li>
-<li>100% private — no file uploads ever</li>
+<li>Up to 50 configurable keywords per asset</li>
+<li>500+ file desktop batch queue target</li>
+<li>Four clear steps: upload, generate, review, and export</li>
+<li>Five AI provider options with bring-your-own-key access</li>
+<li>Local-first desktop file handling, with direct AI-provider requests when analysis is requested</li>
 </ul>
 
 <h2>A Quick Look at What's Inside</h2>
@@ -67,11 +67,8 @@ const CONTENT_HOME = `
 <li>Confidence scores and risk analysis per asset</li>
 </ul>
 
-<h2>What Contributors Say — Real Results from Real Stock Creators</h2>
-<p>Join hundreds of stock contributors who have stopped doing metadata manually.</p>
-<blockquote><p>"I used to spend 2-3 hours manually entering titles and keywords for every batch upload. Tagyfy Pro does the same work in minutes. It is honestly embarrassing how much time I wasted before." — Ahmed K., Adobe Stock Contributor, 1,200+ files</p></blockquote>
-<blockquote><p>"The API rate limit protection is a game-changer for me — I process huge folders and other tools would always crash. This handles API rotation perfectly without dropping any assets." — Sara M., Shutterstock and Freepik Contributor</p></blockquote>
-<blockquote><p>"The trademark sniffer alone saved me from several rejections. I had no idea how many brand names were slipping into my keywords. Now every upload goes through clean." — Tariq R., Stock Vector Designer, 3,000+ vectors</p></blockquote>
+<h2>Designed for a Review-First Workflow</h2>
+<p>Tagyfy generates a starting point; contributors remain responsible for checking accuracy, removing irrelevant terms, confirming trademarks and releases, and following each marketplace's current submission rules.</p>
 
 <h2>A Few Quick Questions</h2>
 <p>The four questions new visitors ask most. See the full, searchable FAQ page for licensing, rate limits, trademark detection, and more.</p>
@@ -80,7 +77,7 @@ const CONTENT_HOME = `
 <h3>Which AI providers are supported?</h3>
 <p>Google Gemini, OpenAI GPT-4o, Groq, Mistral AI, and OpenRouter, with automatic key rotation across multiple API keys.</p>
 <h3>Is my API key safe inside the app?</h3>
-<p>Yes. API keys are stored locally on your own PC and are never sent to Tagyfy Pro servers.</p>
+<p>For the Windows app, API keys are kept on your computer and requests go directly to the provider you choose. The browser tool stores a key locally only when you choose that option and sends the selected file directly to the chosen AI provider; Tagyfy does not proxy or store the media.</p>
 <h3>How does the licensing work?</h3>
 <p>Four plans are available — 1 Month, 3 Months, 6 Months, and 1 Year — and you are never billed per generation.</p>
 
@@ -88,7 +85,7 @@ const CONTENT_HOME = `
 <p>Update approved assets and generate fresh metadata directly inside the Adobe Stock contributor dashboard using Gemini, ChatGPT, Groq, and Mistral. 100% free with no license required.</p>
 
 <h2>Ready to automate your stock metadata?</h2>
-<p>Start generating high-ranking metadata online for free right in your browser, or download the Windows Desktop app for 100% native vector and video embedding.</p>
+<p>Start generating metadata drafts online for free right in your browser, or download the Windows Desktop app for native vector and video embedding.</p>
 `;
 
 const CONTENT_ABOUT = `
@@ -96,14 +93,14 @@ const CONTENT_ABOUT = `
 <p>Empowering Stock Media Creators with AI Precision. We built Tagyfy Pro to solve the single most frustrating bottleneck in digital asset licensing: spending hours manually tagging, describing, and embedding metadata into thousands of stock media files.</p>
 
 <h2>The Problem We Solved</h2>
-<p>Stock contributors lose up to 70% of their creative time writing repetitive titles and searching for 50 high-ranking keywords. Even worse, many web tools do not embed IPTC/XMP data directly into binary formats like Adobe Illustrator (.AI), EPS vectors, or MP4 videos, forcing creators to waste more time with clumsy CSV spreadsheets.</p>
+<p>Stock contributors often spend significant time writing repetitive titles and keywords. Many browser tools also require a separate CSV or manual copy-paste step when a contributor needs to prepare vector or video files, which creates a clear workflow problem.</p>
 
 <h2>The Tagyfy Solution</h2>
 <p>Tagyfy Pro is a desktop-native application engineered with modern Rust and React. It brings together state-of-the-art vision models (Google Gemini 2.5/3.5, OpenAI GPT-4o, Groq, Mistral) and high-speed native binary embedding pipelines to automatically analyze, describe, and directly write metadata into files in bulk.</p>
 
-<h2>Why Creators Trust Us</h2>
-<h3>100% Privacy-First</h3>
-<p>Your media files and API keys never touch our servers. Everything is processed locally on your PC.</p>
+<h2>How the Product Is Designed</h2>
+<h3>Privacy-Aware Design</h3>
+<p>The Windows app processes and embeds files locally. AI analysis sends the selected file or extracted video frames directly to the provider you choose; Tagyfy does not proxy or store that media.</p>
 <h3>Blazing Performance</h3>
 <p>Multi-threaded batch processing handles hundreds of assets in seconds with zero artificial limits.</p>
 <h3>Marketplace SEO</h3>
@@ -154,7 +151,7 @@ const CONTENT_FEATURES = `
 
 const CONTENT_PRICING = `
 <h1>Pricing and License Plans — Tagyfy Pro</h1>
-<p>Simple pricing. Choose a plan that fits your workflow. Transparent pricing with no hidden fees, free 3-day trial, and a 100% free Chrome extension for all contributors.</p>
+<p>Simple pricing. Choose a plan that fits your workflow. Transparent pricing with no hidden fees, a free 3-day trial, and a free Chrome extension for Adobe Stock workflows.</p>
 <p>Compatible with Adobe Stock, Shutterstock, Dreamstime, and Freepik.</p>
 
 <h2>License Plans</h2>
@@ -261,10 +258,10 @@ const CONTENT_FAQ = `
 <p>Everything you need to know before getting started with Tagyfy Pro metadata generator.</p>
 
 <h2>Does Tagyfy Pro embed metadata directly into files?</h2>
-<p>Yes. Tagyfy Pro embeds metadata directly into your files — no extra software required. This works for JPG, PNG, EPS, AI, SVG, MP4, MOV, and more. Stock platforms read the embedded data automatically on upload.</p>
+<p>Yes. Tagyfy Pro writes supported IPTC/XMP fields into compatible files. Many stock workflows can read that metadata on upload, but behavior varies by file format and marketplace, so confirm the current platform requirements.</p>
 
 <h2>Will stock platforms automatically detect this metadata?</h2>
-<p>Yes. Adobe Stock, Shutterstock, Dreamstime, Freepik, 123RF, and Vecteezy all read embedded metadata during upload. Your title and keywords will auto-populate without any manual entry.</p>
+<p>Many stock workflows can read supported embedded metadata during upload, but behavior varies by file format and marketplace. Confirm the current platform requirements and review the title and keywords before submitting.</p>
 
 <h2>Which AI providers are supported?</h2>
 <p>Tagyfy Pro supports 5 AI providers: Google Gemini (Flash and Pro), OpenAI GPT-4o, Groq (Llama 4 Scout), Mistral AI, and OpenRouter (300+ models including free ones). You can add multiple API keys and the system automatically rotates between them when rate limits are hit.</p>
@@ -288,7 +285,7 @@ const CONTENT_FAQ = `
 <p>Tagyfy Pro generates platform-specific CSV files verified against the official upload specs for Adobe Stock, Shutterstock, Dreamstime, Freepik, 123RF, and Vecteezy. Each platform gets the correct column headers, category IDs, and keyword formatting. No truncation is ever applied — your full keyword list and title are always exported.</p>
 
 <h2>Is my API key safe inside the app?</h2>
-<p>Yes. Your API keys are stored locally on your own PC using encrypted storage — they are never sent to Tagyfy Pro servers because there are no Tagyfy Pro servers. The app calls AI providers (Gemini, OpenAI, etc.) directly from your machine, just like a browser would. Tagyfy Pro never sees, logs, or transmits your keys.</p>
+<p>For the Windows app, keys stay in local encrypted storage and requests go directly to the provider you choose. The browser tool keeps a key locally only when you opt in and sends the selected file directly to that AI provider; Tagyfy does not proxy or store the media.</p>
 
 <h2>How does the licensing work?</h2>
 <p>Tagyfy Pro is available in four plans: 1 Month, 3 Months, 6 Months, and 1 Year. You purchase a license key for your chosen duration — when it expires you can renew at any time. The AI generation uses your own API keys (which have their own free tiers — Gemini offers a generous free quota). You are never billed per generation by Tagyfy Pro.</p>
@@ -296,7 +293,7 @@ const CONTENT_FAQ = `
 
 const CONTENT_TUTORIALS = `
 <h1>Tutorials and Video Guides — Tagyfy Pro</h1>
-<p>Step-by-step video tutorials showing how to generate high-converting metadata, embed IPTC data into files, and use the Tagyfy Pro desktop app and Chrome extension.</p>
+<p>Step-by-step video tutorials showing how to generate and review metadata drafts, embed IPTC data into files, and use the Tagyfy Pro desktop app and Chrome extension.</p>
 
 <h2>Getting Started</h2>
 <p>Learn how to set up Tagyfy Pro, add your AI API keys, and start generating metadata for your stock media files in minutes.</p>
@@ -333,9 +330,9 @@ const CONTENT_CHROME_EXTENSION = `
 
 <h2>Key Features</h2>
 <h3>Revive Approved Assets</h3>
-<p>Update titles and keywords on existing approved photos to boost search ranking and revive stalled sales.</p>
+<p>Review and update titles and keywords on existing approved photos without repeating the same manual form entry.</p>
 <h3>Auto-Tag New Uploads</h3>
-<p>Generate commercial titles and 50 high-converting keywords automatically for newly uploaded batches.</p>
+<p>Generate descriptive titles and up to 50 relevant keywords for newly uploaded batches.</p>
 <h3>Multi-AI Vision Support</h3>
 <p>Use your choice of Gemini, ChatGPT (OpenAI), Groq, or Mistral AI with automatic key rotation.</p>
 <h3>Direct Dashboard Integration</h3>
@@ -363,14 +360,14 @@ const CONTENT_CHROME_EXTENSION = `
 <h3>How do I get an AI API key?</h3>
 <p>You can get a free Google Gemini API key in 30 seconds from Google AI Studio (aistudio.google.com/apikey). OpenAI, Groq, and Mistral keys are also supported.</p>
 <h3>Will this get my Adobe Stock account in trouble?</h3>
-<p>No. The extension only fills standard form fields (Title and Keywords) on your dashboard just as if you were typing them manually. It adheres strictly to Adobe Stock metadata compliance guidelines.</p>
+<p>The extension fills standard form fields such as Title and Keywords. You remain responsible for checking accuracy and following Adobe Stock's current contributor guidelines before saving changes.</p>
 <h3>What is the difference between this extension and the Desktop Software?</h3>
 <p>The Chrome Extension works inside your browser to auto-fill metadata on Adobe Stock. The Tagyfy Pro Desktop App is a dedicated native workstation software that embeds metadata directly into EPS, AI, JPG, PNG, and Video files with zero platform limits.</p>
 `;
 
 const CONTENT_TOOL = `
 <h1>Free Online Metadata Generator Tool — Tagyfy Pro</h1>
-<p>Generate optimized titles and keywords for your stock photos, vectors, and videos directly in your browser. Free AI-powered metadata tool with no signup required.</p>
+<p>Generate draft titles, descriptions, and keywords for supported stock images and videos directly in your browser. No Tagyfy account is required, but you bring your own AI provider key and should review every result before submission.</p>
 
 <h2>How to Use the Free Online Tool</h2>
 <ol>
@@ -397,7 +394,7 @@ const CONTENT_TOOL = `
 </ul>
 
 <h2>Why Use This Tool?</h2>
-<p>Stock media contributors spend hours manually writing titles and keywords. This free tool uses advanced AI vision models to analyze your images and videos, then generates commercially optimized metadata that ranks higher in stock marketplace search results. All processing happens in your browser — your files are never uploaded to any server.</p>
+<p>Stock media contributors often spend significant time preparing titles and keywords. This tool uses AI vision to create a draft from your selected file in the browser. The file is sent directly to the AI provider you choose for analysis; Tagyfy does not proxy or store it. AI output is not a guarantee of approval, ranking, or sales, so review it against the current marketplace rules.</p>
 
 <h2>Need More Power?</h2>
 <p>For batch processing of 500+ files, direct IPTC/XMP embedding into files, vector format support, trademark sniffer, and platform-specific CSV exports, download the Tagyfy Pro Desktop Application for Windows with a free 3-day trial.</p>
@@ -405,16 +402,17 @@ const CONTENT_TOOL = `
 
 const CONTENT_PRIVACY = `
 <h1>Privacy Policy — Tagyfy Pro</h1>
-<p>Last Updated: August 17, 2026. Effective Date: January 1, 2026.</p>
+<p>Last Updated: October 4, 2026. Effective Date: January 1, 2026.</p>
 
 <h2>1. Overview and Commitment to Privacy</h2>
 <p>Welcome to Tagyfy Pro (formerly VisionMetadata Pro), accessible from tagyfy.com. We are deeply committed to protecting your personal privacy. This Privacy Policy outlines what information we collect, how we process it, and how we ensure your complete confidentiality when using our website and desktop software.</p>
 
-<h2>2. Zero Server Storage (Local-First Architecture)</h2>
-<p>Our desktop application is engineered with a strict Local-First and Client-Side security paradigm:</p>
+<h2>2. How Media and API Keys Are Handled</h2>
+<p>Tagyfy has two processing modes, and the data flow is different for each. We do not operate a server that proxies or stores your media, but the AI provider you choose still receives the file data needed to analyze it.</p>
 <ul>
-<li><strong>Your Images and Media Files:</strong> Your stock photos, vector files (.AI, .EPS, .SVG), and video files (.MP4, .MOV) are processed and embedded locally on your device. We never upload, store, or view your original creative assets.</li>
-<li><strong>Your AI API Keys:</strong> API keys (Google Gemini, OpenAI, Groq, Mistral) are stored in your device's local encrypted storage using Windows DPAPI / safeStorage. They are never sent to or logged on our servers.</li>
+<li><strong>Windows desktop app:</strong> Files are read and embedded locally on your computer. When you request AI analysis, the selected file or extracted video frames are sent directly from the app to the AI provider associated with your API key. Tagyfy does not receive or store that media.</li>
+<li><strong>Browser tool:</strong> The selected file is read in your browser and sent directly to the AI provider you choose for the generation request. Do not upload confidential media unless you are comfortable with that provider's terms and privacy policy.</li>
+<li><strong>API keys:</strong> The Windows app keeps keys in local encrypted storage. The browser tool keeps a key in browser memory and only uses local storage when you explicitly select “Remember in browser local storage.” Tagyfy does not collect or store keys on its own server.</li>
 </ul>
 
 <h2>3. Cookies, Web Beacons and Analytics</h2>
@@ -499,15 +497,15 @@ const PAGES: { path: string; title: string; desc: string; content?: string }[] =
   { path: '/', title: 'Tagyfy Pro | AI-Powered Metadata Generator for Adobe Stock', desc: 'Generate, optimize, and embed titles, descriptions, and keywords into your stock images, vectors, and videos in bulk using AI. Free online tool and Windows desktop app.', content: CONTENT_HOME },
   { path: '/about', title: 'About Us — Our Mission & Story | Tagyfy Pro', desc: 'Learn about Tagyfy Pro, the AI-powered metadata generator built to help stock media contributors automate titles, keywords, and IPTC embedding for Adobe Stock, Shutterstock, and Freepik.', content: CONTENT_ABOUT },
   { path: '/features', title: 'Features — Batch Processing, Trademark Filter & More | Tagyfy Pro', desc: 'Explore Tagyfy Pro features: multi-AI vision analysis, batch metadata generation, direct IPTC/XMP embedding, trademark sniffer, confidence scoring, and platform-specific CSV exports.', content: CONTENT_FEATURES },
-  { path: '/pricing', title: 'Pricing & License Plans | Tagyfy Pro', desc: 'Transparent pricing for Tagyfy Pro with lifetime and monthly license options. No hidden fees, free 3-day trial, and a 100% free Chrome extension for all contributors.', content: CONTENT_PRICING },
+  { path: '/pricing', title: 'Pricing & License Plans | Tagyfy Pro', desc: 'Transparent pricing for Tagyfy Pro with time-based license options. No hidden fees, a free 3-day trial, and a free Chrome extension for Adobe Stock workflows.', content: CONTENT_PRICING },
   { path: '/download', title: 'Download Tagyfy Pro for Windows | Free Trial', desc: 'Download the Tagyfy Pro desktop application for Windows 10 and 11. Full-access 3-day free trial with AI-powered metadata generation and direct file embedding.', content: CONTENT_DOWNLOAD },
   { path: '/contact', title: 'Contact & Support | Tagyfy Pro', desc: 'Get help with Tagyfy Pro license keys, bulk processing, or technical support. Reach our team directly for fast assistance with your stock metadata workflow.', content: CONTENT_CONTACT },
   { path: '/faq', title: 'Frequently Asked Questions | Tagyfy Pro', desc: 'Answers to common questions about Tagyfy Pro: supported AI providers, file formats, trademark detection, batch processing, CSV exports, API key safety, and licensing.', content: CONTENT_FAQ },
-  { path: '/tutorials', title: 'Tutorials & Video Guides | Tagyfy Pro', desc: 'Step-by-step video tutorials showing how to generate high-converting metadata, embed IPTC data into files, and use the Tagyfy Pro desktop app and Chrome extension.', content: CONTENT_TUTORIALS },
+  { path: '/tutorials', title: 'Tutorials & Video Guides | Tagyfy Pro', desc: 'Step-by-step video tutorials showing how to generate and review metadata drafts, embed IPTC data into files, and use the Tagyfy Pro desktop app and Chrome extension.', content: CONTENT_TUTORIALS },
   { path: '/blogs', title: 'Blog — Stock Contributor Knowledge Base | Tagyfy Pro', desc: 'In-depth guides, marketplace compliance rules, and advanced metadata SEO strategies to help stock media contributors scale their passive earnings on Adobe Stock and beyond.', content: CONTENT_BLOGS },
   { path: '/chrome-extension', title: 'Free Adobe Stock Chrome Extension | Tagyfy Pro', desc: '100% free Chrome extension for Adobe Stock contributors. Update approved assets and generate fresh metadata directly inside the contributor dashboard using Gemini, ChatGPT, Groq, and Mistral.', content: CONTENT_CHROME_EXTENSION },
-  { path: '/tool', title: 'Free Online Metadata Generator Tool | Tagyfy Pro', desc: 'Generate optimized titles and keywords for your stock photos, vectors, and videos directly in your browser. Free AI-powered metadata tool with no signup required.', content: CONTENT_TOOL },
-  { path: '/privacy-policy', title: 'Privacy Policy | Tagyfy Pro', desc: 'Tagyfy Pro privacy policy. Learn how we handle your data, API keys, and media files. All processing happens locally on your device — your files never touch our servers.', content: CONTENT_PRIVACY },
+  { path: '/tool', title: 'Free Online Metadata Generator Tool | Tagyfy Pro', desc: 'Generate draft titles, descriptions, and keywords for supported stock images and videos in your browser. Bring your own AI provider key and review every result before submission.', content: CONTENT_TOOL },
+  { path: '/privacy-policy', title: 'Privacy Policy | Tagyfy Pro', desc: 'Tagyfy Pro privacy policy. Learn how the Windows app and browser tool handle your media files, API keys, analytics, and third-party AI providers.', content: CONTENT_PRIVACY },
   { path: '/terms', title: 'Terms of Service | Tagyfy Pro', desc: 'Terms and conditions for using Tagyfy Pro desktop application, web tool, and Chrome extension. Read our service agreement, license terms, and usage policies.', content: CONTENT_TERMS },
   { path: '/refund-policy', title: 'Refund Policy | Tagyfy Pro', desc: 'Tagyfy Pro refund policy. Understand our refund process, eligibility criteria, and how to request a refund for your license purchase.', content: CONTENT_REFUND }
 ];

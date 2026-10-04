@@ -6,7 +6,6 @@ import { DirectEmbeddingShowcase } from "@/components/DirectEmbeddingShowcase";
 import HowItWorks from "@/components/HowItWorks";
 import FeatureHighlights from "@/components/FeatureHighlights";
 import WhyVisionMeta from "@/components/WhyVisionMeta";
-import Testimonials from "@/components/Testimonials";
 import FAQPreview from "@/components/FAQPreview";
 import { ArrowRight, Zap, DollarSign, HelpCircle, Mail, Download, Chrome, Sparkles } from "lucide-react";
 import { useReveal } from "@/hooks/useReveal";
@@ -91,13 +90,10 @@ const Index = () => {
           </div>
         </section>
 
-        {/* 7. Real Contributor Testimonials */}
-        <Testimonials />
-
-        {/* 8. Frequently Asked Questions (short preview — full list on /faq) */}
+        {/* 7. Frequently Asked Questions (short preview — full list on /faq) */}
         <FAQPreview />
 
-        {/* 9. Final High-Converting Dual Action Banner */}
+        {/* 9. Final Call to Action */}
         <section className="py-20 px-6 relative overflow-hidden bg-gradient-to-b from-background via-primary/5 to-background border-t border-border/60">
           <div className="max-w-4xl mx-auto text-center relative z-10 space-y-6">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/20 bg-primary/10 text-primary text-xs font-bold uppercase tracking-widest">
@@ -110,7 +106,7 @@ const Index = () => {
             </h2>
             
             <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto">
-              Start generating high-ranking metadata online for free right in your browser, or download the Windows Desktop app for 100% native vector & video embedding.
+              Start generating metadata drafts online for free right in your browser, or download the Windows Desktop app for native vector and video embedding.
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
@@ -168,7 +164,7 @@ const Index = () => {
                 </div>
                 <h4 className="text-sm font-bold text-foreground mb-1 group-hover:text-primary transition-colors">Pricing & License</h4>
                 <p className="text-xs text-muted-foreground">
-                  Transparent lifetime and monthly licenses with 0 hidden fees.
+                  Transparent time-based licenses with no hidden fees.
                 </p>
               </Link>
 

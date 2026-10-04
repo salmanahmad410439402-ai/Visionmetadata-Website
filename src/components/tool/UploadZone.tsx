@@ -113,7 +113,7 @@ export const UploadZone: React.FC<UploadZoneProps> = ({
             Drop your media file here, or <span className="text-primary underline">browse</span>
           </h4>
           <p className="text-xs text-muted-foreground mt-1 max-w-sm">
-            High-res Photos, Vectors (EPS/AI/SVG), and Video clips (MP4/MOV). Original file is never modified.
+            Photos, vectors (EPS/AI/SVG), and video clips (MP4/MOV). The browser sends the selected file directly to your chosen AI provider for analysis; the original file is never modified.
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-1.5 mt-5">

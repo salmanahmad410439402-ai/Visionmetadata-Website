@@ -41,7 +41,7 @@ const AboutUs = () => {
               The Problem We Solved
             </h2>
             <p className="text-secondary leading-relaxed">
-              Stock contributors lose up to 70% of their creative time writing repetitive titles and searching for 50 high-ranking keywords. Even worse, many web tools don't embed IPTC/XMP data directly into binary formats like Adobe Illustrator (.AI), EPS vectors, or MP4 videos, forcing creators to waste more time with clumsy CSV spreadsheets.
+              Stock contributors often spend significant time writing repetitive titles and keywords. Many browser tools also require a separate CSV or manual copy-paste step when a contributor needs to prepare vector or video files, which creates a clear workflow problem.
             </p>
           </div>
 
@@ -59,16 +59,16 @@ const AboutUs = () => {
         {/* Key Values */}
         <div className="reveal mb-20">
           <h2 className="text-3xl font-bold text-foreground text-center mb-12">
-            Why Creators Trust Us
+            How the Product Is Designed
           </h2>
           <div className="grid sm:grid-cols-3 gap-6">
             <div className="bg-card-primary border border-card-primary rounded-2xl p-6 text-center space-y-3">
               <div className="w-12 h-12 rounded-xl bg-primary/10 text-primary mx-auto flex items-center justify-center font-bold text-xl">
                 🔒
               </div>
-              <h3 className="text-lg font-bold text-foreground">100% Privacy-First</h3>
+              <h3 className="text-lg font-bold text-foreground">Privacy-Aware Design</h3>
               <p className="text-sm text-secondary">
-                Your media files and API keys never touch our servers. Everything is processed locally on your PC.
+                The Windows app processes and embeds files locally. AI requests go directly from your device to the provider you choose, without a Tagyfy media proxy.
               </p>
             </div>
 

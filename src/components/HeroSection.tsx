@@ -1,4 +1,4 @@
-import { Download, Shield, Zap, Cpu, Globe, Check, Clock, Star, Gift, Sparkles } from "lucide-react";
+import { Download, Shield, Zap, Cpu, Globe, Check, Clock, Gift, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useReveal } from "@/hooks/useReveal";
@@ -110,15 +110,13 @@ const HeroSection = () => {
           </div>
         </Link>
 
-        {/* Social proof strip */}
-        <div className="reveal reveal-delay-6 mt-14 flex flex-col items-center gap-2">
-          <div className="flex items-center gap-1">
-            {[...Array(5)].map((_, i) => (
-              <Star key={i} className="w-4 h-4 fill-current text-primary" />
-            ))}
-          </div>
+        {/* Audience and scope */}
+        <div className="reveal reveal-delay-6 mt-14 flex flex-col items-center gap-2 text-center">
           <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground mt-1">
-            Trusted by 200+ Stock Contributors Worldwide
+            Built for independent stock media contributors
+          </p>
+          <p className="text-xs text-muted-foreground max-w-xl">
+            Prepare metadata for Adobe Stock, Shutterstock, Freepik, Dreamstime, 123RF, and Vecteezy — then review every result before submission.
           </p>
         </div>
 

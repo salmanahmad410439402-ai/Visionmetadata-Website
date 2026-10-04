@@ -2,6 +2,10 @@
   "version": 2,
   "buildCommand": "npm run build:prerender",
   "outputDirectory": "dist",
+  "redirects": [
+    { "source": "/blog", "destination": "/blogs", "permanent": true },
+    { "source": "/blog/", "destination": "/blogs", "permanent": true }
+  ],
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api/$1" },
     { "source": "/((?!api/).*)", "destination": "/index.html" }
