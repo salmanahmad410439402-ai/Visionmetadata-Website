@@ -140,7 +140,7 @@ export const DirectEmbeddingShowcase = () => {
             </div>
             <div className="pt-4 border-t border-border/50 flex items-center gap-2 text-xs font-semibold text-purple-400">
               <CheckCircle2 className="w-4 h-4 text-green-500" />
-              <span>Saves 10+ hours every week</span>
+              <span>Reduces repetitive copy-pasting</span>
             </div>
           </div>
 

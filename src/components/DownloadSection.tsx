@@ -100,19 +100,19 @@ const DownloadSection = () => {
               ))}
             </div>
 
-            {/* Stats */}
-            <div className="flex gap-8 mt-16 pt-12 border-t border-card-secondary">
+            {/* Product facts — factual capabilities rather than unverified usage claims */}
+            <div className="flex flex-wrap gap-x-8 gap-y-4 mt-16 pt-12 border-t border-card-secondary">
               <div>
-                <p className="text-2xl font-bold text-primary">50K+</p>
-                <p className="text-xs text-quaternary">Active Users</p>
+                <p className="text-2xl font-bold text-primary">3 days</p>
+                <p className="text-xs text-quaternary">full-access trial</p>
               </div>
               <div>
-                <p className="text-2xl font-bold text-primary">⭐ 4.8</p>
-                <p className="text-xs text-quaternary">Average Rating</p>
+                <p className="text-2xl font-bold text-primary">Windows</p>
+                <p className="text-xs text-quaternary">10 / 11 desktop app</p>
               </div>
               <div>
-                <p className="text-2xl font-bold text-primary">1M+</p>
-                <p className="text-xs text-quaternary">Files Processed</p>
+                <p className="text-2xl font-bold text-primary">BYOK</p>
+                <p className="text-xs text-quaternary">use your own AI key</p>
               </div>
             </div>
           </div>

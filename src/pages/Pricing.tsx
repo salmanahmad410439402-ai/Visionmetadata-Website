@@ -9,7 +9,7 @@ const Pricing = () => (
       <title>Pricing & License Plans | Tagyfy Pro</title>
       <meta
         name="description"
-        content="Transparent pricing for Tagyfy Pro with lifetime and monthly license options. No hidden fees, free 3-day trial, and a 100% free Chrome extension for all contributors."
+        content="Transparent pricing for Tagyfy Pro with time-based license options. No hidden fees, a free 3-day trial, and a free Chrome extension for Adobe Stock workflows."
       />
       <link rel="canonical" href="https://tagyfy.com/pricing" />
     </Helmet>

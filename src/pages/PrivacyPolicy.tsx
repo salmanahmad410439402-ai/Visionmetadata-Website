@@ -11,7 +11,7 @@ const PrivacyPolicy = () => {
         <title>Privacy Policy | Tagyfy Pro</title>
         <meta
           name="description"
-          content="Tagyfy Pro privacy policy. Learn how we handle your data, API keys, and media files. All processing happens locally on your device — your files never touch our servers."
+          content="Tagyfy Pro privacy policy. Learn how the Windows app and browser tool handle your media files, API keys, analytics, and third-party AI providers."
         />
       <link rel="canonical" href="https://tagyfy.com/privacy-policy" />
     </Helmet>
@@ -49,19 +49,23 @@ const PrivacyPolicy = () => {
           <section className="space-y-4 border-t border-border pt-8">
             <h2 className="text-xl sm:text-2xl font-bold text-foreground flex items-center gap-3">
               <Lock className="w-6 h-6 text-primary" />
-              2. Zero Server Storage (Local-First Architecture)
+              2. How Media and API Keys Are Handled
             </h2>
             <p>
-              Our desktop application is engineered with a strict <strong>Local-First & Client-Side</strong> security paradigm:
+              Tagyfy has two processing modes, and the data flow is different for each. We do not operate a server that proxies or stores your media, but the AI provider you choose still receives the file data needed to analyze it.
             </p>
             <ul className="space-y-2 list-none pl-2">
               <li className="flex items-start gap-2">
                 <CheckCircle2 className="w-5 h-5 text-green-500 shrink-0 mt-0.5" />
-                <span><strong>Your Images & Media Files:</strong> Your stock photos, vector files (.AI, .EPS, .SVG), and video files (.MP4, .MOV) are processed and embedded locally on your device. We never upload, store, or view your original creative assets.</span>
+                <span><strong>Windows desktop app:</strong> Files are read and embedded locally on your computer. When you request AI analysis, the selected file or extracted video frames are sent directly from the app to the AI provider associated with your API key. Tagyfy does not receive or store that media.</span>
               </li>
               <li className="flex items-start gap-2">
                 <CheckCircle2 className="w-5 h-5 text-green-500 shrink-0 mt-0.5" />
-                <span><strong>Your AI API Keys:</strong> API keys (Google Gemini, OpenAI, Groq, Mistral) are stored in your device's local encrypted storage using Windows DPAPI / safeStorage. They are never sent to or logged on our servers.</span>
+                <span><strong>Browser tool:</strong> The selected file is read in your browser and sent directly to the AI provider you choose for the generation request. Do not upload confidential media unless you are comfortable with that provider's terms and privacy policy.</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <CheckCircle2 className="w-5 h-5 text-green-500 shrink-0 mt-0.5" />
+                <span><strong>API keys:</strong> The Windows app keeps keys in local encrypted storage. The browser tool keeps a key in browser memory and only uses local storage when you explicitly select “Remember in browser local storage.” Tagyfy does not collect or store keys on its own server.</span>
               </li>
             </ul>
           </section>

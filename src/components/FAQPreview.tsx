@@ -11,7 +11,7 @@ import { useReveal } from "@/hooks/useReveal";
 const topQuestions = [
   {
     question: "Does Tagyfy Pro embed metadata directly into files?",
-    answer: "Yes. Tagyfy Pro embeds metadata directly into your files — no extra software required. This works for JPG, PNG, EPS, AI, SVG, MP4, MOV, and more. Stock platforms read the embedded data automatically on upload.",
+    answer: "Yes. Tagyfy Pro writes supported IPTC/XMP fields into compatible files. Many stock workflows can read that metadata on upload, but behavior varies by file format and marketplace, so confirm the current platform requirements.",
   },
   {
     question: "Which AI providers are supported?",
@@ -19,7 +19,7 @@ const topQuestions = [
   },
   {
     question: "Is my API key safe inside the app?",
-    answer: "Yes. Your API keys are stored locally on your own PC using encrypted storage — they are never sent to Tagyfy Pro servers because there are no Tagyfy Pro servers involved in processing.",
+    answer: "For the Windows app, keys stay in local encrypted storage and requests go directly to the provider you choose. The browser tool keeps a key locally only when you opt in and sends the selected file directly to that AI provider; Tagyfy does not proxy or store the media.",
   },
   {
     question: "How does the licensing work?",

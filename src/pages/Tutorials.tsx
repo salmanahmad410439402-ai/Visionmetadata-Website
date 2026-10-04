@@ -7,7 +7,7 @@ const Tutorials = () => (
       <title>Tutorials & Video Guides | Tagyfy Pro</title>
       <meta
         name="description"
-        content="Step-by-step video tutorials showing how to generate high-converting metadata, embed IPTC data into files, and use the Tagyfy Pro desktop app and Chrome extension."
+        content="Step-by-step video tutorials showing how to generate and review metadata drafts, embed IPTC data into files, and use the Tagyfy Pro desktop app and Chrome extension."
       />
       <link rel="canonical" href="https://tagyfy.com/tutorials" />
     </Helmet>

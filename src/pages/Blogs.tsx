@@ -376,7 +376,7 @@ return (
                   Actionable Checklist Before Submitting
                 </h3>
                 <p className="text-xs sm:text-sm text-secondary mb-5">
-                  Follow these essential checks to guarantee compliance and maximize search impressions:
+                  Follow these checks to review compliance and improve metadata clarity:
                 </p>
 
                 <div className="space-y-2.5">
