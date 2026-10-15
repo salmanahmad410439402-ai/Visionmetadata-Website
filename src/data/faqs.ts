@@ -48,7 +48,7 @@ export const FAQS: FaqEntry[] = [
     },
     {
         question: "How does the CSV export work?",
-        answer: "Tagyfy Pro generates platform-specific CSV files verified against the official upload specs for Adobe Stock, Shutterstock, Dreamstime, Freepik, 123RF, and Vecteezy. Each platform gets the correct column headers, category IDs, and keyword formatting. No truncation is ever applied — your full keyword list and title are always exported.",
+        answer: "Tagyfy Pro generates platform-specific CSV files for Adobe Stock, Shutterstock, Dreamstime, Freepik, 123RF and Vecteezy, each with that platform's column headers, category IDs and keyword delimiter. The export does not truncate your list — what you see in the editor is what is written to the file. The caps are the marketplaces' own, not the tool's: Adobe Stock accepts 49 keywords per asset and the others accept 50, and a submission over the limit is rejected at upload. Check the keyword count per platform on the metadata limits page before you export, and set the keyword target accordingly in Settings.",
     },
     {
         question: "Is my API key safe inside the app?",

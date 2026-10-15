@@ -180,7 +180,7 @@ const TutorialsSection = () => {
                 aria-label="Play the Tagyfy Pro walkthrough video"
               >
                 <img
-                  src="/thumbnail.png"
+                  src="/thumbnail.jpg"
                   alt="Preview frame of the Tagyfy Pro walkthrough video"
                   className="absolute inset-0 w-full h-full object-cover"
                 />

@@ -5,6 +5,7 @@ import { BLOG_POSTS } from './src/data/blogPosts.js';
 import { FAQS } from './src/data/faqs.js';
 import { PLATFORMS, FAILURES, LIMITS_LAST_CHECKED } from './src/data/platformLimits.js';
 import { SELLER, PAYMENT_RAILS, ORDER_STEPS, FRAUD_NOTICE, CARD_CHECKOUT } from './src/config/commerce.js';
+import { inlineToHtml, escapeHtml } from './src/lib/inlineMarkdown.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -762,16 +763,60 @@ if (blogsPage) {
 }
 
 // ─── Add individual blog posts dynamically ─────────────────────────────────
+// Every text field goes through inlineToHtml (the same parser the React pages
+// use) so the crawler sees rendered <strong>/<a> markup rather than raw `**` and
+// `](` characters, and every field is emitted — tips, warnings, worked examples,
+// key takeaways and the closing checklist were previously dropped, which meant
+// the crawler read noticeably less than the reader did.
 BLOG_POSTS.forEach(post => {
-  let contentHtml = `<h1>${post.title}</h1><h2>${post.subtitle}</h2><p>${post.summary}</p>`;
-  contentHtml += `<p>${post.content.intro}</p>`;
+  let contentHtml =
+    `<h1>${escapeHtml(post.title)}</h1><h2>${escapeHtml(post.subtitle)}</h2>` +
+    `<p><em>${escapeHtml(post.category)} · ${escapeHtml(post.publishDate)} · ${escapeHtml(post.readTime)} · by ${escapeHtml(post.author.name)}</em></p>` +
+    `<p>${escapeHtml(post.summary)}</p>`;
+  contentHtml += `<p>${inlineToHtml(post.content.intro)}</p>`;
+
   post.content.sections.forEach(sec => {
-    contentHtml += `<h3>${sec.heading}</h3>`;
-    sec.body.forEach(p => { contentHtml += `<p>${p}</p>`; });
+    contentHtml += `<h3>${escapeHtml(sec.heading)}</h3>`;
+    if (sec.subheading) contentHtml += `<h4>${escapeHtml(sec.subheading)}</h4>`;
+
+    sec.body.forEach(para => { contentHtml += `<p>${inlineToHtml(para)}</p>`; });
+
+    if (sec.tip) contentHtml += `<p><strong>Tip:</strong> ${inlineToHtml(sec.tip)}</p>`;
+    if (sec.warning) contentHtml += `<p><strong>Warning:</strong> ${inlineToHtml(sec.warning)}</p>`;
+
+    if (sec.keyTakeaways && sec.keyTakeaways.length) {
+      contentHtml += `<h4>Key takeaways</h4><ul>${sec.keyTakeaways
+        .map(item => `<li>${inlineToHtml(item)}</li>`)
+        .join('')}</ul>`;
+    }
+
+    if (sec.example) {
+      const ex = sec.example;
+      contentHtml += `<h4>Worked example</h4>`;
+      if (ex.badTitle) contentHtml += `<p><strong>Title to avoid:</strong> ${inlineToHtml(ex.badTitle)}</p>`;
+      if (ex.goodTitle) contentHtml += `<p><strong>Better title:</strong> ${inlineToHtml(ex.goodTitle)}</p>`;
+      if (ex.badKeywords && ex.badKeywords.length) {
+        contentHtml += `<p><strong>Weak keywords:</strong> ${inlineToHtml(ex.badKeywords.join(', '))}</p>`;
+      }
+      if (ex.goodKeywords && ex.goodKeywords.length) {
+        contentHtml += `<p><strong>Stronger keywords:</strong> ${inlineToHtml(ex.goodKeywords.join(', '))}</p>`;
+      }
+      if (ex.explanation) contentHtml += `<p>${inlineToHtml(ex.explanation)}</p>`;
+    }
   });
+
   if (post.content.conclusion) {
-    contentHtml += `<p>${post.content.conclusion}</p>`;
+    contentHtml += `<h3>Conclusion</h3><p>${inlineToHtml(post.content.conclusion)}</p>`;
   }
+
+  if (post.content.checklist && post.content.checklist.length) {
+    contentHtml += `<h3>Checklist</h3><ul>${post.content.checklist
+      .map(item => `<li>${inlineToHtml(item)}</li>`)
+      .join('')}</ul>`;
+  }
+
+  contentHtml += `<p>Tags: ${escapeHtml(post.tags.join(', '))}. Reviewed before publication — see our <a href="/editorial-policy">editorial standards</a>.</p>`;
+  contentHtml += `<p>Related: <a href="/metadata-limits">metadata limits by marketplace</a>, <a href="/tool">the free browser tool</a>, <a href="/blogs">all guides</a>.</p>`;
 
   PAGES.push({
     path: `/blog/${post.slug}`,

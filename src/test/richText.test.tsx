@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { renderToStaticMarkup } from "react-dom/server";
 import { MemoryRouter } from "react-router-dom";
+import { inlineToHtml } from "@/lib/inlineMarkdown";
 import { renderFormattedText } from "@/lib/richText";
 
 /**
@@ -76,5 +77,59 @@ describe("renderFormattedText", () => {
 
   it("returns empty string for empty input", () => {
     expect(render("")).toBe("");
+  });
+});
+
+describe("prerendered HTML serializer", () => {
+  const textOf = (html: string) =>
+    html
+      .replace(/<[^>]+>/g, "")
+      .replace(/&amp;/g, "&")
+      .replace(/&lt;/g, "<")
+      .replace(/&gt;/g, ">")
+      .replace(/&quot;/g, '"')
+      .replace(/&#39;/g, "'");
+
+  it("turns bold markers into strong tags instead of shipping the asterisks", () => {
+    const html = inlineToHtml("A **Creative Differentiation** framework.");
+    expect(html).toContain("<strong>Creative Differentiation</strong>");
+    expect(html).not.toContain("**");
+  });
+
+  it("turns a markdown link into a real anchor with its href", () => {
+    const html = inlineToHtml("Read [Adobe's guidelines](https://helpx.adobe.com/stock.html) first.");
+    expect(html).toContain('href="https://helpx.adobe.com/stock.html"');
+    expect(html).toContain("Adobe&#39;s guidelines");
+    expect(html).not.toContain("](");
+  });
+
+  it("renders an image token as a labelled link, matching the React renderer", () => {
+    const html = inlineToHtml("![Dashboard](/shot.png)");
+    expect(html).toContain('href="/shot.png"');
+    expect(html).toContain("Dashboard");
+  });
+
+  it("escapes markup so article text cannot inject HTML", () => {
+    const html = inlineToHtml('A caption with <script>alert("x")</script> in it.');
+    expect(html).not.toContain("<script>");
+    expect(html).toContain("&lt;script&gt;");
+  });
+
+  it("keeps every word: crawler text equals reader text", () => {
+    // The whole point of the shared parser. Whatever the markers are, the words
+    // either renderer produces must be identical.
+    const cases = [
+      "Plain sentence with no markup.",
+      "A **bold** claim and an *emphasised* word.",
+      "See [the guide](/blogs) and [Adobe](https://helpx.adobe.com/).",
+      "An unknown ~~strikethrough~~ token must survive verbatim.",
+      "Mixed: **bold**, *italic*, [link](/faq) and a tail.",
+    ];
+
+    for (const text of cases) {
+      const stripMarkers = (s: string) =>
+        s.replace(/!?\[([^\]]*)\]\([^)]*\)/g, "$1").replace(/\*\*/g, "").replace(/\*/g, "");
+      expect(textOf(inlineToHtml(text))).toBe(stripMarkers(text));
+    }
   });
 });

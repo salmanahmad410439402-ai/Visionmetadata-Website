@@ -993,9 +993,7 @@ Most of the time, those collections are ignored.
 
 Adobe Stock buyers are usually professionals—art directors, marketing managers, UI designers, and educators—working under tight deadlines. They are not looking for random decorations. They are looking for visual solutions to specific communication problems.
 
-When a buyer searches for an icon pack, they usually have a project in mind. If your collection solves their problem completely, they will license it. If they have to download five different collections from five different contributors to finish one presentation, they will look for a better alternative.
-
-![Earnings Screenshot](/Screenshot%202026-08-31%20160031.png)`,
+When a buyer searches for an icon pack, they usually have a project in mind. If your collection solves their problem completely, they will license it. If they have to download five different collections from five different contributors to finish one presentation, they will look for a better alternative.`,
       sections: [
         {
           heading: "The problem with random icon collections",
