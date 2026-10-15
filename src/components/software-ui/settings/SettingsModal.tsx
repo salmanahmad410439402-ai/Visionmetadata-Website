@@ -126,13 +126,12 @@ export const SettingsModal = ({ open, onOpenChange, firstRunSetupProps }: Settin
   }, [isModelMenuOpen]);
 
   function getModelDisplayLabel(): string {
-    if (selectedModel === "gemini-3.5-flash") return "Gemini 3.5 Flash";
-    if (selectedModel === "gemini-3-flash-preview") return "Gemini 3 Flash";
-    if (selectedModel === "gemini-2.5-flash") return "Gemini 2.5 Flash";
-    if (selectedModel === "gemini-2.5-flash-lite") return "Gemini 2.5 Flash-Lite";
-    if (selectedModel === "gemini-3.1-pro-preview") return "Gemini 3.1 Pro";
-    if (selectedModel === "gemini-3-pro-preview")   return "Gemini 3 Pro";
-    if (selectedModel === "gemini-2.5-pro") return "Gemini 2.5 Pro";
+    // Only compare against models that exist in the AIModel union. The previous
+    // version tested seven Gemini names that are not selectable anywhere in this
+    // component, so those branches were dead and a user with one of those stored
+    // values saw the raw model id instead of a label.
+    if (selectedModel === "gemini-3.5-flash-lite") return "Gemini 3.5 Flash-Lite";
+    if (selectedModel === "gemini-3.1-flash-lite") return "Gemini 3.1 Flash-Lite";
     if (selectedModel === "gpt-4o")      return "ChatGPT · GPT-4o";
     if (selectedModel === "gpt-4o-mini") return "ChatGPT · GPT-4o Mini";
     if (selectedModel === "qwen/qwen3.6-27b") return "Groq · groq1";

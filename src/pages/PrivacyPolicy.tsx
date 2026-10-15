@@ -1,6 +1,7 @@
 import { Helmet } from "react-helmet-async";
 import { Shield, Lock, Eye, Cookie, FileText, CheckCircle2 } from "lucide-react";
 import { useReveal } from "@/hooks/useReveal";
+import { SELLER } from "@/config/commerce";
 
 const PrivacyPolicy = () => {
   const ref = useReveal();
@@ -77,7 +78,10 @@ const PrivacyPolicy = () => {
               3. Cookies, Web Beacons & Analytics
             </h2>
             <p>
-              Like most professional websites, tagyfy.com uses standard cookies to enhance user navigation and analyze aggregate traffic patterns:
+              tagyfy.com sets no analytics or advertising cookies unless you allow them. On your
+              first visit a banner asks whether you accept them, both choices are one click, and
+              nothing is recorded either way until you decide. If you accept, these are the cookies
+              in use:
             </p>
             <div className="bg-background/50 rounded-2xl p-6 border border-border space-y-3 text-sm">
               <p>
@@ -85,6 +89,12 @@ const PrivacyPolicy = () => {
               </p>
               <p>
                 You can prevent Google Analytics from tracking your visits by installing the <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Google Analytics Opt-out Browser Add-on</a>.
+              </p>
+              <p>
+                <strong>Changing your mind:</strong> use <em>Cookie settings</em> in the footer of
+                any page. Declining, or withdrawing an earlier acceptance, switches both Google
+                Analytics and advertising storage off again. The site stores only your choice, in
+                your own browser — declining costs you nothing on this site.
               </p>
             </div>
           </section>
@@ -140,8 +150,8 @@ const PrivacyPolicy = () => {
               If you have questions regarding this Privacy Policy or wish to exercise any data rights, please contact us:
             </p>
             <div className="bg-primary/5 rounded-2xl p-5 border border-primary/20 text-sm space-y-1">
-              <p><strong>Email:</strong> <a href="mailto:alhamdstudio839@gmail.com" className="text-primary hover:underline">alhamdstudio839@gmail.com</a></p>
-              <p><strong>WhatsApp Support:</strong> +92 325 9640429</p>
+              <p><strong>Email:</strong> <a href={`mailto:${SELLER.supportEmail}`} className="text-primary hover:underline">{SELLER.supportEmail}</a></p>
+              <p><strong>WhatsApp Support:</strong> {SELLER.whatsappDisplay}</p>
               <p><strong>Website:</strong> https://tagyfy.com</p>
             </div>
           </section>

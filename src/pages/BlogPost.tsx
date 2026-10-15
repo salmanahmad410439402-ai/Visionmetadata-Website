@@ -18,78 +18,9 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { BLOG_POSTS, BlogPost as BlogPostType } from "@/data/blogPosts";
+import { renderFormattedText } from "@/lib/richText";
+import { JsonLd, articleSchema, breadcrumbSchema } from "@/lib/structuredData";
 import { toast } from "sonner";
-
-/**
- * Parses and formats text, replacing markdown links ([text](url)),
- * bold (**text**), and italic (*text*) with native React elements.
- * (Same function used in Blogs.tsx)
- */
-function renderFormattedText(text: string): React.ReactNode {
-  if (!text) return "";
-
-  const hasFormatting = text.includes("![") || text.includes("[") || text.includes("**") || text.includes("*");
-  if (!hasFormatting) return text;
-
-  const regex = /(!\[([^\]]*)\]\(([^)]+)\)|\[([^\]]+)\]\(([^)]+)\)|\*\*([^*]+)\*\*|\*([^*]+)\*)/g;
-  const parts: React.ReactNode[] = [];
-  let lastIndex = 0;
-  let match: RegExpExecArray | null;
-  let key = 0;
-
-  while ((match = regex.exec(text)) !== null) {
-    if (match.index > lastIndex) {
-      parts.push(text.substring(lastIndex, match.index));
-    }
-
-    if (match[2] && match[3]) {
-      const linkText = match[2];
-      const linkUrl = match[3];
-      const isInternal = linkUrl.startsWith("/");
-
-      parts.push(
-        isInternal ? (
-          <Link
-            key={`l-${key++}`}
-            to={linkUrl}
-            className="text-primary underline font-bold hover:text-primary/80 transition-colors inline-flex items-center gap-1"
-          >
-            {linkText}
-          </Link>
-        ) : (
-          <a
-            key={`l-${key++}`}
-            href={linkUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-primary underline font-bold hover:text-primary/80 transition-colors inline-flex items-center gap-1"
-          >
-            {linkText}
-          </a>
-        )
-      );
-    } else if (match[4]) {
-      parts.push(
-        <strong key={`b-${key++}`} className="font-bold text-foreground">
-          {match[4]}
-        </strong>
-      );
-    } else if (match[5]) {
-      parts.push(
-        <em key={`i-${key++}`} className="italic font-medium text-foreground/90">
-          {match[5]}
-        </em>
-      );
-    }
-    lastIndex = regex.lastIndex;
-  }
-
-  if (lastIndex < text.length) {
-    parts.push(text.substring(lastIndex));
-  }
-
-  return parts;
-}
 
 const BlogPost = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -144,6 +75,17 @@ const BlogPost = () => {
         <meta name="twitter:description" content={currentPost.summary} />
         <link rel="canonical" href={`https://tagyfy.com/blog/${currentPost.slug}`} />
       </Helmet>
+
+      <JsonLd
+        data={[
+          articleSchema(currentPost),
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Guides", path: "/blogs" },
+            { name: currentPost.title, path: `/blog/${currentPost.slug}` },
+          ]),
+        ]}
+      />
 
       <div className="max-w-6xl mx-auto">
         <article className="max-w-4xl mx-auto animate-in fade-in slide-in-from-bottom-3 duration-300">
@@ -371,6 +313,41 @@ const BlogPost = () => {
             </div>
           )}
 
+          {/* Author + editorial transparency. Inserted before the CTA so the
+              last thing a reader sees is who wrote this and how it was
+              checked, not only a product pitch. */}
+          <div className="glass-panel rounded-3xl p-6 sm:p-8 border border-border/80 mb-8">
+            <h2 className="text-lg font-black text-foreground mb-4">About the author</h2>
+            <div className="flex items-start gap-4">
+              <div className="w-12 h-12 rounded-2xl bg-primary/15 border border-primary/25 flex items-center justify-center text-xl shrink-0">
+                {currentPost.author.avatar}
+              </div>
+              <div className="space-y-2">
+                <p className="text-sm font-bold text-foreground">
+                  {currentPost.author.name} — {currentPost.author.role}
+                </p>
+                <p className="text-xs sm:text-sm text-secondary leading-relaxed">
+                  Salman Ahmad is a stock contributor and logo designer whose own rejection
+                  history prompted most of the guides on this site. The examples and checklists
+                  here come from working portfolios, not from a marketing brief. Where a claim
+                  cannot be supported by a marketplace&apos;s published documentation, it is
+                  described as experience rather than stated as fact.
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  Spotted an error or an outdated rule in this article?{" "}
+                  <Link to="/contact" className="text-primary underline hover:text-primary/80">
+                    Tell us
+                  </Link>{" "}
+                  and we will correct it and update the revision date. See our{" "}
+                  <Link to="/editorial-policy" className="text-primary underline hover:text-primary/80">
+                    editorial standards
+                  </Link>
+                  .
+                </p>
+              </div>
+            </div>
+          </div>
+
           {/* Bottom Conversion CTA Card */}
           <div className="glass-panel rounded-3xl p-6 sm:p-8 border border-border/80 text-center space-y-4 shadow-2xl relative overflow-hidden">
             <div className="w-12 h-12 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary mx-auto">
@@ -380,7 +357,7 @@ const BlogPost = () => {
               Automate Your Metadata with Tagyfy Pro
             </h3>
             <p className="text-xs sm:text-sm text-secondary max-w-lg mx-auto leading-relaxed">
-              Generate 180–190 character titles, auto-sniff trademarks, rank weighted keywords, and embed metadata directly into your files in seconds.
+              Generate 180–190 character titles, flag likely trademarks, order keywords by weight, and write metadata directly into your files.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
               <Link to="/tool" className="w-full sm:w-auto">

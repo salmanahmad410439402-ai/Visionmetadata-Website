@@ -21,82 +21,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { BLOG_POSTS, BlogPost } from "@/data/blogPosts";
+import { renderFormattedText } from "@/lib/richText";
 import { useReveal } from "@/hooks/useReveal";
 import { toast } from "sonner";
-
-/**
- * Parses and formats text, replacing markdown links ([text](url)),
- * bold (**text**), and italic (*text*) with native React elements.
- */
-function renderFormattedText(text: string): React.ReactNode {
-  if (!text) return "";
-
-  // Check if formatting is present
-  const hasFormatting = text.includes("![") || text.includes("[") || text.includes("**") || text.includes("*");
-  if (!hasFormatting) return text;
-
-  const regex = /(!\[([^\]]*)\]\(([^)]+)\)|\[([^\]]+)\]\(([^)]+)\)|\*\*([^*]+)\*\*|\*([^*]+)\*)/g;
-  const parts: React.ReactNode[] = [];
-  let lastIndex = 0;
-  let match: RegExpExecArray | null;
-  let key = 0;
-
-  while ((match = regex.exec(text)) !== null) {
-    if (match.index > lastIndex) {
-      parts.push(text.substring(lastIndex, match.index));
-    }
-
-    if (match[2] && match[3]) {
-      // Link [text](url)
-      const linkText = match[2];
-      const linkUrl = match[3];
-      const isInternal = linkUrl.startsWith("/");
-      
-      parts.push(
-        isInternal ? (
-          <Link
-            key={`l-${key++}`}
-            to={linkUrl}
-            className="text-primary underline font-bold hover:text-primary/80 transition-colors inline-flex items-center gap-1"
-          >
-            {linkText}
-          </Link>
-        ) : (
-          <a
-            key={`l-${key++}`}
-            href={linkUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-primary underline font-bold hover:text-primary/80 transition-colors inline-flex items-center gap-1"
-          >
-            {linkText}
-          </a>
-        )
-      );
-    } else if (match[4]) {
-      // Bold **text**
-      parts.push(
-        <strong key={`b-${key++}`} className="font-bold text-foreground">
-          {match[4]}
-        </strong>
-      );
-    } else if (match[5]) {
-      // Italic *text*
-      parts.push(
-        <em key={`i-${key++}`} className="italic font-medium text-foreground/90">
-          {match[5]}
-        </em>
-      );
-    }
-    lastIndex = regex.lastIndex;
-  }
-
-  if (lastIndex < text.length) {
-    parts.push(text.substring(lastIndex));
-  }
-
-  return parts;
-}
 
 const Blogs = () => {
   const ref = useReveal();
@@ -156,7 +83,7 @@ return (
         <title>Blog — Stock Contributor Knowledge Base | Tagyfy Pro</title>
         <meta
           name="description"
-          content="In-depth guides, marketplace compliance rules, and advanced metadata SEO strategies to help stock media contributors scale their passive earnings on Adobe Stock and beyond."
+          content="Practical guides for stock media contributors: how marketplaces review titles and keywords, how to document a submission properly, and how to avoid the common rejection causes."
         />
       <link rel="canonical" href="https://tagyfy.com/blogs" />
     </Helmet>
@@ -401,7 +328,7 @@ return (
                 Automate Your Metadata with Tagyfy Pro
               </h3>
               <p className="text-xs sm:text-sm text-secondary max-w-lg mx-auto leading-relaxed">
-                Generate 180–190 character titles, auto-sniff trademarks, rank weighted keywords, and embed metadata directly into your files in seconds.
+                Generate 180–190 character titles, flag likely trademarks, order keywords by weight, and write metadata directly into your files.
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
                 <Link to="/tool" className="w-full sm:w-auto">
@@ -439,7 +366,7 @@ return (
               </h1>
 
               <p className="text-sm sm:text-base text-secondary leading-relaxed max-w-2xl mx-auto font-medium">
-                In-depth guides, marketplace compliance rules, and advanced metadata SEO strategies to help you scale your passive stock earnings safely.
+                Plain-spoken guides to how stock marketplaces review assets: title and keyword practice, compliance rules, and the rejection causes worth designing around before you submit.
               </p>
             </div>
 

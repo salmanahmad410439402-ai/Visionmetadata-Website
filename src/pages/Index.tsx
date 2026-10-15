@@ -12,6 +12,7 @@ import { useReveal } from "@/hooks/useReveal";
 import { useEffect } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { JsonLd, softwareSchema } from "@/lib/structuredData";
 
 const Index = () => {
   const ref = useReveal();
@@ -41,6 +42,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <JsonLd data={softwareSchema()} />
       <Helmet>
         <title>Tagyfy Pro | AI-Powered Metadata Generator for Adobe Stock</title>
         <meta
@@ -190,9 +192,9 @@ const Index = () => {
                   </div>
                   <ArrowRight className="w-4 h-4 text-primary/0 group-hover:text-primary/100 transition-all" />
                 </div>
-                <h4 className="text-sm font-bold text-foreground mb-1 group-hover:text-primary transition-colors">24/7 Support</h4>
+                <h4 className="text-sm font-bold text-foreground mb-1 group-hover:text-primary transition-colors">Support</h4>
                 <p className="text-xs text-muted-foreground">
-                  Need help with keys or bulk batching? Contact support directly.
+                  Questions about licence keys, orders or bulk batches? Contact us directly.
                 </p>
               </Link>
             </div>

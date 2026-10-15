@@ -314,6 +314,21 @@ const embedJpegMetadata = async (
  * Safely inject XMP (APP1) and IPTC (APP13) into JPEG binary data,
  * removing obsolete/stale XMP & IPTC segments to prevent conflicting metadata.
  */
+
+/**
+ * Copies bytes into a plain ArrayBuffer before handing them to Blob.
+ *
+ * TypeScript 5.7 narrowed BlobPart so that a Uint8Array backed by a
+ * SharedArrayBuffer is no longer assignable. The bytes here always come from
+ * local file reads, but the type does not know that, so this makes the
+ * ArrayBuffer ownership explicit rather than casting the error away.
+ */
+const toBlobPart = (bytes: Uint8Array): ArrayBuffer => {
+  const copy = new ArrayBuffer(bytes.byteLength);
+  new Uint8Array(copy).set(bytes);
+  return copy;
+};
+
 const injectXMPAndIPTC = (
   jpegData: Uint8Array,
   xmpPacket: string,
@@ -321,7 +336,7 @@ const injectXMPAndIPTC = (
 ): Blob => {
   // Validate JPEG SOI (FF D8)
   if (jpegData.length < 4 || jpegData[0] !== 0xFF || jpegData[1] !== 0xD8) {
-    return new Blob([jpegData], { type: "image/jpeg" });
+    return new Blob([toBlobPart(jpegData)], { type: "image/jpeg" });
   }
 
   // Create APP1 XMP marker

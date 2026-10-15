@@ -2,6 +2,9 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { BLOG_POSTS } from './src/data/blogPosts.js';
+import { FAQS } from './src/data/faqs.js';
+import { PLATFORMS, FAILURES, LIMITS_LAST_CHECKED } from './src/data/platformLimits.js';
+import { SELLER, PAYMENT_RAILS, ORDER_STEPS, FRAUD_NOTICE, CARD_CHECKOUT } from './src/config/commerce.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -12,6 +15,33 @@ const DIST_DIR = path.resolve(__dirname, 'dist');
 // crawlers (AdSense, Googlebot) that do NOT execute JavaScript can read
 // the full page substance.  When React hydrates on the client, it safely
 // overwrites this pre-rendered DOM.
+
+// ─── Generated from src/config/commerce.ts ─────────────────────────────────
+// The crawler-facing copy for the seller, the order process and the payment
+// rails is built from the same config the React pages read. It used to be typed
+// out here as literals, which is how the prerendered HTML ended up disagreeing
+// with the live page about the same bank account.
+const SELLER_HTML = `
+<h2>Who you are buying from</h2>
+<p>Tagyfy Pro is an independent software project written and maintained by ${SELLER.operator}, a stock contributor and designer based in Pakistan. It is not a company with a sales team — support is handled by the same person who builds the app.</p>
+<p>Support: <a href="mailto:${SELLER.supportEmail}">${SELLER.supportEmail}</a> or WhatsApp ${SELLER.whatsappDisplay}. ${SELLER.supportHours}</p>
+`;
+
+const ORDER_HTML = `
+<h2>How ordering works</h2>
+<ol>
+${ORDER_STEPS.map((step) => `<li><strong>${step.title}.</strong> ${step.body}</li>`).join('\n')}
+</ol>
+<p>${CARD_CHECKOUT ? 'Card payment is available through the hosted checkout linked on this page.' : 'Card payment is not available yet. That means the current payment methods carry no chargeback protection, so we recommend using the free trial first and buying only once you are satisfied.'}</p>
+
+<h2>Staying safe when paying</h2>
+<p>${FRAUD_NOTICE}</p>
+
+<h2>Payment methods</h2>
+${PAYMENT_RAILS.map((rail) => `<h3>${rail.label} (${rail.region})</h3>
+<p>${rail.description} ${rail.fields.map((f) => `${f.label}: ${f.value}.`).join(' ')}</p>
+<p>${rail.note}</p>`).join('\n')}
+`;
 
 const CONTENT_HOME = `
 <h1>Tagyfy Pro — AI-Powered Metadata Generator for Adobe Stock</h1>
@@ -150,45 +180,49 @@ const CONTENT_FEATURES = `
 `;
 
 const CONTENT_PRICING = `
-<h1>Pricing and License Plans — Tagyfy Pro</h1>
-<p>Simple pricing. Choose a plan that fits your workflow. Transparent pricing with no hidden fees, a free 3-day trial, and a free Chrome extension for Adobe Stock workflows.</p>
-<p>Compatible with Adobe Stock, Shutterstock, Dreamstime, and Freepik.</p>
+<h1>Tagyfy Pro pricing</h1>
+<p>One-off payment for a fixed licence period. No subscription and no auto-renewal. The desktop app includes a full-access 3-day trial, so you can evaluate it on your own files before paying.</p>
+<p>Compatible with Adobe Stock, Shutterstock, Dreamstime, Freepik, 123RF and Vecteezy.</p>
 
-<h2>License Plans</h2>
-<h3>Starter — 1 Month</h3>
-<p>Price: $1.75 USD / Rs 499 PKR. Full metadata generation, bulk processing, embed into files, and platform-ready CSVs for Adobe Stock, Shutterstock, Dreamstime, and Freepik. Native file metadata embedding included.</p>
+<h2>Licence plans</h2>
+<h3>Starter — 1 month — $1.75 / Rs 499</h3>
+<p>About $1.75 per month. Includes native file metadata embedding, full metadata generation for any supported file type, batch processing with parallel workers, trademark flagging and confidence scores, and CSV exports for Adobe Stock, Shutterstock, Dreamstime, Freepik, 123RF and Vecteezy.</p>
 
-<h3>Creator — 3 Months</h3>
-<p>Price: $4.73 USD / Rs 1,347 PKR. All Starter features plus extended access. Save 10% compared to monthly billing. Native file metadata embedding included.</p>
+<h3>Creator — 3 months — $4.73 / Rs 1,347</h3>
+<p>About $1.58 per month. Every Starter feature for a three-month licence period.</p>
 
-<h3>Pro — 6 Months</h3>
-<p>Price: $8.93 USD / Rs 2,546 PKR. All Starter features plus extended access. Save 15% compared to monthly billing. Native file metadata embedding included.</p>
+<h3>Pro — 6 months — $8.93 / Rs 2,546</h3>
+<p>About $1.49 per month. Every Starter feature for a six-month licence period.</p>
 
-<h3>Studio — 1 Year (Most Popular)</h3>
-<p>Price: $16.82 USD / Rs 4,790 PKR. All Starter features plus a full year of access. Save 20% compared to monthly billing. Native file metadata embedding included.</p>
+<h3>Studio — 12 months — $16.82 / Rs 4,790</h3>
+<p>About $1.40 per month, and the lowest monthly rate of the four terms. Every Starter feature for a twelve-month licence period.</p>
 
-<h2>All Plans Include</h2>
+<h2>All plans include</h2>
 <ul>
-<li>Native File Metadata Embedding (IPTC/XMP directly into files)</li>
-<li>Platform-ready CSVs for Adobe Stock, Shutterstock, Dreamstime, and Freepik</li>
-<li>Full metadata generation with AI vision analysis</li>
-<li>Bulk processing of hundreds of files at once</li>
-<li>Direct embed into JPG, PNG, EPS, AI, SVG, MP4 files</li>
+<li>Native file metadata embedding — IPTC/XMP written directly into compatible files</li>
+<li>Platform-formatted CSV exports for Adobe Stock, Shutterstock, Freepik, Dreamstime, 123RF and Vecteezy</li>
+<li>Metadata generation using AI vision analysis, with your own provider key</li>
+<li>Batch processing of hundreds of files in one run</li>
+<li>Direct embedding into JPG, PNG, WebP, TIFF, SVG, EPS, AI, MP4, MOV and WebM files</li>
 </ul>
 
-<h2>Free Chrome Extension</h2>
-<p>Looking for browser automation? The Tagyfy Pro Chrome Extension for Adobe Stock is completely 100% FREE for all contributors. No license key needed! Direct in-browser tagging, update approved assets, free forever.</p>
+<h2>Free Chrome extension</h2>
+<p>The Tagyfy Pro extension for Adobe Stock fills titles and keywords inside the contributor dashboard. It is free and needs no licence key.</p>
 
-<h2>Buy with Confidence</h2>
-<p>Straightforward terms for every license, with no hidden conditions.</p>
+<h2>What you are agreeing to</h2>
 <ul>
-<li><strong>3-Day Free Trial:</strong> Every plan starts with a full-access trial. No credit card required to test the complete feature set.</li>
-<li><strong>Instant License Delivery:</strong> Keys are generated and sent within minutes of payment confirmation.</li>
-<li><strong>7-Day Technical Refund:</strong> If our team can't resolve a technical incompatibility within 7 days of purchase, you get a full refund.</li>
-<li><strong>One License, One Device:</strong> Simple, transparent licensing. No recurring charges, no auto-renewal surprises.</li>
+<li><strong>Try it before you pay:</strong> the desktop build runs a full-access 3-day trial with no card on file.</li>
+<li><strong>One-time payment:</strong> a licence covers a fixed period. Nothing renews automatically and there is no subscription to cancel.</li>
+<li><strong>One licence, one device:</strong> stated up front rather than buried in the terms.</li>
+<li><strong>A receipt for every order:</strong> each payment carries an order reference and a receipt available on request.</li>
+<li><strong>Refunds:</strong> if a technical problem cannot be resolved within 7 days of purchase you receive a full refund. Accidental duplicate payments are refunded immediately. Full terms are on the Refund Policy page.</li>
 </ul>
 
-<p>Early adopter pricing — prices will increase as features expand.</p>
+${SELLER_HTML}
+${ORDER_HTML}
+
+<h2>About these prices</h2>
+<p>Prices are listed in USD and PKR as two independent prices, not a currency conversion. Current pricing applies to new orders; existing licences are unaffected by later price changes.</p>
 `;
 
 const CONTENT_DOWNLOAD = `
@@ -199,7 +233,7 @@ const CONTENT_DOWNLOAD = `
 <ul>
 <li>Operating System: Windows 10 or Windows 11 (64-bit)</li>
 <li>RAM: 4 GB minimum, 8 GB recommended</li>
-<li>Disk Space: 200 MB for installation</li>
+<li>Disk Space: about 500 MB after installation (installer is about 160 MB)</li>
 <li>Internet: Required for AI API calls (Gemini, OpenAI, Groq, Mistral)</li>
 </ul>
 
@@ -228,100 +262,131 @@ const CONTENT_DOWNLOAD = `
 `;
 
 const CONTENT_CONTACT = `
-<h1>Contact and Support — Tagyfy Pro</h1>
-<p>Get help with Tagyfy Pro license keys, bulk processing, or technical support. Reach our team directly for fast assistance with your stock metadata workflow.</p>
+<h1>Contact and support — Tagyfy Pro</h1>
+<p>Questions about Tagyfy Pro, an existing licence, a refund, or bulk processing? Support is handled by the same person who develops the app.</p>
 
-<h2>How to Reach Us</h2>
-<h3>WhatsApp Support (Fastest)</h3>
-<p>Message us directly on WhatsApp at +92 325 9640429 for the fastest response. Available for license purchases, technical issues, and general questions.</p>
+<h2>How to reach us</h2>
+<h3>WhatsApp</h3>
+<p>Message us on WhatsApp at +92 325 9640429. This is the usual channel for licence keys, order questions and refunds.</p>
 
-<h3>Email Support</h3>
-<p>Send us an email at alhamdstudio839@gmail.com. We typically respond within 2 to 6 hours during business days.</p>
+<h3>E-mail</h3>
+<p>Send an e-mail to ${SELLER.supportEmail}. Use this for anything that needs a written record, such as a refund request or a bug report.</p>
 
-<h2>What We Can Help With</h2>
+<h2>What we can help with</h2>
 <ul>
-<li>License key activation and renewal</li>
+<li>Licence key delivery, activation and renewal</li>
+<li>Refund requests and payment confirmation</li>
 <li>Technical issues and troubleshooting</li>
-<li>Bulk processing and batch workflow guidance</li>
-<li>AI API key setup (Gemini, OpenAI, Groq, Mistral)</li>
-<li>CSV export format questions for Adobe Stock, Shutterstock, Freepik</li>
-<li>Feature requests and feedback</li>
-<li>Refund requests</li>
+<li>Bulk processing and batch workflow questions</li>
+<li>AI provider key setup (Gemini, OpenAI, Groq, Mistral, OpenRouter)</li>
+<li>CSV export format questions for any supported marketplace</li>
+<li>Feature requests and corrections to our documentation</li>
 </ul>
 
-<h2>Response Time</h2>
-<p>WhatsApp messages are typically answered within 1-2 hours. Email inquiries are responded to within 2-6 hours during business days. We are committed to providing fast, helpful support to all our users.</p>
+<h2>Response time</h2>
+<p>We aim to reply within a few hours, and always within 24 hours, seven days a week. Support is provided by one person rather than a call centre, so if you do not hear back within a day, please send a follow-up rather than assuming the message was ignored.</p>
+
+<h2>Before you write</h2>
+<p>Including these details lets us answer without a round trip: your app version, your Windows version, the file type involved, the AI provider you selected, your order reference if the question is about a purchase, and the exact text of any error message.</p>
+
+<h2>Reporting a security or payment problem</h2>
+<p>We will never message you first with new account details, never ask you to pay a different account holder, and never ask for your card number, bank password or one-time code. If you receive anything like that claiming to be from Tagyfy Pro, please forward it to the support e-mail above.</p>
 `;
 
-const CONTENT_FAQ = `
-<h1>Frequently Asked Questions — Tagyfy Pro</h1>
-<p>Everything you need to know before getting started with Tagyfy Pro metadata generator.</p>
+const escapeHtml = (value: string) =>
+  value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
 
-<h2>Does Tagyfy Pro embed metadata directly into files?</h2>
-<p>Yes. Tagyfy Pro writes supported IPTC/XMP fields into compatible files. Many stock workflows can read that metadata on upload, but behavior varies by file format and marketplace, so confirm the current platform requirements.</p>
-
-<h2>Will stock platforms automatically detect this metadata?</h2>
-<p>Many stock workflows can read supported embedded metadata during upload, but behavior varies by file format and marketplace. Confirm the current platform requirements and review the title and keywords before submitting.</p>
-
-<h2>Which AI providers are supported?</h2>
-<p>Tagyfy Pro supports 5 AI providers: Google Gemini (Flash and Pro), OpenAI GPT-4o, Groq (Llama 4 Scout), Mistral AI, and OpenRouter (300+ models including free ones). You can add multiple API keys and the system automatically rotates between them when rate limits are hit.</p>
-
-<h2>Are there any hard limits on how many files I can process at once?</h2>
-<p>No, there are no artificial limits. You can drag and drop folders containing hundreds or thousands of files. The speed of processing depends entirely on your API providers and how many API keys you have added. Tagyfy Pro handles the queueing smoothly.</p>
-
-<h2>What happens when my API key hits a rate limit?</h2>
-<p>The system has an automatic key rotation engine. When one key hits its rate limit, it is placed in a short cooldown and the next available key is tried immediately — following a priority waterfall across all your configured providers. You never see a failed generation just because one key is temporarily limited.</p>
-
-<h2>What is the Trademark Sniffer?</h2>
-<p>It is a built-in compliance system that automatically detects and removes brand names from generated keywords. It has a list of 100+ trademarks and replaces them with generic equivalents — for example iPhone becomes modern smartphone with touchscreen. This prevents stock platform rejections caused by trademarked terms.</p>
-
-<h2>What are Confidence Scores and Risk Analysis?</h2>
-<p>Every generated metadata set includes a confidence score (0-100) broken down into four dimensions: subject clarity, keyword precision, differentiator strength, and compliance safety. Risk Analysis flags potential reasons a stock reviewer might reject the asset — such as editorial content or brand mentions — with a severity level. Platform Readiness tells you if each asset is READY, NEEDS REVIEW, or NOT READY for Adobe Stock, Freepik, and Shutterstock individually.</p>
-
-<h2>What is Series Mode?</h2>
-<p>Series Mode is for assets that belong together — for example, 10 variations of the same icon set. When enabled, the AI appends Part 01, Part 02, etc. to titles and maintains consistent keywords across the entire series, while slightly varying the visual description for each part.</p>
-
-<h2>How does the CSV export work?</h2>
-<p>Tagyfy Pro generates platform-specific CSV files verified against the official upload specs for Adobe Stock, Shutterstock, Dreamstime, Freepik, 123RF, and Vecteezy. Each platform gets the correct column headers, category IDs, and keyword formatting. No truncation is ever applied — your full keyword list and title are always exported.</p>
-
-<h2>Is my API key safe inside the app?</h2>
-<p>For the Windows app, keys stay in local encrypted storage and requests go directly to the provider you choose. The browser tool keeps a key locally only when you opt in and sends the selected file directly to that AI provider; Tagyfy does not proxy or store the media.</p>
-
-<h2>How does the licensing work?</h2>
-<p>Tagyfy Pro is available in four plans: 1 Month, 3 Months, 6 Months, and 1 Year. You purchase a license key for your chosen duration — when it expires you can renew at any time. The AI generation uses your own API keys (which have their own free tiers — Gemini offers a generous free quota). You are never billed per generation by Tagyfy Pro.</p>
-`;
+/**
+ * Built from src/data/faqs.ts so the crawler-facing HTML can never drift from
+ * the live React page. Previously this was a second, hand-maintained copy of
+ * the same answers.
+ */
+const CONTENT_FAQ =
+  `\n<h1>Frequently Asked Questions — Tagyfy Pro</h1>\n` +
+  `<p>Answers on providers, file formats, licensing, privacy and limits. ` +
+  `Use the search box on this page to filter them, or ask a question through the Contact form.</p>\n` +
+  FAQS.map(
+    (faq) => `<h2>${escapeHtml(faq.question)}</h2>\n<p>${escapeHtml(faq.answer)}</p>`
+  ).join('\n') +
+  `\n`;
 
 const CONTENT_TUTORIALS = `
-<h1>Tutorials and Video Guides — Tagyfy Pro</h1>
-<p>Step-by-step video tutorials showing how to generate and review metadata drafts, embed IPTC data into files, and use the Tagyfy Pro desktop app and Chrome extension.</p>
+<h1>Setup Guides — Tagyfy Pro</h1>
+<p>Four written guides that take you from a fresh install to a reviewed, metadata-embedded batch on Windows 10 and 11. A single walkthrough video covers the same workflow end to end.</p>
 
-<h2>Getting Started</h2>
-<p>Learn how to set up Tagyfy Pro, add your AI API keys, and start generating metadata for your stock media files in minutes.</p>
+<h2>Guide 1: Install the app and confirm Windows trusts it</h2>
+<ol>
+<li>Download the installer from the Download page. The current build is Tagyfy_Pro_1.3.6_x64-setup.exe (about 160 MB).</li>
+<li>Optionally verify the download against the .sig signature file published alongside the installer on the release page.</li>
+<li>Run the installer and follow the prompts. The default install is per-user, so no administrator password is normally required.</li>
+<li>Windows Defender SmartScreen may warn that the publisher is not yet widely recognised, because code-signing reputation builds over time. Only continue if the file came from the official release page and the signature and size match.</li>
+<li>Launch Tagyfy Pro. You should land on the empty dashboard with the upload drop zone visible.</li>
+</ol>
 
-<h3>How to Get a Free Gemini API Key</h3>
-<p>Visit Google AI Studio at aistudio.google.com/apikey and generate a free Gemini API key in 30 seconds. This key gives you access to Gemini Flash and Pro models for metadata generation.</p>
+<h2>Guide 2: Add an AI provider key</h2>
+<ol>
+<li>Open Settings and go to the AI provider section. Keys are stored locally on your own machine, not on a Tagyfy server.</li>
+<li>Create a key with your chosen provider. Google AI Studio issues a free Gemini API key in about a minute; Groq also has a free tier.</li>
+<li>Add more than one key if you have them. The app rotates through keys automatically and parks a key in a short cooldown when it hits a rate limit.</li>
+<li>Choose the model used for vision analysis. Gemini Flash is the usual starting point on the free tier.</li>
+<li>Run a single test image before committing to a large batch.</li>
+</ol>
 
-<h3>How to Process Your First Batch</h3>
-<p>Drag and drop your image or video files into Tagyfy Pro. Select your preferred AI model. Click generate. The AI will analyze each file and produce SEO-optimized titles, descriptions, and up to 50 ranked keywords.</p>
+<h2>Guide 3: Configure metadata rules before you generate</h2>
+<ol>
+<li>Set your title length. Adobe Stock caps titles at 200 characters, with roughly 100 to 190 characters being the practical range for relevance.</li>
+<li>Choose your keyword count. Tagyfy Pro supports 5 to 50 keywords per asset; Adobe Stock accepts up to 49, and other marketplaces differ.</li>
+<li>Pick a keyword strategy: single-word, multi-word, or mixed.</li>
+<li>Add prohibited terms under Negative Keywords so they are stripped from every generated output.</li>
+<li>For a themed collection, turn on Event Context or Series Context so phrasing stays consistent and series assets receive ordered titles.</li>
+</ol>
 
-<h3>How to Embed Metadata into Files</h3>
-<p>After generating metadata, click the embed button to write IPTC/XMP data directly into your JPG, PNG, EPS, AI, SVG, and MP4 files. When you upload these files to Adobe Stock, Shutterstock, or Freepik, the metadata auto-populates.</p>
+<h2>Guide 4: Generate, review, embed and upload</h2>
+<ol>
+<li>Drag files or folders onto the dashboard. JPG, PNG, WebP, TIFF, SVG, EPS, AI, MP4, MOV and WebM are handled. For vector work, upload the EPS or AI file together with its same-named JPG preview.</li>
+<li>Start the batch. Enable Batch Mode to process several files in parallel, with live progress and automatic retry on failure.</li>
+<li>Review before exporting. Every asset gets a confidence score and risk flags covering subject clarity, keyword precision, differentiator strength and compliance safety.</li>
+<li>Embed or export. Write IPTC/XMP metadata into the files, or export a CSV formatted for Adobe Stock, Shutterstock, Freepik, Dreamstime, 123RF or Vecteezy.</li>
+<li>Upload to the marketplace and spot-check one file in the contributor dashboard to confirm the title and keywords arrived as expected.</li>
+</ol>
 
-<h3>How to Export Platform-Specific CSVs</h3>
-<p>Go to the export section and select your target platform. Tagyfy Pro generates correctly formatted CSV files for Adobe Stock, Shutterstock, Dreamstime, Freepik, 123RF, and Vecteezy with the exact column headers and formatting each platform requires.</p>
-
-<h3>How to Use the Chrome Extension</h3>
-<p>Install the free Tagyfy Pro Chrome Extension, navigate to your Adobe Stock contributor dashboard, and let the extension auto-fill titles and keywords directly in your browser. Works for both new uploads and approved assets.</p>
-
-<h2>Advanced Features</h2>
-<p>Explore bulk editing, trademark sniffer, series mode, event context, confidence scoring, and quality checks in our advanced tutorial guides.</p>
+<h2>Common questions</h2>
+<h3>Do I have to read every guide?</h3>
+<p>No. Guide 1 is needed once at install time and Guide 2 once per provider key. Guides 3 and 4 cover the settings and batch workflow you will run repeatedly.</p>
+<h3>Can I use this on Mac or Linux?</h3>
+<p>The desktop application currently ships for Windows 10 and 11 (64-bit) only. On Mac or Linux you can still use the browser tool, which generates metadata but cannot write it into vector or video files.</p>
+<h3>Where do I get help if I get stuck?</h3>
+<p>Send us the details through the Contact page, including your app version, the file type involved, the provider you selected, and the exact error text.</p>
 `;
 
+// The index is an actual hub: it previously carried an intro and an empty
+// "Latest Articles" heading, so a crawler that does not run JavaScript saw a page
+// with no articles on it and no route to any of them. It is now generated from
+// BLOG_POSTS, so a new post appears here the moment it is added to the data file.
 const CONTENT_BLOGS = `
 <h1>Blog — Stock Contributor Knowledge Base</h1>
-<p>In-depth guides, marketplace compliance rules, and advanced metadata SEO strategies to help stock media contributors scale their passive earnings on Adobe Stock and beyond.</p>
+<p>Practical guides for stock media contributors: how marketplaces review titles and keywords, how to document a submission properly, and how to avoid the common rejection causes. Every article is written by a working contributor and reviewed before publication — see our <a href="/editorial-policy">editorial standards</a> for how that works.</p>
 
-<h2>Latest Articles</h2>
+<h2>All articles (${BLOG_POSTS.length})</h2>
+${BLOG_POSTS.map((post) => `
+<article>
+<h3><a href="/blog/${post.slug}">${post.title}</a></h3>
+<p><strong>${post.category}</strong> · ${post.publishDate} · ${post.readTime}</p>
+<p>${post.summary}</p>
+<p>Topics: ${post.tags.join(', ')}.</p>
+</article>
+`).join('\n')}
+
+<h2>Where to start</h2>
+<ul>
+<li>New to stock metadata? Read <a href="/blog/mastering-stock-metadata-title-seo-keyword-guide">the title and keyword guide</a>, then try the <a href="/tool">free browser tool</a> on a single image.</li>
+<li>Working at volume? See <a href="/blog/free-adobe-stock-metadata-generator">how uploaders approach batches</a> and check the <a href="/metadata-limits">per-marketplace limits</a> before exporting.</li>
+<li>Been rejected? <a href="/blog/common-mistakes-account-suspension-adobe-stock">This one</a> covers the mistakes that escalate beyond a single rejection.</li>
+</ul>
 `;
 
 const CONTENT_CHROME_EXTENSION = `
@@ -379,7 +444,15 @@ const CONTENT_TOOL = `
 </ol>
 
 <h2>Supported Formats</h2>
-<p>The online tool supports JPG, JPEG, PNG, WebP images and MP4 video files. For vector formats (EPS, AI, SVG) and direct IPTC/XMP file embedding, use the Tagyfy Pro Desktop Application.</p>
+<p>The online tool accepts JPG, JPEG, PNG, WebP, SVG, EPS, AI, MP4 and MOV files. JPG, PNG and WebP are analysed directly. SVG, EPS and AI files are read through their preview, so upload the vector alongside its same-named JPG preview and the model will describe the artwork.</p>
+
+<h2>Limitations worth knowing first</h2>
+<ul>
+<li>A browser cannot write metadata into the internal structure of EPS, AI, SVG, MP4 or MOV files. The browser tool produces the text and exports it as CSV; in-file embedding for those formats is a desktop-app feature.</li>
+<li>You bring your own AI provider key, so that provider's rate limits and accuracy apply. There is no Tagyfy-hosted model and no per-generation fee.</li>
+<li>To describe an image, the tool sends that image to the model provider you selected, under that provider's terms. Tagyfy runs no media proxy and keeps no copy. Use the desktop app when files must stay on your machine.</li>
+<li>Better metadata makes an asset easier to understand; it does not guarantee marketplace approval, search position or sales.</li>
+</ul>
 
 <h2>Features of the Free Web Tool</h2>
 <ul>
@@ -416,7 +489,8 @@ const CONTENT_PRIVACY = `
 </ul>
 
 <h2>3. Cookies, Web Beacons and Analytics</h2>
-<p>Like most professional websites, tagyfy.com uses standard cookies to enhance user navigation and analyze aggregate traffic patterns. We use Google Analytics (GA4) to collect anonymized website performance statistics (e.g., page views, visit durations, browser types). Google Analytics does not collect personally identifiable information (PII). You can prevent Google Analytics from tracking your visits by installing the Google Analytics Opt-out Browser Add-on.</p>
+<p>tagyfy.com sets no analytics or advertising cookies unless you allow them. On your first visit a banner asks whether you accept them, both choices are one click, and nothing is recorded either way until you decide. If you accept, Google Analytics (GA4) collects anonymised website performance statistics such as page views, visit durations and browser types; it does not collect personally identifiable information. You can also prevent Google Analytics from tracking your visits by installing the Google Analytics Opt-out Browser Add-on.</p>
+<p>You can change your decision at any time using the Cookie settings control in the footer of any page. Declining, or withdrawing an earlier acceptance, switches both Google Analytics and advertising storage off again. The site stores only your choice, in your own browser, and declining restricts nothing on the site itself.</p>
 
 <h2>4. Google AdSense and Third-Party Advertising</h2>
 <p>Third-party vendors, including Google, use cookies to serve ads based on a user's prior visits to our website or other websites on the Internet. Google's use of advertising cookies enables it and its partners to serve ads to our users based on their visit to our sites and/or other sites on the Internet. Users may opt out of personalized advertising by visiting Google Ads Settings. Alternatively, you can opt out of a third-party vendor's use of cookies for personalized advertising by visiting aboutads.info.</p>
@@ -428,7 +502,7 @@ const CONTENT_PRIVACY = `
 <p>Under applicable data protection laws, you have the right to request access to your data, request data erasure, and object to processing. Because our software does not store user media on central servers, most data is already under your exclusive physical control on your computer.</p>
 
 <h2>7. Contact Our Privacy Team</h2>
-<p>If you have questions regarding this Privacy Policy or wish to exercise any data rights, please contact us: Email: alhamdstudio839@gmail.com. WhatsApp Support: +92 325 9640429. Website: tagyfy.com.</p>
+<p>If you have questions regarding this Privacy Policy or wish to exercise any data rights, please contact us: Email: ${SELLER.supportEmail}. WhatsApp: ${SELLER.whatsappDisplay}. Website: tagyfy.com.</p>
 `;
 
 const CONTENT_TERMS = `
@@ -456,7 +530,7 @@ const CONTENT_TERMS = `
 <p>Tagyfy Pro and all website materials are provided on an "as is" and "as available" basis without warranties of any kind. While we rigorously test our metadata embedding pipelines against official Adobe Stock, Shutterstock, and Freepik specifications, we do not guarantee specific review approvals or sales earnings on third-party stock agency marketplaces.</p>
 
 <h2>6. Contact Information</h2>
-<p>For legal questions, licensing inquiries, or enterprise permissions, contact us: Email: alhamdstudio839@gmail.com. WhatsApp: +92 325 9640429.</p>
+<p>For legal questions, licensing inquiries, or enterprise permissions, contact us: email ${SELLER.supportEmail}, or WhatsApp ${SELLER.whatsappDisplay}.</p>
 `;
 
 const CONTENT_REFUND = `
@@ -485,7 +559,7 @@ const CONTENT_REFUND = `
 <p>To request assistance or submit a refund request, please contact our support desk with your license key or order transaction ID:</p>
 <ul>
 <li>WhatsApp Support (Fastest): +92 325 9640429</li>
-<li>Email Support: alhamdstudio839@gmail.com</li>
+<li>Email support: ${SELLER.supportEmail}</li>
 <li>Response Time: Typically within 2 to 6 hours.</li>
 </ul>
 `;
@@ -493,32 +567,199 @@ const CONTENT_REFUND = `
 
 // ─── Page definitions ──────────────────────────────────────────────────────
 
-const PAGES: { path: string; title: string; desc: string; content?: string }[] = [
-  { path: '/', title: 'Tagyfy Pro | AI-Powered Metadata Generator for Adobe Stock', desc: 'Generate, optimize, and embed titles, descriptions, and keywords into your stock images, vectors, and videos in bulk using AI. Free online tool and Windows desktop app.', content: CONTENT_HOME },
-  { path: '/about', title: 'About Us — Our Mission & Story | Tagyfy Pro', desc: 'Learn about Tagyfy Pro, the AI-powered metadata generator built to help stock media contributors automate titles, keywords, and IPTC embedding for Adobe Stock, Shutterstock, and Freepik.', content: CONTENT_ABOUT },
-  { path: '/features', title: 'Features — Batch Processing, Trademark Filter & More | Tagyfy Pro', desc: 'Explore Tagyfy Pro features: multi-AI vision analysis, batch metadata generation, direct IPTC/XMP embedding, trademark sniffer, confidence scoring, and platform-specific CSV exports.', content: CONTENT_FEATURES },
-  { path: '/pricing', title: 'Pricing & License Plans | Tagyfy Pro', desc: 'Transparent pricing for Tagyfy Pro with time-based license options. No hidden fees, a free 3-day trial, and a free Chrome extension for Adobe Stock workflows.', content: CONTENT_PRICING },
-  { path: '/download', title: 'Download Tagyfy Pro for Windows | Free Trial', desc: 'Download the Tagyfy Pro desktop application for Windows 10 and 11. Full-access 3-day free trial with AI-powered metadata generation and direct file embedding.', content: CONTENT_DOWNLOAD },
-  { path: '/contact', title: 'Contact & Support | Tagyfy Pro', desc: 'Get help with Tagyfy Pro license keys, bulk processing, or technical support. Reach our team directly for fast assistance with your stock metadata workflow.', content: CONTENT_CONTACT },
-  { path: '/faq', title: 'Frequently Asked Questions | Tagyfy Pro', desc: 'Answers to common questions about Tagyfy Pro: supported AI providers, file formats, trademark detection, batch processing, CSV exports, API key safety, and licensing.', content: CONTENT_FAQ },
-  { path: '/tutorials', title: 'Tutorials & Video Guides | Tagyfy Pro', desc: 'Step-by-step video tutorials showing how to generate and review metadata drafts, embed IPTC data into files, and use the Tagyfy Pro desktop app and Chrome extension.', content: CONTENT_TUTORIALS },
-  { path: '/blogs', title: 'Blog — Stock Contributor Knowledge Base | Tagyfy Pro', desc: 'In-depth guides, marketplace compliance rules, and advanced metadata SEO strategies to help stock media contributors scale their passive earnings on Adobe Stock and beyond.', content: CONTENT_BLOGS },
-  { path: '/chrome-extension', title: 'Free Adobe Stock Chrome Extension | Tagyfy Pro', desc: '100% free Chrome extension for Adobe Stock contributors. Update approved assets and generate fresh metadata directly inside the contributor dashboard using Gemini, ChatGPT, Groq, and Mistral.', content: CONTENT_CHROME_EXTENSION },
-  { path: '/tool', title: 'Free Online Metadata Generator Tool | Tagyfy Pro', desc: 'Generate draft titles, descriptions, and keywords for supported stock images and videos in your browser. Bring your own AI provider key and review every result before submission.', content: CONTENT_TOOL },
-  { path: '/privacy-policy', title: 'Privacy Policy | Tagyfy Pro', desc: 'Tagyfy Pro privacy policy. Learn how the Windows app and browser tool handle your media files, API keys, analytics, and third-party AI providers.', content: CONTENT_PRIVACY },
-  { path: '/terms', title: 'Terms of Service | Tagyfy Pro', desc: 'Terms and conditions for using Tagyfy Pro desktop application, web tool, and Chrome extension. Read our service agreement, license terms, and usage policies.', content: CONTENT_TERMS },
-  { path: '/refund-policy', title: 'Refund Policy | Tagyfy Pro', desc: 'Tagyfy Pro refund policy. Understand our refund process, eligibility criteria, and how to request a refund for your license purchase.', content: CONTENT_REFUND }
+
+const CONTENT_EDITORIAL = `
+<h1>Editorial Standards and Corrections — Tagyfy Pro</h1>
+<p>A statement of what you can expect from the guides, documentation and product copy published at tagyfy.com. Last reviewed: October 2026.</p>
+
+<h2>Written by a practitioner, not a content farm</h2>
+<p>The guides on this site are written by Salman Ahmad, a stock contributor and logo designer who works with these marketplaces directly. Content is produced in small batches around real workflow problems, not mass-generated to fill keyword gaps.</p>
+
+<h2>Claims are limited to what can be supported</h2>
+<p>Where a marketplace publishes a rule — a title length limit, a keyword cap, a category requirement — we state it and link to the source. Where the basis is our own experience, we say so. We do not promise approval, search position or income, because no tool controls those outcomes.</p>
+
+<h2>No invented screenshots, stats or reviews</h2>
+<p>We do not publish fabricated testimonials, invented download counts, or screenshots of results we did not obtain. Product capability claims describe features that exist in the released build; if a feature is removed, the claim is removed with it.</p>
+
+<h2>Content is revisited, not abandoned</h2>
+<p>Marketplace rules change. When a rule we have written about changes, the affected article is revised and its revision date updated. Guides that describe an older build of the software are updated alongside the release, or clearly marked as applying to an older version.</p>
+
+<h2>How AI is used, and how it is not</h2>
+<p>Drafting, spelling and structural editing may involve AI tools. The subject matter, the examples and the judgements in each guide come from the author's own work with these marketplaces, and every published piece is read and edited by a person before it goes live. We do not generate articles in bulk to capture search terms. If a claim about a marketplace rule cannot be checked against that marketplace's own documentation, it is written as a personal observation or it is left out.</p>
+<p>Many marketplaces require generative-AI content to be declared on submission. The software can add the relevant disclosure keywords to a batch, but the decision about what to declare is the contributor's, and our guides say so explicitly.</p>
+
+<h2>Corrections</h2>
+<p>If something on this site is wrong, out of date, or stated with more confidence than the evidence supports, tell us through the Contact page and include the page address. Factual errors in guides and documentation are corrected, and the page's revision date is updated at the same time. If a product claim turns out to be unsupportable, the claim is removed rather than softened. We do not run comments or guest posts, so there is no user-generated content on this site to moderate.</p>
+`;
+
+
+// ─── Structured data ──────────────────────────────────────────────────────────
+// Emitted into the static HTML as well as from React, because a crawler that
+// does not execute JavaScript would otherwise see no structured data at all.
+// Only checkable facts are asserted: no aggregateRating and no review markup,
+// since the site collects neither.
+
+const SITE_URL = 'https://tagyfy.com';
+
+const ORGANISATION_SCHEMA = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'Tagyfy Pro',
+    url: SITE_URL,
+    logo: `${SITE_URL}/icon.jpg`,
+    description:
+      'AI-assisted metadata generation and embedding software for stock media contributors.',
+    email: SELLER.supportEmail,
+    founder: {
+      '@type': 'Person',
+      name: 'Salman Ahmad',
+      jobTitle: 'Stock contributor and software developer',
+    },
+  },
+  { '@context': 'https://schema.org', '@type': 'WebSite', name: 'Tagyfy Pro', url: SITE_URL },
 ];
 
-// ─── Add blog post summaries to the /blogs listing page ────────────────────
-let blogListHtml = CONTENT_BLOGS;
-BLOG_POSTS.forEach(post => {
-  blogListHtml += `<h3><a href="/blog/${post.slug}">${post.title}</a></h3>`;
-  blogListHtml += `<p><em>${post.category} · ${post.readTime} · ${post.publishDate}</em></p>`;
-  blogListHtml += `<p>${post.summary}</p>`;
+const SOFTWARE_SCHEMA = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'Tagyfy Pro',
+  applicationCategory: 'MultimediaApplication',
+  applicationSubCategory: 'Stock media metadata tool',
+  operatingSystem: 'Windows 10, Windows 11 (64-bit)',
+  softwareVersion: '1.3.6',
+  fileSize: '160MB',
+  url: SITE_URL,
+  description:
+    'Desktop application that generates titles, descriptions and keywords for stock media using AI vision models, and writes IPTC/XMP metadata directly into image, vector and video files.',
+  offers: [
+    { '@type': 'Offer', name: 'Starter — 1 month', price: '1.75', priceCurrency: 'USD' },
+    { '@type': 'Offer', name: 'Creator — 3 months', price: '4.73', priceCurrency: 'USD' },
+    { '@type': 'Offer', name: 'Pro — 6 months', price: '8.93', priceCurrency: 'USD' },
+    { '@type': 'Offer', name: 'Studio — 12 months', price: '16.82', priceCurrency: 'USD' },
+  ],
+};
+
+const WEBAPP_SCHEMA = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: 'Tagyfy Pro free online metadata generator',
+  url: `${SITE_URL}/tool`,
+  applicationCategory: 'UtilitiesApplication',
+  operatingSystem: 'Any modern browser',
+  description:
+    'Browser-based stock metadata generator. Produces draft titles, descriptions and keywords for images, vectors and video using your own AI provider key, with no account and nothing to install.',
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+};
+
+const FAQ_SCHEMA = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: FAQS.map((faq) => ({
+    '@type': 'Question',
+    name: faq.question,
+    acceptedAnswer: { '@type': 'Answer', text: faq.answer },
+  })),
+};
+
+const articleSchema = (post: (typeof BLOG_POSTS)[number]) => ({
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: post.title,
+  description: post.subtitle || post.summary,
+  url: `${SITE_URL}/blog/${post.slug}`,
+  mainEntityOfPage: { '@type': 'WebPage', '@id': `${SITE_URL}/blog/${post.slug}` },
+  articleSection: post.category,
+  keywords: post.tags.join(', '),
+  datePublished: post.publishDate,
+  author: { '@type': 'Person', name: post.author.name, jobTitle: post.author.role },
+  publisher: { '@type': 'Organization', name: 'Tagyfy Pro', url: SITE_URL },
 });
+
+const breadcrumb = (items: { name: string; path: string }[]) => ({
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: items.map((item, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: item.name,
+    item: `${SITE_URL}${item.path}`,
+  })),
+});
+
+/** Serialises schemas into script tags. `<` is escaped so a stray character in
+ *  content can never terminate the script block early. */
+const renderJsonLd = (schemas: unknown[]) => {
+  const flat = schemas.flat().filter(Boolean);
+  if (!flat.length) return '';
+  const payload = JSON.stringify(flat.length === 1 ? flat[0] : flat).replace(/</g, '\\u003c');
+  return `<script type="application/ld+json">${payload}</script>`;
+};
+
+// /metadata-limits — generated from src/data/platformLimits.ts so the crawlable
+// HTML and the React page cannot drift apart. This page answers the specific,
+// frequently-searched question contributors have, so the prerendered version
+// carries the full table rather than a summary.
+const CONTENT_METADATA_LIMITS = `
+<h1>Stock Metadata Limits by Marketplace — Titles, Keywords and CSV Columns</h1>
+<p>Title lengths, keyword counts, CSV column names and the errors that actually stop an upload, for every marketplace Tagyfy Pro supports. Figures were compiled from each platform's own documentation and last checked in ${LIMITS_LAST_CHECKED}. Marketplaces change their specifications without notice — when an upload is rejected, the platform's current specification governs, not this page.</p>
+
+${PLATFORMS.map((p) => `
+<h2>${p.name}</h2>
+<ul>
+<li><strong>Title limit:</strong> ${p.titleLimit}. ${p.titleNotes}</li>
+<li><strong>Keywords:</strong> ${p.keywordLimit}. ${p.keywordNotes}</li>
+<li><strong>CSV columns:</strong> <code>${p.csvFormat}</code></li>
+</ul>
+<ul>
+${p.quirks.map((q) => `<li>${q}</li>`).join('\n')}
+</ul>
+<p>Source: <a href="${p.source.url}" rel="noopener">${p.source.label}</a></p>
+`).join('\n')}
+
+<h2>When an upload fails, it is usually one of these five things</h2>
+<ol>
+${FAILURES.map((f) => `<li><strong>${f.symptom}</strong> — Cause: ${f.cause} Fix: ${f.fix}</li>`).join('\n')}
+</ol>
+
+<h2>Related reading</h2>
+<ul>
+<li><a href="/blogs">Contributor guides</a> — how each marketplace weighs titles and keywords, and the rejection causes worth designing around.</li>
+<li><a href="/tool">Free browser tool</a> — generate a title and keyword set for one image, then export it in the right format for the platform above.</li>
+<li><a href="/faq">FAQ</a> — why embedded metadata is sometimes ignored, and what the trademark check does and does not cover.</li>
+<li><a href="/editorial-policy">Editorial standards</a> — how these figures were checked, and how to report one that is out of date.</li>
+</ul>
+`;
+
+const PAGES: { path: string; title: string; desc: string; content?: string; schema?: unknown[] }[] = [
+  { path: '/', title: 'Tagyfy Pro | AI-Powered Metadata Generator for Adobe Stock', desc: 'Generate, optimize, and embed titles, descriptions, and keywords into your stock images, vectors, and videos in bulk using AI. Free online tool and Windows desktop app.', content: CONTENT_HOME, schema: [ORGANISATION_SCHEMA, SOFTWARE_SCHEMA, breadcrumb([{ name: 'Home', path: '/' }])] },
+  { path: '/about', title: 'About Us — Our Mission & Story | Tagyfy Pro', desc: 'Learn about Tagyfy Pro, the AI-powered metadata generator built to help stock media contributors automate titles, keywords, and IPTC embedding for Adobe Stock, Shutterstock, and Freepik.', content: CONTENT_ABOUT },
+  { path: '/features', title: 'Features — Batch Processing, Trademark Filter & More | Tagyfy Pro', desc: 'Explore Tagyfy Pro features: multi-AI vision analysis, batch metadata generation, direct IPTC/XMP embedding, trademark sniffer, confidence scoring, and platform-specific CSV exports.', content: CONTENT_FEATURES },
+  { path: '/pricing', title: 'Pricing & License Plans | Tagyfy Pro', desc: 'Transparent pricing for Tagyfy Pro with time-based license options. No hidden fees, a free 3-day trial, and a free Chrome extension for Adobe Stock workflows.', content: CONTENT_PRICING, schema: [SOFTWARE_SCHEMA, breadcrumb([{ name: 'Home', path: '/' }, { name: 'Pricing', path: '/pricing' }])] },
+  { path: '/download', title: 'Download Tagyfy Pro for Windows | Free Trial', desc: 'Download the Tagyfy Pro desktop application for Windows 10 and 11. Full-access 3-day free trial with AI-powered metadata generation and direct file embedding.', content: CONTENT_DOWNLOAD },
+  { path: '/contact', title: 'Contact & Support | Tagyfy Pro', desc: 'Get help with Tagyfy Pro license keys, bulk processing, or technical support. Reach our team directly for fast assistance with your stock metadata workflow.', content: CONTENT_CONTACT },
+  { path: '/faq', title: 'Frequently Asked Questions | Tagyfy Pro', desc: 'Answers to common questions about Tagyfy Pro: supported AI providers, file formats, trademark detection, batch processing, CSV exports, API key safety, and licensing.', content: CONTENT_FAQ, schema: [FAQ_SCHEMA, breadcrumb([{ name: 'Home', path: '/' }, { name: 'FAQ', path: '/faq' }])] },
+  { path: '/tutorials', title: 'Tutorials & Video Guides | Tagyfy Pro', desc: 'Step-by-step video tutorials showing how to generate and review metadata drafts, embed IPTC data into files, and use the Tagyfy Pro desktop app and Chrome extension.', content: CONTENT_TUTORIALS },
+  { path: '/blogs', title: 'Blog — Stock Contributor Knowledge Base | Tagyfy Pro', desc: 'Practical guides for stock media contributors: how marketplaces review titles and keywords, how to document a submission properly, and how to avoid the common rejection causes.', content: CONTENT_BLOGS },
+  { path: '/chrome-extension', title: 'Free Adobe Stock Chrome Extension | Tagyfy Pro', desc: '100% free Chrome extension for Adobe Stock contributors. Update approved assets and generate fresh metadata directly inside the contributor dashboard using Gemini, ChatGPT, Groq, and Mistral.', content: CONTENT_CHROME_EXTENSION, schema: [breadcrumb([{ name: 'Home', path: '/' }, { name: 'Chrome extension', path: '/chrome-extension' }])] },
+  { path: '/tool', title: 'Free Online Metadata Generator Tool | Tagyfy Pro', desc: 'Generate draft titles, descriptions, and keywords for supported stock images and videos in your browser. Bring your own AI provider key and review every result before submission.', content: CONTENT_TOOL, schema: [WEBAPP_SCHEMA, breadcrumb([{ name: 'Home', path: '/' }, { name: 'Free tool', path: '/tool' }])] },
+  { path: '/metadata-limits', title: 'Stock Metadata Limits by Marketplace - Titles, Keywords & CSV Columns | Tagyfy Pro', desc: 'Title length limits, keyword counts, CSV column names and the errors that stop an upload for Adobe Stock, Shutterstock, Freepik, Vecteezy, Dreamstime and 123RF - each with its official source linked.', content: CONTENT_METADATA_LIMITS, schema: [breadcrumb([{ name: 'Home', path: '/' }, { name: 'Metadata limits', path: '/metadata-limits' }])] },
+  { path: '/privacy-policy', title: 'Privacy Policy | Tagyfy Pro', desc: 'Tagyfy Pro privacy policy. Learn how the Windows app and browser tool handle your media files, API keys, analytics, and third-party AI providers.', content: CONTENT_PRIVACY },
+  { path: '/terms', title: 'Terms of Service | Tagyfy Pro', desc: 'Terms and conditions for using Tagyfy Pro desktop application, web tool, and Chrome extension. Read our service agreement, license terms, and usage policies.', content: CONTENT_TERMS },
+  { path: '/refund-policy', title: 'Refund Policy | Tagyfy Pro', desc: 'Tagyfy Pro refund policy. Understand our refund process, eligibility criteria, and how to request a refund for your license purchase.', content: CONTENT_REFUND },
+  { path: '/editorial-policy', title: 'Editorial Standards & Corrections | Tagyfy Pro', desc: 'How the guides and documentation on tagyfy.com are researched, written, reviewed and corrected — including our policy on accuracy, sources, product claims and AI assistance.', content: CONTENT_EDITORIAL, schema: [breadcrumb([{ name: 'Home', path: '/' }, { name: 'Editorial standards', path: '/editorial-policy' }])] }
+];
+
+// ─── /blogs listing page ───────────────────────────────────────────────────
+// The listing is built inside CONTENT_BLOGS from BLOG_POSTS. It used to be
+// appended here instead, after the intro, which produced an index whose first
+// screen was an empty "Latest Articles" heading — a crawler reached /blogs and
+// found no route to any article.
 const blogsPage = PAGES.find(p => p.path === '/blogs');
-if (blogsPage) blogsPage.content = blogListHtml;
+if (blogsPage) {
+  blogsPage.content = CONTENT_BLOGS;
+  blogsPage.schema = [breadcrumb([{ name: 'Home', path: '/' }, { name: 'Guides', path: '/blogs' }])];
+}
 
 // ─── Add individual blog posts dynamically ─────────────────────────────────
 BLOG_POSTS.forEach(post => {
@@ -536,7 +777,15 @@ BLOG_POSTS.forEach(post => {
     path: `/blog/${post.slug}`,
     title: `${post.title} | Tagyfy Pro Blog`,
     desc: post.summary,
-    content: contentHtml
+    content: contentHtml,
+    schema: [
+      articleSchema(post),
+      breadcrumb([
+        { name: 'Home', path: '/' },
+        { name: 'Guides', path: '/blogs' },
+        { name: post.title, path: `/blog/${post.slug}` },
+      ]),
+    ]
   });
 });
 
@@ -561,6 +810,11 @@ async function prerender() {
       /<meta name="description" content=".*?"\s*\/>/,
       `<meta name="description" content="${page.desc.replace(/"/g, '&quot;')}" />`
     );
+
+    // Inject structured data before </head>
+    if (page.schema?.length) {
+      html = html.replace('</head>', `${renderJsonLd(page.schema)}</head>`);
+    }
 
     // Inject Content into root for AdSense / Googlebot crawler to read text
     const injection = page.content ? page.content : `<h1>${page.title}</h1><p>${page.desc}</p>`;

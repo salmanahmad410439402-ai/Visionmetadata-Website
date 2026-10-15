@@ -7,7 +7,7 @@ const ContactPage = () => (
       <title>Contact & Support | Tagyfy Pro</title>
       <meta
         name="description"
-        content="Get help with Tagyfy Pro license keys, bulk processing, or technical support. Reach our team directly for fast assistance with your stock metadata workflow."
+        content="Contact Tagyfy Pro for help with licence keys, orders, refunds or bulk processing. Support is handled directly by the developer, with a reply typically within one working day."
       />
       <link rel="canonical" href="https://tagyfy.com/contact" />
     </Helmet>
