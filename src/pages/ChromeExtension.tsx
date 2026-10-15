@@ -1,4 +1,5 @@
 import { Helmet } from "react-helmet-async";
+import { Link } from "react-router-dom";
 import { Download, CheckCircle2, Bot, Chrome, RefreshCw, Sparkles, FolderDown, FileCode, Puzzle, Zap, ArrowDown, ShieldCheck, Key, Cpu, HelpCircle, Layers, Check, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useReveal } from "@/hooks/useReveal";
@@ -50,7 +51,7 @@ const ChromeExtension = () => {
 
   const steps = [
     { num: "1", icon: FolderDown, title: "Download Extension Archive", desc: "Scroll to the download section at the bottom of this page and grab the latest Tagyfy_Pro_Chrome_Extension_V1.3.6.zip file." },
-    { num: "2", icon: FileCode, title: "Extract the .ZIP File", desc: "Right-click the downloaded .zip file and extract it to a permanent folder on your computer (e.g. Documents/Tagyfy-Extension)." },
+    { num: "2", icon: FileCode, title: "Extract the .ZIP File", desc: "Right-click the downloaded .zip file and extract it to a permanent folder on your computer. The archive contains a folder named tagyfy-pro — keep that folder together, Chrome loads it as a unit." },
     { num: "3", icon: Chrome, title: "Enable Developer Mode", desc: "Open Google Chrome, navigate to chrome://extensions/ in your URL bar, and toggle 'Developer mode' in the top-right corner." },
     { num: "4", icon: Puzzle, title: "Load Unpacked", desc: "Click 'Load unpacked' at top left, select your extracted folder, and pin Tagyfy Pro to your Chrome extensions toolbar." },
   ];
@@ -216,11 +217,91 @@ const ChromeExtension = () => {
             <div className="mt-10 p-5 rounded-2xl bg-yellow-500/10 border border-yellow-500/20 backdrop-blur-md">
               <p className="text-yellow-200/90 text-xs sm:text-sm flex items-start gap-3 font-semibold">
                 <Zap className="w-4 h-4 text-yellow-500 flex-shrink-0 mt-0.5" />
-                <span>Note: Chrome may occasionally display a standard developer mode prompt on startup. Simply click "Cancel" to keep using your free Tagyfy Pro extension seamlessly.</span>
+                <span>
+                  Note: extensions loaded this way are unsigned, so Chrome may show an
+                  &#34;unsupported extensions&#34; or developer-mode prompt on startup. That warning is
+                  Chrome telling you the extension was not installed from the Web Store — read it,
+                  and only keep the extension if you are satisfied with what it does. You can review
+                  or remove it at any time at chrome://extensions/. A signed Web Store release is on
+                  our roadmap.
+                </span>
               </p>
             </div>
           </div>
         </div>
+
+
+            {/* Transparency: what the extension can actually access. Sideloaded
+                software has to be described honestly — including permissions and
+                the fact that this build is not a signed Web Store release. */}
+            <div className="mt-10 p-6 sm:p-8 rounded-2xl border border-border/80 bg-card-primary">
+              <h2 className="text-lg font-bold text-foreground mb-4">
+                What this extension can access
+              </h2>
+              <p className="text-sm text-secondary leading-relaxed mb-5">
+                Because you are installing this manually rather than from the Chrome Web Store,
+                you should know exactly what it asks for before you enable it. The installed
+                manifest (v1.3.6) requests the following:
+              </p>
+              <div className="grid sm:grid-cols-2 gap-x-8 gap-y-4 text-sm">
+                <div>
+                  <p className="font-bold text-foreground mb-1">Runs on</p>
+                  <p className="text-secondary leading-relaxed">
+                    contributor.stock.adobe.com only. It has no access to your other browsing.
+                  </p>
+                </div>
+                <div>
+                  <p className="font-bold text-foreground mb-1">Connects out to</p>
+                  <p className="text-secondary leading-relaxed">
+                    The AI provider whose key you supplied — Google, OpenAI, Groq or Mistral. No
+                    Tagyfy server is contacted.
+                  </p>
+                </div>
+                <div>
+                  <p className="font-bold text-foreground mb-1">Stores locally</p>
+                  <p className="text-secondary leading-relaxed">
+                    Your API keys and your title/keyword preferences, in Chrome extension storage
+                    on this device.
+                  </p>
+                </div>
+                <div>
+                  <p className="font-bold text-foreground mb-1">Does not do</p>
+                  <p className="text-secondary leading-relaxed">
+                    No analytics, no tracking, no remote code loading, and no access to files
+                    outside the Adobe contributor tab you run it on.
+                  </p>
+                </div>
+              </div>
+              <p className="mt-6 text-sm text-secondary leading-relaxed">
+                <strong className="text-foreground">We audited the build before publishing it.</strong>{" "}
+                Every network destination in the shipped code was traced. There are six outbound
+                calls in total and they go to the four AI providers listed above — no Tagyfy server,
+                no analytics endpoint, no third party of any kind. The code contains no{" "}
+                <code className="text-xs">eval</code>, no{" "}
+                <code className="text-xs">atob</code>, no cookie access, no{" "}
+                <code className="text-xs">webRequest</code> usage and no remote code loading. Your
+                API keys are written to Chrome's extension storage under the{" "}
+                <code className="text-xs">vmp_</code> prefix and never leave your device except in
+                calls to the provider that issued them.
+              </p>
+              <p className="mt-4 text-sm text-secondary leading-relaxed">
+                <strong className="text-foreground">The remaining caveat.</strong>{" "}
+                The JavaScript in this build is minified, which makes it harder for you to check our
+                work than it should be. Minified code is not hidden code — nothing is packed,
+                encrypted or fetched at runtime, and the plain-text list above is the complete set
+                of things the extension can reach — but it does mean you cannot skim it. If
+                inspectable code matters to you, use the browser tool on the{" "}
+                <Link to="/tool" className="text-primary underline hover:text-primary/80">
+                  Tool page
+                </Link>{" "}
+                — it does the same job with nothing to install.
+              </p>
+              <p className="mt-4 text-sm text-secondary leading-relaxed">
+                The extension fills form fields on the Adobe contributor dashboard. It does not
+                submit, publish or delete anything on your behalf, and you remain responsible for
+                what you save.
+              </p>
+            </div>
 
         {/* ─── FREQUENTLY ASKED QUESTIONS ─── */}
         <div className="mb-24">
@@ -285,14 +366,14 @@ const ChromeExtension = () => {
               <div className="pt-6 border-t border-border/80 flex flex-wrap justify-center items-center gap-6 text-xs text-muted-foreground font-medium">
                 <span className="flex items-center gap-1.5">
                   <ShieldCheck className="w-4 h-4 text-green-400" />
-                  Verified Safe & Clean
+                  No account, no telemetry, no Tagyfy server
                 </span>
                 <span>•</span>
-                <span>Version: <strong>1.3.5</strong></span>
+                <span>Version: <strong>1.3.6</strong></span>
                 <span>•</span>
-                <span>Format: <strong>ZIP Archive (~650 KB)</strong></span>
+                <span>Format: <strong>ZIP archive (~70 KB)</strong></span>
                 <span>•</span>
-                <span className="text-green-400 font-semibold">100% Free Forever</span>
+                <span className="text-green-400 font-semibold">Free, with no licence key</span>
               </div>
             </div>
           </div>

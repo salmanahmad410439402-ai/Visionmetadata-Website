@@ -1,5 +1,34 @@
 import { VercelRequest, VercelResponse } from "@vercel/node";
 import { Resend } from "resend";
+import { SELLER } from "../src/config/commerce";
+
+/**
+ * Contact form handler — POST /api/contact
+ *
+ * SECURITY NOTE, and the reason this file was edited:
+ * the Resend API key used to have a hard-coded fallback here —
+ * `process.env.RESEND_API_KEY || "re_..."`. This repository is public, so that
+ * key was published to the internet, and anyone who found it could send mail
+ * from the account. Any key that has ever been committed must be treated as
+ * compromised: rotate it in the Resend dashboard rather than deleting the line
+ * and moving on. There is no fallback now — a missing key fails loudly.
+ *
+ * The recipient also used to be a second hard-coded address that disagreed with
+ * the address the site publishes. It now defaults to SELLER.supportEmail and can
+ * be overridden per-deployment with CONTACT_TO_EMAIL.
+ */
+
+const BRAND = SELLER.brand;
+const CONTACT_TO = process.env.CONTACT_TO_EMAIL || SELLER.supportEmail;
+
+/** Escapes text for safe interpolation into the HTML email body. */
+const esc = (value: unknown): string =>
+  String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Enable CORS
@@ -22,12 +51,24 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const { name, email, message } = req.body;
+  const { name, email, message } = req.body ?? {};
 
   // Validate required fields
   if (!message || !email) {
     return res.status(400).json({ error: "Missing required fields" });
   }
+
+  // Length caps: this endpoint sends mail to a real inbox, so unbounded input is
+  // a spam vector as much as a rendering problem.
+  if (typeof message === "string" && message.length > 5000) {
+    return res.status(413).json({ error: "Message is too long" });
+  }
+
+  // Escaped once, used everywhere below. The previous version interpolated the
+  // raw name and e-mail into the HTML body and into a mailto: href.
+  const safeName = esc(name || "Anonymous").slice(0, 120);
+  const safeEmail = esc(email).slice(0, 200);
+  const safeMessage = esc(message).slice(0, 5000);
 
   // Get client IP
   const clientIp =
@@ -45,21 +86,30 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }));
 
   // Send email via Resend
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) {
+    // Deliberately explicit. A silent no-op here would look like the form worked
+    // while nothing was delivered, which is worse than an honest failure.
+    console.error("RESEND_API_KEY is not set — contact form cannot deliver mail.");
+    return res.status(503).json({
+      error: `Sending is temporarily unavailable. Please e-mail ${SELLER.supportEmail} directly — your message will reach the same inbox.`,
+    });
+  }
+
   try {
-    const apiKey = process.env.RESEND_API_KEY || "re_dx2xZvoW_P9kpVtaNQGamG1T8u4ZJtAsp";
     const resend = new Resend(apiKey);
 
     const { data, error } = await resend.emails.send({
-      from: "VisionMetadata Pro <onboarding@resend.dev>",
-      to: "salmangraphics839@gmail.com",
-      subject: `📩 New Contact: ${name || "Anonymous"} — VisionMetadata Pro`,
+      from: `${BRAND} <onboarding@resend.dev>`,
+      to: CONTACT_TO,
+      subject: `New contact message: ${safeName}`, 
       html: `
         <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #0f172a; color: #e2e8f0; border-radius: 12px; overflow: hidden;">
           
           <!-- Header -->
           <div style="background: linear-gradient(135deg, #0891b2, #06b6d4); padding: 24px 32px;">
             <h1 style="margin: 0; font-size: 20px; color: #ffffff;">📩 New Contact Form Message</h1>
-            <p style="margin: 4px 0 0; font-size: 13px; color: #e0f2fe;">VisionMetadata Pro Website</p>
+            <p style="margin: 4px 0 0; font-size: 13px; color: #e0f2fe;">${BRAND} Website</p>
           </div>
 
           <!-- Body -->
@@ -70,12 +120,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
               <table style="width: 100%; border-collapse: collapse;">
                 <tr>
                   <td style="padding: 6px 0; color: #94a3b8; font-size: 13px; width: 80px;">Name:</td>
-                  <td style="padding: 6px 0; color: #f1f5f9; font-size: 14px; font-weight: 600;">${name || "Not provided"}</td>
+                  <td style="padding: 6px 0; color: #f1f5f9; font-size: 14px; font-weight: 600;">${safeName}</td>
                 </tr>
                 <tr>
                   <td style="padding: 6px 0; color: #94a3b8; font-size: 13px;">Email:</td>
                   <td style="padding: 6px 0;">
-                    <a href="mailto:${email}" style="color: #22d3ee; text-decoration: none; font-size: 14px; font-weight: 600;">${email}</a>
+                    <a href="mailto:${safeEmail}" style="color: #22d3ee; text-decoration: none; font-size: 14px; font-weight: 600;">${safeEmail}</a>
                   </td>
                 </tr>
                 <tr>
@@ -93,15 +143,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             <div style="background: #1e293b; border-left: 3px solid #06b6d4; border-radius: 8px; padding: 16px;">
               <p style="margin: 0 0 8px; color: #94a3b8; font-size: 12px; text-transform: uppercase; letter-spacing: 1px;">Message</p>
               <p style="margin: 0; color: #e2e8f0; font-size: 14px; line-height: 1.6; white-space: pre-wrap;">${
-                typeof message === "string" ? message.slice(0, 2000).replace(/</g, "&lt;").replace(/>/g, "&gt;") : ""
+                safeMessage
               }</p>
             </div>
 
             <!-- Quick Reply -->
             <div style="margin-top: 24px; text-align: center;">
-              <a href="mailto:${email}?subject=Re: VisionMetadata Pro Inquiry&body=Hi ${name || "there"},%0A%0AThank you for reaching out!%0A%0A" 
+              <a href="mailto:${safeEmail}?subject=${encodeURIComponent(`${BRAND} enquiry`)}&body=Hi ${safeName},%0A%0AThank you for reaching out!%0A%0A" 
                 style="display: inline-block; background: #06b6d4; color: #ffffff; padding: 10px 24px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 600;">
-                ↩ Reply to ${name || "sender"}
+                ↩ Reply to ${safeName}
               </a>
             </div>
 
@@ -109,7 +159,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
           <!-- Footer -->
           <div style="padding: 16px 32px; background: #0c1524; text-align: center;">
-            <p style="margin: 0; color: #475569; font-size: 11px;">Sent from the VisionMetadata Pro contact form</p>
+            <p style="margin: 0; color: #475569; font-size: 11px;">Sent from the tagyfy.com contact form</p>
           </div>
 
         </div>

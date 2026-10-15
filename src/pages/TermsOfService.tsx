@@ -1,6 +1,7 @@
 import { Helmet } from "react-helmet-async";
 import { FileCheck, ShieldCheck, HelpCircle, AlertCircle } from "lucide-react";
 import { useReveal } from "@/hooks/useReveal";
+import { SELLER } from "@/config/commerce";
 
 const TermsOfService = () => {
   const ref = useReveal();
@@ -98,8 +99,8 @@ const TermsOfService = () => {
               For legal questions, licensing inquiries, or enterprise permissions:
             </p>
             <div className="bg-primary/5 rounded-2xl p-5 border border-primary/20 text-sm space-y-1">
-              <p><strong>Email:</strong> <a href="mailto:alhamdstudio839@gmail.com" className="text-primary hover:underline">alhamdstudio839@gmail.com</a></p>
-              <p><strong>WhatsApp:</strong> +92 325 9640429</p>
+              <p><strong>Email:</strong> <a href={`mailto:${SELLER.supportEmail}`} className="text-primary hover:underline">{SELLER.supportEmail}</a></p>
+              <p><strong>WhatsApp:</strong> {SELLER.whatsappDisplay}</p>
             </div>
           </section>
 

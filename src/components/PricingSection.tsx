@@ -1,123 +1,117 @@
-import { useState, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
-import { Check, Clock, Gift, Sparkles } from "lucide-react";
+import { Check, Sparkles, Copy, Check as CheckIcon } from "lucide-react";
 import { useReveal } from "@/hooks/useReveal";
+import { CARD_CHECKOUT, makeOrderReference, mailLink, waLink } from "@/config/commerce";
 
-const TRIAL_END = new Date("2026-03-22T15:40:21.162Z");
+/**
+ * Pricing section.
+ *
+ * WHAT CHANGED AND WHY
+ * The previous version ran a countdown timer against a hard-coded date of
+ * 2026-03-22 that had been in the past for months, and drove its displayed
+ * prices from that clock. So every visitor saw:
+ *
+ *   • a price rendered in a "discounted" red with the full price struck through
+ *     beside it, and
+ *   • nothing anywhere explaining why, because the explanatory "Eid Price" badge
+ *     was itself gated behind the expired timer.
+ *
+ * That is a struck-through reference price with no stated basis, which is a
+ * misleading commercial practice and the kind of thing a review flags. The
+ * discount machinery and the dead Eid campaign are gone; there is now one price
+ * per plan and one honest line about pricing.
+ *
+ * Ordering is also explicit now: each card carries a stable order reference, so
+ * a buyer can quote something specific instead of just "the $4.73 one".
+ */
 
-const plans = [
+interface Plan {
+  name: string;
+  duration: string;
+  months: number;
+  priceUsd: number;
+  pricePkr: number;
+  highlighted?: boolean;
+  color: string;
+}
+
+const PLANS: Plan[] = [
   {
     name: "Starter",
-    duration: "1 Month",
-    originalPkr: 499,
-    originalUsd: 1.75,
-    eidPkr: 499,
-    eidUsd: 1.75,
-    postEidPkr: 499,
-    postEidUsd: 1.75,
-    eidDiscount: null,
-    postEidDiscount: null,
-    highlighted: false,
+    duration: "1 month",
+    months: 1,
+    priceUsd: 1.75,
+    pricePkr: 499,
+    color: "#94a3b8",
   },
   {
     name: "Creator",
-    duration: "3 Months",
-    originalPkr: 1497,
-    originalUsd: 5.25,
-    eidPkr: 1272,
-    eidUsd: 4.46,
-    postEidPkr: 1347,
-    postEidUsd: 4.73,
-    eidDiscount: 15,
-    postEidDiscount: 10,
-    highlighted: false,
+    duration: "3 months",
+    months: 3,
+    priceUsd: 4.73,
+    pricePkr: 1347,
+    color: "#4F46E5",
   },
   {
     name: "Pro",
-    duration: "6 Months",
-    originalPkr: 2995,
-    originalUsd: 10.51,
-    eidPkr: 2246,
-    eidUsd: 7.88,
-    postEidPkr: 2546,
-    postEidUsd: 8.93,
-    eidDiscount: 25,
-    postEidDiscount: 15,
-    highlighted: false,
+    duration: "6 months",
+    months: 6,
+    priceUsd: 8.93,
+    pricePkr: 2546,
+    color: "#10B981",
   },
   {
     name: "Studio",
-    duration: "1 Year",
-    originalPkr: 5988,
-    originalUsd: 21.02,
-    eidPkr: 3892,
-    eidUsd: 13.66,
-    postEidPkr: 4790,
-    postEidUsd: 16.82,
-    eidDiscount: 35,
-    postEidDiscount: 20,
+    duration: "12 months",
+    months: 12,
+    priceUsd: 16.82,
+    pricePkr: 4790,
     highlighted: true,
+    color: "hsl(var(--primary))",
   },
 ];
 
-type TimeLeft = {
-  days: number;
-  hours: number;
-  minutes: number;
-  seconds: number;
-  expired: boolean;
-};
-
-const getTimeLeft = (): TimeLeft => {
-  const diff = TRIAL_END.getTime() - Date.now();
-  if (diff <= 0) return { days: 0, hours: 0, minutes: 0, seconds: 0, expired: true };
-  return {
-    days: Math.floor(diff / (1000 * 60 * 60 * 24)),
-    hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
-    minutes: Math.floor((diff / (1000 * 60)) % 60),
-    seconds: Math.floor((diff / 1000) % 60),
-    expired: false,
-  };
-};
-
-const pad = (n: number) => String(n).padStart(2, "0");
+const FEATURES = [
+  "Native file metadata embedding",
+  "CSV exports for Adobe, SS, DT & Freepik",
+  "Full metadata generation, any file type",
+  "Batch processing with parallel workers",
+  "Trademark flagging and confidence scores",
+];
 
 const PricingSection = () => {
   const [currency, setCurrency] = useState<"PKR" | "USD">("USD");
-  const [timeLeft, setTimeLeft] = useState<TimeLeft>(getTimeLeft());
+  const [selected, setSelected] = useState<Plan>(PLANS[3]);
+
+  // One reference per page load, regenerated when the buyer switches plan, so
+  // the message they send us matches the plan they are looking at.
+  const orderRef = useMemo(() => makeOrderReference(), [selected.name]);
+
   const ref = useReveal();
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft(getTimeLeft());
-    }, 1000);
-    return () => clearInterval(timer);
-  }, []);
+  const priceLabel = (plan: Plan) =>
+    currency === "PKR" ? `Rs ${plan.pricePkr.toLocaleString()}` : `$${plan.priceUsd.toFixed(2)}`;
 
-  const isExpired = timeLeft.expired;
+  const orderMessage = `Hi, I would like to order Tagyfy Pro.
+Order reference: ${orderRef}
+Plan: ${selected.name} (${selected.duration})
+Price shown: ${priceLabel(selected)} (${currency})
 
-  const getWhatsAppMessage = (planName: string, cur: "PKR" | "USD") => {
-    const plan = plans.find((p) => p.name === planName)!;
-    const price = cur === "PKR"
-      ? `Rs ${(isExpired ? plan.postEidPkr : plan.eidPkr).toLocaleString()}`
-      : `$${isExpired ? plan.postEidUsd : plan.eidUsd}`;
-    return encodeURIComponent(
-      `Hi, I want to subscribe to the ${planName} plan for ${price}.`
-    );
-  };
+I have read the refund policy. Please send me the payment details.`;
 
   return (
     <section id="pricing" className="pt-24 pb-16 px-6" ref={ref as React.RefObject<HTMLElement>}>
       <div className="max-w-6xl mx-auto">
-        <h2 className="text-3xl sm:text-4xl font-bold text-center text-foreground mb-6">
-          Simple Pricing
-        </h2>
-        <p className="text-center text-tertiary mb-12 max-w-xl mx-auto">
-          Choose a plan that fits your workflow
+        <h1 className="text-3xl sm:text-4xl font-bold text-center text-foreground mb-4">
+          Tagyfy Pro pricing
+        </h1>
+        <p className="text-center text-secondary mb-10 max-w-2xl mx-auto">
+          One-off payment for a fixed licence period. No subscription, no auto-renewal, and the
+          desktop app is free to evaluate for 3 days before you decide.
         </p>
 
-        {/* Platform logos */}
-        <div className="flex flex-wrap justify-center items-center gap-6 mb-12">
+        <div className="flex flex-wrap justify-center items-center gap-6 mb-14">
           {["Adobe Stock", "Shutterstock", "Dreamstime", "Freepik"].map((name) => (
             <span
               key={name}
@@ -128,34 +122,27 @@ const PricingSection = () => {
           ))}
         </div>
 
-        {/* ─── EID COUNTDOWN / EXPIRED BANNER ─── */}
-        {/* Discount banners removed */}
-        {/* ─── END BANNER ─── */}
-
-        {/* ─── CHROME EXTENSION 100% FREE BANNER ─── */}
-        <Link to="/chrome-extension" className="reveal mt-8 mb-16 flex flex-col sm:flex-row items-center sm:items-start gap-5 glass-panel rounded-3xl p-5 sm:px-8 max-w-2xl mx-auto transform hover:scale-[1.02] transition-all duration-300 relative overflow-hidden group border-primary/20 hover:border-primary/50 hover:shadow-[0_0_30px_hsl(var(--primary)/0.2)]">
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-          <div className="absolute top-0 right-0 bg-green-500 text-slate-950 text-[10px] font-black uppercase px-3 py-1 rounded-bl-xl shadow-sm z-10">
-            100% FREE EXTENSION
-          </div>
-          <div className="w-14 h-14 rounded-2xl bg-primary/20 flex items-center justify-center flex-shrink-0 border border-primary/30 shadow-inner z-10 relative mt-2 sm:mt-0 group-hover:scale-110 transition-transform">
+        {/* Free extension cross-sell */}
+        <Link
+          to="/chrome-extension"
+          className="reveal mb-16 flex flex-col sm:flex-row items-center sm:items-start gap-5 glass-panel rounded-3xl p-5 sm:px-8 max-w-2xl mx-auto transform hover:scale-[1.02] transition-all duration-300 relative overflow-hidden group border-primary/20 hover:border-primary/50"
+        >
+          <div className="w-14 h-14 rounded-2xl bg-primary/20 flex items-center justify-center flex-shrink-0 border border-primary/30 z-10 relative group-hover:scale-110 transition-transform">
             <Sparkles className="w-7 h-7 text-primary" />
           </div>
-          <div className="text-center sm:text-left mt-2 sm:mt-0 z-10 relative">
-            <p className="text-xl font-black text-foreground tracking-tight flex items-center justify-center sm:justify-start gap-2">
-              Looking for Browser Automation?
-              <span className="text-sm text-primary font-bold hidden sm:inline-block group-hover:translate-x-1 transition-transform">→</span>
+          <div className="text-center sm:text-left z-10 relative">
+            <p className="text-xl font-black text-foreground tracking-tight">
+              There is also a free extension
             </p>
-            <p className="text-sm text-secondary mt-1.5 leading-relaxed">The Tagyfy Pro Chrome Extension for Adobe Stock is completely <strong>100% FREE</strong> for all contributors. No license key needed!</p>
-            <p className="text-xs font-bold text-green-400 mt-2.5 flex items-center justify-center sm:justify-start gap-1.5">
-              <Check className="w-3.5 h-3.5" /> Direct In-Browser Tagging • Update Approved Assets • Free Forever
+            <p className="text-sm text-secondary mt-1.5 leading-relaxed">
+              The Adobe Stock browser extension fills titles and keywords inside the contributor
+              dashboard. It is free and needs no licence key.
             </p>
           </div>
         </Link>
-        {/* ─── END FREE EXTENSION BANNER ─── */}
 
-        {/* Currency toggle */}
-        <div className="flex justify-center mb-20">
+        {/* Currency toggle — label makes it clear nothing about the price changes */}
+        <div className="flex flex-col items-center mb-16">
           <div className="inline-flex rounded-xl bg-card-primary border border-card-primary p-1">
             {(["PKR", "USD"] as const).map((cur) => (
               <button
@@ -171,97 +158,45 @@ const PricingSection = () => {
               </button>
             ))}
           </div>
+          <p className="text-xs text-muted-foreground mt-3">
+            Display currency only — this is the same price, not a conversion or a discount.
+          </p>
         </div>
 
-        {/* ─── PLAN CARDS ─── */}
+        {/* Plan cards */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {plans.map((plan) => {
-            const currentDiscount = isExpired ? plan.postEidDiscount : plan.eidDiscount;
-            const currentPkr      = isExpired ? plan.postEidPkr      : plan.eidPkr;
-            const currentUsd      = isExpired ? plan.postEidUsd      : plan.eidUsd;
-
-            // Give each plan its own neon color
-            const planColors: Record<string, string> = {
-              Starter: "#94a3b8",   // slate
-              Creator: "#4F46E5",   // indigo
-              Pro:     "#10B981",   // mint
-              Studio:  "hsl(var(--primary))", // brand purple (highlighted)
-            };
-            const planColor = planColors[plan.name] ?? "hsl(var(--primary))";
+          {PLANS.map((plan) => {
+            const isSelected = selected.name === plan.name;
 
             return (
               <div
                 key={plan.name}
-                style={{ '--card-color': planColor } as React.CSSProperties}
-                className={`reveal relative rounded-3xl p-6 sm:p-8 transition-all duration-300 overflow-hidden neon-hover-card ${
-                  plan.highlighted
-                    ? "glass-panel transform md:-translate-y-4"
-                    : "glass-panel"
-                }`}
+                style={{ "--card-color": plan.color } as React.CSSProperties}
+                className={`reveal relative rounded-3xl p-6 sm:p-8 transition-all duration-300 overflow-hidden neon-hover-card glass-panel ${
+                  plan.highlighted ? "transform md:-translate-y-4" : ""
+                } ${isSelected ? "ring-2 ring-primary/60" : ""}`}
               >
                 {plan.highlighted && (
                   <>
-                    {/* Top gradient accent line — sits inside overflow-hidden so it respects rounded corners */}
-                    <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-indigo-400 via-indigo-500 to-emerald-400 animate-pulse" />
+                    <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-indigo-400 via-indigo-500 to-emerald-400" />
                     <div className="absolute top-0 right-0 bg-primary text-primary-foreground text-xs font-black uppercase px-4 py-1.5 rounded-bl-xl shadow-sm z-10">
-                      Most Popular
+                      Longest term
                     </div>
                   </>
                 )}
 
-                <h3 className={`text-xl font-bold mb-1 neon-title transition-colors ${plan.highlighted ? 'text-gradient text-2xl' : 'text-foreground'}`}>{plan.name}</h3>
+                <h2 className="text-xl font-bold mb-1 text-foreground">{plan.name}</h2>
                 <p className="text-sm text-secondary font-medium mb-4">{plan.duration}</p>
 
-                {/* Discount badges */}
-                {currentDiscount && (
-                  <div className="flex items-center gap-2 mb-3 flex-wrap">
-                    <span className="inline-block px-3 py-1 rounded-full text-xs font-bold bg-info-light text-info">
-                      Save {currentDiscount}%
-                    </span>
-                    {!isExpired && (
-                      <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide animate-pulse bg-yellow-500/20 text-yellow-300 border border-yellow-500/30">
-                        🎉 Eid Price
-                      </span>
-                    )}
-                  </div>
-                )}
-
-                {/* Price */}
-                <div className="mb-6">
-                  {currentDiscount ? (
-                    <>
-                      <span className="block text-lg font-semibold line-through mb-1 text-minimal-low">
-                        {currency === "PKR"
-                          ? `₨${plan.originalPkr.toLocaleString()}`
-                          : `$${plan.originalUsd}`}
-                      </span>
-                      <span className="text-4xl font-black text-info">
-                        {currency === "PKR"
-                          ? `₨${currentPkr.toLocaleString()}`
-                          : `$${currentUsd}`}
-                      </span>
-                    </>
-                  ) : (
-                    <span className="text-4xl font-black text-foreground">
-                      {currency === "PKR"
-                        ? `₨${currentPkr.toLocaleString()}`
-                        : `$${currentUsd}`}
-                    </span>
-                  )}
+                <div className="mb-2">
+                  <span className="text-4xl font-black text-foreground">{priceLabel(plan)}</span>
                 </div>
+                <p className="text-xs text-muted-foreground mb-6">
+                  about {(plan.priceUsd / plan.months).toFixed(2)} USD per month
+                </p>
 
-                {/* Features */}
-                <ul className="space-y-4 mb-6 mt-4">
-                  <li className="flex items-center gap-2 text-sm font-bold text-primary bg-primary/10 px-3 py-2 rounded-lg mb-4 border border-primary/20">
-                    <Sparkles className="w-4 h-4 flex-shrink-0" />
-                    Native File Metadata Embedding
-                  </li>
-                  {[
-                    "Platform-ready CSVs for Adobe, SS, DT & Freepik",
-                    "Full metadata generation",
-                    "Bulk processing",
-                    "Embed into files",
-                  ].map((f) => (
+                <ul className="space-y-4 mb-6">
+                  {FEATURES.map((f) => (
                     <li key={f} className="flex items-start gap-3 text-sm text-secondary font-medium">
                       <Check className="w-5 h-5 text-primary flex-shrink-0" />
                       <span>{f}</span>
@@ -269,39 +204,141 @@ const PricingSection = () => {
                   ))}
                 </ul>
 
-                {/* CTA */}
-                <div className="flex gap-2">
-                  <a
-                    href={`https://wa.me/923259640429?text=${getWhatsAppMessage(plan.name, currency)}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`flex-1 flex items-center justify-center py-3.5 rounded-xl text-sm font-bold transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] ${
-                      plan.highlighted
-                        ? "btn-shimmer shadow-[0_0_20px_hsl(var(--primary)/0.3)] hover:shadow-[0_0_40px_hsl(var(--primary)/0.5)] border border-primary/50"
-                        : "bg-secondary text-foreground hover:bg-secondary/80"
-                    }`}
-                  >
-                    Get {plan.name}
-                  </a>
-                  <a
-                    href={`https://wa.me/923259640429?text=${getWhatsAppMessage(plan.name, currency)}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center justify-center w-12 rounded-xl border border-green-500/30 bg-green-500/10 hover:bg-green-500/20 transition-all duration-200"
-                    title={`Ask about ${plan.name} on WhatsApp`}
-                  >
-                    <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-green-500">
-                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
-                    </svg>
-                  </a>
-                </div>
+                <button
+                  onClick={() => {
+                    setSelected(plan);
+                    document
+                      .getElementById("order")
+                      ?.scrollIntoView({ behavior: "smooth", block: "center" });
+                  }}
+                  className={`w-full flex items-center justify-center py-3.5 rounded-xl text-sm font-bold transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] ${
+                    plan.highlighted
+                      ? "btn-shimmer border border-primary/50"
+                      : "bg-secondary text-foreground hover:bg-secondary/80"
+                  }`}
+                >
+                  {isSelected ? "Selected — continue below" : `Choose ${plan.name}`}
+                </button>
               </div>
             );
           })}
         </div>
 
-        <p className="text-center text-xs text-muted-foreground mt-14">
-          Early adopter pricing — prices will increase as features expand.
+        {/* Order panel — replaces the bare WhatsApp buttons that sat on every
+            card. This is where the reference, the plan and the next step are
+            brought together. */}
+        <div
+          id="order"
+          className="reveal mt-14 scroll-mt-24 glass-panel rounded-3xl p-6 sm:p-10 border border-primary/25"
+        >
+          <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-2">
+            Ready to order {selected.name}?
+          </h2>
+          <p className="text-sm text-secondary leading-relaxed mb-8 max-w-2xl">
+            Send the message below and we will reply with the payment details for your plan. You get
+            a licence key and a receipt once the payment is confirmed. Nothing is charged
+            automatically and no card details are ever asked for.
+          </p>
+
+          <div className="grid md:grid-cols-2 gap-6 mb-8">
+            <div className="rounded-2xl border border-card-primary bg-card-primary p-5">
+              <p className="text-[11px] font-semibold uppercase tracking-wide text-tertiary mb-1">
+                Your order reference
+              </p>
+              <div className="flex items-center gap-3">
+                <p className="text-lg font-mono font-bold text-foreground">{orderRef}</p>
+                <button
+                  onClick={() => navigator.clipboard?.writeText(orderRef)}
+                  className="p-1.5 rounded-lg hover:bg-primary/10 transition-colors"
+                  aria-label="Copy order reference"
+                  title="Copy order reference"
+                >
+                  <Copy className="w-4 h-4 text-primary" />
+                </button>
+              </div>
+              <p className="text-xs text-muted-foreground mt-3 leading-relaxed">
+                Quote this in your message. It is how we match your payment to your order and issue
+                the right licence.
+              </p>
+            </div>
+
+            <div className="rounded-2xl border border-card-primary bg-card-primary p-5">
+              <p className="text-[11px] font-semibold uppercase tracking-wide text-tertiary mb-1">
+                Selected plan
+              </p>
+              <p className="text-lg font-bold text-foreground">
+                {selected.name} · {selected.duration}
+              </p>
+              <p className="text-sm text-secondary mt-1">{priceLabel(selected)} one-off</p>
+              <p className="text-xs text-muted-foreground mt-3 leading-relaxed">
+                Not the right term? Pick a different card above and this updates. You can also ask
+                us before paying.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex flex-col sm:flex-row gap-3">
+            <a
+              href={waLink(orderMessage)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 flex items-center justify-center gap-2 py-4 rounded-xl text-sm font-bold btn-shimmer border border-primary/50 hover:scale-[1.01] transition-transform"
+            >
+              Continue on WhatsApp
+            </a>
+            <a
+              href={mailLink(
+                `Tagyfy Pro order ${orderRef} — ${selected.name}`,
+                orderMessage
+              )}
+              className="flex-1 flex items-center justify-center gap-2 py-4 rounded-xl text-sm font-bold border border-card-secondary hover:border-primary transition-colors text-foreground"
+            >
+              Continue by e-mail
+            </a>
+          </div>
+
+          {CARD_CHECKOUT ? (
+            <a
+              href={CARD_CHECKOUT}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-3 flex items-center justify-center gap-2 py-4 rounded-xl text-sm font-bold border border-primary/40 hover:border-primary transition-colors"
+            >
+              Or pay by card
+            </a>
+          ) : (
+            <p className="text-xs text-muted-foreground mt-4 leading-relaxed">
+              Card payment is not available yet, so this order is completed by bank transfer or
+              mobile wallet. That means no chargeback protection — if that matters to you, use the
+              3-day trial first. Full terms are on the{" "}
+              <Link to="/refund-policy" className="text-primary underline hover:text-primary/80">
+                refund policy
+              </Link>{" "}
+              and{" "}
+              <Link to="/terms" className="text-primary underline hover:text-primary/80">
+                terms
+              </Link>{" "}
+              pages.
+            </p>
+          )}
+
+          <p className="text-xs text-muted-foreground mt-6 flex items-start gap-2">
+            <CheckIcon className="w-3.5 h-3.5 text-primary shrink-0 mt-0.5" />
+            <span>
+              Prefer to try before ordering? The desktop app includes a full 3-day trial with no
+              card required — see the{" "}
+              <Link to="/download" className="text-primary underline hover:text-primary/80">
+                download page
+              </Link>
+              .
+            </span>
+          </p>
+        </div>
+
+        <p className="text-center text-xs text-muted-foreground mt-12 leading-relaxed max-w-2xl mx-auto">
+          Prices are shown in USD and PKR as two independent prices, not a currency conversion.
+          Current pricing applies to new orders; existing licences are unaffected by later price
+          changes.
         </p>
       </div>
     </section>

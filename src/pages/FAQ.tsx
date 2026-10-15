@@ -1,5 +1,7 @@
 import { Helmet } from "react-helmet-async";
 import FAQSection from "@/components/FAQSection";
+import { FAQS } from "@/data/faqs";
+import { JsonLd, faqSchema, breadcrumbSchema } from "@/lib/structuredData";
 
 const FAQ = () => (
   <div className="min-h-screen bg-background pt-12">
@@ -11,6 +13,15 @@ const FAQ = () => (
       />
       <link rel="canonical" href="https://tagyfy.com/faq" />
     </Helmet>
+    <JsonLd
+      data={[
+        faqSchema(FAQS),
+        breadcrumbSchema([
+          { name: "Home", path: "/" },
+          { name: "FAQ", path: "/faq" },
+        ]),
+      ]}
+    />
     <main>
       <div className="max-w-3xl mx-auto text-center px-6 pt-8">
         <h1 className="text-3xl sm:text-4xl font-black text-foreground mb-2">

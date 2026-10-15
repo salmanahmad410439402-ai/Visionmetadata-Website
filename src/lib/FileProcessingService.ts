@@ -13,6 +13,7 @@ import type { Asset, AssetMetadata } from "@/contexts/AssetsContext";
 import { isDesktop as _isDesktop, hasNativeTools as _hasNativeTools } from "./env";
 import { embedMetadata as browserEmbedMetadata } from "./metadataEmbedder";
 import { tauriAPI } from "./tauriAPI";
+import { tempDir, join, writeFile, remove } from "./nativeFs";
 
 // ============================================
 // Environment Detection

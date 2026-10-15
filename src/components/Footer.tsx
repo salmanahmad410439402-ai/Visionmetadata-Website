@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { clearConsent } from "@/lib/consent";
 
 const Footer = () => {
   return (
@@ -29,9 +30,11 @@ const Footer = () => {
             <Link to="/about" className="hover:text-primary transition-colors">About Us</Link>
             <Link to="/contact" className="hover:text-primary transition-colors">Contact</Link>
             <Link to="/faq" className="hover:text-primary transition-colors">FAQ</Link>
+            <Link to="/metadata-limits" className="hover:text-primary transition-colors">Metadata Limits</Link>
             <Link to="/privacy-policy" className="hover:text-primary transition-colors font-semibold text-foreground/80">Privacy Policy</Link>
             <Link to="/terms" className="hover:text-primary transition-colors font-semibold text-foreground/80">Terms</Link>
             <Link to="/refund-policy" className="hover:text-primary transition-colors font-semibold text-foreground/80">Refunds</Link>
+            <Link to="/editorial-policy" className="hover:text-primary transition-colors font-semibold text-foreground/80">Editorial Standards</Link>
           </div>
 
         </div>
@@ -39,7 +42,16 @@ const Footer = () => {
         {/* Copyright */}
         <div className="border-t border-border/50 pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-minimal-low gap-3">
           <p>© {new Date().getFullYear()} Tagyfy Pro · All rights reserved.</p>
-          <p className="text-[11px]">Built for Adobe Stock, Shutterstock, Freepik & Vecteezy Contributors</p>
+          <div className="flex flex-col sm:flex-row items-center gap-3">
+            <p className="text-[11px]">Built for Adobe Stock, Shutterstock, Freepik & Vecteezy Contributors</p>
+            <button
+              type="button"
+              onClick={clearConsent}
+              className="text-[11px] underline hover:text-primary transition-colors"
+            >
+              Cookie settings
+            </button>
+          </div>
         </div>
       </div>
     </footer>

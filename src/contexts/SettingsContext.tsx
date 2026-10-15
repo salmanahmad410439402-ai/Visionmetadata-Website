@@ -238,16 +238,28 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
     // Migrate stale model names (e.g. "llama3-70b-8192" -> "meta-llama/llama-4-scout-17b-16e-instruct")
     // so the UI shows the correct button selected after an app update.
     const migrations: Record<string, AIModel> = {
-      // ── Legacy Gemini names
-      "gemini-1.5-flash":               "gemini-3-flash-preview",
-      "gemini-1.5-pro":                 "gemini-3-pro-preview",
-      "gemini-2.0-flash":               "gemini-3-flash-preview",
+      // ── Legacy Gemini names.
+      // These previously targeted "gemini-3-flash-preview"/"gemini-3-pro-preview"/
+      // "gemini-2.5-flash-lite", none of which exist in the AIModel union or in
+      // the model menu — so a stored legacy value migrated to a model the app
+      // could not select, label or verify. Every target below is a model the UI
+      // actually offers.
+      "gemini-1.5-flash":               "gemini-3.5-flash-lite",
+      "gemini-1.5-pro":                 "gemini-3.1-flash-lite",
+      "gemini-2.0-flash":               "gemini-3.5-flash-lite",
       // ── Legacy internal names
-      "gemini-3.5-flash-high":          "gemini-3.5-flash",
-      "gemini-3.5-flash-medium":        "gemini-3.5-flash",
-      "gemini-3.5-flash-low":           "gemini-3.5-flash",
-      "gemini-3.1-flash-lite-preview":  "gemini-2.5-flash-lite",
-      "gemini-3.1-deep-think":          "gemini-3-pro-preview",
+      "gemini-3.5-flash-high":          "gemini-3.5-flash-lite",
+      "gemini-3.5-flash-medium":        "gemini-3.5-flash-lite",
+      "gemini-3.5-flash-low":           "gemini-3.5-flash-lite",
+      "gemini-3.5-flash":               "gemini-3.5-flash-lite",
+      "gemini-3-flash-preview":         "gemini-3.5-flash-lite",
+      "gemini-3.1-flash-lite-preview":  "gemini-3.1-flash-lite",
+      "gemini-3.1-deep-think":          "gemini-3.1-flash-lite",
+      "gemini-3-pro-preview":           "gemini-3.1-flash-lite",
+      "gemini-3.1-pro-preview":         "gemini-3.1-flash-lite",
+      "gemini-2.5-flash":               "gemini-3.5-flash-lite",
+      "gemini-2.5-flash-lite":          "gemini-3.5-flash-lite",
+      "gemini-2.5-pro":                 "gemini-3.1-flash-lite",
       // ── Invented GPT-5.4 / GPT-4.1 / o3 / o4-mini → real gpt-4o names ───
       "gpt-5.4":       "gpt-4o",
       "gpt-5.4-pro":   "gpt-4o",

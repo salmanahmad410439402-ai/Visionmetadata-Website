@@ -6,6 +6,7 @@
 import { MotionType } from "@/contexts/AssetsContext";
 import { tauriAPI } from "@/lib/tauriAPI";
 import { isDesktop } from "./env";
+import { tempDir, join, writeFile, remove } from "./nativeFs";
 
 const FRAME_TIMESTAMPS = [0, 0.33, 0.66, 1]; // 0%, 33%, 66%, 100%
 const GRID_SIZE = 640; // 2x2 grid will be 640x640 (320px per frame)

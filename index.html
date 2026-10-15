@@ -18,23 +18,45 @@
   <meta property="og:description"
     content="AI-Powered Metadata Tool for Stock Creators. Generate, optimize, and embed titles and keywords directly into your files." />
   <meta property="og:type" content="website" />
-  <meta property="og:image" content="/icon.png" />
+  <meta property="og:image" content="https://tagyfy.com/thumbnail.jpg" />
+  <meta property="og:image:width" content="1376" />
+  <meta property="og:image:height" content="768" />
+  <meta property="og:image:alt" content="The Tagyfy Pro browser tool analysing a stock image and generating titles and keywords" />
+  <meta property="og:url" content="https://tagyfy.com/" />
+  <meta property="og:site_name" content="Tagyfy Pro" />
 
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Tagyfy Pro" />
   <meta name="twitter:description"
     content="AI-Powered Metadata Tool for Stock Creators. Generate, optimize, and embed titles and keywords directly into your files." />
-  <meta name="twitter:image" content="/icon.png" />
+  <meta name="twitter:image" content="https://tagyfy.com/thumbnail.jpg" />
+  <meta name="twitter:image:alt" content="The Tagyfy Pro browser tool generating title and keyword suggestions" />
 
   <meta name="p:domain_verify" content="7cab546fe5948941b3352f53143465c8"/>
+
+  <!--
+    Google Consent Mode v2 defaults.
+    Every storage signal starts denied, so GA4 and AdSense can load (AdSense
+    needs the tag present to verify the site) without writing analytics or
+    advertising cookies before the visitor chooses. The banner in the app calls
+    gtag('consent', 'update', ...) on accept; see src/lib/consent.ts.
+  -->
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      analytics_storage: 'denied',
+      wait_for_update: 500
+    });
+  </script>
 
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-VDFCFCECNL"></script>
   <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-
     gtag('config', 'G-VDFCFCECNL');
   </script>
 

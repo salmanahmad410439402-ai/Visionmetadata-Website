@@ -299,8 +299,7 @@ export const Dashboard = () => {
           status: "complete",
           metadata,
           metadataEmbedded: true,
-          error: undefined,
-          errorDetails: undefined
+          error: undefined
         });
         // Sync to related assets
         if (asset.relatedAssetIds) {
@@ -309,8 +308,7 @@ export const Dashboard = () => {
               status: "complete",
               metadata,
               metadataEmbedded: true,
-              error: undefined,
-              errorDetails: undefined
+              error: undefined
             });
           });
         }
@@ -318,8 +316,7 @@ export const Dashboard = () => {
         updateAsset(assetId, {
           status: "complete",
           metadata,
-          error: undefined,
-          errorDetails: undefined
+          error: undefined
         });
         // Sync to related assets
         if (asset.relatedAssetIds) {
@@ -327,8 +324,7 @@ export const Dashboard = () => {
             updateAsset(id, {
               status: "complete",
               metadata,
-              error: undefined,
-              errorDetails: undefined
+              error: undefined
             });
           });
         }

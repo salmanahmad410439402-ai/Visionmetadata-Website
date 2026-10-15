@@ -1,29 +1,35 @@
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 import { useReveal } from "@/hooks/useReveal";
 
+/**
+ * Homepage preview questions.
+ *
+ * These are deliberately different questions from the ones on /faq rather than
+ * a shortened copy of that page: repeating the same Q&A on two URLs creates
+ * duplicate content and gives a visitor no reason to click through. Each answer
+ * here is self-contained, and the full list lives at /faq.
+ */
 const topQuestions = [
   {
-    question: "Does Tagyfy Pro embed metadata directly into files?",
-    answer: "Yes. Tagyfy Pro writes supported IPTC/XMP fields into compatible files. Many stock workflows can read that metadata on upload, but behavior varies by file format and marketplace, so confirm the current platform requirements.",
+    question: "What do I need before I can generate metadata?",
+    answer:
+      "Two things: the media files you want to describe, and an API key from one AI provider. Google AI Studio issues a free Gemini key in about a minute, and Groq also has a free tier, so a paid account is not required to start. Tagyfy Pro never resells AI access, which is why there is no per-generation charge.",
   },
   {
-    question: "Which AI providers are supported?",
-    answer: "Tagyfy Pro supports 5 AI providers: Google Gemini, OpenAI GPT-4o, Groq (Llama 4 Scout), Mistral AI, and OpenRouter. You can add multiple API keys and the system rotates between them automatically.",
+    question: "Which parts work in the browser and which need the desktop app?",
+    answer:
+      "The browser tool on the Tool page handles images: upload a JPG, PNG or WebP, get a draft title, description and keyword set back, then copy or export it. Writing metadata into vector files such as EPS and AI, or into video containers such as MP4 and MOV, requires the desktop app because browsers cannot modify those file structures.",
   },
   {
-    question: "Is my API key safe inside the app?",
-    answer: "For the Windows app, keys stay in local encrypted storage and requests go directly to the provider you choose. The browser tool keeps a key locally only when you opt in and sends the selected file directly to that AI provider; Tagyfy does not proxy or store the media.",
+    question: "What happens at the end of the 3-day trial?",
+    answer:
+      "Nothing charges automatically. You evaluate the app for 3 days with every feature enabled and no card on file, and if it earns a place in your workflow you buy a licence key for 1, 3, 6 or 12 months. Nothing renews by itself, and no card is stored because no card is ever collected for the trial.",
   },
   {
-    question: "How does the licensing work?",
-    answer: "Tagyfy Pro is available in four plans: 1 Month, 3 Months, 6 Months, and 1 Year. You purchase a license key for your chosen duration, and you're never billed per generation.",
+    question: "Can I see real output before I trust it with a batch?",
+    answer:
+      "Yes. Generate metadata for one image in the browser tool, or run a single file in the desktop app, and read the result critically: check whether the title describes the actual subject, whether the keywords would help a buyer find it, and whether anything reads as invented. Only extend to a full batch once that single result holds up.",
   },
 ];
 
@@ -45,29 +51,24 @@ const FAQPreview = () => {
             A Few Quick Questions
           </h2>
           <p className="reveal reveal-delay-2 max-w-xl mx-auto text-tertiary">
-            The four questions new visitors ask most. Need more detail? The full FAQ page covers licensing, rate
-            limits, trademark detection, and more.
+            Everything you need before you start — what to prepare, what runs where, and how the trial ends.
           </p>
         </div>
 
-        <div className="reveal">
-          <Accordion type="single" collapsible className="w-full">
-            {topQuestions.map((faq, index) => (
-              <AccordionItem key={index} value={`home-faq-${index}`} className="border-b border-muted">
-                <AccordionTrigger className="text-sm sm:text-base font-semibold text-foreground hover:no-underline transition-colors py-5 text-left text-secondary">
-                  {faq.question}
-                </AccordionTrigger>
-                <AccordionContent className="text-sm leading-relaxed pb-5 text-tertiary">
-                  {faq.answer}
-                </AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
+        <div className="reveal space-y-6">
+          {topQuestions.map((faq) => (
+            <div key={faq.question} className="rounded-2xl border border-card-primary bg-card-primary p-5 sm:p-6">
+              <h3 className="text-sm sm:text-base font-semibold text-foreground mb-2 text-left">
+                {faq.question}
+              </h3>
+              <p className="text-sm leading-relaxed text-tertiary">{faq.answer}</p>
+            </div>
+          ))}
         </div>
 
         <div className="reveal text-center mt-10">
           <Link to="/faq" className="inline-flex items-center gap-2 text-sm font-bold text-primary hover:gap-3 transition-all">
-            View all FAQs
+            Read the full FAQ
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>

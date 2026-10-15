@@ -1,5 +1,6 @@
 import { MessageCircle, Send, Camera, KeyRound, Mail, Phone, Clock, Shield } from "lucide-react";
 import { useReveal } from "@/hooks/useReveal";
+import { SELLER, waLink } from "@/config/commerce";
 import ContactForm from "./ContactForm";
 
 const ContactSection = () => {
@@ -19,32 +20,32 @@ const ContactSection = () => {
             Contact & Support
           </h2>
           <p className="reveal reveal-delay-2 max-w-2xl mx-auto text-lg text-tertiary">
-            Have questions about Tagyfy Pro? Need a license key? Our team responds quickly on WhatsApp & email.
+            Questions about Tagyfy Pro, an existing licence, or a refund? Message us on WhatsApp or e-mail — support is handled by the same person who develops the app.
           </p>
         </div>
 
         {/* Quick contact buttons */}
         <div className="reveal reveal-delay-3 grid sm:grid-cols-2 gap-4 mb-20">
           {/* WhatsApp */}
-          <a href="https://wa.me/923259640429" target="_blank" rel="noopener noreferrer"
+          <a href={waLink("Hi, I have a question about Tagyfy Pro.")} target="_blank" rel="noopener noreferrer"
             className="group relative overflow-hidden rounded-xl border p-6 transition-all duration-300 hover:border-green-500/50 hover:shadow-[0_0_20px_rgba(34,197,94,0.1)] bg-green-500/10 border-green-500/20">
             <div className="flex items-center justify-between relative z-10">
               <div>
                 <h3 className="text-sm font-bold text-green-600 dark:text-green-400 mb-1">WhatsApp (Fastest)</h3>
-                <p className="text-lg font-semibold text-foreground">+92 325 9640429</p>
-                <p className="text-xs mt-2 text-minimal">Instant responses · License keys delivered in minutes</p>
+                <p className="text-lg font-semibold text-foreground">{SELLER.whatsappDisplay}</p>
+                <p className="text-xs mt-2 text-minimal">Order questions, licence keys and refunds</p>
               </div>
               <Phone className="w-8 h-8 text-green-500/60 group-hover:text-green-500 transition-colors" />
             </div>
           </a>
 
           {/* Email */}
-          <a href="mailto:alhamdstudio839@gmail.com"
+          <a href={`mailto:${SELLER.supportEmail}`}
             className="group relative overflow-hidden rounded-xl border p-6 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_20px_hsl(243_75%_59%/0.1)] bg-card-primary border-card-primary">
             <div className="flex items-center justify-between relative z-10">
               <div>
                 <h3 className="text-sm font-bold text-primary mb-1">Email Support</h3>
-                <p className="text-lg font-semibold text-foreground">alhamdstudio839@gmail.com</p>
+                <p className="text-lg font-semibold text-foreground">{SELLER.supportEmail}</p>
                 <p className="text-xs mt-2 text-minimal">General inquiries · Technical support · Partnerships</p>
               </div>
               <Mail className="w-8 h-8 text-primary/60 group-hover:text-primary transition-colors" />
@@ -117,8 +118,9 @@ const ContactSection = () => {
         <div className="reveal reveal-delay-4 glass-panel rounded-2xl p-10 text-center mt-8 border-primary/20">
           <p className="text-sm font-semibold text-primary mb-4">✓ Security & Privacy</p>
           <p className="text-sm text-quaternary">
-            All communication is encrypted. One license key per device. No recurring charges. <br />
-            License delivered within minutes on WhatsApp after payment confirmation.
+            One licence key per device. No recurring charges, no auto-renewal. <br />
+            Licence keys are sent once payment is confirmed, and a receipt is available for every
+            completed order. We never ask for card details, bank passwords or one-time codes.
           </p>
         </div>
 

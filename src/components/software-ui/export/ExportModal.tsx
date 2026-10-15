@@ -52,7 +52,10 @@ export const ExportModal = ({ open, onOpenChange, assets }: ExportModalProps) =>
     setExporting(true);
     try {
       await exportAssets(assets, format, {
-        vecteezyLicense,
+        // Lowercased at the boundary: the UI displays "Free"/"Pro" but the
+        // Vecteezy CSV spec requires "free"/"pro"/"editorial". Passing the
+        // display string through unchanged produced an invalid License column.
+        vecteezyLicense: vecteezyLicense.toLowerCase() as "free" | "pro",
         freepikIsAI,
         freepikAiTool: freepikAiTool.trim(),
         includeVectorEps,

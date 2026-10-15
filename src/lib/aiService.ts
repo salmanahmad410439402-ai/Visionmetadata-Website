@@ -227,7 +227,9 @@ export async function generateMetadata(
         : getSystemPrompt(settings, isVideo, isVertical, isAIGenerated, eventEnabled, eventName);
     const userPrompt     = getUserPrompt(isVideo, motionType, eventEnabled, eventName);
 
-    const isAutoMode       = preferredModel === "auto" || !preferredModel;
+    // "auto" is migrated to a concrete model by SettingsContext, so the only
+    // way to land here without a model is a missing value.
+    const isAutoMode       = !preferredModel;
     const effectiveModel   = isAutoMode ? undefined : preferredModel;
     const preferredProvider = effectiveModel ? getProviderFromModel(effectiveModel) : undefined;
 

@@ -4,6 +4,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { SettingsProvider } from '@/contexts/SettingsContext';
 import { AssetsProvider } from '@/contexts/AssetsContext';
 import { Dashboard } from '@/components/software-ui/dashboard/Dashboard';
+import ToolGuide from '@/components/tool/ToolGuide';
+import { JsonLd, webAppSchema } from '@/lib/structuredData';
 import { Play, Sparkles, X, Video } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
@@ -30,6 +32,7 @@ export const ToolPage: React.FC = () => {
 
   return (
     <SettingsProvider>
+      <JsonLd data={webAppSchema()} />
       <Helmet>
         <title>Free Online Metadata Generator Tool | Tagyfy Pro</title>
         <meta
@@ -66,14 +69,28 @@ export const ToolPage: React.FC = () => {
             </div>
           )}
 
-          <p className="mx-auto max-w-5xl px-4 pb-2 text-center text-[11px] leading-relaxed text-muted-foreground">
-            Privacy note: this browser tool sends the selected file directly to the AI provider you choose. Tagyfy does not proxy or store your media, but provider terms apply. Use the Windows app when your files must remain on your device.
-          </p>
+          <div className="mx-auto max-w-5xl px-4 pb-4 text-center">
+            <h1 className="text-xl sm:text-2xl font-bold text-foreground mb-2">
+              Free online stock metadata generator
+            </h1>
+            <p className="text-[11px] sm:text-xs leading-relaxed text-muted-foreground">
+              Generate draft titles, descriptions and keywords for stock images, vectors and video in
+              your browser using your own AI provider key — no Tagyfy account, no installation.
+            </p>
+            <p className="mt-2 text-[11px] leading-relaxed text-muted-foreground">
+              Privacy note: this browser tool sends the selected file directly to the AI provider you
+              choose. Tagyfy does not proxy or store your media, but provider terms apply. Use the
+              Windows app when your files must remain on your device.
+            </p>
+          </div>
 
           {/* Main Desktop Software Dashboard Engine */}
           <main className="flex-1 w-full max-w-[1920px] mx-auto px-2 sm:px-4 lg:px-6 py-4">
             <Dashboard />
           </main>
+
+          {/* Supporting content — see ToolGuide for why this exists on the page */}
+          <ToolGuide />
         </div>
       </AssetsProvider>
     </SettingsProvider>

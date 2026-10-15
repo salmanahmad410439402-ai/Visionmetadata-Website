@@ -5,6 +5,7 @@ import { prepareAssetForZip } from "./metadataEmbedder";
 import { isDesktop, hasNativeTools } from "./FileProcessingService";
 import { tauriAPI } from "./tauriAPI";
 import { toast } from "sonner";
+import { tempDir, join, writeFile, remove } from "./nativeFs";
 
 /**
  * Electron-native streaming zip export.

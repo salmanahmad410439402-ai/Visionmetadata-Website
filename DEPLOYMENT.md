@@ -239,6 +239,39 @@ Track deployments and traffic:
 - Monitor Core Web Vitals
 - View deployment logs
 
+## Google Search Console verification
+
+Search Console is the only way to see which pages Google has actually indexed, and
+the site is not verified yet — `site:tagyfy.com` returns nothing, which means the
+pages are not in the index at all. Verify before re-applying anywhere, because
+without indexation the AdSense review sees a site with no discoverable content.
+
+Three routes, in order of effort:
+
+**1. Google Analytics (no code change).** The site already runs GA4 with
+measurement ID `G-VDFCFCECNL`. If your Google account has edit rights on that GA4
+property, choose *Google Analytics* as the verification method in Search Console
+and it verifies immediately. Nothing to deploy.
+
+**2. Meta tag (one line).** In Search Console choose *HTML tag*, copy the value of
+the `content` attribute, and paste the whole tag into `index.html` inside `<head>`,
+next to the existing verification meta tags:
+
+```html
+<meta name="google-site-verification" content="PASTE_TOKEN_HERE" />
+```
+
+Then `npm run build:prerender` and deploy. The token is per-property and
+single-use — it cannot be generated for you, and inventing one will not verify.
+
+**3. HTML file (no code change).** Download the verification file from Search
+Console, drop it in `public/`, and deploy. It is served from the site root
+unchanged.
+
+After verifying: submit `https://tagyfy.com/sitemap.xml`, then use *URL
+Inspection → Request indexing* on the home page, `/tool`, `/blogs` and the two
+reference pages. Indexing takes days, not hours.
+
 ## Support
 
 For issues:

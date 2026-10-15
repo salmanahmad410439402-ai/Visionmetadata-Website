@@ -319,7 +319,7 @@ export const EventContextPanel: React.FC<Props> = ({
           Pinned Keywords <span className="text-muted-foreground">(optional)</span>
         </Label>
         <p className="text-xs text-muted-foreground">
-          These exact phrases are guaranteed to appear in the first {ctx.eventKeywordSlots ?? 12} keyword slots.
+          These exact phrases are placed at the start of the keyword list, ahead of the generated terms, so they land in the first {ctx.eventKeywordSlots ?? 12} positions.
         </p>
         <div className="flex gap-2">
           <Input

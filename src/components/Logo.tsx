@@ -29,10 +29,6 @@ export const Logo = ({ size = "md", showPro = true }: LogoProps) => {
           width={icon}
           height={icon}
           className="rounded-full object-contain badge-glow relative z-10"
-          onError={(e) => {
-            // Fallback to icon.png if icon.jpg is not yet placed in public/
-            (e.target as HTMLImageElement).src = '/icon.png';
-          }}
         />
         {/* Glow effect */}
         <div className="absolute inset-0 rounded-full bg-primary opacity-20 blur-md" />

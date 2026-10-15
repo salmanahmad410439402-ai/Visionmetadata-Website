@@ -5,6 +5,7 @@ import { updateAssetTransactional } from "@/lib/databaseTransactions";
 import { isDesktop } from "@/lib/env";
 import { tauriAPI } from "@/lib/tauriAPI";
 import { resetBatchDownloadPath } from "@/lib/batchDownloadPath";
+import { tempDir, join, writeFile, remove } from "@/lib/nativeFs";
 
 // FIX: probeLimit is intentionally NOT created at module level.
 // Previously "const probeLimit = pLimit(5)" ran at import time — before React

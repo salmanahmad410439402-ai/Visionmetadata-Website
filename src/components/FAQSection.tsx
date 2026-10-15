@@ -1,60 +1,10 @@
 import { useState, useMemo } from "react";
 import { Search, X } from "lucide-react";
-import {
-    Accordion,
-    AccordionContent,
-    AccordionItem,
-    AccordionTrigger,
-} from "@/components/ui/accordion";
 import { useReveal } from "@/hooks/useReveal";
 import { analytics } from "@/lib/analytics";
+import { FAQS } from "@/data/faqs";
 
-const faqs = [
-    {
-        question: "Does Tagyfy Pro embed metadata directly into files?",
-        answer: "Yes. Tagyfy Pro writes supported IPTC/XMP fields into compatible files. Many stock workflows can read that metadata on upload, but behavior varies by file format and marketplace, so confirm the current platform requirements.",
-    },
-    {
-        question: "Will stock platforms automatically detect this metadata?",
-        answer: "Many stock workflows can read supported embedded metadata during upload, but behavior varies by file format and marketplace. Confirm the current platform requirements and review the title and keywords before submitting.",
-    },
-    {
-        question: "Which AI providers are supported?",
-        answer: "Tagyfy Pro supports 5 AI providers: Google Gemini (Flash & Pro), OpenAI GPT-4o, Groq (Llama 4 Scout), Mistral AI, and OpenRouter (300+ models including free ones). You can add multiple API keys and the system automatically rotates between them when rate limits are hit.",
-    },
-    {
-        question: "Are there any hard limits on how many files I can process at once?",
-        answer: "No, there are no artificial limits. You can drag and drop folders containing hundreds or thousands of files. The speed of processing depends entirely on your API providers and how many API keys you have added. Tagyfy Pro handles the queueing smoothly.",
-    },
-    {
-        question: "What happens when my API key hits a rate limit?",
-        answer: "The system has an automatic key rotation engine. When one key hits its rate limit, it's placed in a short cooldown and the next available key is tried immediately — following a priority waterfall across all your configured providers. You never see a failed generation just because one key is temporarily limited.",
-    },
-    {
-        question: "What is the Trademark Sniffer?",
-        answer: "It's a built-in compliance system that automatically detects and removes brand names from generated keywords. It has a list of 100+ trademarks and replaces them with generic equivalents — for example 'iPhone' becomes 'modern smartphone with touchscreen'. This prevents stock platform rejections caused by trademarked terms.",
-    },
-    {
-        question: "What are Confidence Scores and Risk Analysis?",
-        answer: "Every generated metadata set includes a confidence score (0–100) broken down into four dimensions: subject clarity, keyword precision, differentiator strength, and compliance safety. Risk Analysis flags potential reasons a stock reviewer might reject the asset — such as editorial content or brand mentions — with a severity level. Platform Readiness tells you if each asset is READY, NEEDS REVIEW, or NOT READY for Adobe Stock, Freepik, and Shutterstock individually.",
-    },
-    {
-        question: "What is Series Mode?",
-        answer: "Series Mode is for assets that belong together — for example, 10 variations of the same icon set. When enabled, the AI appends 'Part 01', 'Part 02', etc. to titles and maintains consistent keywords across the entire series, while slightly varying the visual description for each part.",
-    },
-    {
-        question: "How does the CSV export work?",
-        answer: "Tagyfy Pro generates platform-specific CSV files verified against the official upload specs for Adobe Stock, Shutterstock, Dreamstime, Freepik, 123RF, and Vecteezy. Each platform gets the correct column headers, category IDs, and keyword formatting. No truncation is ever applied — your full keyword list and title are always exported.",
-    },
-    {
-        question: "Is my API key safe inside the app?",
-        answer: "For the Windows app, keys stay in local encrypted storage and requests go directly to the provider you choose. The browser tool keeps a key locally only when you opt in and sends the selected file directly to that AI provider; Tagyfy does not proxy or store the media.",
-    },
-    {
-        question: "How does the licensing work?",
-        answer: "Tagyfy Pro is available in four plans: 1 Month, 3 Months, 6 Months, and 1 Year. You purchase a license key for your chosen duration — when it expires you can renew at any time. The AI generation uses your own API keys (which have their own free tiers — Gemini offers a generous free quota). You are never billed per generation by Tagyfy Pro.",
-    },
-];
+
 
 /**
  * Highlights matching text in a string
@@ -106,10 +56,10 @@ const FAQSection = () => {
 
     // Filter FAQs based on search query
     const filteredFaqs = useMemo(() => {
-        if (!searchQuery.trim()) return faqs;
+        if (!searchQuery.trim()) return FAQS;
 
         const query = searchQuery.toLowerCase();
-        return faqs.filter(
+        return FAQS.filter(
             (faq) =>
                 faq.question.toLowerCase().includes(query) ||
                 faq.answer.toLowerCase().includes(query)
@@ -128,7 +78,7 @@ const FAQSection = () => {
                         Frequently Asked Questions
                     </h2>
                     <p className="reveal reveal-delay-2 max-w-xl mx-auto text-tertiary">
-                        Everything you need to know before getting started
+                        Answers on providers, file formats, licensing, privacy and limits. Use the search box to filter, or add a question in the Contact form if something is missing.
                     </p>
                 </div>
 
@@ -165,23 +115,27 @@ const FAQSection = () => {
                     )}
                 </div>
 
-                {/* FAQ Accordion */}
+                {/* Q&A list.
+                    Answers are always rendered in the DOM rather than inside a
+                    collapsed accordion: an accordion that mounts its content
+                    only on click means a reader (or a search crawler) sees a
+                    page of questions with no answers at all, which makes the
+                    page look thin. Each item stays skimmable via the heading
+                    hierarchy. */}
                 <div className="reveal">
                     {resultCount > 0 ? (
-                        <Accordion type="single" collapsible className="w-full">
+                        <div className="w-full">
                             {filteredFaqs.map((faq, index) => (
-                                <AccordionItem key={index} value={`faq-${index}`}
-                                    className="border-b border-muted">
-                                    <AccordionTrigger
-                                        className="text-sm sm:text-base font-semibold text-foreground hover:no-underline transition-colors py-5 text-left text-secondary">
+                                <div key={index} className="border-b border-muted py-6">
+                                    <h3 className="text-sm sm:text-base font-semibold text-foreground mb-3">
                                         <HighlightText text={faq.question} query={searchQuery} />
-                                    </AccordionTrigger>
-                                    <AccordionContent className="text-sm leading-relaxed pb-5 text-tertiary">
+                                    </h3>
+                                    <p className="text-sm leading-relaxed text-tertiary">
                                         <HighlightText text={faq.answer} query={searchQuery} />
-                                    </AccordionContent>
-                                </AccordionItem>
+                                    </p>
+                                </div>
                             ))}
-                        </Accordion>
+                        </div>
                     ) : (
                         <div className="text-center py-12">
                             <p className="text-secondary mb-2">No matching FAQs found</p>
