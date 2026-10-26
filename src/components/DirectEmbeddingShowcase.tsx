@@ -44,9 +44,9 @@ export const DirectEmbeddingShowcase = () => {
       highlight: true,
     },
     {
-      feature: "Stock Marketplace Auto-Populate (No CSV Needed)",
-      web: "Available for Images",
-      desktop: "🔥 100% Automatic for ALL File Types",
+      feature: "Embedded Metadata on Upload (Supported Portals)",
+      web: "JPEG / PNG / WebP",
+      desktop: "Supported Image, Vector & Video Formats",
       highlight: true,
     },
     {
@@ -135,7 +135,7 @@ export const DirectEmbeddingShowcase = () => {
                 <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-purple-500/15 text-purple-400 border border-purple-500/25">No CSV Needed</span>
               </div>
               <p className="text-sm text-secondary leading-relaxed font-medium mb-4">
-                Drag and drop your exported files onto Adobe Stock, Shutterstock, Freepik, or Vecteezy. Watch titles and keywords populate automatically in 1 second.
+                Upload your embedded files to compatible portals such as Adobe Stock, Shutterstock, Freepik, or Vecteezy — supported IPTC/XMP fields populate during import so you can review and submit faster.
               </p>
             </div>
             <div className="pt-4 border-t border-border/50 flex items-center gap-2 text-xs font-semibold text-purple-400">
@@ -195,12 +195,12 @@ export const DirectEmbeddingShowcase = () => {
               </Button>
             </Link>
 
-            <a href="https://github.com/salmangraphics839-hue/visionmeta-releases/releases/download/1.3.6/Tagyfy_Pro_1.3.6_x64-setup.exe" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
+            <Link to="/download" className="w-full sm:w-auto">
               <Button size="lg" variant="outline" className="w-full sm:w-auto h-14 px-8 text-sm sm:text-base font-bold rounded-2xl border-primary/30 hover:bg-primary/10 hover:scale-[1.02] transition-all glass-panel text-foreground">
                 <Download className="w-4 h-4 mr-2 text-primary" />
-                Download Windows App (159MB)
+                Windows App Details &amp; Trial
               </Button>
-            </a>
+            </Link>
           </div>
         </div>
 

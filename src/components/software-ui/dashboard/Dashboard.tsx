@@ -24,11 +24,12 @@ import type { Asset, AssetMetadata } from "@/contexts/AssetsContext";
 import { formatErrorForUser, safeConsoleError } from "@/lib/errorSanitizer";
 import { OfflineDetection } from "@/lib/offlineDetection";
 import { ConfirmDialog, ConfirmDialogPresets } from "@/components/ConfirmDialog";
+import { createSampleDemoAsset } from "@/lib/sampleDemoAsset";
 import { toast } from "sonner";
 
 export const Dashboard = () => {
   const { isSettingsOpen, setIsSettingsOpen, activeApiKeys, metadataSettings, selectedModel, eventEnabled, eventName } = useSettings();
-  const { assets, filteredAssets, updateAsset, addToQueue, removeFromQueue, removeAsset, selectedAssets, toggleSelectAsset, selectAllAssets, clearSelection, processingQueue } = useAssets();
+  const { assets, filteredAssets, addAsset, updateAsset, addToQueue, removeFromQueue, removeAsset, selectedAssets, toggleSelectAsset, selectAllAssets, clearSelection, processingQueue } = useAssets();
   const [showUploadZone, setShowUploadZone] = useState(false);
   const [showExportModal, setShowExportModal] = useState(false);
   const [viewType, setViewType] = useState<ViewType>("grid");
@@ -770,12 +771,40 @@ export const Dashboard = () => {
                 </p>
               </div>
 
-              <button
-                onClick={handleUpload}
-                className="mt-6 px-8 py-3.5 btn-primary-glow rounded-xl font-semibold"
-              >
-                Upload Your First Asset
-              </button>
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-6">
+                <button
+                  onClick={handleUpload}
+                  className="w-full sm:w-auto px-8 py-3.5 btn-primary-glow rounded-xl font-semibold"
+                >
+                  Upload Your First Asset
+                </button>
+                <button
+                  type="button"
+                  onClick={async () => {
+                    try {
+                      const demo = await createSampleDemoAsset();
+                      const id = addAsset(demo.file);
+                      updateAsset(id, {
+                        status: "complete",
+                        thumbnail: demo.thumbnailUrl,
+                        processedImage: demo.thumbnailUrl,
+                        width: demo.width,
+                        height: demo.height,
+                        aspectRatio: demo.aspectRatio,
+                        isVertical: false,
+                        metadata: demo.metadata,
+                        qualityReport: demo.qualityReport,
+                      });
+                      toast.success("Sample demo loaded! Inspect, edit inline, or export a 6-platform CSV.");
+                    } catch (err) {
+                      toast.error("Could not load sample asset.");
+                    }
+                  }}
+                  className="w-full sm:w-auto px-6 py-3.5 rounded-xl font-semibold border border-primary/40 bg-primary/10 text-primary hover:bg-primary/20 transition-colors text-sm"
+                >
+                  Try Sample Demo (No API Key)
+                </button>
+              </div>
             </div>
           </motion.div>
         ) : (

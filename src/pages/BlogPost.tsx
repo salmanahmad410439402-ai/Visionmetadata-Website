@@ -2,10 +2,10 @@ import { useMemo, useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import {
-  BookOpen,
   Clock,
   Calendar,
   ArrowLeft,
+  ArrowRight,
   CheckCircle2,
   Lightbulb,
   Share2,
@@ -13,13 +13,14 @@ import {
   ShieldAlert,
   Download,
   Bookmark,
-  Check
+  Check,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { BLOG_POSTS, BlogPost as BlogPostType } from "@/data/blogPosts";
 import { renderFormattedText } from "@/lib/richText";
 import { JsonLd, articleSchema, breadcrumbSchema } from "@/lib/structuredData";
+import { formatBlogDate } from "./Blogs";
 import { toast } from "sonner";
 
 const BlogPost = () => {
@@ -29,8 +30,19 @@ const BlogPost = () => {
 
   const currentPost = useMemo(() => {
     if (!slug) return null;
-    return BLOG_POSTS.find(p => p.slug === slug) || null;
+    return BLOG_POSTS.find((p) => p.slug === slug) || null;
   }, [slug]);
+
+  const relatedPosts = useMemo(() => {
+    if (!currentPost) return [];
+    const sameCategory = BLOG_POSTS.filter(
+      (p) => p.slug !== currentPost.slug && p.category === currentPost.category
+    );
+    const others = BLOG_POSTS.filter(
+      (p) => p.slug !== currentPost.slug && p.category !== currentPost.category
+    );
+    return [...sameCategory, ...others].slice(0, 3);
+  }, [currentPost]);
 
   const handleShare = (post: BlogPostType) => {
     const url = `${window.location.origin}/blog/${post.slug}`;
@@ -42,18 +54,28 @@ const BlogPost = () => {
     }
   };
 
-  // 404 - post not found
+  // 404 - post not found (explicitly noindex so crawlers never treat it as content)
   if (!currentPost) {
     return (
       <div className="min-h-screen bg-background pt-28 pb-20 px-4 sm:px-6">
         <Helmet>
           <title>Article Not Found | Tagyfy Pro</title>
-          <meta name="description" content="The requested blog article could not be found." />
+          <meta
+            name="description"
+            content="The requested blog article could not be found."
+          />
+          <meta name="robots" content="noindex, nofollow" />
         </Helmet>
         <div className="max-w-4xl mx-auto text-center space-y-6 pt-20">
           <h1 className="text-3xl font-black text-foreground">Article Not Found</h1>
-          <p className="text-muted-foreground">The blog post you're looking for doesn't exist or has been moved.</p>
-          <Button variant="outline" onClick={() => navigate("/blogs")} className="rounded-xl">
+          <p className="text-muted-foreground">
+            The blog post you&apos;re looking for doesn&apos;t exist or has been moved.
+          </p>
+          <Button
+            variant="outline"
+            onClick={() => navigate("/blogs")}
+            className="rounded-xl"
+          >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to All Articles
           </Button>
@@ -89,17 +111,18 @@ const BlogPost = () => {
 
       <div className="max-w-6xl mx-auto">
         <article className="max-w-4xl mx-auto animate-in fade-in slide-in-from-bottom-3 duration-300">
-          {/* Back button & Breadcrumb */}
+          {/* Back button & Share */}
           <div className="flex items-center justify-between gap-4 mb-8 pt-4">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => navigate("/blogs")}
-              className="gap-2 text-muted-foreground hover:text-foreground rounded-xl"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              <span>Back to All Articles</span>
-            </Button>
+            <Link to="/blogs">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="gap-2 text-muted-foreground hover:text-foreground rounded-xl"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                <span>Back to All Articles</span>
+              </Button>
+            </Link>
 
             <Button
               variant="outline"
@@ -107,7 +130,11 @@ const BlogPost = () => {
               onClick={() => handleShare(currentPost)}
               className="gap-2 rounded-xl border-border/80 text-xs"
             >
-              {copiedLink ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Share2 className="w-3.5 h-3.5" />}
+              {copiedLink ? (
+                <Check className="w-3.5 h-3.5 text-emerald-500" />
+              ) : (
+                <Share2 className="w-3.5 h-3.5" />
+              )}
               <span>{copiedLink ? "Link Copied" : "Share Guide"}</span>
             </Button>
           </div>
@@ -115,7 +142,10 @@ const BlogPost = () => {
           {/* Article Header Card */}
           <div className="glass-panel rounded-3xl p-6 sm:p-10 border border-border/80 mb-10 shadow-2xl relative overflow-hidden">
             <div className="flex flex-wrap items-center gap-2.5 mb-4">
-              <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20 font-bold px-3 py-1 text-xs">
+              <Badge
+                variant="secondary"
+                className="bg-primary/10 text-primary border-primary/20 font-bold px-3 py-1 text-xs"
+              >
                 {currentPost.category}
               </Badge>
               <span className="text-xs text-muted-foreground flex items-center gap-1">
@@ -124,7 +154,12 @@ const BlogPost = () => {
               </span>
               <span className="text-xs text-muted-foreground flex items-center gap-1">
                 <Calendar className="w-3.5 h-3.5" />
-                {currentPost.publishDate}
+                <time dateTime={currentPost.publishDate}>
+                  {formatBlogDate(currentPost.publishDate)}
+                </time>
+                {currentPost.updatedDate && currentPost.updatedDate !== currentPost.publishDate && (
+                  <span> · Updated {formatBlogDate(currentPost.updatedDate)}</span>
+                )}
               </span>
             </div>
 
@@ -142,7 +177,9 @@ const BlogPost = () => {
                 {currentPost.author.avatar}
               </div>
               <div>
-                <p className="text-sm font-bold text-foreground">Written by {currentPost.author.name}</p>
+                <p className="text-sm font-bold text-foreground">
+                  Written by {currentPost.author.name}
+                </p>
                 <p className="text-xs text-muted-foreground">{currentPost.author.role}</p>
               </div>
             </div>
@@ -161,7 +198,12 @@ const BlogPost = () => {
               <div key={idx} className="space-y-4">
                 <h2 className="text-xl sm:text-2xl font-black text-foreground tracking-tight flex items-start gap-3">
                   <span className="text-primary opacity-80">{idx + 1}.</span>
-                  <span>{section.heading.replace(/^\d+\.\s*/, "").replace(/^Truth #\d+:\s*/, "").replace(/^Mistake #\d+:\s*/, "")}</span>
+                  <span>
+                    {section.heading
+                      .replace(/^\d+\.\s*/, "")
+                      .replace(/^Truth #\d+:\s*/, "")
+                      .replace(/^Mistake #\d+:\s*/, "")}
+                  </span>
                 </h2>
 
                 {section.subheading && (
@@ -174,22 +216,35 @@ const BlogPost = () => {
                   {section.body.map((paragraph, pIdx) => {
                     if (paragraph.startsWith("### ")) {
                       return (
-                        <h3 key={pIdx} className="text-base sm:text-lg font-bold text-foreground pt-3 text-primary">
+                        <h3
+                          key={pIdx}
+                          className="text-base sm:text-lg font-bold text-foreground pt-3 text-primary"
+                        >
                           {renderFormattedText(paragraph.replace(/^###\s*/, ""))}
                         </h3>
                       );
                     }
                     if (paragraph.startsWith("• ") || paragraph.startsWith("- ")) {
                       return (
-                        <div key={pIdx} className="flex items-start gap-2.5 pl-2 text-foreground/90 font-medium">
+                        <div
+                          key={pIdx}
+                          className="flex items-start gap-2.5 pl-2 text-foreground/90 font-medium"
+                        >
                           <span className="text-primary font-bold">•</span>
                           <span>{renderFormattedText(paragraph.replace(/^[•-]\s*/, ""))}</span>
                         </div>
                       );
                     }
-                    if (paragraph.startsWith('"') && paragraph.endsWith('"') && paragraph.length < 160) {
+                    if (
+                      paragraph.startsWith('"') &&
+                      paragraph.endsWith('"') &&
+                      paragraph.length < 160
+                    ) {
                       return (
-                        <div key={pIdx} className="p-3 bg-muted/40 rounded-xl border border-border/50 font-mono text-xs text-foreground/90 my-2">
+                        <div
+                          key={pIdx}
+                          className="p-3 bg-muted/40 rounded-xl border border-border/50 font-mono text-xs text-foreground/90 my-2"
+                        >
                           {paragraph}
                         </div>
                       );
@@ -198,13 +253,34 @@ const BlogPost = () => {
                   })}
                 </div>
 
+                {/* Key Takeaways list if provided */}
+                {section.keyTakeaways && section.keyTakeaways.length > 0 && (
+                  <div className="rounded-2xl border border-border/70 bg-card/50 p-4 sm:p-5 space-y-2">
+                    <p className="text-xs font-bold uppercase tracking-wider text-primary">
+                      Key Takeaways
+                    </p>
+                    <ul className="space-y-1.5 text-xs sm:text-sm text-secondary">
+                      {section.keyTakeaways.map((item, kIdx) => (
+                        <li key={kIdx} className="flex items-start gap-2">
+                          <span className="text-primary font-bold">✓</span>
+                          <span>{renderFormattedText(item)}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
                 {/* Warning Callout Box */}
                 {section.warning && (
                   <div className="rounded-2xl bg-destructive/10 border border-destructive/25 p-4 sm:p-5 flex items-start gap-3.5 text-xs sm:text-sm text-destructive">
                     <ShieldAlert className="w-5 h-5 shrink-0 mt-0.5 text-destructive" />
                     <div>
-                      <strong className="font-bold block mb-0.5">Critical Compliance Warning:</strong>
-                      <span className="text-destructive/90">{renderFormattedText(section.warning)}</span>
+                      <strong className="font-bold block mb-0.5">
+                        Compliance Note:
+                      </strong>
+                      <span className="text-destructive/90">
+                        {renderFormattedText(section.warning)}
+                      </span>
                     </div>
                   </div>
                 )}
@@ -214,8 +290,10 @@ const BlogPost = () => {
                   <div className="rounded-2xl bg-emerald-500/10 border border-emerald-500/25 p-4 sm:p-5 flex items-start gap-3.5 text-xs sm:text-sm text-emerald-400">
                     <Lightbulb className="w-5 h-5 shrink-0 mt-0.5 text-emerald-400" />
                     <div>
-                      <strong className="font-bold block mb-0.5">Expert Pro Tip:</strong>
-                      <span className="text-emerald-300/90">{renderFormattedText(section.tip)}</span>
+                      <strong className="font-bold block mb-0.5">Practitioner Tip:</strong>
+                      <span className="text-emerald-300/90">
+                        {renderFormattedText(section.tip)}
+                      </span>
                     </div>
                   </div>
                 )}
@@ -224,42 +302,50 @@ const BlogPost = () => {
                 {section.example && (
                   <div className="rounded-2xl border border-border/80 bg-card/60 p-5 space-y-4 shadow-sm">
                     <div className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-                      Practical Real-World Example
+                      Worked Example
                     </div>
 
                     {section.example.badTitle && (
                       <div className="p-3 rounded-xl bg-destructive/10 border border-destructive/20 text-xs">
                         <span className="font-bold text-destructive flex items-center gap-1.5 mb-1">
-                          ❌ Poorly Optimized Title:
+                          ❌ Weak or Risky Title:
                         </span>
-                        <p className="text-muted-foreground font-mono">{section.example.badTitle}</p>
+                        <p className="text-muted-foreground font-mono">
+                          {section.example.badTitle}
+                        </p>
                       </div>
                     )}
 
                     {section.example.goodTitle && (
                       <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-xs">
                         <span className="font-bold text-emerald-400 flex items-center gap-1.5 mb-1">
-                          ✅ Winning Optimized Title:
+                          ✅ Clear Descriptive Title:
                         </span>
-                        <p className="text-foreground font-mono font-medium">{section.example.goodTitle}</p>
+                        <p className="text-foreground font-mono font-medium">
+                          {section.example.goodTitle}
+                        </p>
                       </div>
                     )}
 
                     {section.example.badKeywords && (
                       <div className="p-3 rounded-xl bg-destructive/10 border border-destructive/20 text-xs">
                         <span className="font-bold text-destructive flex items-center gap-1.5 mb-1">
-                          ❌ Repetitive Keyword Spamming:
+                          ❌ Weak / Spammy Keywords:
                         </span>
-                        <p className="text-muted-foreground font-mono">{section.example.badKeywords.join(", ")}</p>
+                        <p className="text-muted-foreground font-mono">
+                          {section.example.badKeywords.join(", ")}
+                        </p>
                       </div>
                     )}
 
                     {section.example.goodKeywords && (
                       <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-xs">
                         <span className="font-bold text-emerald-400 flex items-center gap-1.5 mb-1">
-                          ✅ High-Information Density Keywords:
+                          ✅ Prioritized Relevant Keywords:
                         </span>
-                        <p className="text-foreground font-mono font-medium">{section.example.goodKeywords.join(", ")}</p>
+                        <p className="text-foreground font-mono font-medium">
+                          {section.example.goodKeywords.join(", ")}
+                        </p>
                       </div>
                     )}
 
@@ -279,30 +365,36 @@ const BlogPost = () => {
             <div className="glass-panel rounded-3xl p-6 sm:p-8 border border-border/80 mb-10 space-y-3 shadow-sm bg-card/40">
               <h3 className="text-lg font-bold text-foreground mb-2 flex items-center gap-2">
                 <Bookmark className="w-5 h-5 text-primary" />
-                Key Takeaways
+                Summary
               </h3>
               {currentPost.content.conclusion.split("\n\n").map((cPara, cIdx) => (
-                <p key={cIdx} className="text-sm sm:text-base text-secondary leading-relaxed font-medium">
+                <p
+                  key={cIdx}
+                  className="text-sm sm:text-base text-secondary leading-relaxed font-medium"
+                >
                   {renderFormattedText(cPara)}
                 </p>
               ))}
             </div>
           )}
 
-          {/* Conclusion & Actionable Checklist */}
+          {/* Actionable Checklist */}
           {currentPost.content.checklist && currentPost.content.checklist.length > 0 && (
             <div className="glass-panel rounded-3xl p-6 sm:p-8 border border-primary/30 mb-12 shadow-xl bg-primary/5">
               <h3 className="text-xl font-bold text-foreground mb-2 flex items-center gap-2">
                 <CheckCircle2 className="w-5 h-5 text-primary" />
-                Actionable Checklist Before Submitting
+                Pre-Submission Review Checklist
               </h3>
               <p className="text-xs sm:text-sm text-secondary mb-5">
-                Follow these checks to review compliance and improve metadata clarity:
+                Verify these items against the current marketplace specification before submitting:
               </p>
 
               <div className="space-y-2.5">
                 {currentPost.content.checklist.map((item, cIdx) => (
-                  <div key={cIdx} className="flex items-start gap-3 text-xs sm:text-sm text-foreground">
+                  <div
+                    key={cIdx}
+                    className="flex items-start gap-3 text-xs sm:text-sm text-foreground"
+                  >
                     <div className="w-5 h-5 rounded-full bg-primary/20 border border-primary/40 flex items-center justify-center shrink-0 mt-0.5 text-primary text-xs font-bold">
                       ✓
                     </div>
@@ -313,9 +405,37 @@ const BlogPost = () => {
             </div>
           )}
 
-          {/* Author + editorial transparency. Inserted before the CTA so the
-              last thing a reader sees is who wrote this and how it was
-              checked, not only a product pitch. */}
+          {/* Related Guides */}
+          {relatedPosts.length > 0 && (
+            <section className="mb-10 space-y-4">
+              <h2 className="text-lg sm:text-xl font-black text-foreground">
+                Related contributor guides
+              </h2>
+              <div className="grid sm:grid-cols-3 gap-4">
+                {relatedPosts.map((rel) => (
+                  <Link
+                    key={rel.id}
+                    to={`/blog/${rel.slug}`}
+                    className="glass-panel rounded-2xl p-5 border border-border/80 hover:border-primary/50 transition-all flex flex-col justify-between group"
+                  >
+                    <div>
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-primary">
+                        {rel.category}
+                      </span>
+                      <h3 className="text-sm font-bold text-foreground group-hover:text-primary transition-colors mt-1.5 mb-2 line-clamp-3">
+                        {rel.title}
+                      </h3>
+                    </div>
+                    <span className="text-xs font-semibold text-primary inline-flex items-center gap-1 pt-2">
+                      Read guide <ArrowRight className="w-3 h-3" />
+                    </span>
+                  </Link>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {/* Author + editorial transparency */}
           <div className="glass-panel rounded-3xl p-6 sm:p-8 border border-border/80 mb-8">
             <h2 className="text-lg font-black text-foreground mb-4">About the author</h2>
             <div className="flex items-start gap-4">
@@ -327,11 +447,14 @@ const BlogPost = () => {
                   {currentPost.author.name} — {currentPost.author.role}
                 </p>
                 <p className="text-xs sm:text-sm text-secondary leading-relaxed">
-                  Salman Ahmad is a stock contributor and logo designer whose own rejection
-                  history prompted most of the guides on this site. The examples and checklists
-                  here come from working portfolios, not from a marketing brief. Where a claim
-                  cannot be supported by a marketplace&apos;s published documentation, it is
-                  described as experience rather than stated as fact.
+                  Salman Ahmad is a stock contributor, vector/logo designer, and developer of{" "}
+                  <Link to="/about" className="text-primary underline hover:text-primary/80">
+                    Tagyfy Pro
+                  </Link>
+                  . The examples and checklists here come from real contributor portfolios rather
+                  than generic marketing copy. Where a rule is not published in a marketplace&apos;s
+                  official documentation, it is framed as practical experience rather than stated as
+                  an algorithm guarantee.
                 </p>
                 <p className="text-xs text-muted-foreground">
                   Spotted an error or an outdated rule in this article?{" "}
@@ -339,7 +462,10 @@ const BlogPost = () => {
                     Tell us
                   </Link>{" "}
                   and we will correct it and update the revision date. See our{" "}
-                  <Link to="/editorial-policy" className="text-primary underline hover:text-primary/80">
+                  <Link
+                    to="/editorial-policy"
+                    className="text-primary underline hover:text-primary/80"
+                  >
                     editorial standards
                   </Link>
                   .
@@ -354,28 +480,31 @@ const BlogPost = () => {
               <Sparkles className="w-6 h-6" />
             </div>
             <h3 className="text-xl sm:text-2xl font-black text-foreground">
-              Automate Your Metadata with Tagyfy Pro
+              Prepare &amp; Validate Your Metadata Faster
             </h3>
             <p className="text-xs sm:text-sm text-secondary max-w-lg mx-auto leading-relaxed">
-              Generate 180–190 character titles, flag likely trademarks, order keywords by weight, and write metadata directly into your files.
+              Draft titles and ranked keywords in the browser tool, validate character limits and
+              trademarks in our free compliance checker, or review the Windows desktop app.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
               <Link to="/tool" className="w-full sm:w-auto">
-                <Button size="lg" className="w-full sm:w-auto rounded-xl bg-gradient-flow text-white font-bold px-6 shadow-md">
+                <Button
+                  size="lg"
+                  className="w-full sm:w-auto rounded-xl bg-gradient-flow text-white font-bold px-6 shadow-md"
+                >
                   Try Free Online Web Tool
                 </Button>
               </Link>
-              <a
-                href="https://github.com/salmangraphics839-hue/visionmeta-releases/releases/download/1.3.6/Tagyfy_Pro_1.3.6_x64-setup.exe"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full sm:w-auto"
-              >
-                <Button size="lg" variant="outline" className="w-full sm:w-auto rounded-xl border-border/80 font-bold px-6">
+              <Link to="/download" className="w-full sm:w-auto">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="w-full sm:w-auto rounded-xl border-border/80 font-bold px-6"
+                >
                   <Download className="w-4 h-4 mr-2 text-primary" />
-                  Download Windows App
+                  Windows Desktop App Details
                 </Button>
-              </a>
+              </Link>
             </div>
           </div>
         </article>

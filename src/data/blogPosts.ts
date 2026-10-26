@@ -3,9 +3,17 @@ export interface BlogPost {
   slug: string;
   title: string;
   subtitle: string;
-  category: "Compliance & Safety" | "SEO & Metadata" | "Stock Strategy" | "AI & Prompting";
+  category:
+    | "Compliance & Safety"
+    | "SEO & Metadata"
+    | "Stock Strategy"
+    | "AI & Prompting"
+    | "Technical Guides";
   readTime: string;
+  /** ISO 8601 date string (YYYY-MM-DD) for valid Schema.org Article markup. */
   publishDate: string;
+  /** Optional ISO 8601 revision date (YYYY-MM-DD). */
+  updatedDate?: string;
   author: {
     name: string;
     role: string;
@@ -43,7 +51,8 @@ export const BLOG_POSTS: BlogPost[] = [
     subtitle: "Why generic AI prompts can resemble existing stock submissions, and how to add a specific, commercially useful angle to a concept.",
     category: "AI & Prompting",
     readTime: "8 min read",
-    publishDate: "August 2026",
+    publishDate: "2026-08-04",
+    updatedDate: "2026-10-26",
     author: {
       name: "Salman Ahmad",
       role: "Stock Contributor & Logo Designer",
@@ -197,118 +206,94 @@ Next time you sit down to generate an image, don't ask "what do I want to see?" 
   {
     id: "why-best-photo-rejected-adobe-stock-secret",
     slug: "why-does-your-best-photo-keep-getting-rejected-adobe-stock-secret",
-    title: "Why High-Quality Stock Photos Can Be Rejected: A Metadata and Review Checklist",
-    subtitle: "A practical checklist for diagnosing metadata, similarity, trademark, and relevance problems when a strong-looking stock photo is not accepted.",
+    title: "Why Strong-Looking Stock Photos Still Get Rejected: Technical, IP and Moderation Diagnostics",
+    subtitle: "How to inspect files at 100% zoom for optical flaws, background trademarks, similarity clustering, and metadata mismatches before submitting.",
     category: "Stock Strategy",
-    readTime: "6 min read",
-    publishDate: "August 2026",
+    readTime: "7 min read",
+    publishDate: "2026-08-11",
+    updatedDate: "2026-10-26",
     author: {
       name: "Salman Ahmad",
       role: "Stock Contributor & Logo Designer",
       avatar: "✍️",
     },
-    summary: "A strong photo can still have metadata and compliance problems. Learn how to write a descriptive title, order relevant keywords, avoid trademarks, and review a submission before sending it to a stock marketplace.",
-    tags: ["Adobe Stock", "Rejection Secrets", "Title Strategy", "Keyword Formula", "Stock Photography"],
+    summary: "Even well-composed photos fail moderation when hidden technical artifacts, background brand signage, missing releases, or mismatched titles slip past pre-upload review. Use this five-point inspection routine before uploading.",
+    tags: ["Moderation Diagnostics", "Technical Quality", "Adobe Stock", "100% Zoom Check", "Stock Photography"],
     content: {
-      intro: `A strong composition and clean technical quality do not remove every reason a stock photo might be rejected. Similarity to existing submissions, unclear metadata, trademarks, missing releases, and inaccurate descriptions can all matter during review.
+      intro: `Every contributor eventually uploads a favorite shot—clean composition, flattering light, compelling subject—only to receive a terse rejection notice for "Technical Issues," "Intellectual Property," or "Similar Content."
 
-This guide presents a practical checklist for diagnosing those problems. It focuses on writing a clear title, ordering relevant keywords, avoiding subjective filler, and checking intellectual-property risks before submission.
+Because marketplace rejection emails use broad bucket categories rather than pointing to the exact pixel or field that triggered the decision, contributors often fix the wrong thing or re-upload the exact same file unchanged.
 
-Search visibility also depends on the marketplace's current systems and buyer demand. Good metadata can improve clarity, but it cannot guarantee approval or sales.`,
+In practice, moderation reviewers inspect submissions very differently from casual viewers scrolling a social feed: they check files at 100% magnification, scan background edges for stray trademarks and license plates, compare incoming batches against existing catalog clusters, and verify that your title accurately reflects the frame. Here is a five-step diagnostic routine to run before you upload.`,
       sections: [
         {
-          heading: "Truth #1: Your Title Is an Ad, Not a Caption",
-          subheading: "Most people just stuff keywords into their title. That's a red flag telling the algorithm 'this is robotic, auto-generated content.'",
+          heading: "Diagnostic #1: Inspect Every File at 100% Magnification (Not Fit-to-Screen)",
+          subheading: "Sharpening halos, chromatic aberration, and aggressive denoising hide at thumbnail scale.",
           body: [
-            "Most people just stuff keywords into their title:",
-            "\"sunset, beach, palm tree, tropical, vacation, ocean, waves\"",
-            "That's not a title. That's a red flag telling the algorithm 'this is robotic, auto-generated content.'",
-            "A winning title looks more like this:",
-            "\"Tropical beach sunset panoramic landscape. Golden hour waves on sandy shore with palm trees and dramatic sky. Scenic coastal photography for travel and tourism.\"",
-            "See the difference? This reads like something a human actually wrote — because it is. And it quietly contains the three things every winning title needs:",
-            "1. Subject — what the asset actually is",
-            "2. Action or Setting — what's happening, or where it's happening",
-            "3. Style — is it a photo, a vector, a 3D render?",
-            "And here's the most important part: the first 3–5 words need to carry the main subject. Why? Because Adobe's algorithm — just like Google's — gives the strongest weight to the opening words. If your main keyword shows up at word 6 or 7, you've already lost the race."
+            "A photograph that looks tack-sharp on a laptop screen at 25% zoom often falls apart when a reviewer opens it at 1:1 pixel ratio.",
+            "The four technical defects that most frequently cause 'Technical Issues' rejections on sharp-looking photos are:",
+            "• **Chromatic aberration (purple/green fringing)** along high-contrast edges such as tree branches against bright sky, window frames, or metallic rims.",
+            "• **Luminance noise vs plastic over-denoising**: heavy noise reduction smears skin pores, fabric weave, and foliage into waxy blotches, which reviewers reject just as quickly as raw high-ISO grain.",
+            "• **Oversharpening and AI upscaler halos**: running an already sharp file through an aggressive upscaler creates bright 1-pixel outlines around eyelashes, hair, and horizon lines.",
+            "• **Sensor dust spots** in uniform sky or studio backdrop areas—pan across the upper third at high contrast to spot dark circular smudges."
+          ],
+          tip: "In Lightroom or Camera Raw, check the 'Remove Chromatic Aberration' box by default, keep sharpening masking above 50 so smooth skies are not sharpened, and pan corner-to-corner at 100% before exporting."
+        },
+        {
+          heading: "Diagnostic #2: Audit the Frame Edges for Background Intellectual Property",
+          subheading: "The main subject can be clean while a blurred coffee cup or car badge in the corner triggers an IP rejection.",
+          body: [
+            "Commercial royalty-free buyers need indemnification that an image contains zero unauthorized third-party intellectual property. Reviewers therefore scan the entire frame—not just the foreground subject.",
+            "Common background elements that trigger 'Intellectual Property' or 'Missing Property Release' rejections include:",
+            "• Small clothing tags, sneaker side-stripes, watch dials, and laptop lid shapes.",
+            "• Vehicle badges, recognizable grille designs, and readable license plates parked down the street.",
+            "• Branded packaging, book covers, app interfaces on phone screens, or framed artwork hanging on an office wall.",
+            "• Ticketed private venues (zoos, botanical gardens, museums, stadiums, amusement parks) whose admission terms prohibit commercial photography without a written property release."
+          ],
+          warning: "Cloning out a logo is not always enough if the underlying product silhouette (such as a signature car grille, designer handbag clasp, or game controller button layout) remains distinctive trade dress."
+        },
+        {
+          heading: "Diagnostic #3: Understand 'Similar Content' Clustering Within Your Own Queue",
+          subheading: "Uploading ten slight angle shifts from the same burst forces your own files to compete against each other.",
+          body: [
+            "When contributors shoot a studio setup or generate an AI concept, it is tempting to upload eight frames from the same setup—horizontal, vertical, slightly tighter crop, slightly warmer white balance.",
+            "Marketplace moderation tools evaluate both catalog saturation and **intra-account similarity**. Submitting near-identical frames in the same batch (or across consecutive weeks) routinely results in most of the batch being rejected for 'Similar Content.'",
+            "Instead of uploading slight camera shifts, select only frames that serve genuinely different commercial layouts—for example, one wide horizontal shot with generous left-side copy space for a website hero banner, and one vertical close-up focusing on hands and tools for mobile social stories."
           ],
           example: {
-            badTitle: "sunset, beach, palm tree, tropical, vacation, ocean, waves",
-            goodTitle: "Tropical beach sunset panoramic landscape. Golden hour waves on sandy shore with palm trees and dramatic sky. Scenic coastal photography for travel and tourism.",
-            explanation: "Notice how the opening 3–5 words carry the primary subject and read naturally like human prose instead of repetitive comma-separated spam."
+            badTitle: "Uploading 8 frames of the same barista pouring milk from slightly different angles",
+            goodTitle: "Selecting 1 wide cafe environment banner with copy space + 1 tight macro shot of latte art hands",
+            explanation: "Each submitted file solves a distinct art-director layout need rather than duplicating the same visual frame."
           }
         },
         {
-          heading: "Truth #2: Writing 'Beautiful' Makes You Look Like an Amateur",
-          subheading: "Subjective adjectives tell buyers and algorithms nothing.",
+          heading: "Diagnostic #4: Align Metadata With Literal Visual Facts",
+          subheading: "Inaccurate location names, wrong species/equipment terms, or comma-stuffed titles stall clean photos.",
           body: [
-            "This seems small, but a lot of people get it wrong.",
-            "\"Beautiful sunset.\" \"Amazing landscape.\" \"Stunning view.\" \"Gorgeous flowers.\"",
-            "These words tell buyers nothing. Beautiful according to who? It's subjective, not searchable. No buyer types 'amazing' into a search bar — they type 'golden hour beach photography.'",
-            "Top contributors permanently cut these words from their vocabulary: beautiful, amazing, stunning, gorgeous, breathtaking, perfect, incredible, fantastic.",
-            "Instead, write specific, visual, searchable details. What color is it? What time of day? What's the mood? These are the things that actually sell — not adjectives."
+            "Even when pixels pass technical and IP inspection, metadata errors can trigger rejection or Compliance warnings:",
+            "• **Comma-list titles** (such as \"coffee, cafe, barista, morning, espresso\") read like tag dumps rather than natural descriptions.",
+            "• **Unverified proper nouns**: naming a specific national park, hospital, or city landmark when the photo neither depicts it nor carries editorial/property clearance.",
+            "• **Contradictory people tags**: leaving 'no people' in a batch template when a human hand or silhouette appears in the frame."
           ],
-          tip: "Replace subjective fluff with tangible details: lighting (golden hour, backlit), composition (aerial, close-up), palette (warm neutral tones), and setting."
+          tip: "Before exporting your batch, run your draft title and tags through the [Free Metadata & Compliance Checker](/metadata-checker) to catch stray brand names, comma-stuffed titles, and duplicate tags."
         },
         {
-          heading: "Truth #3: There's a Hidden Formula Inside Your Keywords",
-          subheading: "Say you write 30 keywords. Every keyword carries a radically different algorithm weight.",
+          heading: "Diagnostic #5: Focus Placement vs Shallow Depth of Field",
+          subheading: "Artistic softness works on Instagram, but commercial buyers need crisp focal planes on the primary subject.",
           body: [
-            "This is the part 90% of contributors get wrong.",
-            "Say you write 30 keywords. Do you think every keyword carries the same weight? Not even close.",
-            "Position Matters More Than You Think:",
-            "• Positions 1–10 — carry the most weight. These should only be the most specific, content-describing words.",
-            "• Positions 11–30 — conceptual and use-case words (like 'corporate,' 'wellness,' 'innovation').",
-            "• Positions 31+ — generic type words like 'photo,' 'vector,' 'illustration'.",
-            "If your main keyword lands at position 11 or later, its ranking potential drops significantly — no matter how relevant that keyword actually is.",
-            "The 60-30-10 Rule:",
-            "A strong keyword list is a mix of three types of words:",
-            "• 60% Literal — what's actually visible in the asset.",
-            "• 30% Conceptual — what the asset represents or communicates.",
-            "• 10% Technical — how it was made (when relevant).",
-            "The Biggest Trap: Putting Generic Words at the Top:",
-            "\"Vector,\" \"icon,\" \"illustration,\" \"design,\" \"background,\" \"template\" — these words are so generic that competition for them is massive. Never put them in your top 10. They should always come last."
-          ],
-          warning: "Never put generic filler tags like 'background' or 'design' in your top 10 keywords. High-competition generic tags waste your most valuable ranking slots."
-        },
-        {
-          heading: "Truth #4: 'No People' Is an Important Signal",
-          subheading: "A high-conversion filter commercial buyers use every day.",
-          body: [
-            "If your asset doesn't contain any humans, make sure 'no people' appears somewhere in your last 10 keywords.",
-            "This is a filter buyers actually use — especially when they specifically need people-free content, like pure landscapes or abstract concepts."
-          ],
-          tip: "Always include 'no people, copy space, indoors/outdoors' in your secondary tags when applicable."
-        },
-        {
-          heading: "Truth #5: Trademarks Are a Silent Killer",
-          subheading: "One trademarked term puts your whole asset at risk.",
-          body: [
-            "One mistake — a keyword like 'iPhone-style smartphone' or 'Nike-style shoes' — and the entire asset becomes legally risky, no matter how good the photo is.",
-            "Brand names, product names, character names — always stay away from these. It's not just a rejection risk; it can become a copyright issue too."
-          ],
-          warning: "Stock platforms use automated visual and text sniffer bots. Even adding '-style' to a brand name triggers instant rejection."
+            "Shooting wide open at f/1.4 often places the eyelashes in focus while the nose tip, product label, or second person in a handshake falls noticeably soft.",
+            "If your title says 'Pharmacist holding prescription bottle,' reviewers check whether the bottle or the pharmacist's eyes—whichever is the clear visual anchor—sit cleanly inside the focal plane without motion blur. Stopping down to f/4–f/8 on commercial setups dramatically lowers focus-related rejections."
+          ]
         }
       ],
-      conclusion: `Success in stock photography comes down to a simple formula:
-
-Great content + Smart metadata = Visibility
-Great content + Weak metadata = Invisible
-
-No matter how good your photo is, if a reviewer or algorithm can't "understand" it, it will never reach a buyer.
-
-The day I changed how I wrote titles and structured my keywords using this system, my rejection rate dropped immediately — and my views started climbing.
-
-This isn't magic. It's just a system that very few people actually know — and now, you do too.
-
-Next step? Before your next upload, read your title out loud. Does it sound like something a human would say — or does it sound like a pile of keywords? If it's the second one, that's exactly where to start fixing it.`,
+      conclusion: `When a strong photo is rejected, resist the urge to re-submit it immediately with a new filename. Open the original file at 100% zoom, check corners for stray logos and trade dress, verify the focal plane, compare it honestly against similar shots already in your portfolio, and confirm your title describes only what is truly visible in the frame.`,
       checklist: [
-        "Read your title out loud — ensure it sounds like human prose, not comma-separated tag stuffing",
-        "Place the primary visual subject within the first 3–5 words of the title",
-        "Eliminate subjective fluff words (beautiful, amazing, stunning, gorgeous)",
-        "Place your top 10 most specific, high-relevance keywords in slots 1–10",
-        "Apply the 60-30-10 rule (60% literal, 30% conceptual, 10% technical)",
-        "Add 'no people' to secondary keywords if the image is people-free",
-        "Scrub all brand names, product references, and trademarked geometry"
+        "Inspect every edge at 100% zoom for chromatic aberration, sensor dust, and upscaling halos",
+        "Check clothing hems, device backs, wall art, and street backgrounds for logos or license plates",
+        "Confirm private interiors or ticketed venues have a valid Property Release (or keep them out of commercial queues)",
+        "Cull burst sequences down to 1–3 genuinely distinct compositions or aspect uses",
+        "Verify the focal plane lands sharply on the primary subject named in your title",
+        "Ensure 'no people' is never attached to frames containing hands, silhouettes, or crowds"
       ]
     }
   },
@@ -319,7 +304,8 @@ Next step? Before your next upload, read your title out loud. Does it sound like
     subtitle: "A practical review of trademarks, releases, generative-AI disclosure, repetitive submissions, and other compliance risks for stock contributors.",
     category: "Compliance & Safety",
     readTime: "7 min read",
-    publishDate: "August 2026",
+    publishDate: "2026-08-18",
+    updatedDate: "2026-10-26",
     author: {
       name: "Salman Ahmad",
       role: "Stock Contributor & Logo Designer",
@@ -350,14 +336,14 @@ This guide explains seven common risk areas and the practical checks contributor
           tip: "Always inspect your files at 100% zoom. Blur or clone out all distinct button layouts, steering wheel emblems, and shoe patterns before uploading."
         },
         {
-          heading: "Mistake #2: Forgetting to Check the Generative AI Toggle",
-          subheading: "Adobe loves AI content—but they will ban you instantly if you hide it.",
+          heading: "Mistake #2: Failing to Declare Generative AI Submissions",
+          subheading: "Marketplaces that accept AI media strictly require accurate contributor disclosure.",
           body: [
-            "Adobe Stock is one of the friendliest platforms for AI art, but they have zero tolerance for deception under the international C2PA standard.",
-            "If you upload a photorealistic Midjourney or Stable Diffusion render of a person or landscape, but submit it as traditional photography without ticking the 'Generative AI' box, Adobe's neural visual detector flags your submission as fraud.",
-            "Three strikes of unlabeled AI content will permanently lock your contributor account with zero payout."
+            "Platforms such as Adobe Stock and Freepik accept synthetic imagery when it follows their generative-AI guidelines, whereas others (such as Shutterstock) prohibit contributor-uploaded AI art altogether.",
+            "Where generative AI is permitted, uploading a photorealistic Midjourney, Flux, or Stable Diffusion render as traditional photography without enabling the platform's 'Created using generative AI tools' checkbox violates the contributor agreement.",
+            "Repeated undisclosed AI submissions can lead to asset removal, submission suspension, or permanent account closure under marketplace compliance rules."
           ],
-          tip: "Always check the 'Created using generative AI tools' toggle upon upload, and include tags like 'generative ai, synthetic media, digital illustration' in your keyword list."
+          tip: "Always enable the platform's official 'Created using generative AI tools' toggle on upload, never label synthetic renders as real documentary events, and check each agency's current AI policy first."
         },
         {
           heading: "Mistake #3: The 50 Variations of One Prompt Flooding Trap",
@@ -384,12 +370,12 @@ This guide explains seven common risk areas and the practical checks contributor
           tip: "Every single keyword must be 100% truthful to the asset. If a buyer searching for that tag would be annoyed to see your image, remove it immediately."
         },
         {
-          heading: "Mistake #5: Submitting Warped AI Hands & Anatomical Horrors",
-          subheading: "High rejection rates (over 35%) trigger an automatic manual profile audit.",
+          heading: "Mistake #5: Submitting Unrepaired AI Anatomy & Geometry Artifacts",
+          subheading: "Persistently high technical rejection rates invite closer moderation scrutiny.",
           body: [
-            "If you submit 100 files and 40 get rejected for technical quality, your account is placed on probation.",
-            "The top technical rejection causes for AI content are: 6 fingers on a hand, warped eyes, floating teeth, melting furniture geometry, and pixelated upscaler noise.",
-            "Reviewers view submitting obviously flawed AI hands as low-effort spam. Take 2 minutes in Photoshop to clean up hands and faces before submitting."
+            "Submitting large batches where a high proportion of files fail basic technical inspection can trigger submission limits or manual account review.",
+            "The most common technical rejection causes on synthetic imagery are extra or fused fingers, asymmetrical pupils, distorted teeth, warped architectural perspective lines, and crunchy upscaler artifacts.",
+            "Reviewers treat unedited anatomical errors as low-effort queue flooding. Inspect hands, eyes, text-like scribbles, and reflections at 100% zoom and retouch flaws in an image editor before submitting."
           ]
         },
         {
@@ -435,11 +421,12 @@ Treat your contributor account with respect, and Adobe Stock will pay you royalt
   {
     id: "mastering-stock-metadata-seo-ranking-guide",
     slug: "mastering-stock-metadata-title-seo-keyword-guide",
-    title: "A Practical Metadata Workflow for Improving Stock Asset Discoverability",
-    subtitle: "How to write descriptive titles, order relevant keywords, and review metadata so buyers can understand the stock assets you submit.",
+    title: "Cross-Marketplace Stock Metadata Workflow: Titles, Seasonal Tags and Keyword Tiers",
+    subtitle: "How to structure titles, seasonal vs evergreen tags, and keyword hierarchies across single-title and dual-field stock agencies.",
     category: "SEO & Metadata",
     readTime: "8 min read",
-    publishDate: "August 2026",
+    publishDate: "2026-08-25",
+    updatedDate: "2026-10-26",
     author: {
       name: "Salman Ahmad",
       role: "Stock Contributor & Logo Designer",
@@ -546,7 +533,8 @@ Stop uploading in the dark. Give your portfolio the metadata it deserves.`,
     subtitle: "Approved assets can become harder to discover as search intent changes. Use this checklist to audit titles and keywords without promising a particular sales result.",
     category: "Stock Strategy",
     readTime: "7 min read",
-    publishDate: "March 2026",
+    publishDate: "2026-09-03",
+    updatedDate: "2026-10-26",
     author: {
       name: "Salman Ahmad",
       role: "Stock Contributor & Logo Designer",
@@ -567,10 +555,10 @@ This guide shows how to audit an existing title and keyword list, update it with
           body: [
             "When you upload a new photo to Adobe Stock, the algorithm gives it a temporary 'freshness boost' for a few weeks. If buyers click and license it during that window, its rank sticks.",
             "But if your metadata was vague or too generic, nobody clicked. The freshness boost expired, and your photo fell from page 3 to page 47. Once an asset drops past page 5 on Adobe Stock, it receives virtually zero organic impressions.",
-            "The good news? **Adobe Stock allows you to edit the title and keywords of already-approved assets at any time without re-submitting them for review.**",
-            "When you update an approved asset with high-intent, 185-character search metadata, Adobe's search indexing engine re-scrapes the asset. Within 48 to 72 hours, dead assets can jump back to page one for high-value long-tail buyer queries."
+            "The good news? **Adobe Stock allows you to edit the title and keywords of already-approved assets in your portfolio.**",
+            "When you replace a vague 4-word title with a clear, accurate description of the subject, setting, and commercial use case, search indexing updates over time so buyers searching specific long-tail queries have more context to match against."
           ],
-          tip: "Approved assets that aren't selling are not 'dead' — they are simply indexed under outdated keywords that modern enterprise buyers never search for."
+          tip: "Approved assets with minimal views are often indexed under overly broad 1-word terms rather than the specific phrases commercial buyers search for."
         },
         {
           heading: "Step 2: The Difference Between a 'Description' and a 'Buyer Query'",
@@ -594,7 +582,7 @@ This guide shows how to audit an existing title and keyword list, update it with
         },
         {
           heading: "Step 3: Restructure Your Top 10 Keywords on Existing Assets",
-          subheading: "Adobe Stock gives 80% of search ranking weight to your first 10 keyword tags.",
+          subheading: "Adobe Stock's documentation states that keywords listed first carry stronger search relevance.",
           body: [
             "If your old approved photos have generic words in positions 1 to 10 (like *'photo'*, *'image'*, *'background'*, *'vector'*, or *'concept'*), you are wasting your most powerful ranking real estate.",
             "When updating old assets, follow this strict priority order:",
@@ -616,24 +604,24 @@ This guide shows how to audit an existing title and keyword list, update it with
             "• 2. Toggle to **Portfolio Mode** inside Tagyfy Pro.",
             "• 3. Select your asset range (e.g. Assets #1 to #50).",
             "• 4. Click **Start Processing**.",
-            "The extension uses advanced computer vision (Gemini 3.5 Flash, GPT-4o Mini, Groq, or Mistral) to analyze each existing image, generates an optimized 185-character search-first title and 50 tiered keywords, and saves the updates directly to Adobe Stock automatically.",
+            "The extension uses your configured vision model (Gemini Flash-Lite, GPT-4o Mini, Groq Qwen Vision, or Mistral) to analyze each preview image and populate updated title and keyword fields in your Adobe Stock contributor dashboard so you can review and save them.",
             "You can get the free extension right now on our [Tagyfy Pro Chrome Extension Page](/chrome-extension)."
           ],
-          tip: "Updating your approved assets during slow seasonal periods gives your existing portfolio an instant traffic and royalty boost without creating any new assets."
+          tip: "Reviewing older portfolio batches during quieter production weeks is a practical maintenance habit that requires shooting zero new files."
         }
       ],
-      conclusion: `Your existing portfolio is your most valuable digital real estate.
+      conclusion: `Your existing portfolio deserves periodic maintenance just like any digital catalog.
 
-Do not let hundreds of approved photos sit in darkness with outdated 2021 metadata. By updating your approved assets with search-intent titles and tiered keywords, you give your older work a second life and compound your monthly royalty income without shooting a single new photo.
+Instead of leaving older approved assets buried under vague three-word titles, audit a small batch, replace generic opening keywords with accurate subject and use-case terms, and verify compliance before saving changes.
 
-Ready to wake up your portfolio? Head over to the [Tagyfy Pro Chrome Extension](/chrome-extension) page, download the free extension, and start reviving your approved assets today.`,
+If you want to reduce repetitive typing while reviewing your Adobe Stock catalog, visit the [Tagyfy Pro Chrome Extension](/chrome-extension) page to learn how the free side-panel works.`,
       checklist: [
-        "Audit your approved assets for short or generic titles (< 100 characters)",
-        "Check that your first 10 keywords contain zero generic format words",
-        "Rewrite titles to 180–190 characters covering subject, setting, and commercial use-case",
-        "Target specific long-tail buyer queries instead of single broad keywords",
-        "Download the free [Tagyfy Pro Chrome Extension](/chrome-extension) to batch-update portfolio assets automatically",
-        "Allow 48–72 hours after updating for Adobe's search algorithm to re-index your refreshed metadata"
+        "Audit older approved assets that still carry vague 3–5 word titles",
+        "Check that your first 10 keywords contain zero generic format words ('photo', 'vector', 'background')",
+        "Rewrite titles naturally to describe the literal subject, setting, and commercial use case",
+        "Target accurate multi-word buyer phrases rather than irrelevant trending tags",
+        "Use the free [Tagyfy Pro Chrome Extension](/chrome-extension) to pre-fill updated drafts for human review",
+        "Give the marketplace search index time to process updated metadata after saving"
       ]
     }
   }  ,{
@@ -643,7 +631,8 @@ Ready to wake up your portfolio? Head over to the [Tagyfy Pro Chrome Extension](
     subtitle: "Discover how a free Adobe Stock metadata generator like Tagyfy can help stock contributors save time on titles, descriptions, and keywords.",
     category: "SEO & Metadata",
     readTime: "7 min read",
-    publishDate: "August 2026",
+    publishDate: "2026-09-12",
+    updatedDate: "2026-10-26",
     author: {
       name: "Salman Ahmad",
       role: "Founder & Metadata Expert",
@@ -834,7 +823,8 @@ Try [Tagyfy's free metadata tool](/tool) today to create a faster, more consiste
     subtitle: "Why short and generic titles can be a problem and how to use 10-keyword prioritization for Adobe Stock.",
     category: "SEO & Metadata",
     readTime: "8 min read",
-    publishDate: "August 2026",
+    publishDate: "2026-09-20",
+    updatedDate: "2026-10-26",
     author: {
       name: "Salman Ahmad",
       role: "Metadata Expert",
@@ -978,7 +968,8 @@ This approach does not guarantee rankings or sales, but it creates a more unders
     subtitle: "Why simple icon sets fail and how to build complete visual systems that stand out on Adobe Stock.",
     category: "Stock Strategy",
     readTime: "7 min read",
-    publishDate: "August 2026",
+    publishDate: "2026-09-28",
+    updatedDate: "2026-10-26",
     author: {
       name: "Salman Ahmad",
       role: "Founder & Contributor",
@@ -1084,6 +1075,520 @@ Creating titles and keywords for every stock asset can take time, especially whe
         "Review the final file before uploading"
       ]
     }
-  }
+  },
+  {
+    id: "iptc-xmp-exif-metadata-explained-stock-contributors",
+    slug: "iptc-xmp-exif-metadata-explained-stock-contributors",
+    title: "IPTC, XMP and EXIF Metadata Explained: Which Fields Stock Marketplaces Actually Read",
+    subtitle: "A technical breakdown of legacy IPTC-IIM datasets, Adobe XMP Dublin Core packets, container behavior across JPEG, EPS, and MP4, and why embedded titles sometimes disappear on upload.",
+    category: "Technical Guides",
+    readTime: "9 min read",
+    publishDate: "2026-10-02",
+    updatedDate: "2026-10-26",
+    author: {
+      name: "Salman Ahmad",
+      role: "Stock Contributor & Software Developer",
+      avatar: "🛠️",
+    },
+    summary: "Understand the difference between EXIF camera data, IPTC-IIM binary records, and XML-based XMP Dublin Core packets—plus which exact tags Adobe Stock, Shutterstock, and Freepik read across JPEG, TIFF, EPS, AI, and MP4 files.",
+    tags: ["IPTC", "XMP", "EXIF", "Dublin Core", "Metadata Embedding"],
+    content: {
+      intro: `Every contributor has experienced the same puzzling moment: you type a careful title and 45 keywords into an image editor, upload the file to two different stock agencies, and discover that Agency A populated everything cleanly while Agency B left the title blank or truncated accented characters into garbled symbols.
 
+The culprit is almost never random server failure. It happens because "embedded metadata" is not a single unified block inside a media file—it is three overlapping historical standards (**EXIF**, **IPTC-IIM**, and **XMP**) stored in separate binary segments that often disagree with one another when only one standard is updated.
+
+Once you understand which block each file format carries and which exact field names stock ingestion servers prioritize, missing titles and encoding bugs become straightforward to diagnose and prevent.`,
+      sections: [
+        {
+          heading: "The Three Metadata Layers Inside a Stock File",
+          subheading: "Camera telemetry, legacy press records, and modern XML packets live side by side.",
+          body: [
+            "When you inspect a photograph or illustration in ExifTool or Adobe Bridge, three distinct standards can exist inside the same file:",
+            "• **EXIF (Exchangeable Image File Format)**: Created for digital cameras. Stores shutter speed, aperture, ISO, lens focal length, color space, orientation flags, and optional GPS coordinates. Stock portals rarely use EXIF for buyer search—though some display camera specs or strip GPS data for privacy.",
+            "• **IPTC-IIM (Information Interchange Model)**: A compact binary standard developed in the 1990s for news agencies. Inside JPEG (`APP13` Photoshop IRB segment) and TIFF files, it stores fixed record numbers such as `2:05` (*ObjectName* / Title), `2:120` (*Caption-Abstract* / Description), and repeatable `2:25` (*Keywords*).",
+            "• **XMP (Extensible Metadata Platform)**: Introduced by Adobe as UTF-8 encoded XML using RDF and **Dublin Core** namespaces (`dc:title`, `dc:description`, `dc:subject`). Unlike legacy IPTC-IIM, XMP natively handles Unicode characters, works inside vector PostScript/PDF streams (`.ai`, `.eps`, `.svg`), and embeds cleanly into QuickTime/ISO-BMFF video containers (`.mp4`, `.mov`)."
+          ],
+          keyTakeaways: [
+            "EXIF describes how the camera captured the frame; IPTC-IIM and XMP describe what the frame means to a buyer.",
+            "XMP (`dc:title`, `dc:description`, `dc:subject`) is always UTF-8 XML and works across raster, vector, and video containers.",
+            "Writing both synchronized IPTC-IIM (UTF-8 coded character set `1:90`) and XMP Dublin Core maximizes compatibility on JPEG uploads."
+          ]
+        },
+        {
+          heading: "Title vs Description Collisions: Why Agencies Read Different Fields",
+          subheading: "Adobe Stock has one Title field, while Shutterstock uses Description as its primary caption.",
+          body: [
+            "The single most common source of confusion across stock agencies is how each ingestion pipeline maps `dc:title` (*ObjectName*) versus `dc:description` (*Caption-Abstract*):",
+            "• **Adobe Stock**: Displays a single **Title** field (up to 200 characters). On upload, Adobe Stock checks XMP `dc:title` / IPTC `ObjectName` first, and falls back to `dc:description` / `Caption-Abstract` if `dc:title` is empty. Caution: if Windows Explorer or Lightroom wrote the camera filename (`DSC_0492`) into `ObjectName`, Adobe Stock will display `DSC_0492` instead of your rich caption!",
+            "• **Shutterstock**: Does not expose a separate short title to contributors; its 200-character **Description** field reads IPTC `Caption-Abstract` / XMP `dc:description` first.",
+            "• **Dreamstime & Vecteezy**: Read both fields separately (`ObjectName` → Title, `Caption-Abstract` → Description).",
+            "Because of these differing rules, leaving an old camera code in `dc:title` while only editing `dc:description` causes inconsistent imports across portals."
+          ],
+          example: {
+            badTitle: "dc:title = 'IMG_8821' | dc:description = ' Barista steaming oat milk in specialty coffee shop'",
+            goodTitle: "dc:title = 'Barista steaming milk at espresso machine in specialty cafe' | dc:description = 'Close-up of specialty coffee barista steaming milk in stainless pitcher behind counter'",
+            explanation: "Populating both XMP/IPTC Title and Description intentionally ensures single-field portals (Adobe Stock) and caption-first portals (Shutterstock) both receive clean human prose."
+          }
+        },
+        {
+          heading: "Why Vector (.EPS / .AI) and Video (.MP4 / .MOV) Behave Differently From JPEG",
+          subheading: "Browsers can rewrite JPEG APP1 segments in memory, but PostScript and video atoms require container-aware writers.",
+          body: [
+            "In a JPEG file, XMP sits inside a well-defined `APP1` marker (`http://ns.adobe.com/xap/1.0/\\0`) near the start of the byte stream. Even lightweight browser code can inject or replace that packet cleanly.",
+            "Vector and video formats are structurally very different:",
+            "• **EPS (Encapsulated PostScript)**: Stores XMP inside PostScript DSC comment blocks (`%begin_xml_code` ... `%end_xml_code`) or embedded XMP packet wrappers with whitespace padding so byte offsets remain valid without breaking Illustrator's PostScript parser.",
+            "• **AI (Adobe Illustrator)**: Modern `.ai` files are dual-stream PDF containers; modifying bytes naively corrupts the PDF cross-reference (`xref`) table unless updated through a PDF/XMP packet space or companion workflow.",
+            "• **MP4 / MOV**: Store metadata inside `moov/udta/meta` or top-level `uuid` XMP boxes. Moreover, not every stock portal reads embedded video atoms on upload—several agencies still require a companion CSV (see our [Marketplace Metadata Limits reference](/metadata-limits)) even when video XMP is valid."
+          ],
+          warning: "Never use a generic text editor to paste XML into an .ai or .mp4 binary—shifting byte offsets without updating container length headers or xref tables will corrupt the file and trigger an instant upload failure."
+        },
+        {
+          heading: "Fixing Garbled Characters and Ordered Keyword Arrays",
+          subheading: "UTF-8 coded character markers and rdf:Bag vs rdf:Seq behavior.",
+          body: [
+            "Have you ever seen smart quotes or hyphens turn into `â€”` after uploading a JPEG? That happens when software writes UTF-8 text into legacy IPTC-IIM without writing the Envelope Record `1:90` (`CodedCharacterSet = ESC % G`), causing older ingestion parsers to assume Latin-1 / MacRoman encoding.",
+            "Keyword ordering has a subtle technical detail too: in XMP Dublin Core, `dc:subject` is defined as an unordered `rdf:Bag`, yet in practice most XML parsers iterate elements in document order (`<rdf:li>` index 1 through N). Keeping your `<rdf:li>` items and IPTC `2:25` datasets in identical priority order preserves your top-10 keyword ranking on portals that respect tag order."
+          ],
+          tip: "Stick to clean ASCII punctuation (straight apostrophes and standard hyphens) in stock titles so legacy IPTC parsers never misread smart typography."
+        }
+      ],
+      conclusion: `Embedded metadata works reliably when you stop treating it as a black box: populate both Title and Description deliberately, never leave camera filenames in ObjectName, keep XMP and IPTC synchronized in UTF-8, and keep a formatted CSV ready for portals whose video or vector pipelines ignore embedded packets.`,
+      checklist: [
+        "Clear camera codes ('IMG_001', 'Untitled-1') out of ObjectName / dc:title before exporting",
+        "Write synchronized UTF-8 XMP (`dc:title`, `dc:description`, `dc:subject`) and IPTC-IIM records on JPEGs",
+        "Preserve top-to-bottom keyword priority order across `<rdf:li>` tags",
+        "Replace smart quotes and em-dashes with plain ASCII equivalents for legacy IPTC safety",
+        "Spot-check one uploaded JPEG, EPS, and MP4 on each target portal before uploading a 200-file batch"
+      ]
+    }
+  },
+  {
+    id: "model-and-property-releases-stock-photography-guide",
+    slug: "model-and-property-releases-stock-photography-guide",
+    title: "Model and Property Releases for Stock Contributors: When You Need One and Why Releases Fail Review",
+    subtitle: "A clear, practical guide to recognizable people, private locations, tattoos, synthetic AI portraits, and avoiding paperwork errors that block commercial approval.",
+    category: "Compliance & Safety",
+    readTime: "8 min read",
+    publishDate: "2026-10-06",
+    updatedDate: "2026-10-26",
+    author: {
+      name: "Salman Ahmad",
+      role: "Stock Contributor & Logo Designer",
+      avatar: "🛡️",
+    },
+    summary: "Commercial stock buyers rely on valid releases to advertise legally. Learn exactly when a Model Release or Property Release is required, how tattoos and silhouettes are judged, how AI-generated faces are treated, and the paperwork mistakes that cause rejections.",
+    tags: ["Model Release", "Property Release", "Commercial Licensing", "Stock Compliance", "Legal Basics"],
+    content: {
+      intro: `One of the fastest ways to stall a promising stock shoot is assuming a release is only needed when a model smiles straight into the lens or when a famous corporate logo fills the frame.
+
+In commercial royalty-free licensing, an advertiser might place your image on a pharmaceutical billboard, a financial app campaign, or consumer packaging. Because the buyer is using the image to promote a product or service, right-of-publicity and property rules are far stricter than in editorial journalism or personal portfolio sharing.
+
+*(Note: This guide summarizes published stock-marketplace submission policies from a contributor's workflow perspective and is not legal advice. Always check the current release templates and rules of each agency you submit to.)*`,
+      sections: [
+        {
+          heading: "When Is a Model Release Required? The 'Recognizability' Standard",
+          subheading: "Faces are only the starting point—silhouettes, tattoos, uniforms, and context also identify a person.",
+          body: [
+            "Across Adobe Stock, Shutterstock, Dreamstime, and 123RF, the test is not 'Can I see both eyes?' The test is **whether the individual could reasonably recognize themselves—or be recognized by acquaintances—from the image and its context.**",
+            "You need a signed Model Release whenever a commercial submission includes:",
+            "• Any recognizable face, profile, or partial facial crop—even in soft background bokeh if features remain distinguishable.",
+            "• **Silhouettes with distinctive profiles**, hairstyles, athletic postures, or unique clothing combinations.",
+            "• **Distinctive tattoos, birthmarks, scars, or body art** (note: a conspicuous custom tattoo may *also* require a Property Release from the tattoo artist because tattoo designs are original graphic works!).",
+            "• Self-portraits—yes, if *you* appear in your own commercial stock photo, you must fill out and attach a Model Release naming yourself as both photographer and model, signed with an independent adult witness."
+          ],
+          warning: "Minors (generally under 18, depending on local age of majority) always require a release signed by a parent or legal guardian—never by an older sibling, coach, or teacher."
+        },
+        {
+          heading: "When Do You Need a Property Release?",
+          subheading: "Publicly visible skylines differ sharply from private interiors, zoos, and distinctive modern architecture.",
+          body: [
+            "Real estate and physical objects do not have 'privacy rights' in the human sense, yet many locations and objects cannot be licensed commercially without the owner's written Property Release due to trademark, copyright, or venue-contract restrictions:",
+            "• **Private residential and commercial interiors**: A trendy Airbnb living room, boutique hotel lobby, gym interior, or artisan bakery counter requires a Property Release signed by the authorized property owner or lessee—unless cropped so generically that zero distinctive decor or layout identifies the property.",
+            "• **Ticketed venues with entry restrictions**: Most zoos, aquariums, museums, botanical gardens, theme parks, and sports stadiums prohibit commercial photography on their entry tickets.",
+            "• **Distinctive modern landmarks & protected lighting**: While generic city skylines shot from public vantage points are commonly accepted, standalone focus on trademarked or copyrighted architectural works (for example, the illuminated Eiffel Tower at night, the Sydney Opera House, or the Space Needle as primary subject) is restricted on commercial stock.",
+            "• **Unique animals and custom objects**: Famous racehorses, show animals in private enclosures, custom-painted hot rods, and fine-art sculptures."
+          ],
+          tip: "Check Adobe Stock's and Shutterstock's published 'Known Image Restrictions' lists before planning a travel shoot—spending two minutes checking restricted landmarks saves hours of wasted editing."
+        },
+        {
+          heading: "How Releases Apply to Generative AI People and Places",
+          subheading: "Why you must never forge a human release for a synthetic face—and when Adobe requests a Property Release.",
+          body: [
+            "Generative AI created massive confusion around releases. Keep two rules crystal clear:",
+            "1. **Never fabricate a Model Release for a purely fictional AI person.** Signing a fake name on a legal release is fraudulent. However, if you used a real person's photograph as an image-to-image reference or LoRA training subject, a valid Model Release from that real person is mandatory—and generating recognizable public figures or celebrities is strictly prohibited.",
+            "2. **Watch for photorealistic AI architecture or interior prompts**: Occasionally, an AI render of a luxury house or museum looks indistinguishable from a real private property, prompting a reviewer to ask for a Property Release or clarification. Ensure the 'Created using generative AI tools' flag is checked and avoid prompting named real-world buildings."
+          ]
+        },
+        {
+          heading: "The Five Paperwork Mistakes That Get Valid Releases Rejected",
+          subheading: "Most release rejections happen because of date mismatches and missing witness fields.",
+          body: [
+            "Even when a model happily signs a release on set, moderation reviewers reject thousands of forms every week for preventable clerical errors:",
+            "• **Shoot date occurs AFTER signature date**: A model cannot legally release a shoot before or without matching shoot dates—confirm the shoot date, model signature date, photographer signature date, and witness signature date align.",
+            "• **Photographer signing as Witness**: The witness must be a third adult—never the photographer and never the model.",
+            "• **Mixing digital e-signatures with pen-and-paper signatures on the same form**: Most agencies require either an approved digital workflow (such as Adobe Acrobat Sign or Easy Release) OR a fully printed, hand-signed scan—not a typed font pasted onto a PDF.",
+            "• **Missing visual reference photo** on digital releases where the agency template requires a headshot of the model to verify identity across batches.",
+            "• **Reusing a single shoot-specific release across later unrelated shoots** taken months apart."
+          ],
+          example: {
+            badTitle: "Typing the model's name in a cursive computer font on a PDF and listing yourself as witness",
+            goodTitle: "Using Adobe Stock's integrated Acrobat Sign release or Easy Release app with a separate adult witness and matching shoot date",
+            explanation: "Clean digital audit trails or complete wet-ink scans pass compliance checks without back-and-forth rejections."
+          }
+        }
+      ],
+      conclusion: `Treat release management as part of pre-production rather than post-processing damage control. Capture clean digital releases on location with an independent witness, photograph generic props free of designer trade dress, and never guess whether a private interior or tattoo will slip past review.`,
+      checklist: [
+        "Obtain a signed Model Release for every recognizable person, distinctive silhouette, or self-portrait",
+        "Verify an independent third-party adult signed as Witness on the same date",
+        "Confirm parent/guardian signatures whenever a minor appears in the frame",
+        "Secure a Property Release for recognizable private homes, offices, gyms, cafes, or custom art/tattoos",
+        "Check agency 'Known Image Restrictions' before shooting landmarks, museums, or zoos",
+        "Never invent fake human releases for synthetic AI portraits, and never prompt real celebrities"
+      ]
+    }
+  },
+  {
+    id: "preparing-eps-svg-vector-files-for-stock-agencies",
+    slug: "preparing-eps-svg-vector-files-for-stock-agencies",
+    title: "Preparing EPS, AI and SVG Vector Files for Stock Agencies: Technical Pre-Flight Guide",
+    subtitle: "How to eliminate hidden raster effects, unclosed paths, live fonts, artboard mismatches, and preview pairing errors before uploading vector graphics.",
+    category: "Technical Guides",
+    readTime: "9 min read",
+    publishDate: "2026-10-10",
+    updatedDate: "2026-10-26",
+    author: {
+      name: "Salman Ahmad",
+      role: "Logo & Vector Designer",
+      avatar: "✒️",
+    },
+    summary: "Vector contributors face strict automated file checks that photographers never encounter. Learn how to save clean EPS 10 / AI / SVG files, avoid accidental bitmap rasterization, outline typography responsibly, and pair JPEG previews accurately.",
+    tags: ["Vector Stock", "EPS 10", "SVG", "Adobe Illustrator", "Technical Pre-Flight"],
+    content: {
+      intro: `Vector buyers license stock illustrations, icon systems, and infographic templates for one primary reason: **infinite editability**. When an art director opens your downloaded file in Adobe Illustrator or Affinity Designer only to find locked clipping masks, missing fonts, or a drop shadow that flattened into a pixelated 72-DPI bitmap box, they request a refund—and agencies design their automated upload validators specifically to block those files at the door.
+
+After preparing thousands of vector icons, logo marks, and UI graphics for stock marketplaces, I run every single vector batch through the same technical pre-flight checklist before touching titles or keywords. Here is what automated vector ingestion checks look for and how to pass cleanly every time.`,
+      sections: [
+        {
+          heading: "1. The Hidden Raster Trap Inside EPS 10 Files",
+          subheading: "Gaussian blurs, outer glows, and freeform gradients silently embed bitmaps when saved to legacy EPS.",
+          body: [
+            "Many marketplaces (including Shutterstock and Dreamstime) have historically standardized on **Illustrator EPS 8 or EPS 10** for maximum backward compatibility, while Adobe Stock also accepts native `.ai`, `.eps`, and `.svg`.",
+            "Here is the trap: EPS 10 is based on PostScript, which does **not** natively support modern CSS/PDF transparency effects such as Gaussian Blur, Drop Shadow, Feather, Outer Glow, or Illustrator's Freeform Gradients.",
+            "When you save a file containing those effects as EPS 10, Illustrator silently rasterizes the effect into an embedded bitmap image. Automated upload bots scan the EPS stream for embedded raster operators—and immediately reject the file with `'Vector file contains bitmap/raster data'`!",
+            "To stay 100% pure vector:",
+            "• Check **Window → Links** in Illustrator—the Links panel must be completely empty (zero linked or embedded PNG/JPG textures).",
+            "• Replace Gaussian blurs and raster drop shadows with multi-step blended vector shapes, solid offset shadows, or clean flat/linear/radial gradients supported cleanly in PostScript."
+          ],
+          warning: "Always inspect the Links panel before saving. Even a tiny forgotten reference sketch hidden on a turned-off layer will trigger an embedded-bitmap rejection."
+        },
+        {
+          heading: "2. Live Fonts vs Outlined Paths (and When Buyers Expect Editable Text)",
+          subheading: "Unoutlined fonts fail automated checks on most portals unless handled per platform spec.",
+          body: [
+            "If you leave live text using a local font on your computer, neither the agency's thumbnail renderer nor the buyer's workstation is guaranteed to have that typeface installed—resulting in ugly courier fallback text.",
+            "For standard commercial vectors, icon packs, badges, and illustrations:",
+            "• Select all (`Ctrl+A` / `Cmd+A`), unlock all layers (`Object → Unlock All`), and run **Type → Create Outlines** (`Ctrl+Shift+O`).",
+            "• Then open **Type → Find/Replace Font**—the font list must display **0 fonts** in the document (catching invisible empty text point-clicks left accidentally on the artboard!).",
+            "• *Pro designer courtesy*: If your graphic includes placeholder words like `'COMPANY NAME'` or `'LOREM IPSUM'`, remove unnecessary dummy text or keep clean geometric layout bars unless the layout specifically requires typographic lockups."
+          ],
+          tip: "Use Object → Path → Clean Up… (checking Stray Points, Unpainted Objects, and Empty Text Paths) on every single file before saving—it takes two seconds and eliminates 90% of stray-object rejections."
+        },
+        {
+          heading: "3. Open Paths, Stray Anchor Points, and Artboard Boundaries",
+          subheading: "Filled shapes with open endpoints and artwork bleeding outside the artboard cause rendering glitches.",
+          body: [
+            "Some portals run geometry scripts that flag filled shapes whose start and end anchor points are not closed (`Ctrl+J`), because open filled paths can render unpredictable diagonal slices in older RIP and SVG engines.",
+            "Equally important is **artboard hygiene**:",
+            "• Every visible element should sit cleanly inside (or intentionally clipped to) a single artboard—never leave color swatches, rejected icon drafts, or reference notes floating out on the gray pasteboard!",
+            "• Size your vector artboard generously (for example `2000 × 2000 px` or `4000 × 2667 px` in **RGB** color mode for digital-first stock, unless an agency explicitly requests CMYK) so both SVG viewBoxes and raster previews export at crisp, >=4 megapixel dimensions."
+          ]
+        },
+        {
+          heading: "4. Pairing `.EPS` + `.JPG` Previews Without Filename Mismatches",
+          subheading: "Case sensitivity and pixel minimums determine whether portals link your vector and preview.",
+          body: [
+            "While Adobe Stock can auto-generate previews from `.ai`, `.eps`, and `.svg` uploads, marketplaces like Shutterstock, Vecteezy, Dreamstime, and 123RF often require (or pair) a high-resolution **JPEG preview** alongside the vector file—and local AI vision tools also read that JPEG preview to describe your artwork.",
+            "Follow strict pairing discipline:",
+            "• **Identical base filenames** (case-sensitive!): `fintech-icons-01.eps` + `fintech-icons-01.jpg`—never `fintech-icons-01-preview.jpg` or `.JPG` vs `.eps` mixed casing.",
+            "• **Minimum 4 Megapixels** on the JPEG preview (for example `2500 × 2000 px` = 5 MP, exported at sRGB quality 10–12 with 'Use Artboards' checked so white margins match the vector artboard 1:1)."
+          ],
+          example: {
+            badTitle: "fintech_pack.eps + Fintech_Pack_Preview.jpg (1200 x 800 px = 0.96 MP)",
+            goodTitle: "fintech-icons-01.eps + fintech-icons-01.jpg (3000 x 2000 px = 6.0 MP, sRGB, Artboard clipped)",
+            explanation: "Exact stem matching lets FTP portals, CSV uploaders, and Tagyfy Pro pair the raster preview with the vector file automatically."
+          }
+        },
+        {
+          heading: "5. Organizing Layers Like a Product, Not a Scratchpad",
+          subheading: "Clean layer groups turn one-time buyers into repeat followers of your portfolio.",
+          body: [
+            "Reviewers check technical validity, while buyers judge usability. Grouping each icon or illustration element logically (`Background`, `Main_Illustration`, `Grid_Icons`) and expanding overlapping strokes only when intentionally finalized (keeping stroke weights editable in 'Editable Stroke' icon sets, and clearly stating `'editable stroke'` vs `'expanded shapes'` in your metadata) prevents buyer frustration."
+          ]
+        }
+      ],
+      conclusion: `Vector rejections are almost entirely deterministic: eliminate embedded bitmaps, run Path → Clean Up to strip stray points and empty text objects, verify zero live fonts remain when outlining, keep pasteboards spotless, and pair exact-named >=4MP sRGB JPEG previews.`,
+      checklist: [
+        "Verify Window → Links is 100% empty (zero embedded or linked raster images)",
+        "Avoid Gaussian Blur, Drop Shadow, and raster effects when saving to EPS 10",
+        "Run Type → Create Outlines and verify 0 fonts remain in Type → Find/Replace Font",
+        "Run Object → Path → Clean Up (Stray Points, Unpainted Objects, Empty Text Paths)",
+        "Delete all scratchpad swatches and drafts outside the active artboard",
+        "Export an exact same-named sRGB JPEG preview at 4MP–15MP (`design.eps` + `design.jpg`)"
+      ]
+    }
+  },
+  {
+    id: "generative-ai-stock-submission-rules-comparison",
+    slug: "generative-ai-stock-submission-rules-comparison",
+    title: "Generative AI Submission Rules Across Stock Marketplaces: Policy Comparison and Disclosure Checklist",
+    subtitle: "Which stock agencies accept AI-generated visuals, which ban them outright, and how disclosure flags, prompts, and titles must be handled.",
+    category: "Compliance & Safety",
+    readTime: "8 min read",
+    publishDate: "2026-10-14",
+    updatedDate: "2026-10-26",
+    author: {
+      name: "Salman Ahmad",
+      role: "Stock Contributor & Researcher",
+      avatar: "📋",
+    },
+    summary: "Uploading the same batch indiscriminately across six stock agencies is dangerous when some portals welcome labeled generative AI and others ban it completely. Review this cross-agency policy comparison before exporting your next batch.",
+    tags: ["Generative AI Policy", "Adobe Stock", "Shutterstock", "Freepik", "Compliance Comparison"],
+    content: {
+      intro: `In multi-agency microstock workflows, contributors used to export a single folder of JPEGs and upload that identical batch to six portals in one afternoon. With generative AI, that habit can get an account suspended overnight.
+
+Stock marketplaces have taken sharply different legal and commercial stances on third-party AI-generated imagery: some actively curate labeled synthetic collections, some require the exact model and prompt in CSV columns, and others strictly prohibit contributor-submitted generative AI.
+
+*(Policies evolve rapidly—the summary below reflects official contributor documentation checked in October 2026. Always verify each marketplace's live contributor help center before uploading.)*`,
+      sections: [
+        {
+          heading: "Marketplace-by-Marketplace Generative AI Stance",
+          subheading: "Separate your traditional camera/vector folders from synthetic AI folders on disk before uploading.",
+          body: [
+            "Here is how the six major marketplaces supported in common CSV workflows treat contributor-submitted generative AI:",
+            "• **Adobe Stock — Accepted with Mandatory Disclosure**: Contributors may submit generative-AI images, illustrations, and videos provided they own commercial rights under the AI tool's terms, check the **'Created using generative AI tools'** box, avoid real-person/artist-style/brand prompts, and never submit AI visuals as real news/editorial depictions.",
+            "• **Shutterstock — Prohibited for Contributor Uploads**: Shutterstock does **not** permit contributors to upload content generated by third-party AI tools (Midjourney, DALL-E, Stable Diffusion, Flux, etc.) into the contributor marketplace, even for partial sky replacements or generative fill subjects that constitute the core asset.",
+            "• **Freepik — Accepted with Model/Prompt Metadata**: Freepik accepts AI-generated assets when properly flagged as AI-generated; its CSV specification even includes dedicated `Prompt` and `Model` columns alongside `File name`, `Title`, and `Keywords`.",
+            "• **Dreamstime & 123RF — Accepted with AI Labeling**: Both permit synthetic commercial submissions when marked with their respective AI disclosure flags and clear of third-party IP or celebrity likenesses.",
+            "• **Vecteezy — Restricted / Program-Specific**: Vecteezy has tightened rules around synthetic floods and enforces strict curation and disclosure requirements; always check your current Vecteezy contributor dashboard eligibility before uploading AI renders."
+          ],
+          warning: "Never include Shutterstock in a bulk upload run of Midjourney, Flux, or Firefly renders—keep AI batches in a dedicated folder so they only go to portals that explicitly permit them."
+        },
+        {
+          heading: "Banned Prompt Patterns That Violate Contributor Warranties",
+          subheading: "Even if the output looks clean, how you prompted the generator affects your legal right to submit it.",
+          body: [
+            "Adobe Stock's Generative AI guidelines make an important point that many creators overlook: compliance starts in your **prompt and reference inputs**, not just in the output pixels.",
+            "Do **not** submit AI assets generated from prompts or references that include:",
+            "• **Living artists' names or copyrighted franchises** (e.g., `'in the style of Studio Ghibli'`, `'Pixar style'`, `'Wes Anderson palette'`, `'Greg Rutkowski'`).",
+            "• **Trademarked products, cameras, or film stocks** inside titles or tags (even if you typed a lens style during generation, scrub brand names like `'Kodak Portra'`, `'Leica'`, or `'Hasselblad'` from every title and keyword!).",
+            "• **Unlicensed third-party photos** used as image-to-image (`img2img`) inputs—you may only use reference images to which you hold full copyright and releases."
+          ],
+          tip: "Audit your titles and keywords for leftover prompt tokens like `--ar 16:9`, `--v 6`, `octane render`, `8k unreal engine`, or camera brand names before exporting your CSV."
+        },
+        {
+          heading: "How to Title AI Assets Honestly (Photo vs Illustration Classification)",
+          subheading: "Never claim a synthetic scene is a documentary photograph of a real place or event.",
+          body: [
+            "On Adobe Stock, photorealistic AI renders should still describe the visual aesthetic honestly without claiming real-world documentary authenticity.",
+            "• **Avoid**: `'Aerial drone photograph of Yosemite Valley national park after wildfire in 2026'` on a synthetic image—naming real places or real-world news events on AI imagery misleads editorial and commercial buyers and triggers instant rejection.",
+            "• **Prefer**: `'Sunlit pine forest valley with morning mist and granite cliffs in warm golden hour light'`—describe the visual scene and commercial concept accurately while ticking the Generative AI checkbox and selecting the appropriate category (`Illustrations` or `Photos` per the portal's current AI categorization rule; check Adobe's current portal guidance, which routes realistic synthetic images via the AI disclosure flag)."
+          ],
+          example: {
+            badTitle: "Documentary photo of Tokyo Shibuya crossing commuters in rain --ar 16:9 Midjourney",
+            goodTitle: "Pedestrians walking with umbrellas across rain-slicked neon city crosswalk at night with motion blur for urban commute concept",
+            explanation: "Removes real-world landmark claims, strips raw generator parameters, and describes the visual scene cleanly."
+          }
+        },
+        {
+          heading: "Upscaling Quality and Resolution Honesty",
+          subheading: "Enlarging a blurry 1024px image to 6000px without detail recovery fails 100% inspection.",
+          body: [
+            "Many base image generators output around 1 to 2 megapixels, below standard 4-megapixel stock minimums. Use clean, artifact-free upscaling to reach natural resolution (4MP–16MP), then inspect skin texture, eyeballs, fabric weave, background signage gibberish (fake alien lettering on storefronts or computer screens!), and fingers at 100% zoom before tagging."
+          ]
+        }
+      ],
+      conclusion: `Responsible AI stock contribution requires strict folder separation by agency policy, honest disclosure checkboxes on every single file, zero artist-name or brand-name prompt residue, and manual 100% pixel cleanup before metadata generation.`,
+      checklist: [
+        "Separate AI-generated files from traditional camera/vector work so AI files never go to Shutterstock",
+        "Verify commercial licensing rights under the current paid tier of the AI generator you used",
+        "Enable the 'Created using generative AI tools' disclosure flag on every synthetic asset",
+        "Strip generator flags (`--ar`, `8k`, `unreal engine`) and brand names from titles and keywords",
+        "Never name real people, living artists, or real-world news locations on synthetic imagery",
+        "Clone out gibberish pseudo-text on background signs, screens, labels, and book spines"
+      ]
+    }
+  },
+  {
+    id: "commercial-vs-editorial-stock-licensing-guide",
+    slug: "commercial-vs-editorial-stock-licensing-guide",
+    title: "Commercial vs Editorial Stock Submissions: Captions, Street Photography and Licensing Boundaries",
+    subtitle: "How commercial and editorial licenses differ, how to format standard journalistic captions, and why Adobe Stock's 'Illustrative Editorial' rules catch contributors off guard.",
+    category: "Compliance & Safety",
+    readTime: "8 min read",
+    publishDate: "2026-10-19",
+    updatedDate: "2026-10-26",
+    author: {
+      name: "Salman Ahmad",
+      role: "Stock Contributor & Editor",
+      avatar: "📰",
+    },
+    summary: "Can you upload street photography, storefronts, or public events without releases? Learn the exact boundary between Commercial and Editorial stock licensing, the mandatory dateline caption formula, and critical rules across agencies.",
+    tags: ["Editorial Stock", "Commercial License", "Caption Format", "Street Photography", "Illustrative Editorial"],
+    content: {
+      intro: `Suppose you photograph commuters boarding a city metro train, a busy farmers' market with handwritten price signs, or an electric vehicle charging at a branded roadside station. You have zero signed model releases and logos are clearly visible. Does that make the photo useless for stock?
+
+Not necessarily—it depends entirely on the **licensing channel** and the **target marketplace**.
+
+Understanding the legal and technical line between **Commercial (Royalty-Free)** and **Editorial** stock saves contributors from two costly mistakes: getting commercial accounts penalized for uploading unreleased street scenes, or having editorial queues rejected for broken dateline captions and over-retouching.`,
+      sections: [
+        {
+          heading: "The Core Legal Difference: Advertising vs Newsworthy Context",
+          subheading: "Who buys each license and how they are allowed to use your file.",
+          body: [
+            "• **Commercial Stock License**: Allows buyers to advertise, endorse, or package products and services—billboards, Facebook ads, SaaS landing pages, product boxes. Because the image promotes a commercial brand, **zero unauthorized logos/trademarks** may appear, and **signed Model/Property Releases** are required for every recognizable person or private property.",
+            "• **Editorial Stock License**: Restricted strictly to **non-promotional, informational, educational, and journalistic contexts**—news articles, textbooks, documentaries, blog commentary on current events or consumer trends. Editorial assets *may* show unreleased people in public places and visible real-world brands, provided the scene is truthful, unmanipulated, and shot legally from a public vantage point without invading reasonable expectations of privacy."
+          ],
+          keyTakeaways: [
+            "Commercial = promotes a product/brand → requires clean IP + signed releases.",
+            "Editorial = informs or illustrates news/education → permits real-world public scenes + truthful dateline captions.",
+            "Generative AI images can NEVER be submitted as documentary Editorial photography."
+          ]
+        },
+        {
+          heading: "The Standard Journalistic Dateline Caption Formula",
+          subheading: "Shutterstock, Dreamstime, and 123RF require exact editorial caption syntax.",
+          body: [
+            "If you submit an editorial photo with a normal commercial title like `'People walking outside retail store'`, moderation bots will reject it immediately for `'Invalid Editorial Caption.'`",
+            "Traditional editorial agencies enforce a strict **Dateline + Factual Sentence** format in the Title/Description field:",
+            "`CITY, COUNTRY - MONTH DAY, YEAR: Factual present-tense description answering Who, What, Where, and Context.`",
+            "Pay close attention to the punctuation details:",
+            "• City and Country (or City, State, Country for USA) in **ALL CAPS**, followed by ` - ` (space, hyphen, space).",
+            "• Full month name in **ALL CAPS** (or agency-specified format), day, four-digit year, followed by a colon `:`.",
+            "• Objective, neutral journalistic prose—no opinionated adjectives (`'terrible traffic'`, `'best smartphone'`) and no promotional language."
+          ],
+          example: {
+            badTitle: "Shoppers walking past store window in London during autumn rain",
+            goodTitle: "LONDON, UNITED KINGDOM - OCTOBER 12, 2026: Pedestrians carrying umbrellas walk past illuminated retail storefronts along Oxford Street during evening commuter rain.",
+            explanation: "Follows the exact CITY, COUNTRY - MONTH DAY, YEAR: factual sentence structure required by editorial ingestion queues."
+          }
+        },
+        {
+          heading: "Why Adobe Stock's 'Illustrative Editorial' Policy Is Unique",
+          subheading: "Adobe Stock does not run an open street-photo news wire for general contributors.",
+          body: [
+            "Many photographers who learn editorial captioning on Shutterstock try uploading the same street crowd photos to Adobe Stock—and get rejected every single time.",
+            "Why? Because Adobe Stock's general contributor portal only accepts a specialized category called **Illustrative Editorial** (conceptual shots of recognizable consumer brands/products—such as a smartphone displaying a social app or a branded delivery van—intended to illustrate articles about those topics), and its rules are much stricter than open news wires:",
+            "• Even in Illustrative Editorial on Adobe Stock, **recognizable human faces are generally NOT permitted without a model release**, and sensitive locations or defamatory contexts are prohibited.",
+            "• Always read Adobe Stock's specific *Illustrative Editorial* help page before submitting any branded image there, rather than assuming Shutterstock's public-street editorial rules apply."
+          ],
+          warning: "Never assume two agencies share the same editorial rules: a public crowd shot accepted as Editorial on Shutterstock or Dreamstime will routinely be rejected on Adobe Stock."
+        },
+        {
+          heading: "Post-Processing Limits on Editorial Photography",
+          subheading: "Cloning out street signs or compositing skies violates journalistic integrity.",
+          body: [
+            "In commercial photography, cloning out a trash can, power line, or wall blemish is encouraged—in fact, required when removing stray brand logos.",
+            "In **editorial photography**, altering the factual reality of the frame is forbidden:",
+            "• **Allowed**: Standard darkroom adjustments—exposure, white balance, subtle contrast, Straightening/cropping, and sensor dust spot removal.",
+            "• **Prohibited**: Sky replacement, AI generative fill/expand, cloning out people or signage, staging fake news events, or heavy color grading that distorts reality."
+          ]
+        }
+      ],
+      conclusion: `Decide before you press the shutter—or before you export from Lightroom—whether a frame belongs in a clean Commercial folder or a truthful Editorial folder. Keep editing truthful on editorial files, follow the exact dateline caption syntax, and verify each agency's specific editorial eligibility rules.`,
+      checklist: [
+        "Confirm whether your target portal accepts general Editorial vs specialized Illustrative Editorial",
+        "Format captions strictly as `CITY, COUNTRY - MONTH DAY, YEAR: Factual description.`",
+        "Verify the exact capture date in your caption matches the camera's EXIF `DateTimeOriginal`",
+        "Perform zero cloning, sky replacement, or generative fill on editorial submissions",
+        "Never submit sensitive private moments (hospitals, schools, private property interiors) without consent",
+        "Never mark synthetic AI-generated renders as Editorial"
+      ]
+    }
+  },
+  {
+    id: "stock-csv-upload-formatting-troubleshooting-guide",
+    slug: "stock-csv-upload-formatting-troubleshooting-guide",
+    title: "Bulk CSV Uploads for Stock Contributors: Column Schemas, UTF-8 Encoding and Fixing Rejected Spreadsheets",
+    subtitle: "How to prevent semicolon delimiter bugs, Excel BOM corruption, unescaped quotation marks, and case-sensitive filename mismatches across six stock agencies.",
+    category: "Technical Guides",
+    readTime: "8 min read",
+    publishDate: "2026-10-24",
+    updatedDate: "2026-10-26",
+    author: {
+      name: "Salman Ahmad",
+      role: "Stock Contributor & Software Developer",
+      avatar: "📊",
+    },
+    summary: "A single unescaped comma, regional semicolon setting in Excel, or uppercase `.JPG` mismatch can cause a 300-row stock CSV upload to fail silently. Master RFC 4180 CSV formatting and per-agency header rules.",
+    tags: ["CSV Upload", "Bulk Metadata", "UTF-8", "Spreadsheet Troubleshooting", "Workflow Automation"],
+    content: {
+      intro: `When you move from uploading five files a week to managing batches of 100 or 300 assets—especially video clips and multi-agency catalogs—manual browser copy-pasting becomes unsustainable. Bulk CSV import is the universal bridge supported by Adobe Stock, Shutterstock, Freepik, Vecteezy, Dreamstime, and 123RF.
+
+Yet CSV ("Comma-Separated Values") is deceptively fragile. Because spreadsheet apps like Microsoft Excel silently rewrite delimiters, strip leading zeros, and save regional Windows-1252 encodings behind your back, contributors routinely spend hours wondering why a portal says *"0 rows matched"* or *"Invalid header format."*
+
+Here is an engineering-level guide to how stock CSV parsers actually read your file—and how to fix every common failure in under two minutes.`,
+      sections: [
+        {
+          heading: "1. Every Agency Expects Different Exact Header Names and Delimiters",
+          subheading: "One generic spreadsheet cannot be uploaded unchanged to six portals.",
+          body: [
+            "Stock portals match CSV columns by **exact header spelling** (and in Freepik's case, a completely different column delimiter):",
+            "• **Adobe Stock** (comma-delimited `,`): `Filename,Title,Keywords,Category,Releases` — Category is a numeric ID (`1` to `21`), Title max 200 chars, Keywords max 49.",
+            "• **Shutterstock** (comma-delimited `,`): `Filename,Description,Keywords,Categories,Editorial,Mature content,Illustration` — note there is **no `Title` column**, and `Categories` expects text names like `Business/Finance` or `Objects`.",
+            "• **Freepik** (**semicolon-delimited `;`**): `\"File name\";\"Title\";\"Keywords\";\"Prompt\";\"Model\"` — notice the space in `File name`, the semicolon separator, and the strict 100-character Title limit.",
+            "• **Vecteezy** (comma-delimited `,`): `Filename,Title,Description,Keywords,License`.",
+            "• **Dreamstime & 123RF**: Each uses its own multi-column layout (`Image Name` vs `oldfilename`; see the exact schemas on our [Marketplace Metadata Limits page](/metadata-limits))."
+          ],
+          tip: "Never hand-rename CSV headers from memory. Export agency-specific CSV templates directly from [Tagyfy's Free Metadata Checker](/metadata-checker) or the `/tool` exporter so column names and delimiters match each portal."
+        },
+        {
+          heading: "2. The RFC 4180 Quoting Rule: Why Unquoted Commas Shift Every Column",
+          subheading: "Your keyword list contains 48 commas—without outer double quotes, the parser sees 49 extra columns.",
+          body: [
+            "In standard RFC 4180 CSV syntax, any cell value that contains a comma `,`, a semicolon `;`, a newline, or a double quote `\"` **must be wrapped in outer double quotes** `\"...\"`, and any literal double quote inside the text must be doubled `\"\"`.",
+            "If you build a CSV with a naive script or text concatenation without quoting:",
+            "• A keyword list `solar, rooftop, energy` splits into three separate columns, pushing your category ID off the end of the row.",
+            "• Even when properly quoted, **Adobe Stock specifically warns against commas inside Titles**, so stripping commas out of the Title string altogether prevents both parser edge cases and comma-stuffing moderation flags."
+          ],
+          example: {
+            badTitle: "solar-01.jpg,Solar rooftop, golden hour,solar, energy, sun,11,",
+            goodTitle: "solar-01.jpg,\"Commercial solar panel array at golden hour\",\"solar panel, renewable energy, rooftop\",11,",
+            explanation: "Wrapping text fields in standard RFC 4180 double quotes and keeping Adobe Stock titles comma-free keeps all 5 columns aligned."
+          }
+        },
+        {
+          heading: "3. Why Opening a Valid CSV in Excel Can Break It (Locale & Encoding)",
+          subheading: "European/Asian regional settings and non-UTF-8 saves silently corrupt good files.",
+          body: [
+            "Two classic spreadsheet traps ruin valid CSVs when contributors double-click them in Excel to make a quick edit:",
+            "1. **Regional list-separator swap**: On Windows machines configured with a comma as the decimal separator (`1,50`), Excel saves 'CSV' files using **semicolons `;`** instead of commas! That works by coincidence for Freepik, and breaks Adobe Stock and Shutterstock completely.",
+            "2. **ANSI / Windows-1252 encoding**: Clicking plain *Save As → CSV (Comma delimited)* in older Excel builds can write Windows-1252 instead of **UTF-8**, causing uploaders to reject the file or corrupt characters.",
+            "If you need to inspect or tweak a CSV manually, open it in **VS Code**, **LibreOffice Calc** (which prompts explicitly for UTF-8 and delimiter choice), or Google Sheets (*File → Download → Comma Separated Values*)."
+          ],
+          warning: "If you open a CSV in a plain-text editor like Notepad or VS Code, check line 1 immediately: you will see in one second whether columns are separated by `,` or `;` and whether keyword lists are wrapped in quotes."
+        },
+        {
+          heading: "4. Case-Sensitive Filenames and Wait-For-Ingestion Timing",
+          subheading: "Why valid CSV rows report '0 files matched' on the contributor portal.",
+          body: [
+            "Linux-backed ingestion servers compare filenames byte-for-byte:",
+            "• `Cafe_Latte_01.JPG` **does not match** `Cafe_Latte_01.jpg` or `cafe_latte_01.jpg`.",
+            "• Include the file extension (`.jpg`, `.eps`, `.mp4`), and **never** include folder paths (`C:\\Exports\\photo.jpg` or `batch1/photo.jpg`)—only the bare filename!",
+            "• **Wait until thumbnails finish processing**: If you upload 100 heavy MP4 or EPS files via FTP/SFTP and upload the CSV ten seconds later while half the batch is still transcoding, only the finished files will match. Wait until every asset appears in your 'Unfinished / To Submit' queue, then import the CSV."
+          ]
+        }
+      ],
+      conclusion: `Bulk CSV failures disappear once you verify four invariants: exact portal-specific headers, RFC 4180 double-quoted cells, clean UTF-8 encoding untouched by regional Excel defaults, and exact case-sensitive bare filenames imported only after media ingestion finishes.`,
+      checklist: [
+        "Use the exact column header schema and delimiter (`,` vs `;` for Freepik) required by the target portal",
+        "Verify every keyword cell and multi-word title is wrapped in RFC 4180 double quotes",
+        "Save strictly in UTF-8 encoding and inspect line 1 in a plain-text editor before uploading",
+        "Confirm CSV `Filename` entries match uploaded file extensions with exact uppercase/lowercase casing",
+        "Strip directory paths (`folder/image.jpg` → `image.jpg`) from the Filename column",
+        "Wait for all uploaded videos and vectors to appear in your portal queue before importing the CSV"
+      ]
+    }
+  }
 ];
+

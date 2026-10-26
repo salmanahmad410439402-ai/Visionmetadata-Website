@@ -23,8 +23,8 @@ const DownloadSection = () => {
     },
     {
       icon: Sparkles,
-      title: "Five AI providers",
-      desc: "Bring a key from Gemini, OpenAI, Groq, Mistral or OpenRouter and rotate between them.",
+      title: "Four AI providers",
+      desc: "Bring a key from Google Gemini, OpenAI, Groq, or Mistral AI and rotate between them.",
     },
     {
       icon: Package,
@@ -204,8 +204,8 @@ const DownloadSection = () => {
           </div>
         </div>
 
-        {/* System Requirements */}
-        <div className="reveal glass-panel rounded-3xl p-10 mb-32 overflow-hidden">
+        {/* System Requirements & Software Transparency / Uninstallation */}
+        <div className="reveal glass-panel rounded-3xl p-8 sm:p-10 mb-16 overflow-hidden">
           <h2 className="text-2xl font-bold mb-8 text-foreground">System requirements</h2>
           <div className="grid sm:grid-cols-3 gap-8">
             {systemReqs.map(({ icon: Icon, label, value }) => (
@@ -219,6 +219,76 @@ const DownloadSection = () => {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+
+        {/* Publisher Disclosure, Verification & Uninstallation (Unwanted Software Policy Compliance) */}
+        <div className="reveal glass-panel rounded-3xl p-8 sm:p-10 mb-32 border border-border/80 space-y-6">
+          <div>
+            <h2 className="text-2xl font-bold text-foreground mb-2">
+              Installer details, verification &amp; how to uninstall
+            </h2>
+            <p className="text-sm text-secondary leading-relaxed">
+              Before installing any desktop application, you should know exactly who publishes it,
+              what it modifies on your computer, and how to remove it cleanly.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-6 text-sm">
+            <div className="rounded-2xl border border-card-primary bg-card-primary p-6 space-y-2.5">
+              <h3 className="font-bold text-foreground">Release &amp; publisher facts</h3>
+              <ul className="space-y-1.5 text-secondary">
+                <li><strong>Publisher:</strong> Salman Ahmad (Tagyfy Pro independent software)</li>
+                <li><strong>Current build:</strong> Version 1.3.6 (Windows 10 / 11 64-bit)</li>
+                <li><strong>File:</strong> <code className="text-xs font-mono">Tagyfy_Pro_1.3.6_x64-setup.exe</code> (~160.7 MB)</li>
+                <li>
+                  <strong>Release &amp; signature:</strong>{" "}
+                  <a
+                    href="https://github.com/salmangraphics839-hue/visionmeta-releases/releases/tag/1.3.6"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-primary underline hover:text-primary/80"
+                  >
+                    Official GitHub release v1.3.6 (.sig verification file)
+                  </a>
+                </li>
+                <li>
+                  <strong>SmartScreen notice:</strong> This installer is not yet EV code-signed, so
+                  Windows Defender SmartScreen may display an &ldquo;Unknown publisher&rdquo; prompt.
+                  Only proceed if you downloaded directly from this page and verified the file size.
+                </li>
+                <li>
+                  <strong>Legal terms:</strong> Governed by our{" "}
+                  <Link to="/terms" className="text-primary underline">Terms of Service</Link> and{" "}
+                  <Link to="/privacy-policy" className="text-primary underline">Privacy Policy</Link>.
+                </li>
+              </ul>
+            </div>
+
+            <div className="rounded-2xl border border-card-primary bg-card-primary p-6 space-y-2.5">
+              <h3 className="font-bold text-foreground">How to uninstall Tagyfy Pro completely</h3>
+              <ol className="list-decimal pl-5 space-y-1.5 text-secondary">
+                <li>Close Tagyfy Pro if it is open.</li>
+                <li>
+                  Open Windows <strong>Settings → Apps → Installed apps</strong> (or{" "}
+                  <em>Apps &amp; features</em> on Windows 10).
+                </li>
+                <li>
+                  Search for <strong>Tagyfy Pro</strong>, click the three-dot menu, and choose{" "}
+                  <strong>Uninstall</strong>. Follow the standard Windows uninstaller prompt.
+                </li>
+                <li>
+                  <em>Optional local settings cleanup:</em> To remove stored API keys and preferences
+                  as well, delete the app&apos;s local data folder inside{" "}
+                  <code className="text-xs font-mono">%LOCALAPPDATA%</code> /{" "}
+                  <code className="text-xs font-mono">%APPDATA%</code>.
+                </li>
+              </ol>
+              <p className="text-xs text-muted-foreground pt-1">
+                Tagyfy Pro installs per-user, registers no background system drivers, modifies no
+                browser search or homepage settings, and bundles zero third-party offers.
+              </p>
+            </div>
           </div>
         </div>
 

@@ -26,8 +26,8 @@ import {
 const workflow = [
   {
     icon: KeyRound,
-    title: "1. Add your own AI key",
-    body: "Open the key panel and paste a key from Google Gemini, OpenAI, Groq, Mistral or OpenRouter. The key is kept in your browser's local storage for the session you choose and is sent only to the provider it belongs to. Google AI Studio issues a free Gemini key in about a minute, so a paid account is not required to try the tool.",
+    title: "1. Add your own AI key (or try Sample Demo)",
+    body: "Click 'Try Sample Demo (No API Key)' to explore a completed asset and CSV export immediately, or open the key panel and paste a key from Google Gemini, OpenAI, Groq, or Mistral AI. Keys stay in your browser and are sent only to the provider they belong to. Google AI Studio and Groq both offer free API tiers.",
   },
   {
     icon: Upload,
@@ -220,7 +220,7 @@ const ToolGuide = () => (
         need metadata written directly into EPS, AI, SVG, MP4 or MOV files, or need your media to
         stay on your own machine.
       </p>
-      <div className="grid sm:grid-cols-3 gap-4 text-sm">
+      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
         <Link
           to="/download"
           className="group rounded-2xl border border-card-primary p-5 hover:border-primary transition-colors"
@@ -239,6 +239,16 @@ const ToolGuide = () => (
           <p className="font-bold text-foreground mb-3">Setup guides</p>
           <p className="text-secondary">
             Four written guides covering install, provider keys, metadata settings and running a batch.
+          </p>
+        </Link>
+        <Link
+          to="/metadata-checker"
+          className="group rounded-2xl border border-card-primary p-5 hover:border-primary transition-colors"
+        >
+          <ClipboardCheck className="w-5 h-5 text-primary mb-3" />
+          <p className="font-bold text-foreground mb-1">Free compliance checker</p>
+          <p className="text-secondary">
+            Validate title length, keyword priority and trademarks across 6 agencies with no API key.
           </p>
         </Link>
         <Link

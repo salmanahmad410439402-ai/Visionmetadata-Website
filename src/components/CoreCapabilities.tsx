@@ -5,12 +5,12 @@ const coreCapabilities = [
   {
     icon: Brain,
     title: "Multi-AI Support",
-    desc: "Connect Gemini, GPT-4, Groq, OpenRouter, or Mistral. Use multiple providers simultaneously.",
+    desc: "Connect Google Gemini, OpenAI GPT-4o, Groq, or Mistral AI. Use multiple keys simultaneously.",
   },
   {
     icon: FileStack,
-    title: "100+ File Types",
-    desc: "JPEG, PNG, WebP, MP4 videos, AI vectors, EPS, SVG, TIFF. Process anything in one batch.",
+    title: "10 Core Media Formats",
+    desc: "JPEG, PNG, WebP, TIFF images, AI, EPS, SVG vectors, and MP4, MOV, WebM video in one batch.",
   },
   {
     icon: BarChart3,

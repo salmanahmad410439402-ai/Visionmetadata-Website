@@ -28,7 +28,7 @@ const TermsOfService = () => {
             Terms of Service
           </h1>
           <p className="reveal reveal-delay-2 text-sm text-tertiary">
-            Last Updated: August 17, 2026 · Effective Date: January 1, 2026
+            Last Updated: October 26, 2026 · Effective Date: January 1, 2026
           </p>
         </div>
 
@@ -66,7 +66,7 @@ const TermsOfService = () => {
               3. AI API Usage & Third-Party Services
             </h2>
             <p>
-              Tagyfy Pro provides direct client-side integration with third-party Artificial Intelligence providers (including Google Gemini, OpenAI, Groq, Mistral, and OpenRouter). You are responsible for providing valid API keys and complying with the respective terms of service of each AI provider.
+              Tagyfy Pro provides direct client-side integration with third-party Artificial Intelligence providers (Google Gemini, OpenAI, Groq, and Mistral AI). You are responsible for providing valid API keys and complying with the respective terms of service of each AI provider.
             </p>
           </section>
 

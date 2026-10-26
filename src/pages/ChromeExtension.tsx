@@ -301,6 +301,17 @@ const ChromeExtension = () => {
                 submit, publish or delete anything on your behalf, and you remain responsible for
                 what you save.
               </p>
+              <div className="mt-6 pt-5 border-t border-border/70 text-sm text-secondary space-y-1.5">
+                <p className="font-bold text-foreground">How to disable or uninstall the extension</p>
+                <p className="leading-relaxed">
+                  Open <code className="text-xs font-mono">chrome://extensions/</code> in Google
+                  Chrome, find <strong>Tagyfy Pro</strong>, and click <strong>Remove</strong> (or
+                  toggle the switch off to disable it temporarily). Removing the extension
+                  automatically deletes its local <code className="text-xs font-mono">vmp_</code>{" "}
+                  extension storage from Chrome; you can then delete the extracted ZIP folder from
+                  your computer.
+                </p>
+              </div>
             </div>
 
         {/* ─── FREQUENTLY ASKED QUESTIONS ─── */}
@@ -371,7 +382,7 @@ const ChromeExtension = () => {
                 <span>•</span>
                 <span>Version: <strong>1.3.6</strong></span>
                 <span>•</span>
-                <span>Format: <strong>ZIP archive (~70 KB)</strong></span>
+                <span>Format: <strong>ZIP archive (~197 KB)</strong></span>
                 <span>•</span>
                 <span className="text-green-400 font-semibold">Free, with no licence key</span>
               </div>

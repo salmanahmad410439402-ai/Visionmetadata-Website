@@ -6,12 +6,12 @@ const highlights = [
   {
     icon: Cpu,
     title: "Multi-Provider AI Engine",
-    desc: "Run Gemini, GPT-4o, Groq, Mistral, and OpenRouter side by side with automatic key rotation.",
+    desc: "Run Google Gemini, OpenAI GPT-4o, Groq, and Mistral AI side by side with automatic key rotation.",
   },
   {
     icon: Shield,
     title: "Trademark & Brand Sniffer",
-    desc: "Flags 100+ brand names before upload so your assets never get rejected for trademarked terms.",
+    desc: "Flags 90+ common brand names and product patterns before upload to reduce avoidable IP rejections.",
   },
   {
     icon: BarChart3,

@@ -105,12 +105,23 @@
   }
 }
 
-/* ── Scroll-reveal animations ─────────────────────────────────── */
+/* ── Scroll-reveal animations ───────────────────────────────────
+ * Keep opacity at 1 at all times so non-scrolling crawlers (Googlebot,
+ * Mediapartners-Google) and assistive tools never encounter invisible
+ * below-the-fold text. Motion is subtle transform-only enhancement.
+ */
 .reveal {
-  opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .reveal:not(.visible) {
+    transform: translateY(10px);
+  }
+  .reveal {
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
 }
 
 .reveal.visible {

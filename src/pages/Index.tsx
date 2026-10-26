@@ -119,12 +119,12 @@ const Index = () => {
                 </Button>
               </Link>
 
-              <a href="https://github.com/salmangraphics839-hue/visionmeta-releases/releases/download/1.3.6/Tagyfy_Pro_1.3.6_x64-setup.exe" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
+              <Link to="/download" className="w-full sm:w-auto">
                 <Button size="lg" variant="outline" className="w-full sm:w-auto h-14 px-8 text-base font-bold rounded-2xl border-white/10 hover:bg-primary/5 transition-all hover:scale-[1.02] glass-panel text-foreground">
                   <Download className="w-4 h-4 mr-2 text-primary" />
                   Download for Windows
                 </Button>
-              </a>
+              </Link>
             </div>
           </div>
         </section>

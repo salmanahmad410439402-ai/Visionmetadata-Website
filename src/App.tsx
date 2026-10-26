@@ -26,8 +26,10 @@ import RefundPolicy from "./pages/RefundPolicy";
 import EditorialPolicy from "./pages/EditorialPolicy";
 import ToolPage from "./pages/Tool";
 import PlatformLimits from "./pages/PlatformLimits";
+import MetadataChecker from "./pages/MetadataChecker";
 import Blogs from "./pages/Blogs";
 import BlogPost from "./pages/BlogPost";
+import AdSenseLoader from "@/components/ads/AdSenseLoader";
 import { JsonLd, organisationSchema } from "@/lib/structuredData";
 
 const queryClient = new QueryClient();
@@ -47,6 +49,7 @@ const App = () => {
         <Sonner />
         <BrowserRouter>
           <JsonLd data={organisationSchema()} />
+          <AdSenseLoader />
           <Navbar />
           <ConsentBanner />
           <main className="min-h-screen bg-background">
@@ -70,6 +73,7 @@ const App = () => {
               <Route path="/editorial-policy" element={<EditorialPolicy />} />
               <Route path="/tool" element={<ToolPage />} />
               <Route path="/metadata-limits" element={<PlatformLimits />} />
+              <Route path="/metadata-checker" element={<MetadataChecker />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
