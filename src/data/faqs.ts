@@ -24,7 +24,7 @@ export const FAQS: FaqEntry[] = [
     },
     {
         question: "Which AI providers are supported?",
-        answer: "Tagyfy Pro supports 5 AI providers: Google Gemini (Flash & Pro), OpenAI GPT-4o, Groq (Llama 4 Scout), Mistral AI, and OpenRouter (300+ models including free ones). You can add multiple API keys and the system automatically rotates between them when rate limits are hit.",
+        answer: "Tagyfy Pro supports 4 AI providers: Google Gemini (Flash-Lite), OpenAI (GPT-4o & GPT-4o Mini), Groq (Qwen 3.8 Vision), and Mistral AI. You can add multiple API keys and the system automatically rotates between them when rate limits are hit.",
     },
     {
         question: "Are there any hard limits on how many files I can process at once?",
@@ -36,7 +36,7 @@ export const FAQS: FaqEntry[] = [
     },
     {
         question: "What is the Trademark Sniffer?",
-        answer: "It's a built-in compliance system that automatically detects and removes brand names from generated keywords. It has a list of 100+ trademarks and replaces them with generic equivalents — for example 'iPhone' becomes 'modern smartphone with touchscreen'. This prevents stock platform rejections caused by trademarked terms.",
+        answer: "It is a built-in compliance check that scans generated titles and keywords against 90+ common brand names and product-line patterns, replacing flagged terms with generic equivalents — for example 'iPhone' becomes 'modern smartphone with touchscreen'. Always perform your own final check as well, since new trademarks appear constantly and text checks do not inspect image pixels.",
     },
     {
         question: "What are Confidence Scores and Risk Analysis?",

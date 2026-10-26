@@ -234,16 +234,12 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
 
   const [selectedModel, setSelectedModel] = useState<AIModel>(() => {
     const saved = localStorage.getItem("tagyfy_selected_model");
-    if (!saved || saved === "auto") return "qwen/qwen3.6-27b";
-    // Migrate stale model names (e.g. "llama3-70b-8192" -> "meta-llama/llama-4-scout-17b-16e-instruct")
-    // so the UI shows the correct button selected after an app update.
+    if (!saved || saved === "auto") return "gemini-3.5-flash-lite";
+    // Migrate stale model names so the UI shows an active, selectable model
+    // after upstream provider deprecations.
     const migrations: Record<string, AIModel> = {
       // ── Legacy Gemini names.
-      // These previously targeted "gemini-3-flash-preview"/"gemini-3-pro-preview"/
-      // "gemini-2.5-flash-lite", none of which exist in the AIModel union or in
-      // the model menu — so a stored legacy value migrated to a model the app
-      // could not select, label or verify. Every target below is a model the UI
-      // actually offers.
+      // Every target below is a model the UI actually offers.
       "gemini-1.5-flash":               "gemini-3.5-flash-lite",
       "gemini-1.5-pro":                 "gemini-3.1-flash-lite",
       "gemini-2.0-flash":               "gemini-3.5-flash-lite",
@@ -270,16 +266,17 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
       "gpt-4.1-nano":  "gpt-4o-mini",
       "o3":            "gpt-4o",
       "o4-mini":       "gpt-4o-mini",
-      // ── Legacy Llama ─────────────────────────────────────────────────────
-      "llama3-70b-8192":  "qwen/qwen3.6-27b",
-      "llama3-8b-8192":   "qwen/qwen3.6-27b",
-      "llama-4-scout":    "qwen/qwen3.6-27b",
-      "meta-llama/llama-4-maverick": "qwen/qwen3.6-27b",
-      "meta-llama/llama-4-scout-17b-16e-instruct": "qwen/qwen3.6-27b",
-      "meta-llama/llama-prompt-guard-2-86m": "qwen/qwen3.6-27b",
-      "meta-llama/llama-prompt-guard-2-22m": "qwen/qwen3.6-27b",
-      "openai/gpt-oss-20b": "qwen/qwen3.6-27b",
-      "auto": "qwen/qwen3.6-27b",
+      // ── Legacy Llama & retired Groq Qwen 3.6 → active Qwen 3.8 Vision ───
+      "llama3-70b-8192":  "qwen/qwen3.8-27b",
+      "llama3-8b-8192":   "qwen/qwen3.8-27b",
+      "llama-4-scout":    "qwen/qwen3.8-27b",
+      "meta-llama/llama-4-maverick": "qwen/qwen3.8-27b",
+      "meta-llama/llama-4-scout-17b-16e-instruct": "qwen/qwen3.8-27b",
+      "meta-llama/llama-prompt-guard-2-86m": "qwen/qwen3.8-27b",
+      "meta-llama/llama-prompt-guard-2-22m": "qwen/qwen3.8-27b",
+      "openai/gpt-oss-20b": "qwen/qwen3.8-27b",
+      "qwen/qwen3.6-27b": "qwen/qwen3.8-27b",
+      "auto": "gemini-3.5-flash-lite",
     };
     return (migrations[saved] || saved) as AIModel;
   });

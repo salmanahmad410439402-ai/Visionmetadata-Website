@@ -38,7 +38,7 @@ const guides = [
     icon: Key,
     title: "Add an AI provider key (and why you bring your own)",
     summary:
-      "Tagyfy Pro does not resell AI access. Connect a free or paid key from Google, OpenAI, Groq, Mistral, or OpenRouter, and understand where that key lives.",
+      "Tagyfy Pro does not resell AI access. Connect a free or paid key from Google Gemini, OpenAI, Groq, or Mistral AI, and understand where that key lives.",
     steps: [
       "Open Settings and go to the AI provider section. Keys are stored in local storage on your own machine, not on a Tagyfy server.",
       "Create a key with your chosen provider. Google AI Studio issues a free Gemini API key in about a minute; Groq also has a free tier. Paste it into the matching provider field.",
@@ -87,7 +87,7 @@ const faqs = [
   },
   {
     q: "Is there a video version?",
-    a: "Yes — one walkthrough video on this page covers install, generation, review and upload end to end. It is a single recording rather than one video per step, so anything you want to re-check later is faster to find in the written guides above.",
+    a: "Yes — the embedded video above demonstrates the browser metadata generator workflow in Urdu / Hindi audio (~9 minutes). For step-by-step English instructions covering Windows desktop installation, API key rotation, and batch file embedding, follow the four written guides on this page.",
   },
   {
     q: "Can I use this on Mac or Linux?",
@@ -177,25 +177,25 @@ const TutorialsSection = () => {
               <button
                 onClick={() => setIsPlayingDemo(true)}
                 className="absolute inset-0 w-full h-full flex flex-col items-center justify-center gap-4 cursor-pointer group transition-all duration-300 bg-black"
-                aria-label="Play the Tagyfy Pro walkthrough video"
+                aria-label="Play the Tagyfy Pro browser tool walkthrough video (Urdu / Hindi audio)"
               >
                 <img
                   src="/thumbnail.jpg"
-                  alt="Preview frame of the Tagyfy Pro walkthrough video"
+                  alt="Preview frame of the Tagyfy Pro workspace"
                   className="absolute inset-0 w-full h-full object-cover"
                 />
-                <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors duration-300" />
+                <div className="absolute inset-0 bg-black/45 group-hover:bg-black/25 transition-colors duration-300" />
                 <div className="relative w-20 h-20 rounded-full border-2 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 bg-accent-indigo-subtle border-accent-indigo shadow-lg shadow-black/50 z-10">
                   <Play className="w-8 h-8 text-white ml-1 drop-shadow-md" />
                 </div>
-                <span className="relative z-10 text-xs sm:text-sm uppercase tracking-widest font-semibold text-white drop-shadow-md">
-                  Watch the full workflow walkthrough
+                <span className="relative z-10 text-xs sm:text-sm uppercase tracking-widest font-semibold text-white drop-shadow-md px-4 text-center">
+                  Watch browser tool walkthrough (Audio: Urdu / Hindi)
                 </span>
               </button>
             )}
           </div>
           <p className="text-center text-xs mt-5 text-quaternary">
-            One recording covering install, generation, review and upload · about 8 minutes
+            Audio language: Urdu / Hindi · Screen demonstration of the browser metadata generator (~9 min). Follow the four written English guides below for Windows desktop installation and batch embedding.
           </p>
         </div>
 

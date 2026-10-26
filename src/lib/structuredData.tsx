@@ -80,16 +80,15 @@ export const softwareSchema = () => ({
   softwareVersion: "1.3.6",
   fileSize: "160MB",
   url: SITE,
-  downloadUrl:
-    "https://github.com/salmangraphics839-hue/visionmeta-releases/releases/download/1.3.6/Tagyfy_Pro_1.3.6_x64-setup.exe",
+  downloadUrl: `${SITE}/download`,
   description:
     "Desktop application that generates titles, descriptions and keywords for stock media using AI vision models, and writes IPTC/XMP metadata directly into image, vector and video files.",
   featureList: [
     "AI vision analysis for titles, descriptions and keywords",
-    "Direct IPTC/XMP embedding into images, vectors and video",
+    "Direct IPTC/XMP embedding into supported image, vector and video files",
     "Batch processing with parallel workers",
     "CSV exports for Adobe Stock, Shutterstock, Freepik, Dreamstime, 123RF and Vecteezy",
-    "Bring-your-own-key support for Gemini, OpenAI, Groq, Mistral and OpenRouter",
+    "Bring-your-own-key support for Google Gemini, OpenAI, Groq and Mistral AI",
   ],
   offers: [
     { name: "Starter — 1 month", price: "1.75", priceCurrency: "USD", "@type": "Offer" },
@@ -106,6 +105,7 @@ export const articleSchema = (post: {
   subtitle: string;
   summary: string;
   publishDate: string;
+  updatedDate?: string;
   category: string;
   tags: string[];
   author: { name: string; role: string };
@@ -119,6 +119,7 @@ export const articleSchema = (post: {
   articleSection: post.category,
   keywords: post.tags.join(", "),
   datePublished: post.publishDate,
+  dateModified: post.updatedDate || post.publishDate,
   author: {
     "@type": "Person",
     name: post.author.name,

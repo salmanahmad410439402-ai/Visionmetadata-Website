@@ -5,7 +5,7 @@ const stats = [
   { icon: Tag,         number: "Up to 50", unit: "keywords",       label: "configurable per asset"            },
   { icon: Package,     number: "500+",     unit: "files",          label: "desktop batch queue target"       },
   { icon: Rocket,      number: "4",        unit: "workflow steps", label: "upload, generate, review, export" },
-  { icon: Brain,       number: "5",        unit: "AI providers",   label: "bring your own API key"           },
+  { icon: Brain,       number: "4",        unit: "AI providers",   label: "Gemini, OpenAI, Groq & Mistral"   },
   { icon: ShieldCheck, number: "Local",    unit: "file work",      label: "desktop embedding stays on-device"   },
 ];
 

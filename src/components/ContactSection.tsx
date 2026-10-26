@@ -67,7 +67,7 @@ const ContactSection = () => {
                 </div>
                 <div>
                   <h3 className="text-xl font-bold text-foreground">Send us a Message</h3>
-                  <p className="text-xs mt-0.5 text-minimal">We'll respond within 2 hours</p>
+                  <p className="text-xs mt-0.5 text-minimal">Typical reply within a few hours (always within 24 hours)</p>
                 </div>
               </div>
               <ContactForm />
@@ -84,7 +84,7 @@ const ContactSection = () => {
                 {[
                   { step: "1", icon: Send, title: "Send Payment", desc: "Via JazzCash, Meezan Bank, or Skrill" },
                   { step: "2", icon: Camera, title: "Share Screenshot", desc: "Send payment proof via WhatsApp" },
-                  { step: "3", icon: KeyRound, title: "Get License Key", desc: "Personal key delivered instantly" },
+                  { step: "3", icon: KeyRound, title: "Get License Key", desc: "Licence key sent once payment is confirmed" },
                 ].map(({ step, icon: Icon, title, desc }) => (
                   <div key={step} className="flex gap-4">
                     <div className="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-full border-2 text-sm font-bold border-primary text-primary">

@@ -113,21 +113,22 @@ export function migrateModelName(model: AIModel): AIModel {
         "gpt-4.1-nano":   "gpt-4o-mini",
         "o3":             "gpt-4o",
         "o4-mini":        "gpt-4o-mini",
-        // ── Legacy Llama ─────────────────────────────────────────────────────
-        "llama3-70b-8192":  "qwen/qwen3.6-27b",
-        "llama3-8b-8192":   "qwen/qwen3.6-27b",
-        "llama-4-scout":    "qwen/qwen3.6-27b",
-        "llama-4-maverick": "qwen/qwen3.6-27b",
-        "meta-llama/llama-4-scout-17b-16e-instruct": "qwen/qwen3.6-27b",
-        "meta-llama/llama-prompt-guard-2-86m": "qwen/qwen3.6-27b",
-        "meta-llama/llama-prompt-guard-2-22m": "qwen/qwen3.6-27b",
-        "openai/gpt-oss-20b": "qwen/qwen3.6-27b",
+        // ── Legacy Llama & retired Groq Qwen 3.6 ────────────────────────────
+        "llama3-70b-8192":  "qwen/qwen3.8-27b",
+        "llama3-8b-8192":   "qwen/qwen3.8-27b",
+        "llama-4-scout":    "qwen/qwen3.8-27b",
+        "llama-4-maverick": "qwen/qwen3.8-27b",
+        "meta-llama/llama-4-scout-17b-16e-instruct": "qwen/qwen3.8-27b",
+        "meta-llama/llama-prompt-guard-2-86m": "qwen/qwen3.8-27b",
+        "meta-llama/llama-prompt-guard-2-22m": "qwen/qwen3.8-27b",
+        "openai/gpt-oss-20b": "qwen/qwen3.8-27b",
+        "qwen/qwen3.6-27b": "qwen/qwen3.8-27b",
     };
     return (migrations[model as string] || model) as AIModel;
 }
 
 export const getOptimalModel = (isVideo: boolean, preferredModel?: AIModel, availableProvider?: AIProvider): AIModel => {
-    if (preferredModel) return preferredModel;
+    if (preferredModel) return migrateModelName(preferredModel);
     if (availableProvider) {
         switch (availableProvider) {
             case "gemini":
@@ -135,7 +136,7 @@ export const getOptimalModel = (isVideo: boolean, preferredModel?: AIModel, avai
             case "openai":
                 return isVideo ? "gpt-4o" : "gpt-4o-mini";
             case "groq":
-                return "qwen/qwen3.6-27b";
+                return "qwen/qwen3.8-27b";
             case "mistral":
                 return "mistral-large-2512";
         }

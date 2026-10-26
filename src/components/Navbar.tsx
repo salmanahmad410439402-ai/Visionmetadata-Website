@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import { Download, Moon, Sun } from "lucide-react";
 import { useTheme } from "@/hooks/useTheme.tsx";
 import { analytics } from "@/lib/analytics";
 
 const navLinks = [
   { label: "Free Web Tool", to: "/tool" },
+  { label: "Checker", to: "/metadata-checker" },
   { label: "Features", to: "/features" },
   { label: "Pricing",  to: "/pricing"  },
-  { label: "Download", to: "/download" },
   { label: "Extension", to: "/chrome-extension" },
   { label: "Blog",     to: "/blogs"    },
   { label: "Tutorials", to: "/tutorials" },
@@ -72,13 +72,13 @@ const Navbar = () => {
             )}
           </button>
 
-          {/* Download CTA */}
-          <a href="https://github.com/salmangraphics839-hue/visionmeta-releases/releases/download/1.3.6/Tagyfy_Pro_1.3.6_x64-setup.exe" target="_blank" rel="noopener noreferrer"
+          {/* Download CTA — routes to /download so visitors read system requirements, publisher info & uninstall instructions first */}
+          <Link to="/download"
             onClick={() => analytics.trackCTAClick('download', 'navbar')}
             className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-primary text-primary-foreground text-sm font-bold hover:opacity-90 hover:scale-[1.03] transition-all duration-200 shadow-[0_0_16px_hsl(243_75%_59%/0.25)]">
             <Download className="w-3.5 h-3.5" />
             Download
-          </a>
+          </Link>
         </div>
 
         {/* Mobile toggle */}
@@ -122,11 +122,14 @@ const Navbar = () => {
             </button>
 
             {/* Download CTA */}
-            <a href="https://github.com/salmangraphics839-hue/visionmeta-releases/releases/download/1.3.6/Tagyfy_Pro_1.3.6_x64-setup.exe" target="_blank" rel="noopener noreferrer"
-              onClick={() => analytics.trackCTAClick('download', 'navbar-mobile')}
+            <Link to="/download"
+              onClick={() => {
+                setMobileOpen(false);
+                analytics.trackCTAClick('download', 'navbar-mobile');
+              }}
               className="flex-1 flex items-center justify-center gap-2 py-3 rounded-lg bg-primary text-primary-foreground text-sm font-bold transition-all hover:scale-[1.01] active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background">
               <Download className="w-4 h-4" /> Download
-            </a>
+            </Link>
           </div>
         </div>
       )}

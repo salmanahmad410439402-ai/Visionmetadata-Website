@@ -2,20 +2,20 @@ import { Sparkles, Shield, Cpu, Layers, BarChart3, AlertTriangle, Tag, ListFilte
 import { useReveal } from "@/hooks/useReveal";
 
 const features = [
-  { icon: Cpu,           title: "Multi-Provider AI",     desc: "Use Gemini, GPT-4o, Groq (Llama 4), OpenRouter, or Mistral. Add unlimited API keys and run multiple AI providers in parallel." },
+  { icon: Cpu,           title: "Multi-Provider AI",     desc: "Use Google Gemini, OpenAI GPT-4o, Groq (Qwen Vision), or Mistral AI. Add multiple API keys and run providers in parallel." },
   { icon: Shield,        title: "Rate Limit Protection",  desc: "Automatically rotates through your API keys and providers when limits are hit. Never stop processing because of a single exhausted key." },
   { icon: Sparkles,      title: "Smart Parallel Queueing", desc: "Intelligent API queueing ensures optimal speed and parallel processing. Maximize your processing throughput with multiple API keys." },
   { icon: BarChart3,     title: "Batch Processing at Scale", desc: "Process 100+ to 500+ assets in a single batch. Parallel workers with live progress, auto-retry on failures, and cancellation support." },
-  { icon: AlertTriangle, title: "Trademark & Brand Sniffer", desc: "AI-powered system detects 100+ brand names and trademarked terms. Auto-removes them and replaces with safe generic alternatives." },
+  { icon: AlertTriangle, title: "Trademark & Brand Sniffer", desc: "Dictionary and regex sniffer flags 90+ common brand names and trademark patterns, replacing them with generic alternatives." },
   { icon: Tag,           title: "Series & Event Context",  desc: "Mark assets as a series to auto-append Part 01/02/03 sequences. Use event context to theme all metadata around a specific event or collection." },
   { icon: BarChart3,     title: "Confidence & Risk Scores", desc: "Every asset gets a 0–100 confidence score with 4-axis breakdown. Identifies compliance risks before uploading to stock platforms." },
   { icon: AlertTriangle, title: "Platform Readiness Checks", desc: "Instant READY / REVIEW / NOT READY rating for Adobe Stock, Freepik, and Shutterstock. Know exactly which assets to submit where." },
   { icon: Database,      title: "Bulk Metadata Editor",     desc: "Spreadsheet-style view of all assets. Find & replace, append/prepend text, remove words across multiple assets at once." },
   { icon: ListFilter,    title: "Negative Keywords",       desc: "Define words you never want in metadata. They are automatically stripped from every generated output." },
   { icon: Tag,           title: "Keyword Strategy Control", desc: "Choose Single-Word, Multi-Word, or Mixed keyword strategies. Enforce max keyword length. Customize keyword count (5–50)." },
-  { icon: Layers,        title: "Native File Metadata",    desc: "Embeds metadata directly into JPEG, PNG, WebP, TIFF, MP4 and vector files. Platforms automatically read it on upload." },
-  { icon: Globe,         title: "6-Platform CSV Export",   desc: "Adobe Stock, Shutterstock, Freepik, Dreamstime, 123RF, Vecteezy. Each CSV is formatted exactly as required by each platform." },
-  { icon: Shield,        title: "AI Disclosure Compliance", desc: "Auto-adds 'Generative AI' keywords for AI-created content. Adobe 2026 rule compliant. C2PA transparency metadata included." },
+  { icon: Layers,        title: "Native File Metadata",    desc: "Writes IPTC/XMP fields into supported JPEG, PNG, WebP, TIFF, MP4 and vector files so compatible portals can read them on upload." },
+  { icon: Globe,         title: "6-Platform CSV Export",   desc: "Adobe Stock, Shutterstock, Freepik, Dreamstime, 123RF, Vecteezy. Each CSV is formatted with that portal's expected headers." },
+  { icon: Shield,        title: "AI Disclosure Helper",    desc: "Optionally appends 'Generative AI' disclosure keywords in XMP and CSV exports; you still check the AI toggle inside each marketplace portal." },
   { icon: Sparkles,      title: "Unattended Mode",         desc: "After batch processing completes, automatically download a ZIP with all metadata-embedded files if idle for 5 minutes." },
   { icon: Brain,         title: "Quality Check on Demand",  desc: "Manual quality pass on any asset for detailed confidence breakdown, risk flags, and platform readiness insights." },
 ];
@@ -67,7 +67,7 @@ const FeatureGridFull = () => {
 
         <div className="reveal mt-8 glass-panel rounded-2xl p-6">
           <p className="text-xs font-semibold text-primary text-center uppercase tracking-widest mb-5">
-            100+ Supported File Formats
+            10 Supported Image, Vector &amp; Video Formats
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             {[
