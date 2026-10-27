@@ -7,6 +7,7 @@ import { analytics } from "@/lib/analytics";
 const navLinks = [
   { label: "Free Web Tool", to: "/tool" },
   { label: "Checker", to: "/metadata-checker" },
+  { label: "CSV Converter", to: "/stock-csv-converter" },
   { label: "Features", to: "/features" },
   { label: "Pricing",  to: "/pricing"  },
   { label: "Extension", to: "/chrome-extension" },
@@ -42,10 +43,10 @@ const Navbar = () => {
         </a>
 
         {/* Desktop links */}
-        <div className="hidden md:flex items-center gap-7">
+        <div className="hidden lg:flex items-center gap-3 xl:gap-5">
           {navLinks.map((link) => (
             <NavLink key={link.to} to={link.to}
-              className="text-sm font-medium transition-colors duration-200 relative group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-2 py-1"
+              className="text-sm font-medium whitespace-nowrap transition-colors duration-200 relative group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1.5 py-1"
               style={({ isActive }) => ({ color: isActive ? "hsl(var(--primary))" : "var(--text-tertiary)" })}>
               {link.label}
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary group-hover:w-full transition-all duration-300" />
@@ -54,7 +55,7 @@ const Navbar = () => {
         </div>
 
         {/* Desktop Actions */}
-        <div className="hidden md:flex items-center gap-3">
+        <div className="hidden lg:flex items-center gap-3">
           {/* Theme Toggle */}
           <button
             onClick={() => {
@@ -82,7 +83,7 @@ const Navbar = () => {
         </div>
 
         {/* Mobile toggle */}
-        <button className="md:hidden text-foreground p-1" onClick={() => setMobileOpen(!mobileOpen)} aria-label="Toggle menu">
+        <button className="lg:hidden text-foreground p-1" onClick={() => setMobileOpen(!mobileOpen)} aria-label="Toggle menu">
           <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             {mobileOpen
               ? <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -93,7 +94,7 @@ const Navbar = () => {
 
         {/* Mobile menu */}
       {mobileOpen && (
-        <div className="md:hidden glass-panel rounded-2xl mx-2 mt-2 p-6 animate-in fade-in slide-in-from-top-2 duration-300 shadow-2xl">
+        <div className="lg:hidden glass-panel rounded-2xl mx-2 mt-2 p-6 animate-in fade-in slide-in-from-top-2 duration-300 shadow-2xl">
           {navLinks.map((link) => (
             <NavLink key={link.to} to={link.to} onClick={() => setMobileOpen(false)}
               className="block py-3 px-2 text-sm font-medium transition-colors rounded hover:bg-primary/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"

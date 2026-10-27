@@ -165,6 +165,22 @@ const PlatformLimits = () => (
         <h2 className="text-lg font-bold text-foreground mb-5">Related reading</h2>
         <ul className="space-y-3 text-sm">
           <li>
+            <Link to="/stock-csv-converter" className="text-primary underline font-semibold hover:text-primary/80">
+              Multi-Agency Stock CSV Converter
+            </Link>{" "}
+            <span className="text-secondary">
+              — upload one spreadsheet and convert it across all six agency header, BOM, and delimiter formats in one click.
+            </span>
+          </li>
+          <li>
+            <Link to="/metadata-checker" className="text-primary underline font-semibold hover:text-primary/80">
+              Free Metadata &amp; Trademark Checker
+            </Link>{" "}
+            <span className="text-secondary">
+              — validate single draft titles and keyword lists against all six portals with no API key.
+            </span>
+          </li>
+          <li>
             <Link to="/blogs" className="text-primary underline font-semibold hover:text-primary/80">
               Contributor guides
             </Link>{" "}

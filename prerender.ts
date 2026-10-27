@@ -416,9 +416,32 @@ const CONTENT_METADATA_CHECKER = `
 
 <h2>Related Resources</h2>
 <ul>
+<li><a href="/stock-csv-converter">Multi-Agency Stock CSV Converter &amp; Fixer</a> — convert a full CSV batch across all six agency formats in one click.</li>
 <li><a href="/metadata-limits">Stock Metadata Limits by Marketplace</a> — full specification table with links to each agency's official documentation.</li>
 <li><a href="/tool">Free Online AI Metadata Generator</a> — generate draft titles and keywords directly from image pixels.</li>
 <li><a href="/blogs">Stock Contributor Knowledge Base</a> — in-depth guides on IPTC/XMP standards, releases, vector pre-flight checks, and CSV troubleshooting.</li>
+</ul>
+`;
+
+const CONTENT_CSV_CONVERTER = `
+<h1>Free Multi-Agency Stock CSV Converter &amp; Fixer — Adobe Stock, Shutterstock &amp; Freepik</h1>
+<p>Upload one stock metadata CSV spreadsheet — from Adobe Stock, Shutterstock, Freepik, Vecteezy, Dreamstime, 123RF, Lightroom, or Excel — and convert the entire batch into verified upload files for all six stock marketplaces at once. Runs 100% locally in your browser with no API key and no server upload.</p>
+
+<h2>What This Free Batch CSV Converter Solves</h2>
+<ul>
+<li><strong>Delimiter &amp; Header Mapping:</strong> Automatically converts comma-delimited spreadsheets into Freepik semicolon-delimited CSVs (<code>filename;title;tags</code>) and vice versa, plus supports custom column mapping.</li>
+<li><strong>UTF-8 BOM Byte Hygiene:</strong> Includes UTF-8 BOM where Excel/portals expect it (Adobe Stock, Shutterstock, Freepik, 123RF) and strips BOM automatically for <strong>Dreamstime</strong> and <strong>Vecteezy</strong> so header validation never fails.</li>
+<li><strong>Title &amp; Description Bridging:</strong> Automatically maps Adobe Stock / Freepik <code>Title</code> values into Shutterstock / 123RF <code>Description</code> columns (and the reverse) so single-column agencies never receive blank fields.</li>
+<li><strong>Cross-Agency Category Crosswalk:</strong> Translates Adobe Stock numeric category IDs (1–21) to Shutterstock English category names (such as <code>Technology</code> or <code>Business/Finance</code>) and Dreamstime numeric category IDs.</li>
+<li><strong>Keyword Deduplication &amp; Trademark Cleaning:</strong> Removes duplicate tags while preserving top-10 keyword order, strips commas from Adobe Stock titles, smart-trims Freepik titles at 100 characters, flags restricted brand names, and packages all six portals into one <code>.zip</code> archive.</li>
+</ul>
+
+<h2>Related Contributor Tools &amp; Guides</h2>
+<ul>
+<li><a href="/metadata-checker">Free Stock Metadata &amp; Trademark Checker</a> — audit single titles and keyword priority across six agencies.</li>
+<li><a href="/tool">Free Online AI Metadata Generator</a> — generate titles, descriptions, and ranked keywords from image or video files.</li>
+<li><a href="/metadata-limits">Stock Metadata Limits by Marketplace</a> — verified column headers, character caps, and official documentation links.</li>
+<li><a href="/blog/stock-csv-upload-formatting-troubleshooting-guide">CSV Upload Formatting &amp; Troubleshooting Guide</a> — deep dive into RFC 4180 escaping, UTF-8 BOM, and filename matching.</li>
 </ul>
 `;
 
@@ -636,6 +659,18 @@ const CHECKER_WEBAPP_SCHEMA = {
   offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
 };
 
+const CSV_CONVERTER_SCHEMA = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: 'Tagyfy Pro Multi-Agency Stock CSV Converter & Fixer',
+  url: `${SITE_URL}/stock-csv-converter`,
+  applicationCategory: 'UtilitiesApplication',
+  operatingSystem: 'Any modern browser',
+  description:
+    'Convert one stock metadata CSV spreadsheet into upload-ready CSV files for Adobe Stock, Shutterstock, Freepik, Vecteezy, Dreamstime, and 123RF locally in your browser with automatic delimiter, BOM, category, and trademark fixing.',
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+};
+
 const FAQ_SCHEMA = {
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
@@ -705,6 +740,7 @@ const PAGES: PageSpec[] = [
   { path: '/chrome-extension', title: 'Free Adobe Stock Chrome Extension | Tagyfy Pro', desc: 'Free Chrome extension for Adobe Stock contributors. Generate and review metadata drafts inside the contributor dashboard using Gemini, OpenAI, Groq, and Mistral AI.', content: CONTENT_CHROME_EXTENSION, adsense: false, lastmod: '2026-10-26', changefreq: 'monthly', priority: '0.7', schema: [breadcrumb([{ name: 'Home', path: '/' }, { name: 'Chrome extension', path: '/chrome-extension' }])] },
   { path: '/tool', title: 'Free Online Metadata Generator Tool | Tagyfy Pro', desc: 'Generate draft titles, descriptions, and keywords for stock images and videos in your browser. Try the instant Sample Demo with no API key or connect Gemini, OpenAI, Groq, or Mistral.', content: CONTENT_TOOL, adsense: false, lastmod: '2026-10-26', changefreq: 'weekly', priority: '0.9', schema: [WEBAPP_SCHEMA, breadcrumb([{ name: 'Home', path: '/' }, { name: 'Free tool', path: '/tool' }])] },
   { path: '/metadata-checker', title: 'Free Stock Metadata & Trademark Checker — 6-Marketplace Validator | Tagyfy Pro', desc: 'Validate stock photo, vector, and video titles and keywords against Adobe Stock, Shutterstock, Freepik, Vecteezy, Dreamstime, and 123RF rules in your browser with no API key.', content: CONTENT_METADATA_CHECKER, adsense: false, lastmod: '2026-10-26', changefreq: 'weekly', priority: '0.9', schema: [CHECKER_WEBAPP_SCHEMA, breadcrumb([{ name: 'Home', path: '/' }, { name: 'Metadata Checker', path: '/metadata-checker' }])] },
+  { path: '/stock-csv-converter', title: 'Free Multi-Agency Stock CSV Converter & Fixer — Adobe Stock, Shutterstock & Freepik | Tagyfy Pro', desc: 'Convert one stock metadata CSV into upload-ready spreadsheets for Adobe Stock, Shutterstock, Freepik, Vecteezy, Dreamstime, and 123RF in your browser with automatic delimiter, BOM, category, and trademark fixing.', content: CONTENT_CSV_CONVERTER, adsense: false, lastmod: '2026-10-26', changefreq: 'weekly', priority: '0.9', schema: [CSV_CONVERTER_SCHEMA, breadcrumb([{ name: 'Home', path: '/' }, { name: 'Stock CSV Converter', path: '/stock-csv-converter' }])] },
   { path: '/metadata-limits', title: 'Stock Metadata Limits by Marketplace — Titles & Keywords Reference | Tagyfy Pro', desc: 'Title length limits, keyword counts, CSV column names and common upload errors for Adobe Stock, Shutterstock, Freepik, Vecteezy, Dreamstime and 123RF — each with its official source linked.', content: CONTENT_METADATA_LIMITS, adsense: true, lastmod: '2026-10-26', changefreq: 'monthly', priority: '0.9', schema: [breadcrumb([{ name: 'Home', path: '/' }, { name: 'Metadata limits', path: '/metadata-limits' }])] },
   { path: '/privacy-policy', title: 'Privacy Policy | Tagyfy Pro', desc: 'Tagyfy Pro privacy policy. Learn how the Windows app and browser tools handle your media files, API keys, cookies, web beacons, analytics, and Google AdSense.', content: CONTENT_PRIVACY, adsense: false, lastmod: '2026-10-26', changefreq: 'yearly', priority: '0.5', schema: [breadcrumb([{ name: 'Home', path: '/' }, { name: 'Privacy Policy', path: '/privacy-policy' }])] },
   { path: '/terms', title: 'Terms of Service | Tagyfy Pro', desc: 'Terms and conditions for using Tagyfy Pro desktop application, browser utilities, and Chrome extension.', content: CONTENT_TERMS, adsense: false, lastmod: '2026-10-26', changefreq: 'yearly', priority: '0.5', schema: [breadcrumb([{ name: 'Home', path: '/' }, { name: 'Terms', path: '/terms' }])] },

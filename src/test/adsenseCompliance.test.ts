@@ -60,6 +60,7 @@ describe("AdSense, Search Spam & Unwanted Software Compliance Guards", () => {
       "/chrome-extension",
       "/tool",
       "/metadata-checker",
+      "/stock-csv-converter",
       "/privacy-policy",
       "/terms",
       "/refund-policy",
@@ -89,15 +90,16 @@ describe("AdSense, Search Spam & Unwanted Software Compliance Guards", () => {
     }
   });
 
-  it("synchronizes public/sitemap.xml with /metadata-checker and every blog slug", () => {
+  it("synchronizes public/sitemap.xml with /metadata-checker, /stock-csv-converter, and every blog slug", () => {
     const sitemap = readRepoFile("public/sitemap.xml");
     expect(sitemap).toContain("<loc>https://tagyfy.com/metadata-checker</loc>");
+    expect(sitemap).toContain("<loc>https://tagyfy.com/stock-csv-converter</loc>");
     for (const post of BLOG_POSTS) {
       expect(sitemap).toContain(`<loc>https://tagyfy.com/blog/${post.slug}</loc>`);
     }
     // Every <lastmod> must be ISO YYYY-MM-DD
     const lastmods = [...sitemap.matchAll(/<lastmod>([^<]+)<\/lastmod>/g)].map((m) => m[1]);
-    expect(lastmods.length).toBeGreaterThanOrEqual(31);
+    expect(lastmods.length).toBeGreaterThanOrEqual(32);
     for (const lm of lastmods) {
       expect(lm).toMatch(/^\d{4}-\d{2}-\d{2}$/);
     }
@@ -152,9 +154,13 @@ describe("AdSense, Search Spam & Unwanted Software Compliance Guards", () => {
     expect(downloadHtml).toContain("How to Uninstall Tagyfy Pro Completely");
     expect(downloadHtml).not.toContain("adsbygoogle.js");
 
-    // 6. Metadata checker prerendered HTML exists and has zero ads
+    // 6. Metadata checker & Stock CSV converter prerendered HTML exist and have zero ads
     const checkerHtml = fs.readFileSync(path.join(distDir, "metadata-checker/index.html"), "utf8");
     expect(checkerHtml).toContain('<link rel="canonical" href="https://tagyfy.com/metadata-checker" />');
     expect(checkerHtml).not.toContain("adsbygoogle.js");
+
+    const csvConverterHtml = fs.readFileSync(path.join(distDir, "stock-csv-converter/index.html"), "utf8");
+    expect(csvConverterHtml).toContain('<link rel="canonical" href="https://tagyfy.com/stock-csv-converter" />');
+    expect(csvConverterHtml).not.toContain("adsbygoogle.js");
   });
 });

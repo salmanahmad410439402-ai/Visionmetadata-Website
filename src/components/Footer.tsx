@@ -23,6 +23,7 @@ const Footer = () => {
           <div className="flex flex-wrap justify-center md:justify-end gap-x-7 gap-y-3 text-xs text-secondary font-medium">
             <Link to="/tool" className="hover:text-primary transition-colors">Free Web Tool</Link>
             <Link to="/metadata-checker" className="hover:text-primary transition-colors">Metadata Checker</Link>
+            <Link to="/stock-csv-converter" className="hover:text-primary transition-colors">CSV Converter</Link>
             <Link to="/metadata-limits" className="hover:text-primary transition-colors">Metadata Limits</Link>
             <Link to="/blogs" className="hover:text-primary transition-colors">Blog</Link>
             <Link to="/tutorials" className="hover:text-primary transition-colors">Tutorials</Link>

@@ -742,14 +742,17 @@ const MetadataChecker = () => {
               </p>
             </div>
             <div>
-              <h3 className="font-bold text-foreground mb-2">3. Need vision analysis from the image itself?</h3>
+              <h3 className="font-bold text-foreground mb-2">3. Need batch CSV conversion or AI vision analysis?</h3>
               <p>
-                When you want an AI vision model to draft titles and keywords directly from your photos,
-                vectors, or video frames, open the{" "}
+                Already have a spreadsheet for one portal? Convert it across all six agencies at once in the{" "}
+                <Link to="/stock-csv-converter" className="text-primary underline">
+                  Multi-Agency Stock CSV Converter
+                </Link>
+                . To draft titles and keywords directly from pixels, open the{" "}
                 <Link to="/tool" className="text-primary underline">
                   Free Online Metadata Generator
                 </Link>{" "}
-                (with a 1-click Sample Demo or your own free Gemini/Groq API key), or read our{" "}
+                or read our{" "}
                 <Link to="/blogs" className="text-primary underline">
                   Contributor Knowledge Base
                 </Link>
