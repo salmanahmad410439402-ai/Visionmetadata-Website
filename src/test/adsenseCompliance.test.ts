@@ -61,6 +61,7 @@ describe("AdSense, Search Spam & Unwanted Software Compliance Guards", () => {
       "/tool",
       "/metadata-checker",
       "/stock-csv-converter",
+      "/event-calendar",
       "/privacy-policy",
       "/terms",
       "/refund-policy",
@@ -90,16 +91,17 @@ describe("AdSense, Search Spam & Unwanted Software Compliance Guards", () => {
     }
   });
 
-  it("synchronizes public/sitemap.xml with /metadata-checker, /stock-csv-converter, and every blog slug", () => {
+  it("synchronizes public/sitemap.xml with /metadata-checker, /stock-csv-converter, /event-calendar, and every blog slug", () => {
     const sitemap = readRepoFile("public/sitemap.xml");
     expect(sitemap).toContain("<loc>https://tagyfy.com/metadata-checker</loc>");
     expect(sitemap).toContain("<loc>https://tagyfy.com/stock-csv-converter</loc>");
+    expect(sitemap).toContain("<loc>https://tagyfy.com/event-calendar</loc>");
     for (const post of BLOG_POSTS) {
       expect(sitemap).toContain(`<loc>https://tagyfy.com/blog/${post.slug}</loc>`);
     }
     // Every <lastmod> must be ISO YYYY-MM-DD
     const lastmods = [...sitemap.matchAll(/<lastmod>([^<]+)<\/lastmod>/g)].map((m) => m[1]);
-    expect(lastmods.length).toBeGreaterThanOrEqual(32);
+    expect(lastmods.length).toBeGreaterThanOrEqual(33);
     for (const lm of lastmods) {
       expect(lm).toMatch(/^\d{4}-\d{2}-\d{2}$/);
     }
@@ -162,5 +164,9 @@ describe("AdSense, Search Spam & Unwanted Software Compliance Guards", () => {
     const csvConverterHtml = fs.readFileSync(path.join(distDir, "stock-csv-converter/index.html"), "utf8");
     expect(csvConverterHtml).toContain('<link rel="canonical" href="https://tagyfy.com/stock-csv-converter" />');
     expect(csvConverterHtml).not.toContain("adsbygoogle.js");
+
+    const eventCalendarHtml = fs.readFileSync(path.join(distDir, "event-calendar/index.html"), "utf8");
+    expect(eventCalendarHtml).toContain('<link rel="canonical" href="https://tagyfy.com/event-calendar" />');
+    expect(eventCalendarHtml).not.toContain("adsbygoogle.js");
   });
 });

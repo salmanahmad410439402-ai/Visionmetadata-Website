@@ -28,6 +28,7 @@ import ToolPage from "./pages/Tool";
 import PlatformLimits from "./pages/PlatformLimits";
 import MetadataChecker from "./pages/MetadataChecker";
 import StockCsvConverter from "./pages/StockCsvConverter";
+import EventCalendar from "./pages/EventCalendar";
 import Blogs from "./pages/Blogs";
 import BlogPost from "./pages/BlogPost";
 import AdSenseLoader from "@/components/ads/AdSenseLoader";
@@ -76,6 +77,7 @@ const App = () => {
               <Route path="/metadata-limits" element={<PlatformLimits />} />
               <Route path="/metadata-checker" element={<MetadataChecker />} />
               <Route path="/stock-csv-converter" element={<StockCsvConverter />} />
+              <Route path="/event-calendar" element={<EventCalendar />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
