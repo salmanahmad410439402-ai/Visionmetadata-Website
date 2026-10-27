@@ -5,6 +5,7 @@ import { BLOG_POSTS } from './src/data/blogPosts.js';
 import { FAQS } from './src/data/faqs.js';
 import { PLATFORMS, FAILURES, LIMITS_LAST_CHECKED } from './src/data/platformLimits.js';
 import { STOCK_CALENDAR_EVENTS, MONTH_NAMES } from './src/data/stockEvents.js';
+import { CONTRIBUTOR_TOOLS } from './src/data/contributorTools.js';
 import { SELLER, PAYMENT_RAILS, ORDER_STEPS, FRAUD_NOTICE, CARD_CHECKOUT } from './src/config/commerce.js';
 import { inlineToHtml, escapeHtml } from './src/lib/inlineMarkdown.js';
 
@@ -51,6 +52,15 @@ const CONTENT_HOME = `
 <li>Four clear steps: upload, generate, review, and export</li>
 <li>Four AI provider options (Google Gemini, OpenAI, Groq, Mistral AI) with bring-your-own-key access</li>
 <li>Local-first desktop file handling, with direct AI-provider requests when analysis is requested</li>
+</ul>
+
+<h2>4 Free Stock Browser Tools — Which One Do You Need?</h2>
+<p>Every browser utility runs free with no account required — use a single tool or follow the complete 4-step stock contributor workflow:</p>
+<ul>
+${CONTRIBUTOR_TOOLS.map(
+  (t) =>
+    `<li><strong><a href="${escapeHtml(t.to)}">${escapeHtml(t.name)}</a> (${escapeHtml(t.stepLabel)}):</strong> ${escapeHtml(t.whatItDoes)} <em>Best used when: ${escapeHtml(t.useWhen)}</em></li>`
+).join('\n')}
 </ul>
 
 <h2>Direct Vector &amp; Video Metadata Embedding</h2>
