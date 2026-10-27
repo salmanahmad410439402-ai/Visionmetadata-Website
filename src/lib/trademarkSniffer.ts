@@ -62,21 +62,21 @@ const TRADEMARK_BLACKLIST = new Set([
 
 // Regex patterns for brand detection
 const TRADEMARK_PATTERNS = [
-  /\biphone\s*\d*/i,
-  /\bipad\s*(pro|air|mini)?/i,
-  /\bmac\s*(book|pro|air|mini|studio)?/i,
-  /\bair\s*pods?\s*(pro|max)?/i,
-  /\bapple\s*(watch|tv|music|pay)?/i,
-  /\bgalaxy\s*(s|a|z|note|tab)?\s*\d*/i,
-  /\bpixel\s*\d*/i,
-  /\bsurface\s*(pro|go|laptop|studio)?/i,
-  /\bplaystation\s*\d*/i,
-  /\bxbox\s*(one|series|360)?/i,
-  /\bnintendo\s*(switch|ds|wii)?/i,
-  /\btesla\s*(model\s*[sxy3])?/i,
+  /\biphone\s*\d*\b/i,
+  /\bipad(?:\s*(?:pro|air|mini))?\b/i,
+  /\bmac(?:\s*(?:book|pro|air|mini|studio))?\b/i,
+  /\bair\s*pods?(?:\s*(?:pro|max))?\b/i,
+  /\bapple(?:\s*(?:watch|tv|music|pay))?\b/i,
+  /\bgalaxy(?:\s*(?:s|a|z|note|tab))?\s*\d*\b/i,
+  /\bpixel\s*\d+\b/i,
+  /\bsurface(?:\s*(?:pro|go|laptop|studio))\b/i,
+  /\bplaystation\s*\d*\b/i,
+  /\bxbox(?:\s*(?:one|series|360))?\b/i,
+  /\bnintendo(?:\s*(?:switch|ds|wii))?\b/i,
+  /\btesla(?:\s*model\s*[sxy3])?\b/i,
   /\bmodel\s*[sxy3]\b/i, // Tesla models
-  /\bcybertruck/i,
-  /\bstarlink/i,
+  /\bcybertruck\b/i,
+  /\bstarlink\b/i,
 ];
 
 // Semantic replacements
@@ -138,12 +138,15 @@ const SEMANTIC_REPLACEMENTS: Record<string, string> = {
   midjourney: "AI art tool",
 };
 
-export function containsTrademark(text: string): boolean {
-  const lowerText = text.toLowerCase();
+function escapeRegex(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
 
-  // Check blacklist
+export function containsTrademark(text: string): boolean {
+  // Check blacklist with word boundaries so words like "audio", "macro", "metallic", or "pineapple" are never false positives
   for (const trademark of TRADEMARK_BLACKLIST) {
-    if (lowerText.includes(trademark)) {
+    const regex = new RegExp(`\\b${escapeRegex(trademark)}\\b`, "i");
+    if (regex.test(text)) {
       return true;
     }
   }
@@ -160,21 +163,21 @@ export function containsTrademark(text: string): boolean {
 
 export function findTrademarks(text: string): string[] {
   const found: string[] = [];
-  const lowerText = text.toLowerCase();
 
-  // Check blacklist
+  // Check blacklist with word boundaries
   for (const trademark of TRADEMARK_BLACKLIST) {
-    if (lowerText.includes(trademark)) {
+    const regex = new RegExp(`\\b${escapeRegex(trademark)}\\b`, "i");
+    if (regex.test(text)) {
       found.push(trademark);
     }
   }
 
   // Check patterns
   for (const pattern of TRADEMARK_PATTERNS) {
-    const globalPattern = new RegExp(pattern.source, 'gi');
+    const globalPattern = new RegExp(pattern.source, "gi");
     const matches = text.match(globalPattern);
     if (matches) {
-      found.push(...matches.map((m) => m.toLowerCase()));
+      found.push(...matches.map((m) => m.trim().toLowerCase()));
     }
   }
 

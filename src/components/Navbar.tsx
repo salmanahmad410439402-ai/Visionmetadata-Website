@@ -5,9 +5,10 @@ import { useTheme } from "@/hooks/useTheme.tsx";
 import { analytics } from "@/lib/analytics";
 
 const navLinks = [
-  { label: "Free Web Tool", to: "/tool" },
+  { label: "Web Tool", to: "/tool" },
   { label: "Checker", to: "/metadata-checker" },
   { label: "CSV Converter", to: "/stock-csv-converter" },
+  { label: "Events", to: "/event-calendar" },
   { label: "Features", to: "/features" },
   { label: "Pricing",  to: "/pricing"  },
   { label: "Extension", to: "/chrome-extension" },
@@ -43,10 +44,10 @@ const Navbar = () => {
         </a>
 
         {/* Desktop links */}
-        <div className="hidden lg:flex items-center gap-3 xl:gap-5">
+        <div className="hidden lg:flex items-center gap-2 xl:gap-4">
           {navLinks.map((link) => (
             <NavLink key={link.to} to={link.to}
-              className="text-sm font-medium whitespace-nowrap transition-colors duration-200 relative group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1.5 py-1"
+              className="text-xs xl:text-sm font-medium whitespace-nowrap transition-colors duration-200 relative group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1.5 py-1"
               style={({ isActive }) => ({ color: isActive ? "hsl(var(--primary))" : "var(--text-tertiary)" })}>
               {link.label}
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary group-hover:w-full transition-all duration-300" />

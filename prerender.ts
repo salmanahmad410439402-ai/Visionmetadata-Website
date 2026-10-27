@@ -4,6 +4,7 @@ import { fileURLToPath } from 'url';
 import { BLOG_POSTS } from './src/data/blogPosts.js';
 import { FAQS } from './src/data/faqs.js';
 import { PLATFORMS, FAILURES, LIMITS_LAST_CHECKED } from './src/data/platformLimits.js';
+import { STOCK_CALENDAR_EVENTS, MONTH_NAMES } from './src/data/stockEvents.js';
 import { SELLER, PAYMENT_RAILS, ORDER_STEPS, FRAUD_NOTICE, CARD_CHECKOUT } from './src/config/commerce.js';
 import { inlineToHtml, escapeHtml } from './src/lib/inlineMarkdown.js';
 
@@ -403,15 +404,16 @@ const CONTENT_TOOL = `
 `;
 
 const CONTENT_METADATA_CHECKER = `
-<h1>Free Stock Metadata &amp; Trademark Compliance Checker — 6-Marketplace Validator</h1>
-<p>Paste any draft stock title, description, and comma-separated keyword list to validate character limits, comma rules, duplicate keywords, top-10 keyword slot hygiene, subjective filler words, and 90+ restricted brand names across Adobe Stock, Shutterstock, Freepik, Vecteezy, Dreamstime, and 123RF. Runs 100% locally in your browser with no login and no API key.</p>
+<h1>Free Stock Metadata &amp; CSV Compliance Checker — 6-Marketplace Validator</h1>
+<p>Audit a single draft title, description, and keyword list or upload a full <code>.csv</code> batch spreadsheet to verify column headers, semicolon vs. comma delimiters, UTF-8 BOM encoding, duplicate filenames, top-10 keyword slot hygiene, and 90+ restricted brand names across Adobe Stock, Shutterstock, Freepik, Vecteezy, Dreamstime, and 123RF. Runs 100% locally in your browser with no login and no API key.</p>
 
 <h2>What This Free Validator Checks</h2>
 <ul>
+<li><strong>Full CSV File Structure &amp; Byte Audit:</strong> Verifies raw UTF-8 BOM bytes (flagging BOM errors for Dreamstime and Vecteezy), semicolon vs. comma column delimiters, case-sensitive portal headers, ragged column counts, and duplicate batch filenames.</li>
 <li><strong>Per-Marketplace Character &amp; Keyword Limits:</strong> Checks Adobe Stock (200 chars, comma-free title, 5–49 keywords), Shutterstock (200 chars, 7–50 keywords), Freepik (100 chars, semicolon CSV, 5–50 keywords), Vecteezy (200 chars, 5–50 keywords), Dreamstime (130-char title, 10–80 keywords), and 123RF (255 chars, 7–50 keywords).</li>
 <li><strong>Client-Side Trademark &amp; Brand Scan:</strong> Flags common technology, apparel, automotive, food, entertainment, and AI generator brand names with one-click semantic replacement.</li>
 <li><strong>Top-10 Slot &amp; Spam Diagnostics:</strong> Identifies duplicate tags, overly long multi-word sentences, subjective hype adjectives ("beautiful", "stunning", "amazing"), and generic format words ("photo", "vector", "background") wasted in slots 1–10.</li>
-<li><strong>Instant 6-Agency CSV Row Export:</strong> Downloads RFC 4180 escaped single-asset CSV files formatted for any of the six supported portals.</li>
+<li><strong>1-Click Auto-Fix &amp; Clean CSV Download:</strong> Repairs headers, BOM encoding, title commas, duplicate tags, and trademarks and downloads a verified CSV file.</li>
 </ul>
 
 <h2>Related Resources</h2>
@@ -594,6 +596,41 @@ ${FAILURES.map((f) => `<li><strong>${escapeHtml(f.symptom)}</strong> — Cause: 
 </ul>
 `;
 
+const CONTENT_EVENT_CALENDAR = `
+<h1>Stock Contributor Event Calendar &amp; Upload Planner — Adobe Stock &amp; Shutterstock</h1>
+<p>Search ${STOCK_CALENDAR_EVENTS.length} seasonal holidays, commercial retail events, and global awareness days by exact date, month, or theme. Includes ideal Adobe Stock upload lead-time windows (6 to 10 weeks ahead), photo/vector/video buyer briefs, trademark cautions, and copy-ready safe keywords.</p>
+
+<h2>Why Stock Contributors Upload 6 to 10 Weeks Early</h2>
+<p>Marketing teams, graphic designers, and editorial buyers source holiday stock photos, vectors, and footage months before the calendar date arrives. Uploading early clears moderation queues and lets your seasonal assets accumulate initial downloads ahead of peak search volume.</p>
+
+${MONTH_NAMES.map((mName, idx) => {
+  const mEvents = STOCK_CALENDAR_EVENTS.filter((e) => e.month === idx + 1);
+  return `
+<h2>${escapeHtml(mName)} Stock Events</h2>
+${mEvents
+  .map(
+    (ev) => `
+<h3>${escapeHtml(ev.name)} (${escapeHtml(ev.dateLabel)} · Upload ~${ev.leadWeeks} weeks ahead)</h3>
+<p>${escapeHtml(ev.intro)}</p>
+<ul>
+<li><strong>Photo brief:</strong> ${escapeHtml(ev.photoIdea)}</li>
+<li><strong>Vector brief:</strong> ${escapeHtml(ev.vectorIdea)}</li>
+<li><strong>Video brief:</strong> ${escapeHtml(ev.videoIdea)}</li>
+<li><strong>Safe keywords:</strong> ${escapeHtml(ev.safeKeywords.join(', '))}</li>
+${ev.trademarkNote ? `<li><strong>Trademark caution:</strong> ${escapeHtml(ev.trademarkNote)}</li>` : ''}
+</ul>`
+  )
+  .join('\n')}`;
+}).join('\n')}
+
+<h2>Related Stock Contributor Tools</h2>
+<ul>
+<li><a href="/tool">Free AI Metadata Generator</a> — activate Dual-Strategy Event Targeting directly from any event card.</li>
+<li><a href="/metadata-checker">Stock Metadata &amp; CSV Checker</a> — verify title lengths, commas, keyword limits, and restricted brand names.</li>
+<li><a href="/stock-csv-converter">Multi-Agency Stock CSV Converter</a> — convert one CSV into Adobe Stock, Shutterstock, Freepik, Vecteezy, Dreamstime, and 123RF formats.</li>
+</ul>
+`;
+
 // ─── Structured data ──────────────────────────────────────────────────────────
 
 const ORGANISATION_SCHEMA = [
@@ -671,6 +708,18 @@ const CSV_CONVERTER_SCHEMA = {
   offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
 };
 
+const EVENT_CALENDAR_SCHEMA = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: 'Tagyfy Pro Stock Contributor Event & Upload Lead-Time Calendar',
+  url: `${SITE_URL}/event-calendar`,
+  applicationCategory: 'UtilitiesApplication',
+  operatingSystem: 'Any modern browser',
+  description:
+    'Year-round event calendar and upload lead-time planner for Adobe Stock, Shutterstock, and Freepik contributors. Search by date or month for commercial briefs, photo/vector/video concepts, and trademark-safe keywords.',
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+};
+
 const FAQ_SCHEMA = {
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
@@ -741,6 +790,7 @@ const PAGES: PageSpec[] = [
   { path: '/tool', title: 'Free Online Metadata Generator Tool | Tagyfy Pro', desc: 'Generate draft titles, descriptions, and keywords for stock images and videos in your browser. Try the instant Sample Demo with no API key or connect Gemini, OpenAI, Groq, or Mistral.', content: CONTENT_TOOL, adsense: false, lastmod: '2026-10-26', changefreq: 'weekly', priority: '0.9', schema: [WEBAPP_SCHEMA, breadcrumb([{ name: 'Home', path: '/' }, { name: 'Free tool', path: '/tool' }])] },
   { path: '/metadata-checker', title: 'Free Stock Metadata & Trademark Checker — 6-Marketplace Validator | Tagyfy Pro', desc: 'Validate stock photo, vector, and video titles and keywords against Adobe Stock, Shutterstock, Freepik, Vecteezy, Dreamstime, and 123RF rules in your browser with no API key.', content: CONTENT_METADATA_CHECKER, adsense: false, lastmod: '2026-10-26', changefreq: 'weekly', priority: '0.9', schema: [CHECKER_WEBAPP_SCHEMA, breadcrumb([{ name: 'Home', path: '/' }, { name: 'Metadata Checker', path: '/metadata-checker' }])] },
   { path: '/stock-csv-converter', title: 'Free Multi-Agency Stock CSV Converter & Fixer — Adobe Stock, Shutterstock & Freepik | Tagyfy Pro', desc: 'Convert one stock metadata CSV into upload-ready spreadsheets for Adobe Stock, Shutterstock, Freepik, Vecteezy, Dreamstime, and 123RF in your browser with automatic delimiter, BOM, category, and trademark fixing.', content: CONTENT_CSV_CONVERTER, adsense: false, lastmod: '2026-10-26', changefreq: 'weekly', priority: '0.9', schema: [CSV_CONVERTER_SCHEMA, breadcrumb([{ name: 'Home', path: '/' }, { name: 'Stock CSV Converter', path: '/stock-csv-converter' }])] },
+  { path: '/event-calendar', title: 'Stock Contributor Event Calendar & Upload Planner — Adobe Stock & Shutterstock | Tagyfy Pro', desc: 'Search seasonal holidays, commercial sales, and global awareness days by date or month. Includes Adobe Stock upload lead times, photo/vector/video concepts, trademark warnings, and copy-ready safe keywords.', content: CONTENT_EVENT_CALENDAR, adsense: false, lastmod: '2026-10-26', changefreq: 'weekly', priority: '0.9', schema: [EVENT_CALENDAR_SCHEMA, breadcrumb([{ name: 'Home', path: '/' }, { name: 'Stock Event Calendar', path: '/event-calendar' }])] },
   { path: '/metadata-limits', title: 'Stock Metadata Limits by Marketplace — Titles & Keywords Reference | Tagyfy Pro', desc: 'Title length limits, keyword counts, CSV column names and common upload errors for Adobe Stock, Shutterstock, Freepik, Vecteezy, Dreamstime and 123RF — each with its official source linked.', content: CONTENT_METADATA_LIMITS, adsense: true, lastmod: '2026-10-26', changefreq: 'monthly', priority: '0.9', schema: [breadcrumb([{ name: 'Home', path: '/' }, { name: 'Metadata limits', path: '/metadata-limits' }])] },
   { path: '/privacy-policy', title: 'Privacy Policy | Tagyfy Pro', desc: 'Tagyfy Pro privacy policy. Learn how the Windows app and browser tools handle your media files, API keys, cookies, web beacons, analytics, and Google AdSense.', content: CONTENT_PRIVACY, adsense: false, lastmod: '2026-10-26', changefreq: 'yearly', priority: '0.5', schema: [breadcrumb([{ name: 'Home', path: '/' }, { name: 'Privacy Policy', path: '/privacy-policy' }])] },
   { path: '/terms', title: 'Terms of Service | Tagyfy Pro', desc: 'Terms and conditions for using Tagyfy Pro desktop application, browser utilities, and Chrome extension.', content: CONTENT_TERMS, adsense: false, lastmod: '2026-10-26', changefreq: 'yearly', priority: '0.5', schema: [breadcrumb([{ name: 'Home', path: '/' }, { name: 'Terms', path: '/terms' }])] },
