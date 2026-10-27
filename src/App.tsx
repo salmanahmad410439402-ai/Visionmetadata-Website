@@ -33,6 +33,7 @@ import Blogs from "./pages/Blogs";
 import BlogPost from "./pages/BlogPost";
 import AdSenseLoader from "@/components/ads/AdSenseLoader";
 import { JsonLd, organisationSchema } from "@/lib/structuredData";
+import ToolsDiscoveryModal from "@/components/ToolsDiscoveryModal";
 
 const queryClient = new QueryClient();
 
@@ -53,6 +54,7 @@ const App = () => {
           <JsonLd data={organisationSchema()} />
           <AdSenseLoader />
           <Navbar />
+          <ToolsDiscoveryModal />
           <ConsentBanner />
           <main className="min-h-screen bg-background">
             <Routes>

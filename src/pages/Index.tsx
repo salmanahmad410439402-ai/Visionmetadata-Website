@@ -1,44 +1,20 @@
 import { Helmet } from "react-helmet-async";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import HeroSection from "@/components/HeroSection";
 import StatsBar from "@/components/StatsBar";
+import ContributorToolkitSection from "@/components/ContributorToolkitSection";
 import { DirectEmbeddingShowcase } from "@/components/DirectEmbeddingShowcase";
 import HowItWorks from "@/components/HowItWorks";
 import FeatureHighlights from "@/components/FeatureHighlights";
 import WhyVisionMeta from "@/components/WhyVisionMeta";
 import FAQPreview from "@/components/FAQPreview";
-import { ArrowRight, Zap, DollarSign, HelpCircle, Mail, Download, Chrome, Sparkles } from "lucide-react";
+import { ArrowRight, Zap, DollarSign, Mail, Download, Chrome, Sparkles } from "lucide-react";
 import { useReveal } from "@/hooks/useReveal";
-import { useEffect } from "react";
-import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { JsonLd, softwareSchema } from "@/lib/structuredData";
 
 const Index = () => {
   const ref = useReveal();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    // Show a toast notification for the new extension release once per session
-    const hasSeenToast = sessionStorage.getItem("hasSeenExtensionToast");
-    
-    if (!hasSeenToast) {
-      const timer = setTimeout(() => {
-        toast("🎉 Free Chrome Extension Released!", {
-          description: "Tagyfy Pro Adobe Stock Chrome Extension is now live & 100% FREE for all contributors!",
-          action: {
-            label: "Get Extension",
-            onClick: () => navigate("/chrome-extension"),
-          },
-          duration: 10000,
-          position: "top-center",
-        });
-        sessionStorage.setItem("hasSeenExtensionToast", "true");
-      }, 1500);
-      
-      return () => clearTimeout(timer);
-    }
-  }, [navigate]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -57,6 +33,9 @@ const Index = () => {
 
         {/* 2. Key Stats Strip */}
         <StatsBar />
+
+        {/* 2b. Free Browser Contributor Toolkit (4 Tools — Which One Do You Need?) */}
+        <ContributorToolkitSection />
 
         {/* 3. Breakthrough Direct Vector & Video Embedding Showcase (Superpower of Desktop App + Web Tool) */}
         <DirectEmbeddingShowcase />
