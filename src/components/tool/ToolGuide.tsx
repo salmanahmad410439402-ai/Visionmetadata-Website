@@ -9,7 +9,9 @@ import {
   AlertTriangle,
   KeyRound,
   CheckCircle2,
+  ArrowRight,
 } from "lucide-react";
+import { GEMINI_QUOTA_VIDEO_ID } from "@/components/TutorialsSection";
 
 /**
  * Supporting content for /tool.
@@ -118,6 +120,74 @@ const ToolGuide = () => (
             <p className="text-sm leading-relaxed text-secondary">{body}</p>
           </div>
         ))}
+      </div>
+    </section>
+
+    {/* Video Tutorial: Scaling Free Gemini API Quota Across Separate Projects */}
+    <section
+      aria-labelledby="tool-gemini-quota-heading"
+      className="rounded-3xl border border-accent-indigo/40 bg-card-primary p-6 sm:p-8"
+    >
+      <div className="grid lg:grid-cols-12 gap-6 lg:gap-8 items-center">
+        <div className="lg:col-span-6 space-y-4">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-accent-indigo-subtle border border-accent-indigo text-primary">
+            <KeyRound className="w-3.5 h-3.5" />
+            Video Guide · Google Gemini API
+          </div>
+
+          <h2
+            id="tool-gemini-quota-heading"
+            className="text-xl sm:text-2xl font-bold text-foreground leading-snug"
+          >
+            How to Get More Free Gemini API Quota Using Multiple Google Cloud Projects
+          </h2>
+
+          <p className="text-sm leading-relaxed text-secondary">
+            Creating multiple Gemini API keys inside a{" "}
+            <strong className="text-foreground">single Google Cloud project</strong> does not
+            multiply your free quota — all keys in that project draw from the same limit. Watch how
+            to create separate Google Cloud projects with{" "}
+            <strong className="text-foreground">one dedicated Gemini key per project</strong> so
+            automatic key rotation switches across independent project quotas.
+          </p>
+
+          <ul className="space-y-2 pt-1">
+            {[
+              "Why multiple keys inside 1 project share the same 429 quota wall",
+              "Step-by-step setup for separate Google Cloud projects (1 key each)",
+              "How to organize project-separated keys cleanly for batch workflows",
+            ].map((item) => (
+              <li key={item} className="flex items-start gap-2.5 text-xs sm:text-sm text-secondary">
+                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+
+          <div className="pt-1">
+            <Link
+              to="/tutorials#gemini-api-quota-tutorial"
+              className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-primary hover:text-primary/80 transition-colors"
+            >
+              Read full breakdown on the Tutorials page
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+        </div>
+
+        <div className="lg:col-span-6">
+          <div className="relative w-full aspect-video rounded-2xl overflow-hidden border border-accent-indigo/40 bg-black shadow-xl shadow-black/30">
+            <iframe
+              src={`https://www.youtube.com/embed/${GEMINI_QUOTA_VIDEO_ID}?rel=0`}
+              title="How to Get More Free Gemini API Quota Using Multiple Google Cloud Projects"
+              loading="lazy"
+              allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerPolicy="strict-origin-when-cross-origin"
+              allowFullScreen
+              className="absolute inset-0 w-full h-full border-0"
+            />
+          </div>
+        </div>
       </div>
     </section>
 
@@ -236,9 +306,9 @@ const ToolGuide = () => (
           className="group rounded-2xl border border-card-primary p-5 hover:border-primary transition-colors"
         >
           <Layers className="w-5 h-5 text-primary mb-3" />
-          <p className="font-bold text-foreground mb-3">Setup guides</p>
+          <p className="font-bold text-foreground mb-1">Tutorials &amp; setup guides</p>
           <p className="text-secondary">
-            Four written guides covering install, provider keys, metadata settings and running a batch.
+            Gemini multi-project free quota video tutorial plus four written guides for install, key rotation and batching.
           </p>
         </Link>
         <Link

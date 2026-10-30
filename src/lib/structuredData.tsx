@@ -170,6 +170,40 @@ export const webAppSchema = () => ({
 });
 
 /**
+ * VideoObject structured data for an embedded instructional tutorial video.
+ * Only factual, verifiable properties are emitted (no invented ratings or counts).
+ */
+export const videoTutorialSchema = (video: {
+  videoId: string;
+  name: string;
+  description: string;
+  uploadDate: string;
+  inLanguage?: string;
+}) => ({
+  "@context": "https://schema.org",
+  "@type": "VideoObject",
+  name: video.name,
+  description: video.description,
+  thumbnailUrl: [
+    `https://i.ytimg.com/vi/${video.videoId}/maxresdefault.jpg`,
+    `https://i.ytimg.com/vi/${video.videoId}/hqdefault.jpg`,
+  ],
+  embedUrl: `https://www.youtube.com/embed/${video.videoId}`,
+  contentUrl: `https://www.youtube.com/watch?v=${video.videoId}`,
+  uploadDate: video.uploadDate,
+  ...(video.inLanguage ? { inLanguage: video.inLanguage } : {}),
+  publisher: {
+    "@type": "Organization",
+    name: "Tagyfy Pro",
+    url: SITE,
+    logo: {
+      "@type": "ImageObject",
+      url: `${SITE}/icon.jpg`,
+    },
+  },
+});
+
+/**
  * The editorial standards page, expressed as a publisher policy the crawler can
  * read. This is also the page that documents corrections, which the AdSense
  * help text asks for as evidence of ongoing curation.

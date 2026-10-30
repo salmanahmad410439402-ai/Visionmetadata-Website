@@ -67,6 +67,35 @@ export function sanitizeErrorMessage(message: string): string {
 /**
  * Format error for user display - sanitized and user-friendly
  */
+/**
+ * Returns true when an Error or message string indicates an API quota or
+ * rate-limit exhaustion (e.g. HTTP 429, RESOURCE_EXHAUSTED, quota exceeded),
+ * as opposed to authentication, network, or file-format errors.
+ */
+export function isQuotaOrRateLimitError(errorOrMessage: unknown): boolean {
+  if (!errorOrMessage) return false;
+  const raw =
+    errorOrMessage instanceof Error
+      ? errorOrMessage.message
+      : typeof errorOrMessage === "string"
+        ? errorOrMessage
+        : String(errorOrMessage);
+  const msg = raw.toLowerCase();
+
+  return (
+    msg.includes("429") ||
+    msg.includes("rate limit") ||
+    msg.includes("rate_limit") ||
+    msg.includes("too many requests") ||
+    msg.includes("quota") ||
+    msg.includes("resource_exhausted") ||
+    msg.includes("insufficient credits") ||
+    msg.includes("requests per min") ||
+    msg.includes("requests per day") ||
+    msg.includes("tokens per min")
+  );
+}
+
 export function formatErrorForUser(error: Error | unknown): string {
   if (error instanceof Error) {
     const message = error.message.toLowerCase();
@@ -89,12 +118,14 @@ export function formatErrorForUser(error: Error | unknown): string {
       return "Authentication failed. Please verify your API credentials in Settings.";
     }
 
+    // Quota / rate-limit exhaustion (checked before generic API error match)
+    if (isQuotaOrRateLimitError(error)) {
+      return "Free API quota or rate limit reached. Add keys from separate Google Cloud projects in Settings, or wait and retry.";
+    }
+
     // Explicit API fetch errors (narrow — must mention both api AND a failure keyword)
     if ((message.includes("api error") || message.includes("api request")) && (message.includes("failed") || message.includes("error"))) {
       return "API request failed. Please check your API key configuration in Settings.";
-    }
-    if (message.includes("rate limit") || message.includes("quota")) {
-      return "API rate limit reached. Please wait a few moments and try again.";
     }
     if (message.includes("file") || message.includes("read")) {
       return "Failed to process file. The file may be corrupted or inaccessible.";
@@ -140,7 +171,7 @@ export function formatErrorForLog(error: Error | unknown): string {
 /**
  * Safe console.error wrapper that sanitizes before logging
  */
-export function safeConsoleError(...args: any[]): void {
+export function safeConsoleError(...args: unknown[]): void {
   const sanitized = args.map(arg => {
     if (typeof arg === "string") {
       return sanitizeErrorMessage(arg);
@@ -161,7 +192,7 @@ export function safeConsoleError(...args: any[]): void {
 /**
  * Safe console.warn wrapper that sanitizes before logging
  */
-export function safeConsoleWarn(...args: any[]): void {
+export function safeConsoleWarn(...args: unknown[]): void {
   const sanitized = args.map(arg => {
     if (typeof arg === "string") {
       return sanitizeErrorMessage(arg);

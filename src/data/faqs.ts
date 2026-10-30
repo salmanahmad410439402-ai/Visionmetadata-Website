@@ -32,7 +32,7 @@ export const FAQS: FaqEntry[] = [
     },
     {
         question: "What happens when my API key hits a rate limit?",
-        answer: "The system has an automatic key rotation engine. When one key hits its rate limit, it's placed in a short cooldown and the next available key is tried immediately — following a priority waterfall across all your configured providers. You never see a failed generation just because one key is temporarily limited.",
+        answer: "The system has an automatic key rotation engine. When one key hits its rate limit, it's placed in a short cooldown and the next available key is tried immediately — following a priority waterfall across all your configured providers. For Google Gemini free-tier keys, make sure each API key is created inside its own separate Google Cloud project (see our Tutorials page video guide), since multiple keys inside a single project share the same project-level quota.",
     },
     {
         question: "What is the Trademark Sniffer?",

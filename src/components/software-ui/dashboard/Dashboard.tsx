@@ -21,10 +21,13 @@ import { BatchProgressState } from "./BatchProgress";
 import { BulkEditorModal } from "./BulkEditorModal";
 import { useRef, useEffect } from "react";
 import type { Asset, AssetMetadata } from "@/contexts/AssetsContext";
-import { formatErrorForUser, safeConsoleError } from "@/lib/errorSanitizer";
+import { formatErrorForUser, isQuotaOrRateLimitError, safeConsoleError } from "@/lib/errorSanitizer";
 import { OfflineDetection } from "@/lib/offlineDetection";
 import { ConfirmDialog, ConfirmDialogPresets } from "@/components/ConfirmDialog";
 import { createSampleDemoAsset } from "@/lib/sampleDemoAsset";
+import { QuotaTutorialModal, OPEN_QUOTA_TUTORIAL_EVENT } from "../modals/QuotaTutorialModal";
+import { Play, Plus, AlertTriangle, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
 export const Dashboard = () => {
@@ -53,6 +56,21 @@ export const Dashboard = () => {
   });
   const [failedAssetsCount, setFailedAssetsCount] = useState(0);
   const hasFailedAssets = assets.some((a) => a.status === "error");
+  const [isQuotaTutorialOpen, setIsQuotaTutorialOpen] = useState(false);
+  const [showQuotaBanner, setShowQuotaBanner] = useState(false);
+  const lastQuotaToastAtRef = useRef<number>(0);
+
+  useEffect(() => {
+    const handleOpenQuotaModal = () => setIsQuotaTutorialOpen(true);
+    window.addEventListener(OPEN_QUOTA_TUTORIAL_EVENT, handleOpenQuotaModal);
+    return () => window.removeEventListener(OPEN_QUOTA_TUTORIAL_EVENT, handleOpenQuotaModal);
+  }, []);
+
+  useEffect(() => {
+    if (!hasFailedAssets) {
+      setShowQuotaBanner(false);
+    }
+  }, [hasFailedAssets]);
 
   // ── Confirmation Dialog State ────────────────────────────────────────────
   const [confirmDialog, setConfirmDialog] = useState<{
@@ -262,7 +280,7 @@ export const Dashboard = () => {
       addToQueue(assetId);
       updateAsset(assetId, { status: "generating" });
 
-      let metadata: any;
+      let metadata: AssetMetadata | undefined;
       const maxAttempts = asset.type === "video" ? 3 : 1;
       let lastErr: Error | null = null;
       for (let attempt = 1; attempt <= maxAttempts; attempt++) {
@@ -349,12 +367,32 @@ export const Dashboard = () => {
         status: "error",
         error: sanitizedError
       });
-      
-      // Show user-friendly error message
-      toast.error(`Failed to generate metadata`, {
-        description: sanitizedError,
-        duration: 6000
-      });
+
+      const quotaHit =
+        isQuotaOrRateLimitError(error) || isQuotaOrRateLimitError(sanitizedError);
+
+      if (quotaHit) {
+        setShowQuotaBanner(true);
+        const now = Date.now();
+        if (now - lastQuotaToastAtRef.current > 12_000) {
+          lastQuotaToastAtRef.current = now;
+          toast.error("Free API Quota Limit Reached", {
+            description:
+              "Watch how to get more free Gemini API quota using separate Google Cloud projects (1 key per project).",
+            action: {
+              label: "Watch Video",
+              onClick: () => setIsQuotaTutorialOpen(true),
+            },
+            duration: 10_000,
+          });
+        }
+      } else {
+        // Show user-friendly error message
+        toast.error(`Failed to generate metadata`, {
+          description: sanitizedError,
+          duration: 6000
+        });
+      }
       
       return false;
     } finally {
@@ -722,6 +760,67 @@ export const Dashboard = () => {
 
       <main className="w-full px-4 py-6 md:px-8">
         <AnimatePresence>
+          {showQuotaBanner && hasFailedAssets && (
+            <motion.div
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.2 }}
+              role="alert"
+              className="mb-6 rounded-2xl border border-amber-500/35 bg-amber-500/10 p-4 sm:p-5 flex flex-col lg:flex-row lg:items-center justify-between gap-4 shadow-sm"
+            >
+              <div className="flex items-start gap-3">
+                <div className="shrink-0 w-9 h-9 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center mt-0.5">
+                  <AlertTriangle className="w-4 h-4 text-amber-400" />
+                </div>
+                <div className="space-y-1">
+                  <p className="text-sm sm:text-base font-bold text-foreground">
+                    Free API Quota Reached — Get More Free Gemini Quota
+                  </p>
+                  <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed max-w-3xl">
+                    Multiple Gemini keys inside a{" "}
+                    <strong className="text-foreground">single Google Cloud project</strong> share
+                    one quota limit. Watch the step-by-step tutorial to create{" "}
+                    <strong className="text-foreground">separate Google Cloud projects</strong> (1
+                    key per project) for free — your uploaded files stay safe right here.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-2 sm:pl-12 lg:pl-0 shrink-0">
+                <Button
+                  type="button"
+                  size="sm"
+                  onClick={() => setIsQuotaTutorialOpen(true)}
+                  className="rounded-xl gap-1.5 font-bold"
+                >
+                  <Play className="w-3.5 h-3.5 fill-current" />
+                  Watch Free Quota Video
+                </Button>
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="outline"
+                  onClick={() => setIsSettingsOpen(true)}
+                  className="rounded-xl gap-1.5 border-border/80 bg-background/60"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  Add Key in Settings
+                </Button>
+                <button
+                  type="button"
+                  onClick={() => setShowQuotaBanner(false)}
+                  aria-label="Dismiss quota recovery notice"
+                  className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/40 transition-colors"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <AnimatePresence>
           {showUploadZone && (
             <motion.div
               initial={{ opacity: 0, height: 0 }}
@@ -829,6 +928,14 @@ export const Dashboard = () => {
 
       <BulkEditorModal open={showBulkEditor} onOpenChange={setShowBulkEditor} />
       <SettingsModal open={isSettingsOpen} onOpenChange={setIsSettingsOpen} />
+      <QuotaTutorialModal
+        open={isQuotaTutorialOpen}
+        onOpenChange={setIsQuotaTutorialOpen}
+        onOpenSettings={() => {
+          setIsQuotaTutorialOpen(false);
+          setIsSettingsOpen(true);
+        }}
+      />
       <ExportModal
         open={showExportModal}
         onOpenChange={setShowExportModal}
