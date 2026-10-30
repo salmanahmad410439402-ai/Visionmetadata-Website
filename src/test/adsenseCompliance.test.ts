@@ -168,5 +168,16 @@ describe("AdSense, Search Spam & Unwanted Software Compliance Guards", () => {
     const eventCalendarHtml = fs.readFileSync(path.join(distDir, "event-calendar/index.html"), "utf8");
     expect(eventCalendarHtml).toContain('<link rel="canonical" href="https://tagyfy.com/event-calendar" />');
     expect(eventCalendarHtml).not.toContain("adsbygoogle.js");
+
+    // 7. Every prerendered page must wrap content in the styled .prerender-shell (no unstyled raw text flash)
+    const homeHtml = fs.readFileSync(path.join(distDir, "index.html"), "utf8");
+    expect(homeHtml).toContain('class="prerender-shell"');
+    expect(homeHtml).toContain('class="prerender-header"');
+    expect(homeHtml).toContain('class="prerender-card"');
+    expect(html404).toContain('class="prerender-shell"');
+
+    const indexCss = readRepoFile("src/index.css");
+    expect(indexCss).toContain(".prerender-shell");
+    expect(indexCss).toContain(".prerender-card h1");
   });
 });

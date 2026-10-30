@@ -29,6 +29,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { JsonLd, breadcrumbSchema } from "@/lib/structuredData";
+import { hasDecidedConsent } from "@/lib/consent";
 import {
   EVENT_CATEGORIES,
   MONTH_NAMES,
@@ -104,20 +105,27 @@ const EventCalendar = () => {
     [allResolvedEvents]
   );
 
-  // Automatic Upcoming Events Radar dialog (opens once per browser session on page visit)
+  // Automatic Upcoming Events Radar dialog (opens once per browser session after cookie consent is decided)
   const [radarOpen, setRadarOpen] = useState(false);
   const [radarTab, setRadarTab] = useState<"soon" | "upload">("soon");
 
   useEffect(() => {
-    try {
-      const alreadySeen = sessionStorage.getItem(SESSION_POPUP_KEY);
-      if (!alreadySeen) {
+    const maybeOpenRadar = () => {
+      if (!hasDecidedConsent()) return;
+      try {
+        const alreadySeen = sessionStorage.getItem(SESSION_POPUP_KEY);
+        if (!alreadySeen) {
+          setRadarOpen(true);
+          sessionStorage.setItem(SESSION_POPUP_KEY, "1");
+        }
+      } catch {
         setRadarOpen(true);
-        sessionStorage.setItem(SESSION_POPUP_KEY, "1");
       }
-    } catch {
-      setRadarOpen(true);
-    }
+    };
+
+    maybeOpenRadar();
+    window.addEventListener("tagyfy:consent", maybeOpenRadar);
+    return () => window.removeEventListener("tagyfy:consent", maybeOpenRadar);
   }, []);
 
   // Search & filter state
