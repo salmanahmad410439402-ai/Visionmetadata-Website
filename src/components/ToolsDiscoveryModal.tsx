@@ -10,6 +10,7 @@ import {
   Chrome,
   Compass,
   HelpCircle,
+  X,
 } from "lucide-react";
 import {
   Dialog,
@@ -20,6 +21,7 @@ import {
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { hasDecidedConsent } from "@/lib/consent";
 import {
   CONTRIBUTOR_TOOLS,
   CONTRIBUTOR_TOOLS_STORAGE_KEY,
@@ -80,6 +82,7 @@ const ToolsDiscoveryModal = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+  const [nudgeVisible, setNudgeVisible] = useState(false);
   const [selectedGoal, setSelectedGoal] = useState<ContributorToolId | "all">("all");
 
   const markSeen = () => {
@@ -91,26 +94,32 @@ const ToolsDiscoveryModal = () => {
     }
   };
 
-  // Auto-open once for visitors landing on the ad-free Homepage ("/")
+  // Show a non-blocking corner announcement once on "/" after cookie consent is decided
   useEffect(() => {
-    if (location.pathname !== "/") return;
-
-    let seen = false;
-    try {
-      seen = Boolean(localStorage.getItem(CONTRIBUTOR_TOOLS_STORAGE_KEY));
-    } catch {
-      seen = false;
+    if (location.pathname !== "/") {
+      setNudgeVisible(false);
+      return;
     }
 
-    if (seen) return;
+    const maybeShowNudge = () => {
+      let seen = false;
+      try {
+        seen = Boolean(localStorage.getItem(CONTRIBUTOR_TOOLS_STORAGE_KEY));
+      } catch {
+        seen = false;
+      }
+      if (!seen && hasDecidedConsent()) {
+        setNudgeVisible(true);
+      }
+    };
 
-    const timer = window.setTimeout(() => {
-      setSelectedGoal("all");
-      setOpen(true);
-      markSeen();
-    }, 500);
+    const timer = window.setTimeout(maybeShowNudge, 700);
+    window.addEventListener("tagyfy:consent", maybeShowNudge);
 
-    return () => window.clearTimeout(timer);
+    return () => {
+      window.clearTimeout(timer);
+      window.removeEventListener("tagyfy:consent", maybeShowNudge);
+    };
   }, [location.pathname]);
 
   // Listen for manual "Open Tools Guide" clicks from Navbar / Homepage / anywhere
@@ -118,6 +127,7 @@ const ToolsDiscoveryModal = () => {
     const onOpenGuide = (ev: Event) => {
       const custom = ev as CustomEvent<{ toolId?: ContributorToolId | "all" }>;
       setSelectedGoal(custom.detail?.toolId ?? "all");
+      setNudgeVisible(false);
       setOpen(true);
       markSeen();
     };
@@ -132,8 +142,14 @@ const ToolsDiscoveryModal = () => {
     }
   };
 
+  const handleDismissNudge = () => {
+    setNudgeVisible(false);
+    markSeen();
+  };
+
   const handleLaunchTool = (to: string) => {
     markSeen();
+    setNudgeVisible(false);
     setOpen(false);
     navigate(to);
   };
@@ -144,7 +160,61 @@ const ToolsDiscoveryModal = () => {
       : CONTRIBUTOR_TOOLS.filter((t) => t.id === selectedGoal);
 
   return (
-    <Dialog open={open} onOpenChange={handleOpenChange}>
+    <>
+      {nudgeVisible && !open && (
+        <aside
+          aria-label="New contributor tools announcement"
+          className="fixed bottom-4 right-4 z-40 max-w-sm rounded-2xl border border-primary/35 bg-card/95 backdrop-blur-xl p-4 shadow-2xl animate-in fade-in slide-in-from-bottom-3 duration-300"
+        >
+          <div className="flex items-start justify-between gap-3">
+            <div className="space-y-1.5">
+              <div className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-emerald-500">
+                <Sparkles className="w-3.5 h-3.5" />
+                What&apos;s New · 4 Free Browser Tools
+              </div>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Event Calendar, CSV Verifier, 6-Agency CSV Converter &amp; AI Generator — see which tool fits your
+                stock workflow.
+              </p>
+              <div className="pt-1 flex items-center gap-2">
+                <Button
+                  type="button"
+                  size="sm"
+                  onClick={() => {
+                    setNudgeVisible(false);
+                    setSelectedGoal("all");
+                    setOpen(true);
+                    markSeen();
+                  }}
+                  className="h-8 rounded-xl text-xs font-bold gap-1.5"
+                >
+                  <Compass className="w-3.5 h-3.5" />
+                  Open Tool Guide
+                </Button>
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="ghost"
+                  onClick={handleDismissNudge}
+                  className="h-8 rounded-xl text-xs"
+                >
+                  Dismiss
+                </Button>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={handleDismissNudge}
+              aria-label="Dismiss announcement"
+              className="text-muted-foreground hover:text-foreground p-1 rounded-lg"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        </aside>
+      )}
+
+      <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className="max-w-4xl max-h-[88vh] overflow-y-auto rounded-3xl border border-border bg-card p-5 sm:p-7 shadow-2xl">
         <DialogHeader className="space-y-2 text-left">
           <div className="inline-flex items-center gap-2 w-fit px-3 py-1 rounded-full bg-primary/10 border border-primary/25 text-primary text-[11px] font-bold uppercase tracking-wider">
@@ -316,6 +386,7 @@ const ToolsDiscoveryModal = () => {
         </div>
       </DialogContent>
     </Dialog>
+    </>
   );
 };
 

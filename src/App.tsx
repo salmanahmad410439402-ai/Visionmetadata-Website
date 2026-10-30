@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { Suspense, lazy, useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -9,31 +9,42 @@ import { initializeAnalytics } from "@/lib/analytics";
 import { applyStoredConsent } from "@/lib/consent";
 import ConsentBanner from "@/components/ConsentBanner";
 import Index from "./pages/Index";
-import NotFound from "./pages/NotFound";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import Features from "./pages/Features";
-import Pricing from "./pages/Pricing";
-import DownloadPage from "./pages/Download";
-import ContactPage from "./pages/Contact";
-import FAQ from "./pages/FAQ";
-import Tutorials from "./pages/Tutorials";
-import ChromeExtension from "./pages/ChromeExtension";
-import AboutUs from "./pages/AboutUs";
-import PrivacyPolicy from "./pages/PrivacyPolicy";
-import TermsOfService from "./pages/TermsOfService";
-import RefundPolicy from "./pages/RefundPolicy";
-import EditorialPolicy from "./pages/EditorialPolicy";
-import ToolPage from "./pages/Tool";
-import PlatformLimits from "./pages/PlatformLimits";
-import MetadataChecker from "./pages/MetadataChecker";
-import StockCsvConverter from "./pages/StockCsvConverter";
-import EventCalendar from "./pages/EventCalendar";
-import Blogs from "./pages/Blogs";
-import BlogPost from "./pages/BlogPost";
 import AdSenseLoader from "@/components/ads/AdSenseLoader";
 import { JsonLd, organisationSchema } from "@/lib/structuredData";
 import ToolsDiscoveryModal from "@/components/ToolsDiscoveryModal";
+
+// Route-level code splitting so visitors only download the page they open
+const Features = lazy(() => import("./pages/Features"));
+const Pricing = lazy(() => import("./pages/Pricing"));
+const DownloadPage = lazy(() => import("./pages/Download"));
+const ContactPage = lazy(() => import("./pages/Contact"));
+const FAQ = lazy(() => import("./pages/FAQ"));
+const Tutorials = lazy(() => import("./pages/Tutorials"));
+const ChromeExtension = lazy(() => import("./pages/ChromeExtension"));
+const AboutUs = lazy(() => import("./pages/AboutUs"));
+const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
+const TermsOfService = lazy(() => import("./pages/TermsOfService"));
+const RefundPolicy = lazy(() => import("./pages/RefundPolicy"));
+const EditorialPolicy = lazy(() => import("./pages/EditorialPolicy"));
+const ToolPage = lazy(() => import("./pages/Tool"));
+const PlatformLimits = lazy(() => import("./pages/PlatformLimits"));
+const MetadataChecker = lazy(() => import("./pages/MetadataChecker"));
+const StockCsvConverter = lazy(() => import("./pages/StockCsvConverter"));
+const EventCalendar = lazy(() => import("./pages/EventCalendar"));
+const Blogs = lazy(() => import("./pages/Blogs"));
+const BlogPost = lazy(() => import("./pages/BlogPost"));
+const NotFound = lazy(() => import("./pages/NotFound"));
+
+const RouteLoadingFallback = () => (
+  <div className="min-h-[65vh] flex items-center justify-center px-6 pt-28 pb-16">
+    <div className="glass-panel rounded-2xl px-6 py-4 flex items-center gap-3 text-sm font-semibold text-muted-foreground">
+      <span className="h-2.5 w-2.5 rounded-full bg-primary animate-pulse" />
+      Loading workspace…
+    </div>
+  </div>
+);
 
 const queryClient = new QueryClient();
 
@@ -57,32 +68,34 @@ const App = () => {
           <ToolsDiscoveryModal />
           <ConsentBanner />
           <main className="min-h-screen bg-background">
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/features" element={<Features />} />
-              <Route path="/pricing" element={<Pricing />} />
-              <Route path="/download" element={<DownloadPage />} />
-              <Route path="/tutorials" element={<Tutorials />} />
-              <Route path="/blogs" element={<Blogs />} />
-              {/* /blog redirects to the canonical /blogs listing to avoid serving duplicate content at two URLs */}
-              <Route path="/blog" element={<Navigate to="/blogs" replace />} />
-              <Route path="/blog/:slug" element={<BlogPost />} />
-              <Route path="/about" element={<AboutUs />} />
-              <Route path="/contact" element={<ContactPage />} />
-              <Route path="/faq" element={<FAQ />} />
-              <Route path="/chrome-extension" element={<ChromeExtension />} />
-              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-              <Route path="/terms" element={<TermsOfService />} />
-              <Route path="/refund-policy" element={<RefundPolicy />} />
-              <Route path="/editorial-policy" element={<EditorialPolicy />} />
-              <Route path="/tool" element={<ToolPage />} />
-              <Route path="/metadata-limits" element={<PlatformLimits />} />
-              <Route path="/metadata-checker" element={<MetadataChecker />} />
-              <Route path="/stock-csv-converter" element={<StockCsvConverter />} />
-              <Route path="/event-calendar" element={<EventCalendar />} />
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
+            <Suspense fallback={<RouteLoadingFallback />}>
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/features" element={<Features />} />
+                <Route path="/pricing" element={<Pricing />} />
+                <Route path="/download" element={<DownloadPage />} />
+                <Route path="/tutorials" element={<Tutorials />} />
+                <Route path="/blogs" element={<Blogs />} />
+                {/* /blog redirects to the canonical /blogs listing to avoid serving duplicate content at two URLs */}
+                <Route path="/blog" element={<Navigate to="/blogs" replace />} />
+                <Route path="/blog/:slug" element={<BlogPost />} />
+                <Route path="/about" element={<AboutUs />} />
+                <Route path="/contact" element={<ContactPage />} />
+                <Route path="/faq" element={<FAQ />} />
+                <Route path="/chrome-extension" element={<ChromeExtension />} />
+                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                <Route path="/terms" element={<TermsOfService />} />
+                <Route path="/refund-policy" element={<RefundPolicy />} />
+                <Route path="/editorial-policy" element={<EditorialPolicy />} />
+                <Route path="/tool" element={<ToolPage />} />
+                <Route path="/metadata-limits" element={<PlatformLimits />} />
+                <Route path="/metadata-checker" element={<MetadataChecker />} />
+                <Route path="/stock-csv-converter" element={<StockCsvConverter />} />
+                <Route path="/event-calendar" element={<EventCalendar />} />
+                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </Suspense>
           </main>
           <Footer />
         </BrowserRouter>

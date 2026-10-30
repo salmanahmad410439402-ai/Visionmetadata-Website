@@ -895,6 +895,36 @@ BLOG_POSTS.forEach((post) => {
   });
 });
 
+function wrapPrerenderShell(bodyHtml: string): string {
+  return `<div class="prerender-shell">
+  <header class="prerender-header">
+    <div class="prerender-header-inner">
+      <a href="/" class="prerender-logo">Tagyfy<span> Pro</span> <small>AI</small></a>
+      <nav class="prerender-nav" aria-label="Primary navigation">
+        <a href="/tool">Free Tool</a>
+        <a href="/metadata-checker">Checker</a>
+        <a href="/stock-csv-converter">CSV Converter</a>
+        <a href="/event-calendar">Events</a>
+        <a href="/features">Features</a>
+        <a href="/pricing">Pricing</a>
+        <a href="/blogs">Blog</a>
+        <a href="/tutorials">Tutorials</a>
+        <a href="/faq">FAQ</a>
+        <a href="/download" class="prerender-cta">Download</a>
+      </nav>
+    </div>
+  </header>
+  <main class="prerender-main">
+    <div class="prerender-card">
+${bodyHtml}
+    </div>
+  </main>
+  <footer class="prerender-footer">
+    <p>&copy; ${new Date().getFullYear()} Tagyfy Pro &middot; Operated by ${escapeHtml(SELLER.operator)} &middot; <a href="/privacy-policy">Privacy Policy</a> &middot; <a href="/terms">Terms</a> &middot; <a href="/refund-policy">Refunds</a> &middot; <a href="/editorial-policy">Editorial Standards</a> &middot; <a href="/contact">Contact</a></p>
+  </footer>
+</div>`;
+}
+
 function buildPageHtml(template: string, page: PageSpec): string {
   const canonicalUrl = `${SITE_URL}${page.path === '/' ? '/' : page.path}`;
   const safeTitle = escapeHtml(page.title);
@@ -904,36 +934,36 @@ function buildPageHtml(template: string, page: PageSpec): string {
   let html = template;
 
   // Title & meta description
-  html = html.replace(/<title>[\s\S]*?<\/title>/, `<title>${safeTitle}</title>`);
+  html = html.replace(/<title>[\s\S]*?<\/title>/, () => `<title>${safeTitle}</title>`);
   html = html.replace(
     /<meta name="description"[\s\S]*?\/>/,
-    `<meta name="description" content="${safeDesc}" />`
+    () => `<meta name="description" content="${safeDesc}" />`
   );
 
   // OpenGraph & Twitter per-page synchronization
   html = html.replace(
     /<meta property="og:title" content=".*?"\s*\/>/,
-    `<meta property="og:title" content="${safeTitle}" />`
+    () => `<meta property="og:title" content="${safeTitle}" />`
   );
   html = html.replace(
     /<meta property="og:description"[\s\S]*?\/>/,
-    `<meta property="og:description" content="${safeDesc}" />`
+    () => `<meta property="og:description" content="${safeDesc}" />`
   );
   html = html.replace(
     /<meta property="og:type" content=".*?"\s*\/>/,
-    `<meta property="og:type" content="${ogType}" />`
+    () => `<meta property="og:type" content="${ogType}" />`
   );
   html = html.replace(
     /<meta property="og:url" content=".*?"\s*\/>/,
-    `<meta property="og:url" content="${canonicalUrl}" />`
+    () => `<meta property="og:url" content="${canonicalUrl}" />`
   );
   html = html.replace(
     /<meta name="twitter:title" content=".*?"\s*\/>/,
-    `<meta name="twitter:title" content="${safeTitle}" />`
+    () => `<meta name="twitter:title" content="${safeTitle}" />`
   );
   html = html.replace(
     /<meta name="twitter:description"[\s\S]*?\/>/,
-    `<meta name="twitter:description" content="${safeDesc}" />`
+    () => `<meta name="twitter:description" content="${safeDesc}" />`
   );
 
   // Inject canonical link, optional JSON-LD, and strictly scoped AdSense script before </head>
@@ -945,29 +975,29 @@ function buildPageHtml(template: string, page: PageSpec): string {
     .filter(Boolean)
     .join('\n');
 
-  html = html.replace('</head>', `${headExtras}\n</head>`);
+  html = html.replace('</head>', () => `${headExtras}\n</head>`);
 
-  // Inject static crawler-readable body into #root
-  html = html.replace('<div id="root"></div>', `<div id="root">${page.content}</div>`);
+  // Inject styled static crawler-readable shell into #root
+  const shellHtml = wrapPrerenderShell(page.content);
+  html = html.replace('<div id="root"></div>', () => `<div id="root">${shellHtml}</div>`);
 
   return html;
 }
 
 function buildNotFoundHtml(template: string): string {
   let html = template;
-  html = html.replace(/<title>[\s\S]*?<\/title>/, `<title>404 — Page Not Found | Tagyfy Pro</title>`);
+  html = html.replace(/<title>[\s\S]*?<\/title>/, () => `<title>404 — Page Not Found | Tagyfy Pro</title>`);
   html = html.replace(
     /<meta name="description"[\s\S]*?\/>/,
-    `<meta name="description" content="The page you requested does not exist or has moved." />`
+    () => `<meta name="description" content="The page you requested does not exist or has moved." />`
   );
   // Remove AdSense account meta tag on error screens and enforce noindex
   html = html.replace(/<meta name="google-adsense-account"[^>]*>\s*/g, '');
   html = html.replace(
     '</head>',
-    `  <meta name="robots" content="noindex, nofollow" />\n</head>`
+    () => `  <meta name="robots" content="noindex, nofollow" />\n</head>`
   );
   const notFoundBody = `
-<main>
   <h1>404 — Page not found</h1>
   <p>The page you requested does not exist or has moved.</p>
   <ul>
@@ -976,9 +1006,9 @@ function buildNotFoundHtml(template: string): string {
     <li><a href="/metadata-checker">Free Metadata &amp; Compliance Checker</a></li>
     <li><a href="/metadata-limits">Marketplace Metadata Limits</a></li>
     <li><a href="/tool">Free Online Metadata Generator</a></li>
-  </ul>
-</main>`;
-  html = html.replace('<div id="root"></div>', `<div id="root">${notFoundBody}</div>`);
+  </ul>`;
+  const shellHtml = wrapPrerenderShell(notFoundBody);
+  html = html.replace('<div id="root"></div>', () => `<div id="root">${shellHtml}</div>`);
   return html;
 }
 
