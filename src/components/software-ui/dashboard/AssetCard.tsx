@@ -17,6 +17,7 @@ import {
   RefreshCw,
   ShieldCheck,
   FileText,
+  Play,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
@@ -26,6 +27,8 @@ import { InlineTagEditor } from "./InlineTagEditor";
 import { downloadAssetWithMetadata } from "@/lib/metadataEmbedder";
 import { checkMetadataQuality } from "@/lib/aiService";
 import { useSettings } from "@/contexts/SettingsContext";
+import { isQuotaOrRateLimitError } from "@/lib/errorSanitizer";
+import { openQuotaTutorialModal } from "../modals/QuotaTutorialModal";
 import { toast } from "sonner";
 import {
   Tooltip,
@@ -281,9 +284,20 @@ export const AssetCard = ({ asset, onGenerate, isSelected, onToggleSelect, showS
         {/* Error Message with Regenerate Button */}
         {asset.status === "error" && (
           <div className="space-y-2">
-            <div className="p-2 bg-destructive/10 border border-destructive/30 rounded text-xs text-destructive">
+            <div className="p-2.5 bg-destructive/10 border border-destructive/30 rounded-lg text-xs text-destructive leading-relaxed">
               {asset.error || "Generation failed"}
             </div>
+            {isQuotaOrRateLimitError(asset.error) && (
+              <Button
+                type="button"
+                size="sm"
+                className="w-full gap-1.5 text-xs font-semibold"
+                onClick={openQuotaTutorialModal}
+              >
+                <Play className="h-3.5 w-3.5 fill-current" />
+                Watch Free Quota Video
+              </Button>
+            )}
             <Button
               variant="outline"
               size="sm"

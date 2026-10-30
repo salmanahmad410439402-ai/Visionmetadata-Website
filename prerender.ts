@@ -297,8 +297,23 @@ const CONTENT_FAQ =
   `\n`;
 
 const CONTENT_TUTORIALS = `
-<h1>Setup Guides — Tagyfy Pro</h1>
-<p>Four written English guides that take you from a fresh install to a reviewed, metadata-embedded batch on Windows 10 and 11. An optional walkthrough video (audio language: Urdu / Hindi) demonstrates the browser metadata generator screen flow.</p>
+<h1>Tutorials, API Quota Setup &amp; Batch Workflow — Tagyfy Pro</h1>
+<p>Step-by-step video tutorials and written English guides covering how to scale free Google Gemini API quota properly across separate Google Cloud projects, configure multi-key rotation, and run reviewed metadata batches on Windows 10 and 11 or in the browser.</p>
+
+<section id="gemini-api-quota-tutorial">
+<h2>Featured Video Tutorial: How to Get More Free Gemini API Quota Using Multiple Google Cloud Projects</h2>
+<p>Many developers and contributors generate 5 or 10 Gemini API keys inside a single Google Cloud project expecting extra free requests — only to hit <code>429 Quota Exceeded</code> across every key at once. Because Google enforces free-tier Gemini limits per project rather than per key, creating separate Google Cloud projects with one dedicated Gemini API key per project gives each key an independent project quota.</p>
+<p><a href="https://www.youtube.com/watch?v=58nm1hZVvTs" rel="noopener noreferrer">Watch the embedded YouTube tutorial (How to Get More Free Gemini API Quota Using Multiple Google Cloud Projects)</a> directly on this page.</p>
+<h3>What You&apos;ll Learn in This Step-by-Step Tutorial</h3>
+<ul>
+<li>Why multiple Gemini API keys inside a single Google Cloud project share the exact same quota pool</li>
+<li>Why separating keys into distinct Google Cloud projects unlocks independent project-level quotas</li>
+<li>How to create and label multiple Google Cloud projects step by step without confusion</li>
+<li>How to generate one dedicated Gemini API key inside each individual Google Cloud project</li>
+<li>How to organize and import project-separated keys cleanly for automatic multi-key rotation</li>
+<li>Practical workflow habits to avoid hitting avoidable 429 project-level quota errors</li>
+</ul>
+</section>
 
 <h2>Guide 1: Install the app and confirm Windows trusts it</h2>
 <ol>
@@ -309,11 +324,11 @@ const CONTENT_TUTORIALS = `
 <li>Launch Tagyfy Pro. You should land on the empty dashboard with the upload drop zone visible.</li>
 </ol>
 
-<h2>Guide 2: Add an AI provider key</h2>
+<h2>Guide 2: Add an AI provider key (and why separate Google Cloud projects matter)</h2>
 <ol>
 <li>Open Settings and go to the AI provider section. Keys are stored locally on your own machine, not on a Tagyfy server.</li>
 <li>Create a key with your chosen provider: Google Gemini, OpenAI, Groq, or Mistral AI. Google AI Studio and Groq both offer free API tiers.</li>
-<li>Add more than one key if you have them. The app rotates through keys automatically and parks a key in a short cooldown when it hits a rate limit.</li>
+<li>If you add multiple Google Gemini keys for automatic key rotation, create each key inside its own separate Google Cloud project (1 key per project). Keys generated inside the same Google Cloud project share one project quota and will hit rate limits together.</li>
 <li>Choose the model used for vision analysis (such as Gemini 3.5 Flash-Lite or Groq Qwen 3.8 Vision).</li>
 <li>Run a single test image before committing to a large batch.</li>
 </ol>
@@ -337,10 +352,12 @@ const CONTENT_TUTORIALS = `
 </ol>
 
 <h2>Common questions</h2>
+<h3>Why do all my Gemini API keys hit rate limits at the same time?</h3>
+<p>Google enforces Gemini API free-tier quotas per Google Cloud project, not per individual API key. If you generated multiple keys inside a single project, they all draw from the same quota pool. Create separate Google Cloud projects with one Gemini API key per project so key rotation switches between independent project quotas.</p>
 <h3>Do I have to read every guide?</h3>
-<p>No. Guide 1 is needed once at install time and Guide 2 once per provider key. Guides 3 and 4 cover the settings and batch workflow you will run repeatedly.</p>
-<h3>Is there a video version?</h3>
-<p>Yes — the embedded video on this page demonstrates the browser metadata generator workflow in Urdu / Hindi audio (~9 minutes). For step-by-step English instructions covering Windows desktop installation, API key rotation, and batch file embedding, follow the four written guides above.</p>
+<p>No. Guide 1 is needed once at install time and Guide 2 once when setting up your provider keys. Guides 3 and 4 cover the settings and batch workflow you will run repeatedly.</p>
+<h3>Which video tutorials are included on this page?</h3>
+<p>This page embeds two tutorials directly: (1) our step-by-step guide on getting more free Google Gemini API quota using multiple Google Cloud projects, and (2) a full screen demonstration of the browser metadata generator workflow in Urdu / Hindi audio (~9 minutes).</p>
 <h3>Can I use this on Mac or Linux?</h3>
 <p>The desktop application currently ships for Windows 10 and 11 (64-bit) only. On Mac or Linux you can use the <a href="/tool">browser tool</a> and <a href="/metadata-checker">metadata checker</a>.</p>
 `;
@@ -740,6 +757,30 @@ const FAQ_SCHEMA = {
   })),
 };
 
+const GEMINI_QUOTA_VIDEO_SCHEMA = {
+  '@context': 'https://schema.org',
+  '@type': 'VideoObject',
+  name: 'How to Get More Free Gemini API Quota Using Multiple Google Cloud Projects',
+  description:
+    'Step-by-step tutorial explaining why multiple Gemini API keys inside a single Google Cloud project share the same quota limits, and how creating separate Google Cloud projects with one Gemini API key per project provides independent project quotas for AI tools and batch workflows.',
+  thumbnailUrl: [
+    'https://i.ytimg.com/vi/58nm1hZVvTs/maxresdefault.jpg',
+    'https://i.ytimg.com/vi/58nm1hZVvTs/hqdefault.jpg',
+  ],
+  embedUrl: 'https://www.youtube.com/embed/58nm1hZVvTs',
+  contentUrl: 'https://www.youtube.com/watch?v=58nm1hZVvTs',
+  uploadDate: '2026-10-30',
+  publisher: {
+    '@type': 'Organization',
+    name: 'Tagyfy Pro',
+    url: SITE_URL,
+    logo: {
+      '@type': 'ImageObject',
+      url: `${SITE_URL}/icon.jpg`,
+    },
+  },
+};
+
 const articleSchema = (post: (typeof BLOG_POSTS)[number]) => ({
   '@context': 'https://schema.org',
   '@type': 'Article',
@@ -794,7 +835,7 @@ const PAGES: PageSpec[] = [
   { path: '/download', title: 'Download Tagyfy Pro for Windows | Trial, Verification & Uninstall Info', desc: 'Download Tagyfy Pro v1.3.6 for Windows 10 and 11. Includes 3-day free trial, publisher verification details, system requirements, and complete uninstallation steps.', content: CONTENT_DOWNLOAD, adsense: false, lastmod: '2026-10-26', changefreq: 'weekly', priority: '0.8', schema: [breadcrumb([{ name: 'Home', path: '/' }, { name: 'Download', path: '/download' }])] },
   { path: '/contact', title: 'Contact & Support | Tagyfy Pro', desc: 'Get direct help from developer Salman Ahmad for Tagyfy Pro license keys, refunds, technical troubleshooting, or editorial corrections.', content: CONTENT_CONTACT, adsense: false, lastmod: '2026-10-26', changefreq: 'monthly', priority: '0.7', schema: [breadcrumb([{ name: 'Home', path: '/' }, { name: 'Contact', path: '/contact' }])] },
   { path: '/faq', title: 'Frequently Asked Questions | Tagyfy Pro', desc: 'Answers to common questions about Tagyfy Pro: supported AI providers, 10 media formats, trademark detection, batch processing, CSV exports, API key safety, and licensing.', content: CONTENT_FAQ, adsense: true, lastmod: '2026-10-26', changefreq: 'monthly', priority: '0.8', schema: [FAQ_SCHEMA, breadcrumb([{ name: 'Home', path: '/' }, { name: 'FAQ', path: '/faq' }])] },
-  { path: '/tutorials', title: 'Setup Guides & Walkthrough | Tagyfy Pro', desc: 'Four step-by-step English written setup guides covering Windows installation, API key rotation, metadata rules, and batch IPTC/XMP embedding.', content: CONTENT_TUTORIALS, adsense: true, lastmod: '2026-10-26', changefreq: 'monthly', priority: '0.8', schema: [breadcrumb([{ name: 'Home', path: '/' }, { name: 'Tutorials', path: '/tutorials' }])] },
+  { path: '/tutorials', title: 'Tutorials & Video Guides — Gemini API Quota & Batch Setup | Tagyfy Pro', desc: 'Step-by-step video tutorials and written guides: learn how to get more free Google Gemini API quota across multiple Google Cloud projects, configure multi-key rotation, and run metadata batches in Tagyfy Pro.', content: CONTENT_TUTORIALS, adsense: true, lastmod: '2026-10-30', changefreq: 'monthly', priority: '0.8', schema: [GEMINI_QUOTA_VIDEO_SCHEMA, breadcrumb([{ name: 'Home', path: '/' }, { name: 'Tutorials & Video Guides', path: '/tutorials' }])] },
   { path: '/blogs', title: 'Blog — Stock Contributor Knowledge Base | Tagyfy Pro', desc: 'Practitioner-written guides for stock media contributors: IPTC/XMP metadata standards, marketplace title and keyword rules, model and property releases, vector pre-flight checks, and CSV workflows.', content: CONTENT_BLOGS, adsense: true, lastmod: '2026-10-26', changefreq: 'weekly', priority: '0.9', schema: [breadcrumb([{ name: 'Home', path: '/' }, { name: 'Guides', path: '/blogs' }])] },
   { path: '/chrome-extension', title: 'Free Adobe Stock Chrome Extension | Tagyfy Pro', desc: 'Free Chrome extension for Adobe Stock contributors. Generate and review metadata drafts inside the contributor dashboard using Gemini, OpenAI, Groq, and Mistral AI.', content: CONTENT_CHROME_EXTENSION, adsense: false, lastmod: '2026-10-26', changefreq: 'monthly', priority: '0.7', schema: [breadcrumb([{ name: 'Home', path: '/' }, { name: 'Chrome extension', path: '/chrome-extension' }])] },
   { path: '/tool', title: 'Free Online Metadata Generator Tool | Tagyfy Pro', desc: 'Generate draft titles, descriptions, and keywords for stock images and videos in your browser. Try the instant Sample Demo with no API key or connect Gemini, OpenAI, Groq, or Mistral.', content: CONTENT_TOOL, adsense: false, lastmod: '2026-10-26', changefreq: 'weekly', priority: '0.9', schema: [WEBAPP_SCHEMA, breadcrumb([{ name: 'Home', path: '/' }, { name: 'Free tool', path: '/tool' }])] },

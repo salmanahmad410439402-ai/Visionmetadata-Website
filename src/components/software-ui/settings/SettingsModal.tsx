@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { toast } from "sonner";
+import { openQuotaTutorialModal } from "../modals/QuotaTutorialModal";
 import {
   Dialog,
   DialogContent,
@@ -535,6 +536,24 @@ export const SettingsModal = ({ open, onOpenChange, firstRunSetupProps }: Settin
                     <span className="font-mono text-foreground font-semibold"> sk-…</span> (OpenAI),
                     <span className="font-mono text-foreground font-semibold"> gsk_…</span> (Groq).
                   </p>
+
+                  <div className="rounded-xl border border-primary/25 bg-primary/5 px-3.5 py-2.5 text-[11px] sm:text-xs text-muted-foreground leading-relaxed">
+                    <span className="font-bold text-foreground">Adding multiple Gemini keys?</span>{" "}
+                    Keys generated inside the same Google Cloud project share one quota limit. Create{" "}
+                    <span className="font-semibold text-foreground">1 key per separate project</span>{" "}
+                    for independent quotas —{" "}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        onOpenChange(false);
+                        openQuotaTutorialModal();
+                      }}
+                      className="font-semibold text-primary underline underline-offset-2 hover:text-primary/80 cursor-pointer"
+                    >
+                      watch step-by-step tutorial
+                    </button>
+                    .
+                  </div>
 
                   {/* Active Keys List */}
                   <AnimatePresence>

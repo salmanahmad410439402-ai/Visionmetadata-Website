@@ -12,11 +12,14 @@ import {
   Loader2,
   AlertTriangle,
   Video,
-  RefreshCw
+  RefreshCw,
+  Play,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ConfidenceTooltip } from "./ConfidenceTooltip";
 import { downloadAssetWithMetadata } from "@/lib/metadataEmbedder";
+import { isQuotaOrRateLimitError } from "@/lib/errorSanitizer";
+import { openQuotaTutorialModal } from "../modals/QuotaTutorialModal";
 import { toast } from "sonner";
 
 interface AssetListItemProps {
@@ -101,7 +104,7 @@ export const AssetListItem = ({ asset, onGenerate, isSelected, onToggleSelect, s
             Generating
           </Badge>
         );
-      case "complete":
+      case "complete": {
         const confidence = asset.metadata?.confidence ?? 0;
         return (
           <ConfidenceTooltip
@@ -110,6 +113,7 @@ export const AssetListItem = ({ asset, onGenerate, isSelected, onToggleSelect, s
             riskFlags={asset.metadata?.riskAnalysis?.flags ?? []}
           />
         );
+      }
       case "error":
         return (
           <Badge variant="destructive">
@@ -175,6 +179,11 @@ export const AssetListItem = ({ asset, onGenerate, isSelected, onToggleSelect, s
             {asset.metadata.title}
           </p>
         )}
+        {asset.status === "error" && asset.error && (
+          <p className="text-xs text-destructive truncate mt-1">
+            {asset.error}
+          </p>
+        )}
       </div>
 
       {/* Keywords Count */}
@@ -193,6 +202,18 @@ export const AssetListItem = ({ asset, onGenerate, isSelected, onToggleSelect, s
 
       {/* Actions */}
       <div className="flex items-center gap-1">
+        {asset.status === "error" && isQuotaOrRateLimitError(asset.error) && (
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            className="h-8 gap-1.5 text-xs border-primary/40 text-primary"
+            onClick={openQuotaTutorialModal}
+          >
+            <Play className="h-3 w-3 fill-current" />
+            <span className="hidden sm:inline">Free Quota Video</span>
+          </Button>
+        )}
         {asset.status === "error" && (
           <Button
             variant="ghost"
