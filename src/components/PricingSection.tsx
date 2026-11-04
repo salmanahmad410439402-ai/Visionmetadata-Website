@@ -211,9 +211,9 @@ I have read the refund policy. Please send me the payment details.`;
                       .getElementById("order")
                       ?.scrollIntoView({ behavior: "smooth", block: "center" });
                   }}
-                  className={`w-full flex items-center justify-center py-3.5 rounded-xl text-sm font-bold transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] ${
+                  className={`w-full flex items-center justify-center py-3.5 rounded-xl text-sm font-bold transition-all duration-200 ${
                     plan.highlighted
-                      ? "btn-shimmer border border-primary/50"
+                      ? "bg-primary text-primary-foreground hover:bg-primary/90 shadow-md shadow-primary/20"
                       : "bg-secondary text-foreground hover:bg-secondary/80"
                   }`}
                 >
@@ -282,7 +282,7 @@ I have read the refund policy. Please send me the payment details.`;
               href={waLink(orderMessage)}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-1 flex items-center justify-center gap-2 py-4 rounded-xl text-sm font-bold btn-shimmer border border-primary/50 hover:scale-[1.01] transition-transform"
+              className="flex-1 flex items-center justify-center gap-2 py-4 rounded-xl text-sm font-bold bg-primary text-primary-foreground hover:bg-primary/90 shadow-md shadow-primary/20 transition-colors"
             >
               Continue on WhatsApp
             </a>

@@ -105,8 +105,8 @@ const ChromeExtension = () => {
           {/* Smooth Scroll Button to Bottom */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <a href="#download-section" className="w-full sm:w-auto">
-              <Button size="lg" className="w-full sm:w-auto h-14 px-8 text-base font-bold rounded-2xl btn-shimmer bg-gradient-flow text-white shadow-[0_0_35px_hsl(var(--primary)/0.35)] hover:shadow-[0_0_50px_hsl(var(--primary)/0.5)] hover:scale-[1.02] transition-all duration-300 border-0">
-                <ArrowDown className="w-5 h-5 mr-2 animate-bounce" />
+              <Button size="lg" className="w-full sm:w-auto h-14 px-8 text-base font-bold rounded-2xl bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg shadow-primary/25 transition-all duration-200">
+                <ArrowDown className="w-5 h-5 mr-2" />
                 Scroll to Free Download (.zip)
               </Button>
             </a>
@@ -365,7 +365,7 @@ const ChromeExtension = () => {
                 >
                   <Button
                     size="lg"
-                    className="w-full sm:w-auto h-16 px-10 text-lg font-bold rounded-2xl btn-shimmer bg-gradient-flow text-white shadow-[0_0_40px_hsl(var(--primary)/0.4)] hover:shadow-[0_0_60px_hsl(var(--primary)/0.6)] hover:scale-[1.03] transition-all duration-300 border-0"
+                    className="w-full sm:w-auto h-16 px-10 text-lg font-bold rounded-2xl bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg shadow-primary/25 transition-all duration-200"
                   >
                     <Download className="w-6 h-6 mr-3" />
                     Download Free Extension (.zip)

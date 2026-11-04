@@ -99,7 +99,7 @@ const DownloadSection = () => {
             <div className="flex flex-col sm:flex-row gap-4 mb-12">
               <a href={INSTALLER_URL} className="flex-1 sm:flex-none" target="_blank" rel="noopener noreferrer">
                 <Button size="lg"
-                  className="w-full sm:w-auto h-16 px-10 text-lg font-bold rounded-2xl btn-shimmer bg-gradient-flow text-white shadow-[0_0_40px_hsl(var(--primary)/0.4)] hover:shadow-[0_0_60px_hsl(var(--primary)/0.6)] hover:scale-[1.02] transition-all duration-300 border-0">
+                  className="w-full sm:w-auto h-16 px-10 text-lg font-bold rounded-2xl bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg shadow-primary/25 transition-all duration-200">
                   <Download className="w-6 h-6 mr-3" />
                   Download Free Trial
                 </Button>
@@ -313,7 +313,7 @@ const DownloadSection = () => {
           </p>
           <a href={INSTALLER_URL} target="_blank" rel="noopener noreferrer" className="block sm:inline-block w-full sm:w-auto">
             <Button size="lg"
-              className="h-14 sm:h-16 w-full sm:w-auto px-4 sm:px-12 text-sm sm:text-lg font-bold rounded-2xl btn-shimmer bg-gradient-flow text-white shadow-[0_0_40px_hsl(var(--primary)/0.4)] hover:shadow-[0_0_60px_hsl(var(--primary)/0.6)] hover:scale-[1.02] transition-all duration-300 whitespace-normal text-center h-auto py-3 border-0">
+              className="sm:h-16 w-full sm:w-auto px-4 sm:px-12 text-sm sm:text-lg font-bold rounded-2xl bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg shadow-primary/25 transition-all duration-200 whitespace-normal text-center h-auto py-3">
               <Download className="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3 shrink-0" />
               Download free trial (~160 MB)
             </Button>

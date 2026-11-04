@@ -490,7 +490,7 @@ const BlogPost = () => {
               <Link to="/tool" className="w-full sm:w-auto">
                 <Button
                   size="lg"
-                  className="w-full sm:w-auto rounded-xl bg-gradient-flow text-white font-bold px-6 shadow-md"
+                  className="w-full sm:w-auto rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 font-bold px-6 shadow-md transition-colors"
                 >
                   Try Free Online Web Tool
                 </Button>

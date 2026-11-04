@@ -159,7 +159,7 @@ const AboutUs = () => {
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <Link to="/blogs">
-              <Button size="lg" className="w-full sm:w-auto h-14 px-8 font-bold rounded-xl btn-shimmer bg-gradient-flow text-white border-0">
+              <Button size="lg" className="w-full sm:w-auto h-14 px-8 font-bold rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg shadow-primary/20 transition-all duration-200">
                 Read Contributor Guides
               </Button>
             </Link>
