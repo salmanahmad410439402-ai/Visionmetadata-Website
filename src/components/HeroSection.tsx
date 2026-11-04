@@ -40,7 +40,7 @@ const HeroSection = () => {
         {/* CTA */}
         <div className="reveal reveal-delay-3 flex flex-col sm:flex-row items-center gap-4 justify-center mb-8">
           <Link to="/tool">
-            <Button size="lg" className="w-full sm:w-auto h-16 px-8 text-base font-bold rounded-2xl btn-shimmer bg-gradient-flow text-white shadow-[0_0_40px_hsl(var(--primary)/0.4)] hover:shadow-[0_0_60px_hsl(var(--primary)/0.6)] hover:scale-[1.02] transition-all duration-300 border-0">
+            <Button size="lg" className="w-full sm:w-auto h-16 px-8 text-base font-bold rounded-2xl bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg shadow-primary/25 transition-all duration-200">
               <Sparkles className="w-5 h-5 mr-2" />
               Try Free Online Tool
             </Button>

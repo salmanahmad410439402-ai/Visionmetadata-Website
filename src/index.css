@@ -136,29 +136,9 @@
 .reveal-delay-5 { transition-delay: 0.40s; }
 .reveal-delay-6 { transition-delay: 0.48s; }
 
-/* ── Shimmer on CTA button ────────────────────────────────────── */
-@keyframes shimmer {
-  0%   { background-position: -200% center; }
-  100% { background-position:  200% center; }
-}
-
+/* ── Solid Primary CTA utility (replaces legacy shimmer/flowing button animations) ── */
 .btn-shimmer {
   position: relative;
-  overflow: hidden;
-}
-.btn-shimmer::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    105deg,
-    transparent 40%,
-    rgba(255,255,255,0.12) 50%,
-    transparent 60%
-  );
-  background-size: 200% 100%;
-  animation: shimmer 2.8s linear infinite;
-  pointer-events: none;
 }
 
 /* ── Animated grid background ─────────────────────────────────── */
@@ -255,13 +235,11 @@ html.light .glass-panel {
 }
 
 .bg-gradient-flow {
-  background: linear-gradient(to right, #10B981, #4F46E5, #3b82f6);
-  background-size: 200% auto;
-  color: white;
-  animation: gradientFlow 4s linear infinite;
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
 }
 .bg-gradient-flow:hover {
-  background-position: right center;
+  opacity: 0.92;
 }
 
 /* ── Neon Hover Cards ───────────────────────────────────────────── */

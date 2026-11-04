@@ -189,7 +189,7 @@ export const DirectEmbeddingShowcase = () => {
           {/* Action Row below table */}
           <div className="mt-8 pt-8 border-t border-border/60 flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link to="/tool" className="w-full sm:w-auto">
-              <Button size="lg" className="w-full sm:w-auto h-14 px-8 text-sm sm:text-base font-bold rounded-2xl bg-gradient-flow text-white shadow-[0_0_30px_hsl(var(--primary)/0.35)] hover:scale-[1.02] transition-all border-0">
+              <Button size="lg" className="w-full sm:w-auto h-14 px-8 text-sm sm:text-base font-bold rounded-2xl bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg shadow-primary/25 transition-all duration-200">
                 <Sparkles className="w-4 h-4 mr-2" />
                 Launch Free Online Web Tool
               </Button>

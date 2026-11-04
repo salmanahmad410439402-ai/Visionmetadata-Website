@@ -138,7 +138,7 @@ const PaymentMethods = () => {
                 href={CARD_CHECKOUT}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="shrink-0 inline-flex items-center justify-center px-6 py-3.5 rounded-xl text-sm font-bold btn-shimmer border border-primary/50 hover:scale-[1.02] transition-transform"
+                className="shrink-0 inline-flex items-center justify-center px-6 py-3.5 rounded-xl text-sm font-bold bg-primary text-primary-foreground hover:bg-primary/90 shadow-md shadow-primary/20 transition-colors"
               >
                 <CreditCard className="w-4 h-4 mr-2" />
                 Pay by card

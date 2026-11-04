@@ -92,7 +92,7 @@ const Index = () => {
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
               <Link to="/tool" className="w-full sm:w-auto">
-                <Button size="lg" className="w-full sm:w-auto h-14 px-8 text-base font-bold rounded-2xl bg-gradient-flow text-white shadow-[0_0_35px_hsl(var(--primary)/0.4)] hover:scale-[1.02] transition-all border-0">
+                <Button size="lg" className="w-full sm:w-auto h-14 px-8 text-base font-bold rounded-2xl bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg shadow-primary/25 transition-all duration-200">
                   <Sparkles className="w-4 h-4 mr-2" />
                   Try Free Web Tool Now
                 </Button>
