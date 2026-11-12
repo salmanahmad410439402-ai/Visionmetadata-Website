@@ -4,7 +4,6 @@ import { describe, expect, it, vi } from "vitest";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import TutorialsSection, { GEMINI_QUOTA_VIDEO_ID } from "@/components/TutorialsSection";
-import ToolGuide from "@/components/tool/ToolGuide";
 import { videoTutorialSchema } from "@/lib/structuredData";
 import { formatErrorForUser, isQuotaOrRateLimitError } from "@/lib/errorSanitizer";
 import {
@@ -54,25 +53,10 @@ describe("Gemini API Multi-Project Free Quota Tutorial Integration", () => {
     expect(screen.getByText(/Correct Setup · Multiple Projects, 1 Key Each/i)).toBeInTheDocument();
   });
 
-  it("integrates contextual lazy-loaded video tutorial and deep-link inside ToolGuide", () => {
-    render(
-      <MemoryRouter initialEntries={["/tool"]}>
-        <ToolGuide />
-      </MemoryRouter>
-    );
-
-    const iframe = screen.getByTitle(
-      "How to Get More Free Gemini API Quota Using Multiple Google Cloud Projects"
-    ) as HTMLIFrameElement;
-
-    expect(iframe.getAttribute("src")).toBe("https://www.youtube.com/embed/58nm1hZVvTs?rel=0");
-    expect(iframe.getAttribute("src")).not.toContain("autoplay=1");
-    expect(iframe.getAttribute("loading")).toBe("lazy");
-
-    const fullBreakdownLink = screen.getByRole("link", {
-      name: /Read full breakdown on the Tutorials page/i,
-    });
-    expect(fullBreakdownLink.getAttribute("href")).toBe("/tutorials#gemini-api-quota-tutorial");
+  it("keeps /tool focused on the workspace without rendering the removed ToolGuide article block below it", () => {
+    const toolPageSrc = fs.readFileSync(path.join(ROOT, "src/pages/Tool.tsx"), "utf8");
+    expect(toolPageSrc).not.toContain("ToolGuide");
+    expect(toolPageSrc).not.toContain("What the free browser tool does");
   });
 
   it("emits accurate VideoObject structured data for video 58nm1hZVvTs", () => {

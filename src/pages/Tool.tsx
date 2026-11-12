@@ -4,9 +4,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { SettingsProvider } from '@/contexts/SettingsContext';
 import { AssetsProvider } from '@/contexts/AssetsContext';
 import { Dashboard } from '@/components/software-ui/dashboard/Dashboard';
-import ToolGuide from '@/components/tool/ToolGuide';
 import { JsonLd, webAppSchema } from '@/lib/structuredData';
-import { Play, Sparkles, X, Video } from 'lucide-react';
+import { Play, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 
@@ -88,9 +87,6 @@ export const ToolPage: React.FC = () => {
           <main className="flex-1 w-full max-w-[1920px] mx-auto px-2 sm:px-4 lg:px-6 py-4">
             <Dashboard />
           </main>
-
-          {/* Supporting content — see ToolGuide for why this exists on the page */}
-          <ToolGuide />
         </div>
       </AssetsProvider>
     </SettingsProvider>
