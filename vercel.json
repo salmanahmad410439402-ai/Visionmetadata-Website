@@ -6,7 +6,57 @@
   "trailingSlash": false,
   "redirects": [
     { "source": "/blog", "destination": "/blogs", "permanent": true },
-    { "source": "/blog/", "destination": "/blogs", "permanent": true }
+    { "source": "/blog/", "destination": "/blogs", "permanent": true },
+    { "source": "/blogs/:slug", "destination": "/blog/:slug", "permanent": true },
+    { "source": "/app", "destination": "/tool", "permanent": true },
+    { "source": "/app/:path*", "destination": "/tool", "permanent": true },
+    {
+      "source": "/blog/how-to-prompt-ai-for-adobe-stock-commercial-formulas",
+      "destination": "/blog/i-wasted-200-generations-how-ai-actually-sees-prompts",
+      "permanent": true
+    },
+    {
+      "source": "/blog/why-adobe-stock-contributor-accounts-get-suspended-common-mistakes",
+      "destination": "/blog/common-mistakes-account-suspension-adobe-stock",
+      "permanent": true
+    },
+    {
+      "source": "/blog/how-ai-actually-sees-your-prompt-guide",
+      "destination": "/blog/i-wasted-200-generations-how-ai-actually-sees-prompts",
+      "permanent": true
+    },
+    {
+      "source": "/blog/why-best-photo-rejected-adobe-stock-secret",
+      "destination": "/blog/why-does-your-best-photo-keep-getting-rejected-adobe-stock-secret",
+      "permanent": true
+    },
+    {
+      "source": "/blog/adobe-stock-account-suspension-mistakes",
+      "destination": "/blog/common-mistakes-account-suspension-adobe-stock",
+      "permanent": true
+    },
+    {
+      "source": "/blog/mastering-stock-metadata-seo-ranking-guide",
+      "destination": "/blog/mastering-stock-metadata-title-seo-keyword-guide",
+      "permanent": true
+    },
+    {
+      "source": "/Tagyfy_Pro_Chrome_Extension.zip",
+      "destination": "/Tagyfy_Pro_Chrome_Extension_V1.3.6.zip",
+      "permanent": true
+    },
+    {
+      "source": "/Tagyfy_Pro_Chrome_Extension_V1.3.5.zip",
+      "destination": "/Tagyfy_Pro_Chrome_Extension_V1.3.6.zip",
+      "permanent": true
+    },
+    { "source": "/thumbnail.png", "destination": "/thumbnail.jpg", "permanent": true },
+    { "source": "/favicon.ico", "destination": "/icon.ico", "permanent": true },
+    { "source": "/privacy", "destination": "/privacy-policy", "permanent": true },
+    { "source": "/terms-of-service", "destination": "/terms", "permanent": true },
+    { "source": "/refund", "destination": "/refund-policy", "permanent": true },
+    { "source": "/about-us", "destination": "/about", "permanent": true },
+    { "source": "/guides", "destination": "/blogs", "permanent": true }
   ],
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api/$1" }

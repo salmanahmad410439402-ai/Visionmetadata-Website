@@ -1,6 +1,6 @@
 import { createRoot } from "react-dom/client";
 import { HelmetProvider } from "react-helmet-async";
-import App from "./App.tsx";
+import App, { preloadInitialRoute } from "./App.tsx";
 import { ThemeProvider } from "./hooks/useTheme.tsx";
 import "./index.css";
 import "./styles/colors.css";
@@ -22,10 +22,19 @@ if (typeof window !== "undefined") {
   });
 }
 
-createRoot(document.getElementById("root")!).render(
-  <HelmetProvider>
-    <ThemeProvider>
-      <App />
-    </ThemeProvider>
-  </HelmetProvider>
+const rootElement = document.getElementById("root")!;
+const mountApp = () => {
+  createRoot(rootElement).render(
+    <HelmetProvider>
+      <ThemeProvider>
+        <App />
+      </ThemeProvider>
+    </HelmetProvider>
+  );
+};
+
+// Keep the prerendered HTML visible in #root until any lazy initial workspace chunk has loaded
+preloadInitialRoute(typeof window !== "undefined" ? window.location.pathname : "/").then(
+  mountApp,
+  mountApp
 );

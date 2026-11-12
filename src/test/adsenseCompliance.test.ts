@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { BLOG_POSTS } from "../data/blogPosts";
+import { PLATFORMS } from "../data/platformLimits";
 import { isAdSenseEligiblePath } from "../components/ads/AdSenseLoader";
 import { createSampleDemoAsset } from "../lib/sampleDemoAsset";
 import { findTrademarks } from "../lib/trademarkSniffer";
@@ -19,8 +20,68 @@ describe("AdSense, Search Spam & Unwanted Software Compliance Guards", () => {
     expect(vercel.redirects).toEqual(
       expect.arrayContaining([
         expect.objectContaining({ source: "/blog", destination: "/blogs", permanent: true }),
+        expect.objectContaining({ source: "/blog/", destination: "/blogs", permanent: true }),
+        expect.objectContaining({ source: "/blogs/:slug", destination: "/blog/:slug", permanent: true }),
+        expect.objectContaining({ source: "/app", destination: "/tool", permanent: true }),
+        expect.objectContaining({
+          source: "/blog/how-to-prompt-ai-for-adobe-stock-commercial-formulas",
+          destination: "/blog/i-wasted-200-generations-how-ai-actually-sees-prompts",
+          permanent: true,
+        }),
+        expect.objectContaining({
+          source: "/blog/why-adobe-stock-contributor-accounts-get-suspended-common-mistakes",
+          destination: "/blog/common-mistakes-account-suspension-adobe-stock",
+          permanent: true,
+        }),
       ])
     );
+  });
+
+  it("never wraps AdSense editorial, reference, marketing, legal, or 404 routes in React.lazy (no Loading workspace wipeout)", () => {
+    const appSrc = readRepoFile("src/App.tsx");
+    for (const eagerPage of [
+      "Blogs",
+      "BlogPost",
+      "FAQ",
+      "Tutorials",
+      "PlatformLimits",
+      "EditorialPolicy",
+      "PrivacyPolicy",
+      "TermsOfService",
+      "RefundPolicy",
+      "AboutUs",
+      "Contact",
+      "Pricing",
+      "Download",
+      "Features",
+      "ChromeExtension",
+      "NotFound",
+    ]) {
+      expect(appSrc).not.toMatch(new RegExp(`lazy\\(\\(\\)\\s*=>\\s*import\\("./pages/${eagerPage}"\\)`));
+    }
+
+    const mainSrc = readRepoFile("src/main.tsx");
+    expect(mainSrc).toContain("preloadInitialRoute");
+  });
+
+  it("keeps platformLimits.ts 100% consistent with verified 6-agency CSV exporters and BOM rules", () => {
+    const shutterstock = PLATFORMS.find((p) => p.name === "Shutterstock");
+    expect(shutterstock).toBeDefined();
+    expect(JSON.stringify(shutterstock)).not.toMatch(/numeric category IDs/i);
+    expect(shutterstock!.csvFormat).toBe(
+      "Filename,Description,Keywords,Categories,Illustration,Mature Content,Editorial"
+    );
+
+    const freepik = PLATFORMS.find((p) => p.name === "Freepik");
+    expect(freepik).toBeDefined();
+    expect(freepik!.csvFormat).toContain("filename;title;tags");
+    expect(JSON.stringify(freepik)).not.toContain("File name, Title, Keywords");
+
+    const vecteezy = PLATFORMS.find((p) => p.name === "Vecteezy");
+    expect(JSON.stringify(vecteezy)).toMatch(/WITHOUT BOM|Do NOT include a UTF-8 BOM/i);
+
+    const dreamstime = PLATFORMS.find((p) => p.name === "Dreamstime");
+    expect(JSON.stringify(dreamstime)).toMatch(/WITHOUT BOM|Do NOT include a UTF-8 BOM/i);
   });
 
   it("keeps .reveal visible without JavaScript (no opacity: 0 cloaking/thin-DOM risk)", () => {
@@ -73,8 +134,8 @@ describe("AdSense, Search Spam & Unwanted Software Compliance Guards", () => {
     }
   });
 
-  it("enforces at least 14 original guides with valid ISO 8601 dates and clean factual claims", () => {
-    expect(BLOG_POSTS.length).toBeGreaterThanOrEqual(14);
+  it("enforces at least 20 original guides with unified author, primary sources, valid ISO dates, and clean factual claims", () => {
+    expect(BLOG_POSTS.length).toBeGreaterThanOrEqual(20);
     const isoDatePattern = /^\d{4}-\d{2}-\d{2}$/;
     const slugs = new Set<string>();
 
@@ -85,10 +146,21 @@ describe("AdSense, Search Spam & Unwanted Software Compliance Guards", () => {
       if (post.updatedDate) {
         expect(post.updatedDate, `${post.slug} updatedDate`).toMatch(isoDatePattern);
       }
+      expect(post.author.name).toBe("Salman Ahmad");
+      expect(post.author.role).toBe("Stock Contributor, Vector Designer & Developer");
+      expect(post.author.avatar).toBe("SA");
+      expect(post.sources && post.sources.length, `${post.slug} sources`).toBeGreaterThanOrEqual(1);
+
       const serialized = JSON.stringify(post);
       expect(serialized).not.toMatch(/C2PA/i);
       expect(serialized).not.toMatch(/\b3 strikes\b/i);
     }
+
+    // Ensure rewritten GSC 'Crawled - currently not indexed' slug is vendor-neutral technical documentation
+    const visionPost = BLOG_POSTS.find((p) => p.slug === "free-adobe-stock-metadata-generator");
+    expect(visionPost).toBeDefined();
+    expect(JSON.stringify(visionPost)).not.toMatch(/What Is Tagyfy|How to Use Tagyfy/i);
+    expect(visionPost!.content.sections.some((s) => Boolean(s.table))).toBe(true);
   });
 
   it("synchronizes public/sitemap.xml with /metadata-checker, /stock-csv-converter, /event-calendar, and every blog slug", () => {
@@ -174,7 +246,15 @@ describe("AdSense, Search Spam & Unwanted Software Compliance Guards", () => {
     expect(homeHtml).toContain('class="prerender-shell"');
     expect(homeHtml).toContain('class="prerender-header"');
     expect(homeHtml).toContain('class="prerender-card"');
+    expect(homeHtml).toContain('name="google-adsense-account"');
+    expect(homeHtml).toContain('href="/metadata-limits"');
+    expect(homeHtml).toContain('href="/blogs"');
     expect(html404).toContain('class="prerender-shell"');
+
+    // Non-AdSense pages strip google-adsense-account while AdSense editorial pages retain it
+    expect(pricingHtml).not.toContain('name="google-adsense-account"');
+    expect(checkerHtml).not.toContain('name="google-adsense-account"');
+    expect(blogsHtml).toContain('name="google-adsense-account"');
 
     const indexCss = readRepoFile("src/index.css");
     expect(indexCss).toContain(".prerender-shell");

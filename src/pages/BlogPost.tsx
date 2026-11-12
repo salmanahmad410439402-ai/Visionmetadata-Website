@@ -9,11 +9,13 @@ import {
   CheckCircle2,
   Lightbulb,
   Share2,
-  Sparkles,
   ShieldAlert,
-  Download,
   Bookmark,
   Check,
+  ExternalLink,
+  BookOpen,
+  TableProperties,
+  ClipboardCheck,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -173,7 +175,7 @@ const BlogPost = () => {
 
             {/* Author Strip */}
             <div className="flex items-center gap-3 pt-6 border-t border-border/50">
-              <div className="w-10 h-10 rounded-2xl bg-primary/15 border border-primary/25 flex items-center justify-center text-lg">
+              <div className="w-10 h-10 rounded-2xl bg-primary/15 border border-primary/25 flex items-center justify-center text-xs font-black text-primary tracking-wider">
                 {currentPost.author.avatar}
               </div>
               <div>
@@ -252,6 +254,62 @@ const BlogPost = () => {
                     return <p key={pIdx}>{renderFormattedText(paragraph)}</p>;
                   })}
                 </div>
+
+                {/* Structured Reference Table */}
+                {section.table && (
+                  <div className="rounded-2xl border border-border/80 bg-card/60 overflow-hidden shadow-sm">
+                    {section.table.caption && (
+                      <div className="px-4 sm:px-5 py-3 border-b border-border/70 bg-muted/30 text-xs font-bold uppercase tracking-wider text-primary">
+                        {section.table.caption}
+                      </div>
+                    )}
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-left border-collapse text-xs sm:text-sm">
+                        <thead>
+                          <tr className="border-b border-border/70 bg-muted/20">
+                            {section.table.headers.map((header, hIdx) => (
+                              <th
+                                key={hIdx}
+                                scope="col"
+                                className="px-4 py-3 font-bold text-foreground whitespace-nowrap"
+                              >
+                                {header}
+                              </th>
+                            ))}
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-border/50">
+                          {section.table.rows.map((row, rIdx) => (
+                            <tr key={rIdx} className="hover:bg-muted/15 transition-colors">
+                              {row.map((cell, cIdx) => (
+                                <td
+                                  key={cIdx}
+                                  className={`px-4 py-3 align-top leading-relaxed ${
+                                    cIdx === 0 ? "font-semibold text-foreground" : "text-secondary"
+                                  }`}
+                                >
+                                  {renderFormattedText(cell)}
+                                </td>
+                              ))}
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                )}
+
+                {/* Technical Packet / CSV / Schema Code Block */}
+                {section.codeBlock && (
+                  <div className="rounded-2xl border border-border/80 bg-muted/30 overflow-hidden">
+                    <div className="px-4 py-2.5 border-b border-border/60 bg-muted/40 text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
+                      {section.codeBlock.label}
+                    </div>
+                    <pre className="p-4 overflow-x-auto text-xs font-mono text-foreground/90 leading-relaxed">
+                      <code>{section.codeBlock.code}</code>
+                    </pre>
+                  </div>
+                )}
 
                 {/* Key Takeaways list if provided */}
                 {section.keyTakeaways && section.keyTakeaways.length > 0 && (
@@ -405,6 +463,34 @@ const BlogPost = () => {
             </div>
           )}
 
+          {/* Primary Sources & Official Documentation Referenced */}
+          {currentPost.sources && currentPost.sources.length > 0 && (
+            <section className="glass-panel rounded-3xl p-6 sm:p-8 border border-border/80 mb-10 space-y-4">
+              <h2 className="text-base sm:text-lg font-black text-foreground flex items-center gap-2">
+                <BookOpen className="w-4 h-4 text-primary" />
+                Official Documentation &amp; Standards Referenced
+              </h2>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Marketplace specifications evolve independently. Verify current submission policies against the primary official sources below:
+              </p>
+              <ul className="space-y-2.5 text-xs sm:text-sm">
+                {currentPost.sources.map((src, sIdx) => (
+                  <li key={sIdx}>
+                    <a
+                      href={src.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 font-semibold text-primary hover:text-primary/80 underline"
+                    >
+                      <span>{src.label}</span>
+                      <ExternalLink className="w-3.5 h-3.5 shrink-0" />
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+
           {/* Related Guides */}
           {relatedPosts.length > 0 && (
             <section className="mb-10 space-y-4">
@@ -439,7 +525,7 @@ const BlogPost = () => {
           <div className="glass-panel rounded-3xl p-6 sm:p-8 border border-border/80 mb-8">
             <h2 className="text-lg font-black text-foreground mb-4">About the author</h2>
             <div className="flex items-start gap-4">
-              <div className="w-12 h-12 rounded-2xl bg-primary/15 border border-primary/25 flex items-center justify-center text-xl shrink-0">
+              <div className="w-12 h-12 rounded-2xl bg-primary/15 border border-primary/25 flex items-center justify-center text-sm font-black text-primary tracking-wider shrink-0">
                 {currentPost.author.avatar}
               </div>
               <div className="space-y-2">
@@ -474,36 +560,50 @@ const BlogPost = () => {
             </div>
           </div>
 
-          {/* Bottom Conversion CTA Card */}
-          <div className="glass-panel rounded-3xl p-6 sm:p-8 border border-border/80 text-center space-y-4 shadow-2xl relative overflow-hidden">
-            <div className="w-12 h-12 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary mx-auto">
-              <Sparkles className="w-6 h-6" />
-            </div>
-            <h3 className="text-xl sm:text-2xl font-black text-foreground">
-              Prepare &amp; Validate Your Metadata Faster
-            </h3>
-            <p className="text-xs sm:text-sm text-secondary max-w-lg mx-auto leading-relaxed">
-              Draft titles and ranked keywords in the browser tool, validate character limits and
-              trademarks in our free compliance checker, or review the Windows desktop app.
+          {/* Neutral Reference & Free Validation Resources */}
+          <div className="glass-panel rounded-3xl p-6 sm:p-8 border border-border/80 space-y-4">
+            <h2 className="text-base sm:text-lg font-black text-foreground">
+              Free reference tables &amp; browser validators
+            </h2>
+            <p className="text-xs sm:text-sm text-secondary leading-relaxed">
+              Cross-check character caps, CSV column headers, and trademark rules directly in your browser with no account or API key required:
             </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
-              <Link to="/tool" className="w-full sm:w-auto">
-                <Button
-                  size="lg"
-                  className="w-full sm:w-auto rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 font-bold px-6 shadow-md transition-colors"
-                >
-                  Try Free Online Web Tool
-                </Button>
+            <div className="grid sm:grid-cols-3 gap-3 pt-1">
+              <Link
+                to="/metadata-limits"
+                className="rounded-2xl border border-border/70 bg-card/50 hover:border-primary/50 p-4 transition-colors space-y-1"
+              >
+                <div className="flex items-center gap-2 text-xs font-bold text-primary">
+                  <TableProperties className="w-3.5 h-3.5" />
+                  <span>6-Agency Limits Table</span>
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Title caps, keyword ranges, BOM rules, and official CSV headers.
+                </p>
               </Link>
-              <Link to="/download" className="w-full sm:w-auto">
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="w-full sm:w-auto rounded-xl border-border/80 font-bold px-6"
-                >
-                  <Download className="w-4 h-4 mr-2 text-primary" />
-                  Windows Desktop App Details
-                </Button>
+              <Link
+                to="/metadata-checker"
+                className="rounded-2xl border border-border/70 bg-card/50 hover:border-primary/50 p-4 transition-colors space-y-1"
+              >
+                <div className="flex items-center gap-2 text-xs font-bold text-primary">
+                  <ClipboardCheck className="w-3.5 h-3.5" />
+                  <span>Metadata &amp; CSV Validator</span>
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Audit titles, top-10 keywords, trademarks, and uploaded CSV files.
+                </p>
+              </Link>
+              <Link
+                to="/blogs"
+                className="rounded-2xl border border-border/70 bg-card/50 hover:border-primary/50 p-4 transition-colors space-y-1"
+              >
+                <div className="flex items-center gap-2 text-xs font-bold text-primary">
+                  <BookOpen className="w-3.5 h-3.5" />
+                  <span>All Contributor Guides</span>
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Browse all {BLOG_POSTS.length} practitioner guides on stock workflows.
+                </p>
               </Link>
             </div>
           </div>
