@@ -1,0 +1,1164 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="light dark" />
+<link rel="icon" href="data:," />
+<title>Caution Tapes Vector Tool</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Black&family=Oswald:wght@700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#f4f4f2; --panel:#ffffff; --panel2:#ececea; --ink:#16181d; --muted:#5c6068;
+    --line:#d8d8d2; --accent:#f7b500; --danger:#d92b2b;
+    --ok:#1c7c43; --chip:#ffffff; --shadow:0 2px 10px rgba(20,20,20,.08);
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#131417; --panel:#1d1f24; --panel2:#26282e; --ink:#f0f0ec; --muted:#a7abb3;
+      --line:#35373e; --chip:#26282e; --shadow:0 2px 10px rgba(0,0,0,.4);
+    }
+  }
+  *{ box-sizing:border-box; }
+  html{ -webkit-text-size-adjust:100%; }
+  body{ margin:0; background:var(--bg); color:var(--ink);
+    font-family:"Segoe UI", system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif; }
+  button, select, input[type="text"], input[type="number"]{ min-height:2.75rem; font:inherit; }
+  button{ cursor:pointer; }
+  .hazardbar{ height:14px;
+    background:repeating-linear-gradient(45deg, var(--accent) 0 18px, #141414 18px 36px); }
+  .wrap{ max-width:1180px; margin:0 auto; padding:20px 16px 64px; }
+  header.hero{ padding:10px 0 4px; }
+  header.hero h1{ font-size:clamp(26px,4.5vw,40px); line-height:1.08; margin:6px 0 8px;
+    font-weight:800; letter-spacing:-.01em; }
+  header.hero h1 .hl{ background:var(--accent); color:#141414; padding:0 .18em;
+    box-decoration-break:clone; -webkit-box-decoration-break:clone; }
+  header.hero p{ color:var(--muted); max-width:72ch; margin:0; font-size:15.5px; line-height:1.55; }
+  section.panel{ background:var(--panel); border:1px solid var(--line); border-radius:12px;
+    padding:18px; margin-top:18px; box-shadow:var(--shadow); }
+  section.panel h2{ font-size:19px; margin:0 0 14px; font-weight:800; }
+  .grid2{ display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+  @media (max-width:760px){ .grid2{ grid-template-columns:1fr; } }
+  .fld label{ display:block; font-size:12.5px; font-weight:700; letter-spacing:.06em;
+    text-transform:uppercase; color:var(--muted); margin:0 0 7px; }
+  .fld{ margin-bottom:16px; }
+  select, input[type="text"], input[type="number"]{ width:100%; background:var(--chip); color:var(--ink);
+    border:1px solid var(--line); border-radius:8px; padding:10px 12px; }
+  input[type="range"]{ width:100%; accent-color:#e8a400; min-height:2rem; margin-top:10px; }
+  .numrow{ display:flex; align-items:center; gap:10px; margin-top:10px; }
+  .numrow input[type="number"]{ width:110px; }
+  .numrow span{ font-size:13.5px; color:var(--muted); }
+  .chips{ display:flex; flex-wrap:wrap; gap:8px; }
+  .chip{ border:1.5px solid var(--line); background:var(--chip); color:var(--ink);
+    border-radius:999px; padding:9px 14px; font-size:13.5px; font-weight:600; min-height:2.5rem; }
+  .chip[aria-pressed="true"]{ border-color:var(--ink); background:var(--ink); color:var(--bg); }
+  .swatches{ display:grid; grid-template-columns:repeat(auto-fill,minmax(118px,1fr)); gap:8px; }
+  .sw{ border:2px solid var(--line); border-radius:9px; padding:7px; background:var(--chip);
+    text-align:left; min-height:3.4rem; }
+  .sw[aria-pressed="true"]{ border-color:var(--ink); box-shadow:0 0 0 2px var(--accent); }
+  .sw .bar{ display:block; height:16px; border-radius:4px; border:1px solid rgba(0,0,0,.25); margin-bottom:5px; }
+  .sw .nm{ font-size:12px; font-weight:700; line-height:1.25; display:block; }
+  .seg{ display:flex; border:1.5px solid var(--line); border-radius:9px; overflow:hidden; }
+  .seg button{ flex:1; border:0; background:var(--chip); color:var(--ink); font-weight:700;
+    padding:10px 6px; font-size:14px; }
+  .seg button[aria-pressed="true"]{ background:var(--ink); color:var(--bg); }
+  .previewbox{ background:
+      repeating-conic-gradient(#cfcfcf 0% 25%, #f4f4f4 0% 50%) 0 0/22px 22px;
+    border:1px solid var(--line); border-radius:10px; padding:14px; overflow:hidden; }
+  @media (prefers-color-scheme: dark){
+    .previewbox{ background:repeating-conic-gradient(#2c2e33 0% 25%, #22242a 0% 50%) 0 0/22px 22px; }
+  }
+  .previewbox svg{ display:block; width:100%; height:auto; }
+  .btnrow{ display:flex; flex-wrap:wrap; gap:10px; margin-top:10px; align-items:center; }
+  .btn{ border-radius:9px; border:1.5px solid var(--ink); padding:11px 18px; font-weight:800;
+    font-size:14.5px; background:var(--panel); color:var(--ink); min-height:3rem; }
+  .btn.primary{ background:var(--accent); border-color:#141414; color:#141414; }
+  .btn.dark{ background:var(--ink); color:var(--bg); }
+  .btn.small{ padding:8px 12px; font-size:13px; min-height:2.6rem; border-width:1px; }
+  .btn:disabled{ opacity:.45; cursor:not-allowed; }
+  .rowlabel{ font-size:12.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase;
+    color:var(--muted); margin:16px 0 0; }
+  .meta{ font-size:13px; color:var(--muted); margin-top:10px; line-height:1.55; }
+  .meta b{ color:var(--ink); }
+  .cards{ display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:16px; margin-top:16px; }
+  @media (max-width:480px){ .cards{ grid-template-columns:1fr; } }
+  .card{ background:var(--panel); border:1px solid var(--line); border-radius:12px; overflow:hidden;
+    box-shadow:var(--shadow); display:flex; flex-direction:column; }
+  .card .thumb{ padding:12px;
+    background:repeating-conic-gradient(#cfcfcf 0% 25%, #f4f4f4 0% 50%) 0 0/20px 20px; }
+  @media (prefers-color-scheme: dark){
+    .card .thumb{ background:repeating-conic-gradient(#2c2e33 0% 25%, #22242a 0% 50%) 0 0/20px 20px; }
+  }
+  .card .thumb svg{ display:block; width:100%; height:auto; }
+  .card .body{ padding:13px 14px 15px; display:flex; flex-direction:column; gap:8px; flex:1; }
+  .card h3{ font-size:15px; margin:0; line-height:1.35; }
+  .card .kw{ font-size:12px; color:var(--muted); line-height:1.5; word-break:break-word; }
+  .card .acts{ display:flex; flex-wrap:wrap; gap:7px; margin-top:auto; }
+  .card .acts .lbl{ width:100%; font-size:11.5px; font-weight:700; letter-spacing:.05em;
+    text-transform:uppercase; color:var(--muted); margin-top:4px; }
+  .toast{ position:fixed; left:50%; bottom:22px; transform:translateX(-50%) translateY(20px);
+    background:#141414; color:#fff; padding:11px 18px; border-radius:9px; font-size:14px; font-weight:600;
+    opacity:0; pointer-events:none; transition:.25s; z-index:50; max-width:92vw; text-align:center; }
+  .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+  details.tips{ margin-top:18px; background:var(--panel); border:1px solid var(--line);
+    border-radius:12px; padding:14px 18px; box-shadow:var(--shadow); }
+  details.tips summary{ cursor:pointer; font-weight:800; font-size:15px; min-height:2rem; }
+  details.tips ul{ font-size:13px; color:var(--muted); line-height:1.6; margin:10px 0 4px; padding-left:18px; }
+  details.tips li{ margin-bottom:4px; }
+  details.tips b{ color:var(--ink); }
+  footer{ margin-top:20px; color:var(--muted); font-size:12.5px; line-height:1.6; }
+  .hidden{ display:none !important; }
+  /* All-packs exporter progress (new — nothing else uses these classes) */
+  .bar-track{ height:10px; margin-top:14px; background:var(--panel2); border:1px solid var(--line);
+    border-radius:999px; overflow:hidden; }
+  .bar-fill{ height:100%; width:0%; background:var(--accent); transition:width .15s linear; }
+</style>
+</head>
+<body>
+<div class="hazardbar"></div>
+<div class="wrap">
+
+  <header class="hero">
+    <h1>Caution Tapes <span class="hl">Vector Tool</span></h1>
+    <p>Original caution tape vectors with a seamless end-to-end repeat — join copies and print at any length, no break at the join.</p>
+  </header>
+
+  <!-- ============ BUILDER ============ -->
+  <section class="panel" aria-labelledby="builder-h">
+    <h2 id="builder-h">Build a tape</h2>
+
+    <div class="grid2">
+      <div>
+        <div class="fld">
+          <label>Mode</label>
+          <div class="seg" role="group" aria-label="Mode">
+            <button type="button" id="mode-single" aria-pressed="true">Single tape</button>
+            <button type="button" id="mode-set" aria-pressed="false">Tape set (10 in 1)</button>
+          </div>
+        </div>
+        <div class="fld">
+          <label for="style-sel">Style</label>
+          <select id="style-sel"></select>
+        </div>
+        <div class="fld">
+          <label for="word-sel">Word</label>
+          <select id="word-sel"></select>
+        </div>
+        <div class="fld">
+          <label for="custom-word">Custom word (optional)</label>
+          <input type="text" id="custom-word" maxlength="42" placeholder="e.g. FRAGILE HANDLE WITH CARE" />
+        </div>
+        <div class="fld">
+          <label for="font-sel">Font</label>
+          <select id="font-sel">
+            <option value="anton">Anton</option>
+            <option value="archivo">Archivo Black</option>
+            <option value="oswald">Oswald Bold</option>
+          </select>
+        </div>
+        <div class="fld">
+          <label>Background</label>
+          <div class="chips" id="bg-chips">
+            <button type="button" class="chip" data-bg="transparent" aria-pressed="true">Transparent</button>
+            <button type="button" class="chip" data-bg="white" aria-pressed="false">White</button>
+            <button type="button" class="chip" data-bg="black" aria-pressed="false">Black</button>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="fld">
+          <label>Colour</label>
+          <div class="swatches" id="swatches"></div>
+        </div>
+        <div class="fld">
+          <label>Tape thickness — <span id="thick-val">Standard · 120</span></label>
+          <div class="chips" id="thick-chips">
+            <button type="button" class="chip" data-thick="80" aria-pressed="false">Thin · 80</button>
+            <button type="button" class="chip" data-thick="120" aria-pressed="true">Standard · 120</button>
+            <button type="button" class="chip" data-thick="180" aria-pressed="false">Thick · 180</button>
+            <button type="button" class="chip" data-thick="240" aria-pressed="false">Extra Thick · 240</button>
+          </div>
+          <input type="range" id="thick-range" min="70" max="260" step="5" value="120" aria-label="Tape thickness slider" />
+        </div>
+        <div class="fld">
+          <label>Length — whole repeats only, pattern never stretches</label>
+          <div class="chips" id="len-chips">
+            <button type="button" class="chip" data-rep="3" aria-pressed="false">Short · 3</button>
+            <button type="button" class="chip" data-rep="5" aria-pressed="true">Standard · 5</button>
+            <button type="button" class="chip" data-rep="8" aria-pressed="false">Long · 8</button>
+            <button type="button" class="chip" data-rep="12" aria-pressed="false">Extra Long · 12</button>
+          </div>
+          <input type="range" id="len-range" min="2" max="12" step="1" value="5" aria-label="Repeats slider" />
+          <div class="numrow">
+            <input type="number" id="len-num" min="2" max="12" step="1" value="5" aria-label="Custom repeats" />
+            <span>custom repeats (2–12)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="previewbox" id="preview" aria-label="Tape preview"></div>
+    <p class="meta" id="preview-meta"></p>
+
+    <p class="rowlabel">Seamless check — tile joined 3×</p>
+    <div class="btnrow" style="margin-top:6px">
+      <button type="button" class="chip" id="seam-toggle" aria-pressed="true">Seam markers</button>
+    </div>
+    <div class="previewbox" id="seam-preview" style="margin-top:10px" aria-label="Seamless join preview"></div>
+
+    <p class="rowlabel">Seamless tile — 1 repeat (tile it yourself)</p>
+    <div class="btnrow">
+      <button type="button" class="btn" id="dl-tile-eps">EPS 10</button>
+      <button type="button" class="btn" id="dl-tile-svg">SVG</button>
+      <button type="button" class="btn" id="dl-tile-png">PNG</button>
+    </div>
+
+    <p class="rowlabel">Full tape — <span id="full-label">5 repeats</span></p>
+    <div class="btnrow">
+      <button type="button" class="btn primary" id="dl-eps">EPS 10</button>
+      <button type="button" class="btn" id="dl-svg">SVG</button>
+      <button type="button" class="btn" id="dl-png">PNG</button>
+      <button type="button" class="btn dark" id="add-batch">Add to batch ↓</button>
+    </div>
+    <p class="meta">EPS: open in Illustrator → <b>Type &gt; Create Outlines</b> before uploading.</p>
+
+    <p class="meta" style="margin-top:14px"><b>Title:</b> <span id="stock-title"></span></p>
+    <p class="meta"><b>Keywords:</b> <span id="stock-kw"></span></p>
+    <p class="meta"><b>Description:</b> <span id="stock-desc"></span></p>
+    <div class="btnrow">
+      <button type="button" class="btn small" id="copy-meta">Copy title + description + keywords</button>
+    </div>
+  </section>
+
+  <!-- ============ BATCH ============ -->
+  <section class="panel" aria-labelledby="batch-h">
+    <h2 id="batch-h">Batch</h2>
+    <div class="btnrow" style="margin-top:0">
+      <button type="button" class="btn primary" data-gen="8">Generate 8 singles</button>
+      <button type="button" class="btn primary" data-gen="12">Generate 12 singles</button>
+      <button type="button" class="btn primary" data-gen="set4">Generate 4 sets</button>
+      <button type="button" class="btn" id="clear-batch">Clear batch</button>
+    </div>
+    <div class="btnrow">
+      <button type="button" class="btn dark" id="zip-eps">ZIP — all EPS 10</button>
+      <button type="button" class="btn dark" id="zip-svg">ZIP — all SVG</button>
+      <button type="button" class="btn dark" id="zip-png">ZIP — all PNG</button>
+      <button type="button" class="btn" id="dl-txt">Titles + keywords (.txt)</button>
+    </div>
+    <p class="meta" id="batch-count">Batch is empty — generate designs or add the tape above.</p>
+    <div class="cards" id="cards"></div>
+  </section>
+
+  <!-- ============ ALL SVG PACKS (EVERY WORD × EVERY COLOUR) ============ -->
+  <section class="panel" aria-labelledby="allpacks-h">
+    <h2 id="allpacks-h">All SVG packs — every word × every colour</h2>
+    <p class="meta">One click builds a <b>tape pack</b> (10-in-1 set) for <b id="ap-words">all words</b>
+      × <b id="ap-schemes">all colours</b> = <b id="ap-total">every combination</b> SVG packs, then downloads
+      them together as a single ZIP. Packs use the <b>font, thickness and background</b> selected above;
+      each colour gets its own folder inside the ZIP.</p>
+    <div class="btnrow" style="margin-top:12px">
+      <button type="button" class="btn primary" id="all-packs-btn">Generate all SVG packs → ZIP</button>
+      <button type="button" class="btn" id="all-packs-stop" disabled>Stop</button>
+    </div>
+    <div class="bar-track" aria-hidden="true"><div class="bar-fill" id="all-packs-fill"></div></div>
+    <p class="meta" id="all-packs-status">Ready — nothing generated yet.</p>
+  </section>
+
+  <details class="tips">
+    <summary>Upload tips</summary>
+    <ul>
+      <li><b>Shutterstock:</b> upload the EPS 10 plus a JPG/PNG preview of at least 4 MP — every PNG from this tool is above 4 MP. Flat shapes only, no effects.</li>
+      <li><b>Vecteezy:</b> upload the EPS (or SVG) plus the PNG preview, with the title and keywords from each design.</li>
+      <li><b>EPS text</b> is live Helvetica-Bold — open in Illustrator and use Type &gt; Create Outlines before uploading.</li>
+      <li><b>Seamless:</b> every tape is built from one exact repeat unit. The tile file is a single unit — buyers can join copies end-to-end to print any length with no break in the stripes, chevrons or wording.</li>
+      <li><b>Originality:</b> all designs are generated from basic shapes and generic safety words — no brand or company names.</li>
+    </ul>
+  </details>
+
+  <footer>All designs are original vector artwork generated in your browser. Files download straight to your device.</footer>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+"use strict";
+/* ================= DATA ================= */
+var SCHEMES = [
+  { id:'yellow-black', name:'Yellow / Black',    base:'#FFD21F', ink:'#151515', accent:'#151515' },
+  { id:'red-white',    name:'Red / White',       base:'#E02B20', ink:'#FFFFFF', accent:'#FFFFFF' },
+  { id:'orange-black', name:'Orange / Black',    base:'#FF7A1A', ink:'#151515', accent:'#151515' },
+  { id:'orange-white', name:'Orange / White',    base:'#FF7A1A', ink:'#FFFFFF', accent:'#FFFFFF' },
+  { id:'black-white',  name:'Black / White',     base:'#1B1B1B', ink:'#FFFFFF', accent:'#FFD21F' },
+  { id:'white-red',    name:'White / Red',       base:'#FFFFFF', ink:'#D92323', accent:'#151515' },
+  { id:'white-black',  name:'White / Black',     base:'#FFFFFF', ink:'#151515', accent:'#D92323' },
+  { id:'blue-white',   name:'Blue / White',      base:'#1450B4', ink:'#FFFFFF', accent:'#FFFFFF' },
+  { id:'green-white',  name:'Green / White',     base:'#1E8A46', ink:'#FFFFFF', accent:'#FFFFFF' },
+  { id:'pink-black',   name:'Pink / Black',      base:'#FF5C8A', ink:'#151515', accent:'#151515' },
+  { id:'lime-black',   name:'Lime / Black',      base:'#B7E01E', ink:'#151515', accent:'#151515' },
+  { id:'gold-black',   name:'Gold / Black',      base:'#C99700', ink:'#151515', accent:'#151515' }
+];
+var STYLES = [
+  { id:'stripes',      name:'Diagonal hazard stripes' },
+  { id:'stripes-text', name:'Stripes + WARNING text band' },
+  { id:'chevron',      name:'Chevron arrows' },
+  { id:'checker',      name:'Checkerboard' },
+  { id:'text',         name:'Text repeat tape' },
+  { id:'text-icon',    name:'Text + warning triangle icons' },
+  { id:'text-caution', name:'CAUTION dots tape' },
+  { id:'double',       name:'Double line classic' },
+  { id:'biohazard',    name:'Biohazard symbol tape' },
+  { id:'skull',        name:'Skull danger tape' }
+];
+var WORDS = [
+  'WARNING','CAUTION','DANGER','DO NOT CROSS','POLICE LINE DO NOT CROSS','CRIME SCENE DO NOT CROSS',
+  'KEEP OUT','NO TRESPASSING','RESTRICTED AREA','AUTHORIZED PERSONNEL ONLY','UNDER CONSTRUCTION',
+  'CONSTRUCTION AREA','HARD HAT AREA','HIGH VOLTAGE','ELECTRICITY DANGER','BIOHAZARD','RADIOACTIVE',
+  'TOXIC','FLAMMABLE','SAFETY FIRST','WET FLOOR','MIND THE GAP','DO NOT ENTER','NO ENTRY',
+  'QUARANTINE','KEEP AWAY','DANGER KEEP OUT','CAUTION HOT SURFACE','FRAGILE','THIS SIDE UP',
+  'HAPPY HALLOWEEN','HAPPY BIRTHDAY','VIP ONLY','PARTY ZONE','SALE','OPENING SOON'
+];
+var WORD_GROUPS = [
+  { label:'Other potential sellers — Construction & site', words:['UNDER CONSTRUCTION','CONSTRUCTION ZONE','ROAD WORK AHEAD','WORK ZONE','MEN AT WORK','HARD HAT AREA','HARD HAT REQUIRED','OVERHEAD WORK','FALLING OBJECTS','SAFETY FIRST','PROCEED WITH CAUTION'] },
+  { label:'Other potential sellers — Restricted & access', words:['NO TRESPASSING','PRIVATE PROPERTY','RESTRICTED AREA','AUTHORIZED PERSONNEL ONLY','KEEP CLEAR','NO ENTRY','NO PARKING','EMERGENCY EXIT'] },
+  { label:'Other potential sellers — Hazard & floors', words:['WET FLOOR','SLIPPERY WHEN WET','SLIPPERY SURFACE','WATCH YOUR STEP','MIND THE STEP','ELECTRICAL HAZARD','HIGH VOLTAGE','FIRE HAZARD','FLAMMABLE','BIOHAZARD','CHEMICAL HAZARD','QUARANTINE AREA','DO NOT TOUCH','FRAGILE'] },
+  { label:'Other potential sellers — Crime scene (generic)', words:['CRIME SCENE','POLICE LINE - DO NOT CROSS','DO NOT CROSS - POLICE LINE'] },
+  { label:'Other potential sellers — Party, Halloween & seasonal', words:['BEWARE','ENTER IF YOU DARE','HAUNTED HOUSE','ZOMBIE ZONE','KEEP OUT - ZOMBIES','HAPPY HALLOWEEN','TRICK OR TREAT','DANGER - MONSTERS AHEAD','VIP ONLY','HAPPY BIRTHDAY'] },
+  { label:'Other potential sellers — General', words:['CAUTION - WET PAINT','CAUTION - HOT SURFACE','MIND THE GAP','STOP','SLOW DOWN'] }
+];
+var ALL_WORDS = (function(){ var seen={}, out=[];
+  WORDS.concat.apply(WORDS, WORD_GROUPS.map(function(g){ return g.words; })).forEach(function(w){
+    if(!seen[w]){ seen[w]=1; out.push(w); } });
+  return out; })();
+var SET_ORDER = ['stripes-text','stripes','text','chevron','text-icon','checker','text-caution','double','biohazard','skull'];
+
+/* ================= STATE ================= */
+var state = { mode:'single', style:'stripes-text', scheme:SCHEMES[0], word:'WARNING',
+              custom:'', bg:'transparent', font:'anton', thick:120, repeats:5, seam:true };
+var batch = [];
+var usedCombos = {};
+var uidC = 0;
+
+/* ================= HELPERS ================= */
+function $(id){ return document.getElementById(id); }
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function r2(n){ return Math.round(n * 100) / 100; }
+function toast(msg){ var t=$('toast'); t.textContent=msg; t.classList.add('show');
+  clearTimeout(t._h); t._h=setTimeout(function(){ t.classList.remove('show'); },2600); }
+function slug(s){ return s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,''); }
+function effWord(){ var c=state.custom.trim(); return (c? c.toUpperCase() : state.word); }
+function saveBlob(blob, name){ var a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download=name; document.body.appendChild(a); a.click();
+  setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); },400); }
+function copyText(txt, msg){ if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(function(){ toast(msg); }, function(){ fallbackCopy(txt,msg); });
+  } else fallbackCopy(txt,msg); }
+function fallbackCopy(txt,msg){ var ta=document.createElement('textarea'); ta.value=txt;
+  document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); toast(msg); }
+  catch(e){ toast('Copy failed — select the text manually'); } ta.remove(); }
+
+/* ================= REAL FONTS =================
+   Text is set in real professional fonts (Anton / Archivo Black / Oswald Bold).
+   Letters are never stretched: text is fitted by font-size only, and every word
+   is a whole word inside one repeat unit — never clipped at a seam. */
+var FONTS = [
+  { id:'anton',   name:'Anton',         family:'Anton',           weight:400 },
+  { id:'archivo', name:'Archivo Black', family:"'Archivo Black'", weight:400 },
+  { id:'oswald',  name:'Oswald Bold',   family:'Oswald',          weight:700 }
+];
+function fontById(id){ for(var i=0;i<FONTS.length;i++) if(FONTS[i].id===id) return FONTS[i]; return FONTS[0]; }
+function effFont(spec){ var f = fontById(spec.font || 'anton');
+  if(f.id==='anton' && (spec.word || '').length >= 15) return fontById('oswald');
+  return f; }
+var _mc = document.createElement('canvas').getContext('2d');
+function measureWord(word, f, fs){ _mc.font = f.weight + ' ' + fs + 'px ' + f.family + ', sans-serif';
+  return _mc.measureText(word).width; }
+function fitFs(word, f, fs, maxW){ var w = measureWord(word, f, fs);
+  if(!w || w <= maxW) return fs; return Math.max(8, fs * maxW / w); }
+function textAttrs(f, fs, fill){ return ' font-family="' + f.family + ', sans-serif" font-weight="' + f.weight
+  + '" font-size="' + fs.toFixed(1) + '" fill="' + fill + '"'; }
+function textOnceSVG(word, x, yBase, fs, fill, f){
+  return '<text x="' + r2(x) + '" y="' + r2(yBase) + '"' + textAttrs(f, fs, fill) + '>' + esc(word) + '</text>';
+}
+
+/* ---- EPS text: Helvetica-Bold (PostScript standard) with real AFM widths ---- */
+var HELV_W = { ' ':278, 'A':722,'B':722,'C':722,'D':722,'E':667,'F':611,'G':778,'H':722,'I':278,'J':556,
+  'K':722,'L':611,'M':833,'N':722,'O':778,'P':667,'Q':778,'R':722,'S':667,'T':611,'U':722,'V':667,'W':944,
+  'X':667,'Y':667,'Z':611,'0':556,'1':556,'2':556,'3':556,'4':556,'5':556,'6':556,'7':556,'8':556,'9':556,
+  '!':333,'.':278,'-':333,'&':778,'/':278,':':333,"'":278,'(':333,')':333,',':278 };
+function measureWordEPS(word, fs){ var u = 0;
+  for(var i=0;i<word.length;i++) u += (HELV_W[word[i]] != null ? HELV_W[word[i]] : 667);
+  return u * fs / 1000; }
+function fitFsEPS(word, fs, maxW){ var w = measureWordEPS(word, fs);
+  if(!w || w <= maxW) return fs; return Math.max(8, fs * maxW / w); }
+function escPS(s){ return String(s).replace(/\\/g,'\\\\').replace(/\(/g,'\\(').replace(/\)/g,'\\)'); }
+function epsShow(word, x, yBasePS, fs){
+  return '/Helvetica-Bold findfont ' + fs.toFixed(1) + ' scalefont setfont '
+    + r2(x) + ' ' + r2(yBasePS) + ' moveto (' + escPS(word) + ') show'; }
+
+/* measurer adapters so ONE geometry function drives both SVG and EPS */
+function svgMeasurer(spec){ var f = effFont(spec); return {
+  measure:function(w, fs){ return measureWord(w, f, fs); },
+  fit:function(w, fs, maxW){ return fitFs(w, f, fs, maxW); } }; }
+function epsMeasurer(){ return {
+  measure:function(w, fs){ return measureWordEPS(w, fs); },
+  fit:function(w, fs, maxW){ return fitFsEPS(w, fs, maxW); } }; }
+
+/* ================= SEAMLESS REPEAT GEOMETRY =================
+   Every style defines ONE exact repeat unit of width U. A tape of any length
+   is a whole number of units stamped side by side — never a partial unit.
+   - stripes:  U is a whole number of stripe periods S, so the stripe cut at
+     the right edge continues at the left edge at the same angle/position.
+   - stripes+text: the stripe period S is re-derived as U/k so it divides the
+     text unit exactly — stripes AND text are both seamless in the same unit.
+   - chevron/checker: U is a whole number of arrows / cells.
+   - text & icon styles: U = icon + gap + whole word + ONE uniform trailing
+     gap, so the gap across a join equals the gap inside the tape. */
+function unitGeom(spec, M){
+  var H = spec.thick || 120, word = spec.word || '', st = spec.style;
+  var g = { H:H, f:effFont(spec) };
+  if(st === 'stripes'){ g.S = H * 0.9; g.U = g.S * 3; }
+  else if(st === 'chevron'){ g.cw = H * 0.7; g.U = g.cw * 2; }
+  else if(st === 'checker'){ g.cell = H / 2; g.U = H; }
+  else if(st === 'text' || st === 'double'){
+    g.fs = M.fit(word, st === 'text' ? H * 0.56 : H * 0.46, 1100);
+    g.wordW = M.measure(word, g.fs); g.gap = g.fs * 0.9; g.U = g.wordW + g.gap;
+  }
+  else if(st === 'stripes-text'){
+    g.fs = M.fit(word, H * 0.40, 1100);
+    g.wordW = M.measure(word, g.fs); g.gap = g.fs * 0.9; g.U = g.wordW + g.gap;
+    var kk = Math.max(1, Math.round(g.U / (H * 0.9))); g.S = g.U / kk;
+  }
+  else if(st === 'text-icon'){
+    g.ts = H * 0.74; g.tw = g.ts * 1.13;
+    g.fs = M.fit(word, H * 0.47, 1100); g.wordW = M.measure(word, g.fs);
+    g.g1 = H * 0.28; g.gap = H * 0.55; g.U = g.tw + g.g1 + g.wordW + g.gap;
+  }
+  else if(st === 'text-caution'){
+    g.fs = M.fit('CAUTION', H * 0.52, 1100); g.wordW = M.measure('CAUTION', g.fs);
+    g.gap = g.fs * 0.55; g.U = g.wordW + g.gap;
+  }
+  else if(st === 'biohazard'){
+    g.br = H * 0.40; g.symW = g.br * 2 * 1.18;
+    g.fs = M.fit(word, H * 0.42, 1100); g.wordW = M.measure(word, g.fs);
+    g.g1 = H * 0.22; g.gap = H * 0.5; g.U = g.symW + g.g1 + g.wordW + g.gap;
+  }
+  else if(st === 'skull'){
+    g.su = H * 0.92;
+    g.fs = M.fit(word, H * 0.44, 1100); g.wordW = M.measure(word, g.fs);
+    g.g1 = g.su * 1.06; g.gap = H * 0.5; g.U = g.g1 + g.wordW + g.gap;
+  }
+  return g;
+}
+function singleSpecOf(spec){
+  return { mode:'single', style:spec.style, scheme:spec.scheme, word:spec.word,
+           bg:spec.bg, font:spec.font || 'anton', thick:spec.thick || 120, repeats:spec.repeats || 5 };
+}
+function currentSpec(){
+  return { mode:state.mode, style:state.style, scheme:state.scheme, word:effWord(),
+           bg:state.bg, font:state.font, thick:state.thick, repeats:state.repeats };
+}
+/* ================= ICONS (solid fills only — no blue, no hollow shapes) ================= */
+function triSVG(cx, cy, s){
+  var w = s * 1.13, top = cy - s * 0.52, bot = cy + s * 0.48;
+  var exW = Math.max(3, s * 0.115), exTop = cy - s * 0.17, exH = s * 0.38;
+  return '<polygon points="' + r2(cx) + ',' + r2(top) + ' ' + r2(cx + w / 2) + ',' + r2(bot)
+    + ' ' + r2(cx - w / 2) + ',' + r2(bot) + '" fill="#FFC400" stroke="#151515" stroke-width="'
+    + r2(s * 0.10) + '" stroke-linejoin="round"/>'
+    + '<rect x="' + r2(cx - exW / 2) + '" y="' + r2(exTop) + '" width="' + r2(exW) + '" height="'
+    + r2(exH) + '" rx="' + r2(exW * 0.45) + '" fill="#151515"/>'
+    + '<circle cx="' + r2(cx) + '" cy="' + r2(exTop + exH + s * 0.115) + '" r="' + r2(exW * 0.62) + '" fill="#151515"/>';
+}
+function bioSVG(cx, cy, r, fill){
+  var b = '', i, a;
+  for(i = 0; i < 3; i++){ a = -90 + i * 120;
+    b += '<path d="M' + cx + ' ' + cy + ' L' + r2(cx + r * Math.cos((a - 32) * Math.PI / 180)) + ' ' + r2(cy + r * Math.sin((a - 32) * Math.PI / 180))
+       + ' A' + r + ' ' + r + ' 0 0 1 ' + r2(cx + r * Math.cos((a + 32) * Math.PI / 180)) + ' ' + r2(cy + r * Math.sin((a + 32) * Math.PI / 180)) + ' Z" fill="' + fill + '"/>'; }
+  return b + '<circle cx="' + cx + '" cy="' + cy + '" r="' + r2(r * 0.30) + '" fill="' + fill + '"/>';
+}
+function skullFull(cx, cy, s, fill, hole){
+  var u = s / 100;
+  return '<g transform="translate(' + r2(cx) + ' ' + r2(cy) + ')">'
+    + '<path transform="scale(' + u + ')" d="M-38 -6 Q-38 -42 0 -42 Q38 -42 38 -6 Q38 16 24 24 L24 42 L14 42 L14 30 L5 30 L5 42 L-5 42 L-5 30 L-14 30 L-14 42 L-24 42 L-24 24 Q-38 16 -38 -6 Z" fill="' + fill + '"/>'
+    + '<circle cx="' + (-16 * u) + '" cy="' + (-4 * u) + '" r="' + (9.5 * u) + '" fill="' + hole + '"/>'
+    + '<circle cx="' + (16 * u) + '" cy="' + (-4 * u) + '" r="' + (9.5 * u) + '" fill="' + hole + '"/>'
+    + '<polygon points="0,' + (8 * u) + ' ' + (-6 * u) + ',' + (20 * u) + ' ' + (6 * u) + ',' + (20 * u) + '" fill="' + hole + '"/>'
+    + '</g>';
+}
+
+/* ---- ONE repeat unit, drawn in local coords [0,U] x [0,H]. Base colour is
+   NOT drawn here (the tape group fills the whole width once). ---- */
+function unitBodySVG(spec, idp, g){
+  var sc = spec.scheme, st = spec.style, word = spec.word, H = g.H, f = g.f, b = '', yB, i, o;
+  if(st === 'stripes'){
+    b += '<rect x="0" y="0" width="' + r2(g.U) + '" height="' + H + '" fill="url(#' + idp + 'p)"/>';
+  }
+  else if(st === 'stripes-text'){
+    b += '<rect x="0" y="0" width="' + r2(g.U) + '" height="' + H + '" fill="url(#' + idp + 'p)"/>';
+    b += '<rect x="0" y="' + r2(H * 0.24) + '" width="' + r2(g.U) + '" height="' + r2(H * 0.52) + '" fill="' + sc.base + '"/>';
+    yB = H * 0.24 + H * 0.26 + g.fs * 0.35;
+    b += textOnceSVG(word, 0, yB, g.fs, sc.ink, f);
+  }
+  else if(st === 'chevron'){
+    for(i = 0; i < 2; i++){ o = i * g.cw;
+      b += '<polygon points="' + r2(o) + ',0 ' + r2(o + g.cw / 2) + ',0 ' + r2(o + g.cw) + ',' + r2(H / 2) + ' '
+        + r2(o + g.cw / 2) + ',' + H + ' ' + r2(o) + ',' + H + ' ' + r2(o + g.cw / 2) + ',' + r2(H / 2) + '" fill="' + sc.ink + '"/>'; }
+  }
+  else if(st === 'checker'){
+    b += '<rect x="0" y="0" width="' + r2(g.cell) + '" height="' + r2(g.cell) + '" fill="' + sc.ink + '"/>'
+       + '<rect x="' + r2(g.cell) + '" y="' + r2(g.cell) + '" width="' + r2(g.cell) + '" height="' + r2(g.cell) + '" fill="' + sc.ink + '"/>';
+  }
+  else if(st === 'text'){
+    yB = H / 2 + g.fs * 0.35;
+    b += textOnceSVG(word, 0, yB, g.fs, sc.ink, f);
+  }
+  else if(st === 'text-icon'){
+    yB = H / 2 + g.fs * 0.35;
+    b += triSVG(g.tw / 2, H / 2, g.ts);
+    b += textOnceSVG(word, g.tw + g.g1, yB, g.fs, sc.ink, f);
+  }
+  else if(st === 'text-caution'){
+    yB = H / 2 + g.fs * 0.35;
+    b += textOnceSVG('CAUTION', 0, yB, g.fs, sc.ink, f);
+    b += '<circle cx="' + r2(g.wordW + g.gap / 2) + '" cy="' + r2(H / 2) + '" r="' + r2(g.fs * 0.11) + '" fill="' + sc.ink + '"/>';
+  }
+  else if(st === 'double'){
+    b += '<rect x="0" y="' + r2(H * 0.10) + '" width="' + r2(g.U) + '" height="' + r2(H * 0.07) + '" fill="' + sc.ink + '"/>'
+       + '<rect x="0" y="' + r2(H * 0.83) + '" width="' + r2(g.U) + '" height="' + r2(H * 0.07) + '" fill="' + sc.ink + '"/>';
+    yB = H / 2 + g.fs * 0.35;
+    b += textOnceSVG(word, 0, yB, g.fs, sc.ink, f);
+  }
+  else if(st === 'biohazard'){
+    yB = H / 2 + g.fs * 0.35;
+    b += bioSVG(g.symW / 2, H / 2, g.br, sc.ink);
+    b += textOnceSVG(word, g.symW + g.g1, yB, g.fs, sc.ink, f);
+  }
+  else if(st === 'skull'){
+    yB = H / 2 + g.fs * 0.35;
+    b += skullFull(g.su * 0.5, H / 2, g.su, sc.ink, sc.base);
+    b += textOnceSVG(word, g.g1, yB, g.fs, sc.ink, f);
+  }
+  return b;
+}
+
+/* ---- a full tape: the unit stamped `repeats` times. Width = repeats × U exactly.
+   The stripe pattern is referenced inside each translated unit group, so its
+   phase restarts at every unit origin — and because U is a whole number of
+   stripe periods, the phase at the right edge equals the phase at the left. ---- */
+function tapeGroupSVG(spec, idp, repeats){
+  var g = unitGeom(spec, svgMeasurer(spec));
+  var H = g.H, U = g.U, W = U * repeats, defs = '', body = '', k;
+  defs += '<clipPath id="' + idp + 'c"><rect x="0" y="0" width="' + r2(W) + '" height="' + H + '"/></clipPath>';
+  if(spec.style === 'stripes' || spec.style === 'stripes-text'){
+    var tile = g.S / Math.SQRT2;
+    defs += '<pattern id="' + idp + 'p" width="' + r2(tile) + '" height="' + r2(tile)
+      + '" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="' + r2(tile / 2)
+      + '" height="' + r2(tile) + '" fill="' + spec.scheme.ink + '"/></pattern>';
+  }
+  var unit = unitBodySVG(spec, idp, g);
+  body += '<g clip-path="url(#' + idp + 'c)">';
+  body += '<rect x="-4" y="-4" width="' + r2(W + 8) + '" height="' + (H + 8) + '" fill="' + spec.scheme.base + '"/>';
+  for(k = 0; k < repeats; k++)
+    body += '<g transform="translate(' + r2(k * U) + ' 0)">' + unit + '</g>';
+  body += '</g>';
+  return { defs:defs, body:body, W:W, U:U, H:H };
+}
+function bgRectSVG(bg, w, h){
+  if(bg === 'white') return '<rect width="' + r2(w) + '" height="' + r2(h) + '" fill="#FFFFFF"/>';
+  if(bg === 'black') return '<rect width="' + r2(w) + '" height="' + r2(h) + '" fill="#101010"/>';
+  return '';
+}
+/* main preview: tape with a little breathing room + soft shadow */
+function buildDisplaySVG(spec){
+  uidC++;
+  var tp = tapeGroupSVG(spec, 't' + uidC + '_', spec.repeats || 5);
+  var VB = tp.H + 90, TY = 45;
+  return '<svg xmlns="http://www.w3.org/2000/svg" width="' + Math.round(tp.W * 2) + '" height="' + Math.round(VB * 2)
+    + '" viewBox="0 0 ' + r2(tp.W) + ' ' + VB + '"><defs>' + tp.defs + '</defs>'
+    + bgRectSVG(spec.bg, tp.W, VB)
+    + '<rect x="6" y="' + (TY + 7) + '" width="' + r2(tp.W) + '" height="' + tp.H + '" fill="rgba(0,0,0,0.20)"/>'
+    + '<g transform="translate(0 ' + TY + ')">' + tp.body + '</g></svg>';
+}
+/* export SVG: exact tape rectangle, no padding, no shadow — tiles perfectly */
+function buildExportSVG(spec, tile){
+  uidC++;
+  var s = singleSpecOf(spec);
+  var tp = tapeGroupSVG(s, 'x' + uidC + '_', tile ? 1 : (spec.repeats || 5));
+  return '<svg xmlns="http://www.w3.org/2000/svg" width="' + Math.round(tp.W * 2) + '" height="' + (tp.H * 2)
+    + '" viewBox="0 0 ' + r2(tp.W) + ' ' + tp.H + '"><defs>' + tp.defs + '</defs>'
+    + bgRectSVG(spec.bg, tp.W, tp.H) + tp.body + '</svg>';
+}
+/* seamless check: one unit joined 3 times, optional seam markers */
+function seamlessSVG(spec){
+  uidC++;
+  var s = singleSpecOf(spec);
+  var tp = tapeGroupSVG(s, 'sm' + uidC + '_', 3);
+  var markers = '';
+  if(state.seam){
+    markers = '<g stroke="#D92B2B" stroke-width="2" stroke-dasharray="7 5">'
+      + '<line x1="' + r2(tp.U) + '" y1="-20" x2="' + r2(tp.U) + '" y2="' + (tp.H + 8) + '"/>'
+      + '<line x1="' + r2(2 * tp.U) + '" y1="-20" x2="' + r2(2 * tp.U) + '" y2="' + (tp.H + 8) + '"/></g>'
+      + '<g fill="#D92B2B" font-family="sans-serif" font-size="13" font-weight="700">'
+      + '<text x="' + r2(tp.U + 6) + '" y="-7">seam</text>'
+      + '<text x="' + r2(2 * tp.U + 6) + '" y="-7">seam</text></g>';
+  }
+  return '<svg xmlns="http://www.w3.org/2000/svg" width="' + Math.round(tp.W * 2) + '" height="' + Math.round((tp.H + 30) * 2)
+    + '" viewBox="-4 -24 ' + r2(tp.W + 8) + ' ' + (tp.H + 32) + '"><defs>' + tp.defs + '</defs>'
+    + bgRectSVG(spec.bg, tp.W, tp.H) + tp.body + markers + '</svg>';
+}
+function setRowRepeats(sub, M){
+  var g = unitGeom(sub, M);
+  return Math.max(2, Math.min(12, Math.round(1200 / g.U)));
+}
+function buildSetSVG(spec){
+  uidC++;
+  var Ht = spec.thick || 120, rows = SET_ORDER.length, gap = Math.round(Ht * 0.28), top = 56;
+  var tps = [], maxW = 0, i;
+  for(i = 0; i < rows; i++){
+    var sub = { mode:'single', style:SET_ORDER[i], scheme:spec.scheme, word:spec.word,
+                bg:'transparent', font:spec.font, thick:Ht, repeats:5 };
+    var tp = tapeGroupSVG(sub, 's' + uidC + '_' + i + '_', setRowRepeats(sub, svgMeasurer(sub)));
+    tps.push(tp); if(tp.W > maxW) maxW = tp.W;
+  }
+  var H = top * 2 + rows * Ht + (rows - 1) * gap;
+  var defs = '', body = bgRectSVG(spec.bg, maxW, H);
+  for(i = 0; i < rows; i++){
+    defs += tps[i].defs;
+    body += '<rect x="5" y="' + (top + i * (Ht + gap) + 6) + '" width="' + r2(tps[i].W) + '" height="' + Ht + '" fill="rgba(0,0,0,0.16)"/>'
+          + '<g transform="translate(0 ' + (top + i * (Ht + gap)) + ')">' + tps[i].body + '</g>';
+  }
+  return { svg:'<svg xmlns="http://www.w3.org/2000/svg" width="' + Math.round(maxW * 2) + '" height="' + (H * 2)
+    + '" viewBox="0 0 ' + r2(maxW) + ' ' + H + '"><defs>' + defs + '</defs>' + body + '</svg>', height:H };
+}
+function specSVG(spec){ return spec.mode === 'set' ? buildSetSVG(spec).svg : buildDisplaySVG(spec); }
+function exportSVGFor(spec, tile){
+  if(spec.mode === 'set' && !tile) return buildSetSVG(spec).svg;
+  return buildExportSVG(spec, tile);
+}
+/* ================= EPS 10 EXPORT =================
+   Same seamless geometry as the SVG: width = repeats × U (EPS-measured unit),
+   text set in live Helvetica-Bold with real AFM widths. Exact tape rectangle —
+   no padding — so EPS tiles join perfectly too. */
+function hexRGB(h){ return [parseInt(h.slice(1,3),16), parseInt(h.slice(3,5),16), parseInt(h.slice(5,7),16)]; }
+function epsColor(hex){ var c = hexRGB(hex);
+  return (c[0]/255).toFixed(3) + ' ' + (c[1]/255).toFixed(3) + ' ' + (c[2]/255).toFixed(3) + ' setrgbcolor'; }
+function epsHeader(w, h, title){
+  return '%!PS-Adobe-3.0 EPSF-3.0\n%%Creator: Caution Tapes Vector Tool\n%%Title: ' + title
+    + '\n%%BoundingBox: 0 0 ' + Math.round(w) + ' ' + Math.round(h) + '\n%%EndComments\n';
+}
+/* one tape in EPS local coords: origin bottom-left, y up. Returns body + size. */
+function epsTape(spec, repeats){
+  var g = unitGeom(spec, epsMeasurer());
+  var sc = spec.scheme, st = spec.style, word = spec.word;
+  var H = g.H, U = g.U, W = U * repeats, o = [], k, off, x, yB;
+  function show(wd, sx, yBsvg, fs){ o.push(epsShow(wd, sx, H - yBsvg, fs)); }
+  o.push('gsave');
+  o.push('newpath 0 0 ' + r2(W) + ' ' + H + ' rectclip');
+  o.push(epsColor(sc.base));
+  o.push('-4 -4 ' + r2(W + 8) + ' ' + (H + 8) + ' rectfill');
+  if(st === 'stripes' || st === 'stripes-text'){
+    /* bands depend on (x+y) with period S; U is a whole number of periods,
+       so the band phase at x=W matches x=0 — the join is invisible. */
+    var stepE = g.S / Math.SQRT2, R = W + H;
+    o.push(epsColor(sc.ink));
+    o.push('gsave newpath 0 0 ' + r2(W) + ' ' + H + ' rectclip ' + r2(W / 2) + ' ' + r2(H / 2) + ' translate 45 rotate');
+    for(x = -R; x < R; x += stepE) o.push(r2(x) + ' ' + r2(-R) + ' ' + r2(stepE / 2) + ' ' + r2(2 * R) + ' rectfill');
+    o.push('grestore');
+    if(st === 'stripes-text'){
+      o.push(epsColor(sc.base));
+      o.push('0 ' + r2(H - H * 0.24 - H * 0.52) + ' ' + r2(W) + ' ' + r2(H * 0.52) + ' rectfill');
+      o.push(epsColor(sc.ink));
+      yB = H * 0.24 + H * 0.26 + g.fs * 0.35;
+      for(k = 0; k < repeats; k++) show(word, k * U, yB, g.fs);
+    }
+  }
+  else if(st === 'chevron'){
+    o.push(epsColor(sc.ink));
+    for(x = 0; x < W - 0.01; x += g.cw)
+      o.push('newpath ' + r2(x) + ' 0 moveto ' + r2(x + g.cw / 2) + ' 0 lineto ' + r2(x + g.cw) + ' ' + r2(H / 2)
+        + ' lineto ' + r2(x + g.cw / 2) + ' ' + H + ' lineto ' + r2(x) + ' ' + H + ' lineto '
+        + r2(x + g.cw / 2) + ' ' + r2(H / 2) + ' lineto closepath fill');
+  }
+  else if(st === 'checker'){
+    var cols = Math.round(W / g.cell), rr, cc;
+    o.push(epsColor(sc.ink));
+    for(rr = 0; rr < 2; rr++) for(cc = 0; cc < cols; cc++)
+      if((cc + rr) % 2 === 1) o.push(r2(cc * g.cell) + ' ' + r2(rr * g.cell) + ' ' + r2(g.cell) + ' ' + r2(g.cell) + ' rectfill');
+  }
+  else if(st === 'text'){
+    o.push(epsColor(sc.ink));
+    yB = H / 2 + g.fs * 0.35;
+    for(k = 0; k < repeats; k++) show(word, k * U, yB, g.fs);
+  }
+  else if(st === 'double'){
+    o.push(epsColor(sc.ink));
+    o.push('0 ' + r2(H * 0.83) + ' ' + r2(W) + ' ' + r2(H * 0.07) + ' rectfill');
+    o.push('0 ' + r2(H * 0.10) + ' ' + r2(W) + ' ' + r2(H * 0.07) + ' rectfill');
+    yB = H / 2 + g.fs * 0.35;
+    for(k = 0; k < repeats; k++) show(word, k * U, yB, g.fs);
+  }
+  else if(st === 'text-icon'){
+    yB = H / 2 + g.fs * 0.35;
+    for(k = 0; k < repeats; k++){
+      off = k * U;
+      var cx = off + g.tw / 2, cyT = H / 2;
+      var topE = H - (cyT - g.ts * 0.52), botE = H - (cyT + g.ts * 0.48);
+      var triPath = 'newpath ' + r2(cx) + ' ' + r2(topE) + ' moveto ' + r2(cx + g.tw / 2) + ' ' + r2(botE)
+        + ' lineto ' + r2(cx - g.tw / 2) + ' ' + r2(botE) + ' lineto closepath';
+      o.push('1.000 0.769 0.000 setrgbcolor');
+      o.push(triPath + ' fill');
+      o.push('0.082 0.082 0.082 setrgbcolor ' + r2(g.ts * 0.10) + ' setlinewidth 1 setlinejoin');
+      o.push(triPath + ' stroke');
+      var exW = Math.max(3, g.ts * 0.115), exTopSVG = cyT - g.ts * 0.17, exH = g.ts * 0.38;
+      o.push(r2(cx - exW / 2) + ' ' + r2(H - exTopSVG - exH) + ' ' + r2(exW) + ' ' + r2(exH) + ' rectfill');
+      o.push('newpath ' + r2(cx) + ' ' + r2(H - (exTopSVG + exH + g.ts * 0.115)) + ' ' + r2(exW * 0.62) + ' 0 360 arc closepath fill');
+      o.push(epsColor(sc.ink));
+      show(word, off + g.tw + g.g1, yB, g.fs);
+    }
+  }
+  else if(st === 'text-caution'){
+    o.push(epsColor(sc.ink));
+    yB = H / 2 + g.fs * 0.35;
+    for(k = 0; k < repeats; k++){
+      off = k * U;
+      show('CAUTION', off, yB, g.fs);
+      o.push('newpath ' + r2(off + g.wordW + g.gap / 2) + ' ' + r2(H / 2) + ' ' + r2(g.fs * 0.11) + ' 0 360 arc closepath fill');
+    }
+  }
+  else if(st === 'biohazard'){
+    o.push(epsColor(sc.ink));
+    yB = H / 2 + g.fs * 0.35;
+    for(k = 0; k < repeats; k++){
+      off = k * U;
+      var bcx = off + g.symW / 2, bcy = H / 2, ai;
+      for(ai = 0; ai < 3; ai++){ var aa = 90 - ai * 120;
+        o.push('newpath ' + r2(bcx) + ' ' + bcy + ' moveto ' + r2(bcx) + ' ' + bcy + ' ' + r2(g.br) + ' ' + (aa - 32) + ' ' + (aa + 32) + ' arc closepath fill'); }
+      o.push('newpath ' + r2(bcx) + ' ' + bcy + ' ' + r2(g.br * 0.30) + ' 0 360 arc closepath fill');
+      show(word, off + g.symW + g.g1, yB, g.fs);
+    }
+  }
+  else if(st === 'skull'){
+    yB = H / 2 + g.fs * 0.35;
+    for(k = 0; k < repeats; k++){
+      off = k * U;
+      var scx = off + g.su * 0.5, scy = H / 2, u = g.su / 100;
+      o.push(epsColor(sc.ink));
+      o.push('newpath ' + r2(scx) + ' ' + r2(scy + 6 * u) + ' ' + r2(30 * u) + ' 0 360 arc closepath fill');
+      o.push(r2(scx - 17 * u) + ' ' + r2(scy - 32 * u) + ' ' + r2(34 * u) + ' ' + r2(26 * u) + ' rectfill');
+      o.push(epsColor(sc.base));
+      o.push('newpath ' + r2(scx - 13 * u) + ' ' + r2(scy + 4 * u) + ' ' + r2(8.5 * u) + ' 0 360 arc closepath fill');
+      o.push('newpath ' + r2(scx + 13 * u) + ' ' + r2(scy + 4 * u) + ' ' + r2(8.5 * u) + ' 0 360 arc closepath fill');
+      o.push('newpath ' + r2(scx) + ' ' + r2(scy - 14 * u) + ' moveto ' + r2(scx - 6 * u) + ' ' + r2(scy - 24 * u) + ' lineto ' + r2(scx + 6 * u) + ' ' + r2(scy - 24 * u) + ' lineto closepath fill');
+      o.push(epsColor(sc.ink));
+      show(word, off + g.g1, yB, g.fs);
+    }
+  }
+  o.push('grestore');
+  return { body:o.join('\n'), W:W, U:U, H:H };
+}
+function buildEPS(spec, tile){
+  var title = specTitle(spec), i;
+  if(spec.mode === 'set' && !tile){
+    var Ht = spec.thick || 120, rows = SET_ORDER.length, gap = Math.round(Ht * 0.28), top = 56;
+    var H = top * 2 + rows * Ht + (rows - 1) * gap;
+    var parts = [], sheetW = 0;
+    for(i = 0; i < rows; i++){
+      var sub = { mode:'single', style:SET_ORDER[i], scheme:spec.scheme, word:spec.word,
+                  bg:'transparent', font:spec.font, thick:Ht, repeats:5 };
+      var t = epsTape(sub, setRowRepeats(sub, epsMeasurer()));
+      parts.push(t); if(t.W > sheetW) sheetW = t.W;
+    }
+    var out = epsHeader(sheetW, H, title);
+    if(spec.bg === 'white') out += '1 1 1 setrgbcolor 0 0 ' + r2(sheetW) + ' ' + H + ' rectfill\n';
+    if(spec.bg === 'black') out += '0.06 0.06 0.06 setrgbcolor 0 0 ' + r2(sheetW) + ' ' + H + ' rectfill\n';
+    for(i = 0; i < rows; i++){
+      var bottom = H - (top + i * (Ht + gap)) - Ht;
+      out += 'gsave 0 ' + r2(bottom) + ' translate\n' + parts[i].body + '\ngrestore\n';
+    }
+    return out + 'showpage\n%%EOF\n';
+  }
+  var s = singleSpecOf(spec);
+  var tt = epsTape(s, tile ? 1 : (spec.repeats || 5));
+  var out2 = epsHeader(tt.W, tt.H, title);
+  if(spec.bg === 'white') out2 += '1 1 1 setrgbcolor 0 0 ' + r2(tt.W) + ' ' + tt.H + ' rectfill\n';
+  if(spec.bg === 'black') out2 += '0.06 0.06 0.06 setrgbcolor 0 0 ' + r2(tt.W) + ' ' + tt.H + ' rectfill\n';
+  return out2 + tt.body + '\nshowpage\n%%EOF\n';
+}
+
+/* ================= STOCK METADATA ================= */
+function styleName(id){ for(var i=0;i<STYLES.length;i++) if(STYLES[i].id===id) return STYLES[i].name; return id; }
+function specTitle(spec){
+  var w = spec.word.toLowerCase().replace(/\b\w/g, function(c){ return c.toUpperCase(); });
+  if(spec.mode === 'set') return 'Caution Tape Set — ' + w + ' Warning Tape Collection, ' + spec.scheme.name + ' Seamless Hazard Barrier Tapes Vector';
+  return w + ' Caution Tape — ' + spec.scheme.name + ' ' + styleName(spec.style) + ' Seamless Barrier Tape Vector Illustration';
+}
+function specKeywords(spec){
+  var w = spec.word.toLowerCase(), base = ['caution tape','warning tape','barrier tape','hazard tape',
+    'safety tape','warning sign','danger sign','construction tape','barricade tape','police tape',
+    'caution sign','hazard stripes','safety warning','restricted area','do not cross','vector illustration',
+    'seamless tape','seamless repeat','tileable tape','endless tape','yellow caution tape','warning banner','danger tape'];
+  var extra = { 'stripes':['diagonal stripes','hazard stripes black yellow','striped warning'],
+    'chevron':['chevron arrows','arrow tape','direction arrows'], 'checker':['checkerboard pattern','checkered tape'],
+    'biohazard':['biohazard symbol','toxic warning','hazard symbol'], 'skull':['skull warning','danger skull','poison warning'] };
+  var list = base.slice();
+  (extra[spec.style] || []).forEach(function(k){ if(list.indexOf(k) < 0) list.push(k); });
+  if(w && list.indexOf(w) < 0) list.unshift(w);
+  if(spec.mode === 'set'){ list.splice(2, 0, 'caution tape set', 'warning tape collection', 'tape set'); }
+  return list.slice(0, 32).join(', ');
+}
+function specDescription(spec){
+  var w = spec.word;
+  if(spec.mode === 'set')
+    return 'Set of 10 original caution tape vector illustrations in ' + spec.scheme.name.toLowerCase()
+      + ' — hazard stripes, chevron arrows, checkerboard and repeating "' + w + '" text tapes in one collection. '
+      + 'Every tape is a seamless end-to-end repeat: join copies and the pattern and wording continue with no break, so it prints at any length. '
+      + 'Transparent background. EPS 10 vector, fully scalable; EPS text is set in Helvetica Bold — convert it to outlines in Illustrator (Type > Create Outlines) before uploading.';
+  return 'Original ' + w.toLowerCase() + ' caution tape vector illustration — ' + spec.scheme.name.toLowerCase() + ' '
+    + styleName(spec.style).toLowerCase() + ' barrier tape with repeating "' + w + '" wording. '
+    + 'Seamless end-to-end repeat built from one exact tile unit: join copies and the stripes, pattern and wording continue across the join with no gap or break, so buyers can print it at any length. '
+    + 'Supplied as one seamless tile (single repeat) plus the full tape at your chosen length. Transparent background. EPS 10 vector, fully scalable; EPS text is set in Helvetica Bold — convert it to outlines in Illustrator (Type > Create Outlines) before uploading.';
+}
+function specFname(spec, tile){
+  var base = slug(spec.word || 'caution') + '-' + spec.scheme.id + '-' + (spec.mode === 'set' ? 'tape-set' : spec.style) + '-tape';
+  if(tile) return base + '-seamless-tile';
+  return spec.mode === 'set' ? base : base + '-x' + (spec.repeats || 5);
+}
+
+/* ================= RASTER EXPORT (PNG, always 4 MP+) ================= */
+function svgDims(svg){ var m = svg.match(/viewBox="0 0 ([\d.]+) ([\d.]+)"/); return { w:+m[1], h:+m[2] }; }
+function rasterDims(W, H){
+  var s = Math.sqrt(5200000 / (W * H));
+  var w = Math.round(W * s), h = Math.round(H * s);
+  if(w < 2400){ w = 2400; h = Math.round(2400 * H / W); }
+  if(w > 26000){ w = 26000; h = Math.round(26000 * H / W); }
+  return { w:w, h:h };
+}
+function exportSizeText(spec, tile){
+  var d = svgDims(exportSVGFor(spec, tile)), rd = rasterDims(d.w, d.h);
+  return rd.w + ' × ' + rd.h + ' px · ' + (rd.w * rd.h / 1000000).toFixed(1) + ' MP';
+}
+function svgToBlob(spec, tile){
+  return document.fonts.ready.then(function(){ return new Promise(function(resolve, reject){
+    var svg = exportSVGFor(spec, tile), d = svgDims(svg), rd = rasterDims(d.w, d.h);
+    var url = URL.createObjectURL(new Blob([svg], { type:'image/svg+xml;charset=utf-8' }));
+    var img = new Image();
+    img.onload = function(){
+      var cv = document.createElement('canvas'); cv.width = rd.w; cv.height = rd.h;
+      var ctx = cv.getContext('2d');
+      ctx.drawImage(img, 0, 0, rd.w, rd.h);
+      URL.revokeObjectURL(url);
+      cv.toBlob(function(b){ b ? resolve({ blob:b, w:rd.w, h:rd.h }) : reject(new Error('render failed')); }, 'image/png');
+    };
+    img.onerror = function(){ URL.revokeObjectURL(url); reject(new Error('render failed')); };
+    img.src = url;
+  }); });
+}
+
+/* ================= DOWNLOADS ================= */
+function dlEPS(spec, tile){ saveBlob(new Blob([buildEPS(spec, tile)], { type:'application/postscript' }), specFname(spec, tile) + '.eps');
+  toast('EPS 10 downloaded — ' + specFname(spec, tile) + '.eps'); }
+function dlSVG(spec, tile){ saveBlob(new Blob([exportSVGFor(spec, tile)], { type:'image/svg+xml' }), specFname(spec, tile) + '.svg');
+  toast('SVG downloaded — ' + specFname(spec, tile) + '.svg'); }
+function dlPNG(spec, tile){ svgToBlob(spec, tile).then(function(r){
+    saveBlob(r.blob, specFname(spec, tile) + '.png');
+    toast('PNG downloaded — ' + r.w + ' × ' + r.h + ' px (' + (r.w * r.h / 1000000).toFixed(1) + ' MP)');
+  }).catch(function(){ toast('Render failed — try the SVG/EPS download'); }); }
+/* ================= UI ================= */
+function comboKey(spec){ return [spec.mode, spec.style, spec.scheme.id, spec.word, spec.bg, spec.font || 'anton', spec.thick || 120, spec.repeats || 5].join('|'); }
+function renderPreview(){
+  var spec = currentSpec();
+  $('preview').innerHTML = specSVG(spec);
+  $('seam-preview').innerHTML = seamlessSVG(spec);
+  $('seam-toggle').setAttribute('aria-pressed', state.seam ? 'true' : 'false');
+  $('stock-title').textContent = specTitle(spec);
+  $('stock-desc').textContent = specDescription(spec);
+  $('stock-kw').textContent = specKeywords(spec);
+  $('full-label').textContent = spec.mode === 'set' ? 'set of 10 tapes' : (spec.repeats || 5) + ' repeats';
+  var g = unitGeom(singleSpecOf(spec), svgMeasurer(spec));
+  $('preview-meta').innerHTML = 'Repeat unit <b>' + r2(g.U) + ' units</b> · Thickness <b>' + (spec.thick || 120)
+    + '</b> · Font <b>' + effFont(spec).name + '</b>'
+    + ' · Tile PNG <b>' + exportSizeText(spec, true) + '</b>'
+    + ' · Full PNG <b>' + exportSizeText(spec, false) + '</b>';
+}
+function markChips(containerId, attr, val){
+  var btns = $(containerId).querySelectorAll('button');
+  for(var i=0;i<btns.length;i++) btns[i].setAttribute('aria-pressed', btns[i].getAttribute(attr)===val ? 'true' : 'false');
+}
+function buildControls(){
+  var ss = $('style-sel');
+  STYLES.forEach(function(s){ var o=document.createElement('option'); o.value=s.id; o.textContent=s.name; ss.appendChild(o); });
+  ss.value = state.style;
+  var ws = $('word-sel'), seen = {};
+  function addGroup(label, words){
+    var g = document.createElement('optgroup'); g.label = label;
+    words.forEach(function(w){ if(seen[w]) return; seen[w]=1;
+      var o=document.createElement('option'); o.value=w; o.textContent=w; g.appendChild(o); });
+    if(g.children.length) ws.appendChild(g);
+  }
+  addGroup('★ Best sellers', WORDS);
+  WORD_GROUPS.forEach(function(g){ addGroup(g.label, g.words); });
+  ws.value = state.word;
+  var sw = $('swatches');
+  SCHEMES.forEach(function(s){
+    var b = document.createElement('button'); b.type='button'; b.className='sw';
+    b.setAttribute('aria-pressed', s.id===state.scheme.id ? 'true' : 'false');
+    b.setAttribute('data-scheme', s.id);
+    b.innerHTML = '<span class="bar" style="background:repeating-linear-gradient(45deg, ' + s.base + ' 0 9px, ' + s.ink + ' 9px 18px)"></span><span class="nm">' + esc(s.name) + '</span>';
+    b.addEventListener('click', function(){ state.scheme = s;
+      var all = sw.querySelectorAll('.sw');
+      for(var i=0;i<all.length;i++) all[i].setAttribute('aria-pressed', all[i].getAttribute('data-scheme')===s.id ? 'true' : 'false');
+      renderPreview(); });
+    sw.appendChild(b);
+  });
+}
+/* ================= BATCH ================= */
+function addToBatch(spec, silent){
+  var key = comboKey(spec);
+  for(var i=0;i<batch.length;i++) if(comboKey(batch[i].spec)===key){ if(!silent) toast('That exact design is already in the batch'); return false; }
+  usedCombos[key] = 1;
+  batch.push({ spec:spec, svg:specSVG(spec), title:specTitle(spec), description:specDescription(spec), keywords:specKeywords(spec), fname:specFname(spec, false) });
+  return true;
+}
+function renderBatch(){
+  $('batch-count').textContent = batch.length
+    ? 'Batch: ' + batch.length + ' design' + (batch.length>1?'s':'') + ' ready. ZIP buttons download the whole batch at once.'
+    : 'Batch is empty — generate designs or add the tape above.';
+  var wrap = $('cards'); wrap.innerHTML = '';
+  batch.forEach(function(it, idx){
+    var card = document.createElement('div'); card.className = 'card';
+    card.innerHTML = '<div class="thumb">' + it.svg + '</div><div class="body"><h3>' + esc(it.title) + '</h3>'
+      + '<p class="kw">' + esc(it.description) + '</p>'
+      + '<p class="kw">' + esc(it.keywords) + '</p>'
+      + '<div class="acts">'
+      + '<span class="lbl">Full tape</span>'
+      + '<button type="button" class="btn small" data-act="eps" data-i="' + idx + '">EPS 10</button>'
+      + '<button type="button" class="btn small" data-act="svg" data-i="' + idx + '">SVG</button>'
+      + '<button type="button" class="btn small" data-act="png" data-i="' + idx + '">PNG</button>'
+      + '<span class="lbl">Seamless tile — 1 repeat</span>'
+      + '<button type="button" class="btn small" data-act="teps" data-i="' + idx + '">Tile EPS</button>'
+      + '<button type="button" class="btn small" data-act="tsvg" data-i="' + idx + '">Tile SVG</button>'
+      + '<button type="button" class="btn small" data-act="tpng" data-i="' + idx + '">Tile PNG</button>'
+      + '<span class="lbl"></span>'
+      + '<button type="button" class="btn small" data-act="copy" data-i="' + idx + '">Copy title + description + keywords</button>'
+      + '<button type="button" class="btn small" data-act="del" data-i="' + idx + '">Remove</button>'
+      + '</div></div>';
+    wrap.appendChild(card);
+  });
+}
+function rnd(arr){ return arr[Math.floor(Math.random() * arr.length)]; }
+function generate(kind){
+  var added = 0, guard = 0;
+  if(kind === 'set4'){
+    while(added < 4 && guard++ < 200){
+      var spec = { mode:'set', style:'stripes-text', scheme:rnd(SCHEMES), word:rnd(ALL_WORDS),
+                   bg:rnd(['transparent','white','black']), font:rnd(FONTS).id,
+                   thick:rnd([80,120,180,240]), repeats:5 };
+      if(addToBatch(spec, true)) added++;
+    }
+  } else {
+    var n = parseInt(kind, 10);
+    while(added < n && guard++ < 400){
+      var s2 = { mode:'single', style:rnd(STYLES).id, scheme:rnd(SCHEMES), word:rnd(ALL_WORDS),
+                 bg:'transparent', font:rnd(FONTS).id, thick:rnd([80,120,120,180,240]),
+                 repeats:rnd([3,4,5,5,6,8]) };
+      if(addToBatch(s2, true)) added++;
+    }
+  }
+  renderBatch();
+  toast(added ? added + ' new design' + (added>1?'s':'') + ' added to the batch' : 'No new combinations left in this session');
+  if(added) $('cards').scrollIntoView({ behavior:'smooth', block:'nearest' });
+}
+function zipAll(kind){
+  if(!batch.length){ toast('Batch is empty — generate designs first'); return; }
+  if(typeof JSZip === 'undefined'){ toast('ZIP library still loading — try again in a moment'); return; }
+  toast('Building ZIP…');
+  var zip = new JSZip(), jobs;
+  if(kind === 'eps'){ batch.forEach(function(it){ zip.file(it.fname + '.eps', buildEPS(it.spec, false)); }); jobs = Promise.resolve(); }
+  else if(kind === 'svg'){ batch.forEach(function(it){ zip.file(it.fname + '.svg', exportSVGFor(it.spec, false)); }); jobs = Promise.resolve(); }
+  else { jobs = Promise.all(batch.map(function(it){
+      return svgToBlob(it.spec, false).then(function(r){ zip.file(it.fname + '.png', r.blob); });
+    })); }
+  jobs.then(function(){ return zip.generateAsync({ type:'blob' }); }).then(function(b){
+    saveBlob(b, 'caution-tapes-' + kind + '.zip'); toast('ZIP downloaded — ' + batch.length + ' files');
+  }).catch(function(){ toast('ZIP failed — download designs one by one'); });
+}
+/* ================= ALL SVG PACKS — EVERY WORD × EVERY COLOUR =================
+   One button builds EVERY tape PACK the tool can make for the current font,
+   thickness and background: every word in the library × every colour scheme.
+   A pack is always a tape SET (10 tapes in 1) — never a single tape — and every
+   pack is drawn by the exact same buildSetSVG() geometry the "Tape set (10 in 1)"
+   mode already uses. All packs are then exported together in ONE ZIP, one folder
+   per colour scheme inside one master folder. This block only adds behaviour;
+   no existing function is changed. */
+var packRun = { busy:false, stop:false };
+
+function packSpecs(){
+  var out = [], bg = state.bg, font = state.font, thick = state.thick, si, wi;
+  for(si = 0; si < SCHEMES.length; si++){
+    for(wi = 0; wi < ALL_WORDS.length; wi++){
+      out.push({ mode:'set', style:'stripes-text', scheme:SCHEMES[si], word:ALL_WORDS[wi],
+                 bg:bg, font:font, thick:thick, repeats:5 });
+    }
+  }
+  return out;
+}
+function packCount(){ return ALL_WORDS.length * SCHEMES.length; }
+function setPackStatus(msg){ $('all-packs-status').textContent = msg; }
+function setPackBar(pct){ $('all-packs-fill').style.width = Math.max(0, Math.min(100, pct)).toFixed(1) + '%'; }
+/* folder = colour scheme, file = same naming the single exports use (deduped) */
+function packPath(spec, used){
+  var folder = 'caution-tape-svg-packs/' + spec.scheme.id, base = specFname(spec, false), name = base, n = 2, path;
+  do { path = folder + '/' + name + '.svg'; if(used[path]) name = base + '-' + (n++); }
+  while(used[path]);
+  used[path] = 1;
+  return path;
+}
+function buildAllPacksZip(){
+  if(packRun.busy) return;
+  if(typeof JSZip === 'undefined'){ toast('ZIP library still loading — try again in a moment'); return; }
+  var specs = packSpecs(), total = specs.length, zip = new JSZip(), used = {}, i = 0;
+  packRun.busy = true; packRun.stop = false;
+  $('all-packs-btn').disabled = true; $('all-packs-stop').disabled = false;
+  setPackBar(0);
+  setPackStatus('Generating packs… 0 / ' + total);
+
+  function finish(msg){
+    packRun.busy = false; packRun.stop = false;
+    $('all-packs-btn').disabled = false; $('all-packs-stop').disabled = true;
+    setPackStatus(msg);
+    toast(msg.length > 95 ? msg.slice(0, 95) + '…' : msg);
+  }
+  function chunk(){
+    if(packRun.stop){ finish('Stopped after ' + i + ' of ' + total + ' packs — nothing was downloaded.'); setPackBar(0); return; }
+    var end = Math.min(total, i + 10);
+    while(i < end){
+      var spec = specs[i];
+      zip.file(packPath(spec, used), exportSVGFor(spec, false));
+      i++;
+    }
+    var pct = i / total * 90;
+    setPackBar(pct);
+    setPackStatus('Generating packs… ' + i + ' / ' + total + ' (' + Math.round(i / total * 100) + '%)');
+    if(i < total) setTimeout(chunk, 0);
+    else finalise();
+  }
+  function finalise(){
+    setPackStatus('Packing ' + total + ' SVG packs into the ZIP…');
+    zip.generateAsync({ type:'blob', compression:'DEFLATE', compressionOptions:{ level:6 } },
+      function(meta){
+        setPackBar(90 + meta.percent * 0.10);
+        setPackStatus('Packing ZIP… ' + Math.round(meta.percent) + '% of ' + total + ' SVG packs');
+      }).then(function(blob){
+        saveBlob(blob, 'caution-tape-svg-packs-' + total + '.zip');
+        setPackBar(100);
+        finish('ZIP downloaded — ' + total + ' SVG tape packs (' + ALL_WORDS.length + ' words × '
+          + SCHEMES.length + ' colours) · ' + (blob.size / 1048576).toFixed(1) + ' MB');
+      }).catch(function(){
+        finish('ZIP failed — try again, or build smaller groups from the Batch panel.');
+        setPackBar(0);
+      });
+  }
+  setPackStatus('Waiting for fonts, then generating ' + total + ' packs…');
+  if(document.fonts && document.fonts.ready)
+    document.fonts.ready.then(function(){ setTimeout(chunk, 0); }, function(){ setTimeout(chunk, 0); });
+  else setTimeout(chunk, 0);
+}
+function bindAllPacks(){
+  $('all-packs-btn').addEventListener('click', buildAllPacksZip);
+  $('all-packs-stop').addEventListener('click', function(){
+    if(!packRun.busy) return;
+    packRun.stop = true;
+    setPackStatus('Stopping…');
+  });
+}
+function initAllPacks(){
+  $('ap-words').textContent = ALL_WORDS.length + ' words';
+  $('ap-schemes').textContent = SCHEMES.length + ' colours';
+  $('ap-total').textContent = packCount();
+  bindAllPacks();
+}
+/* ================= EVENTS ================= */
+function bindEvents(){
+  $('mode-single').addEventListener('click', function(){ state.mode = 'single';
+    $('mode-single').setAttribute('aria-pressed','true'); $('mode-set').setAttribute('aria-pressed','false'); renderPreview(); });
+  $('mode-set').addEventListener('click', function(){ state.mode = 'set';
+    $('mode-set').setAttribute('aria-pressed','true'); $('mode-single').setAttribute('aria-pressed','false'); renderPreview(); });
+  $('style-sel').addEventListener('change', function(){ state.style = this.value; renderPreview(); });
+  $('font-sel').addEventListener('change', function(){ state.font = this.value; renderPreview(); });
+  $('word-sel').addEventListener('change', function(){ state.word = this.value; renderPreview(); });
+  $('custom-word').addEventListener('input', function(){ state.custom = this.value; renderPreview(); });
+  $('bg-chips').addEventListener('click', function(e){ var b = e.target.closest('button'); if(!b) return;
+    state.bg = b.getAttribute('data-bg'); markChips('bg-chips', 'data-bg', state.bg); renderPreview(); });
+  function thickName(t){ return t <= 95 ? 'Thin' : t <= 150 ? 'Standard' : t <= 210 ? 'Thick' : 'Extra Thick'; }
+  function syncThick(){
+    $('thick-range').value = state.thick;
+    $('thick-val').textContent = thickName(state.thick) + ' · ' + state.thick;
+    var btns = $('thick-chips').querySelectorAll('button');
+    for(var i = 0; i < btns.length; i++)
+      btns[i].setAttribute('aria-pressed', +btns[i].getAttribute('data-thick') === state.thick ? 'true' : 'false');
+  }
+  $('thick-chips').addEventListener('click', function(e){ var b = e.target.closest('button'); if(!b) return;
+    state.thick = +b.getAttribute('data-thick'); syncThick(); renderPreview(); });
+  $('thick-range').addEventListener('input', function(){ state.thick = +this.value; syncThick(); renderPreview(); });
+  function syncLen(){
+    $('len-range').value = Math.min(12, state.repeats);
+    $('len-num').value = state.repeats;
+    var btns = $('len-chips').querySelectorAll('button');
+    for(var i = 0; i < btns.length; i++)
+      btns[i].setAttribute('aria-pressed', +btns[i].getAttribute('data-rep') === state.repeats ? 'true' : 'false');
+  }
+  $('len-chips').addEventListener('click', function(e){ var b = e.target.closest('button'); if(!b) return;
+    state.repeats = +b.getAttribute('data-rep'); syncLen(); renderPreview(); });
+  $('len-range').addEventListener('input', function(){ state.repeats = +this.value; syncLen(); renderPreview(); });
+  $('len-num').addEventListener('change', function(){
+    var v = Math.round(+this.value || 5);
+    state.repeats = Math.max(2, Math.min(12, v)); syncLen(); renderPreview(); });
+  $('seam-toggle').addEventListener('click', function(){ state.seam = !state.seam; renderPreview(); });
+  $('dl-tile-eps').addEventListener('click', function(){ dlEPS(currentSpec(), true); });
+  $('dl-tile-svg').addEventListener('click', function(){ dlSVG(currentSpec(), true); });
+  $('dl-tile-png').addEventListener('click', function(){ dlPNG(currentSpec(), true); });
+  $('dl-eps').addEventListener('click', function(){ dlEPS(currentSpec(), false); });
+  $('dl-svg').addEventListener('click', function(){ dlSVG(currentSpec(), false); });
+  $('dl-png').addEventListener('click', function(){ dlPNG(currentSpec(), false); });
+  $('copy-meta').addEventListener('click', function(){ var s = currentSpec();
+    copyText('Title: ' + specTitle(s) + '\nDescription: ' + specDescription(s) + '\nKeywords: ' + specKeywords(s), 'Title, description + keywords copied'); });
+  $('add-batch').addEventListener('click', function(){ if(addToBatch(currentSpec())){ renderBatch(); toast('Added to batch'); } });
+  var gens = document.querySelectorAll('[data-gen]');
+  for(var i = 0; i < gens.length; i++) gens[i].addEventListener('click', function(){ generate(this.getAttribute('data-gen')); });
+  $('clear-batch').addEventListener('click', function(){ batch = []; renderBatch(); toast('Batch cleared (session combination memory kept)'); });
+  $('zip-eps').addEventListener('click', function(){ zipAll('eps'); });
+  $('zip-svg').addEventListener('click', function(){ zipAll('svg'); });
+  $('zip-png').addEventListener('click', function(){ zipAll('png'); });
+  $('dl-txt').addEventListener('click', function(){
+    if(!batch.length){ toast('Batch is empty — generate designs first'); return; }
+    var txt = batch.map(function(it){ return it.fname + '\nTitle: ' + it.title + '\nDescription: ' + it.description + '\nKeywords: ' + it.keywords; }).join('\n\n');
+    saveBlob(new Blob([txt], { type:'text/plain' }), 'caution-tapes-titles-descriptions-keywords.txt'); toast('TXT downloaded'); });
+  $('cards').addEventListener('click', function(e){ var b = e.target.closest('button'); if(!b) return;
+    var it = batch[+b.getAttribute('data-i')]; if(!it) return;
+    var act = b.getAttribute('data-act');
+    if(act === 'eps') dlEPS(it.spec, false);
+    else if(act === 'svg') dlSVG(it.spec, false);
+    else if(act === 'png') dlPNG(it.spec, false);
+    else if(act === 'teps') dlEPS(it.spec, true);
+    else if(act === 'tsvg') dlSVG(it.spec, true);
+    else if(act === 'tpng') dlPNG(it.spec, true);
+    else if(act === 'copy') copyText('Title: ' + it.title + '\nDescription: ' + it.description + '\nKeywords: ' + it.keywords, 'Title, description + keywords copied');
+    else if(act === 'del'){ batch.splice(+b.getAttribute('data-i'), 1); renderBatch(); }
+  });
+}
+/* ================= INIT ================= */
+buildControls();
+bindEvents();
+renderPreview();
+renderBatch();
+initAllPacks();
+/* Re-render once the real fonts arrive so measurements and letterforms are exact. */
+if(document.fonts && document.fonts.load){
+  document.fonts.load('400 40px Anton'); document.fonts.load('400 40px "Archivo Black"');
+  document.fonts.load('700 40px Oswald');
+  document.fonts.ready.then(function(){ renderPreview(); });
+}
+</script>
+</body>
+</html>
