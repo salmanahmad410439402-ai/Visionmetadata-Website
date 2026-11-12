@@ -250,7 +250,10 @@ const Blogs = () => {
 
                 <div className="pt-6 mt-6 border-t border-border/50 flex items-center justify-between">
                   <div className="flex items-center gap-2.5">
-                    <span className="text-sm" aria-hidden="true">
+                    <span
+                      className="w-7 h-7 rounded-lg bg-primary/15 border border-primary/25 flex items-center justify-center text-[11px] font-black text-primary shrink-0"
+                      aria-hidden="true"
+                    >
                       {post.author.avatar}
                     </span>
                     <div>

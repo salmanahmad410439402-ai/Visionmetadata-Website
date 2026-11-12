@@ -11,13 +11,13 @@ import {
 import { ToolIcon, ToolStatusBadge } from "@/components/ToolsDiscoveryModal";
 
 const siteLinks = [
+  { label: "Guides", to: "/blogs" },
+  { label: "Limits", to: "/metadata-limits" },
+  { label: "Tutorials", to: "/tutorials" },
+  { label: "FAQ", to: "/faq" },
   { label: "Features", to: "/features" },
   { label: "Pricing", to: "/pricing" },
   { label: "Extension", to: "/chrome-extension" },
-  { label: "Blog", to: "/blogs" },
-  { label: "Tutorials", to: "/tutorials" },
-  { label: "FAQ", to: "/faq" },
-  { label: "Contact", to: "/contact" },
 ];
 
 const Navbar = () => {

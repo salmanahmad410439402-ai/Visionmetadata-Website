@@ -16,9 +16,9 @@ const ContactSection = () => {
             <MessageCircle className="w-4 h-4" />
             Get in Touch
           </div>
-          <h2 className="reveal reveal-delay-1 text-4xl sm:text-5xl font-bold text-foreground mb-6">
-            Contact & Support
-          </h2>
+          <h1 className="reveal reveal-delay-1 text-4xl sm:text-5xl font-bold text-foreground mb-6">
+            Contact &amp; Support
+          </h1>
           <p className="reveal reveal-delay-2 max-w-2xl mx-auto text-lg text-tertiary">
             Questions about Tagyfy Pro, an existing licence, or a refund? Message us on WhatsApp or e-mail — support is handled by the same person who develops the app.
           </p>

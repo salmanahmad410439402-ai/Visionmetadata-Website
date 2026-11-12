@@ -63,6 +63,19 @@ ${CONTRIBUTOR_TOOLS.map(
 ).join('\n')}
 </ul>
 
+<h2>Stock Contributor Knowledge Base &amp; Reference (${BLOG_POSTS.length} Original Guides)</h2>
+<p>In-depth technical guides written from real stock portfolio workflows — covering IPTC/XMP file standards, 6-agency CSV rules, visual trademark audits, vector pre-flight checks, and international tax withholding. Reviewed under our <a href="/editorial-policy">editorial standards</a>.</p>
+<ul>
+<li><strong><a href="/metadata-limits">6-Marketplace Metadata Limits Reference</a>:</strong> Compare exact title character limits, keyword minimums, UTF-8 BOM rules, and CSV column headers across Adobe Stock, Shutterstock, Freepik, Vecteezy, Dreamstime, and 123RF.</li>
+<li><strong><a href="/blog/iptc-xmp-exif-metadata-explained-stock-contributors">IPTC, XMP, and EXIF Metadata Explained for Stock Contributors</a></strong> — How Adobe Stock, Shutterstock, and Freepik read embedded metadata packets across JPEG, EPS, SVG, and MP4 files.</li>
+<li><strong><a href="/blog/stock-csv-upload-formatting-troubleshooting-guide">CSV Upload Formatting &amp; Troubleshooting Guide across 6 Stock Marketplaces</a></strong> — Fix delimiter mismatches, UTF-8 BOM errors, title commas, and RFC 4180 quote escaping.</li>
+<li><strong><a href="/blog/hidden-visual-trademarks-stock-photography-illustrations-audit">Hidden Visual Trademarks in Stock Photos &amp; Illustrations</a></strong> — Pre-upload IP audit for industrial design shapes, architectural landmarks, UI screens, and apparel hardware.</li>
+<li><strong><a href="/blog/adobe-stock-similar-content-rejection-portfolio-curation-guide">Adobe Stock 'Similar Content' Rejections &amp; Series Curation</a></strong> — Why near-duplicate variations get flagged as spam and how to curate high-acceptance commercial series.</li>
+<li><strong><a href="/blog/preparing-eps-svg-vector-files-for-stock-agencies">Preparing Clean EPS &amp; SVG Vector Files for Stock Agencies</a></strong> — Eliminate stray anchor points, rasterized effects, live fonts, and artboard clipping errors.</li>
+<li><strong><a href="/blog/w8ben-tax-withholding-payout-guide-international-stock-contributors">Form W-8BEN &amp; US Royalty Tax Withholding Guide for Stock Contributors</a></strong> — Claim treaty rates on US buyer downloads and avoid 30% default withholding.</li>
+<li><a href="/blogs">Browse all ${BLOG_POSTS.length} contributor guides in the Knowledge Base →</a></li>
+</ul>
+
 <h2>Direct Vector &amp; Video Metadata Embedding</h2>
 <p>Tagyfy Pro writes IPTC, XMP, and Dublin Core metadata directly into compatible JPG, PNG, WebP, TIFF, AI, EPS, SVG, MP4, MOV, and WebM files, or exports formatted CSV spreadsheets for Adobe Stock, Shutterstock, Freepik, Dreamstime, 123RF, and Vecteezy.</p>
 
@@ -870,6 +883,28 @@ BLOG_POSTS.forEach((post) => {
       contentHtml += `<p>${inlineToHtml(para)}</p>`;
     });
 
+    if (sec.table) {
+      contentHtml += `<table>`;
+      if (sec.table.caption) {
+        contentHtml += `<caption>${escapeHtml(sec.table.caption)}</caption>`;
+      }
+      contentHtml += `<thead><tr>${sec.table.headers
+        .map((h) => `<th scope="col">${escapeHtml(h)}</th>`)
+        .join('')}</tr></thead>`;
+      contentHtml += `<tbody>${sec.table.rows
+        .map(
+          (row) =>
+            `<tr>${row.map((cell) => `<td>${inlineToHtml(cell)}</td>`).join('')}</tr>`
+        )
+        .join('')}</tbody></table>`;
+    }
+
+    if (sec.codeBlock) {
+      contentHtml += `<p><strong>${escapeHtml(sec.codeBlock.label)}:</strong></p><pre><code>${escapeHtml(
+        sec.codeBlock.code
+      )}</code></pre>`;
+    }
+
     if (sec.tip) contentHtml += `<p><strong>Practitioner Tip:</strong> ${inlineToHtml(sec.tip)}</p>`;
     if (sec.warning) contentHtml += `<p><strong>Compliance Note:</strong> ${inlineToHtml(sec.warning)}</p>`;
 
@@ -904,6 +939,15 @@ BLOG_POSTS.forEach((post) => {
   if (post.content.checklist && post.content.checklist.length) {
     contentHtml += `<h2>Pre-Submission Review Checklist</h2><ul>${post.content.checklist
       .map((item) => `<li>${inlineToHtml(item)}</li>`)
+      .join('')}</ul>`;
+  }
+
+  if (post.sources && post.sources.length) {
+    contentHtml += `<h2>Official Documentation &amp; Standards Referenced</h2><ul>${post.sources
+      .map(
+        (s) =>
+          `<li><a href="${escapeHtml(s.url)}" rel="noopener noreferrer">${escapeHtml(s.label)}</a></li>`
+      )
       .join('')}</ul>`;
   }
 
@@ -942,15 +986,16 @@ function wrapPrerenderShell(bodyHtml: string): string {
     <div class="prerender-header-inner">
       <a href="/" class="prerender-logo">Tagyfy<span> Pro</span> <small>AI</small></a>
       <nav class="prerender-nav" aria-label="Primary navigation">
+        <a href="/blogs">Guides</a>
+        <a href="/metadata-limits">Limits</a>
+        <a href="/tutorials">Tutorials</a>
+        <a href="/faq">FAQ</a>
         <a href="/tool">Free Tool</a>
         <a href="/metadata-checker">Checker</a>
         <a href="/stock-csv-converter">CSV Converter</a>
         <a href="/event-calendar">Events</a>
         <a href="/features">Features</a>
         <a href="/pricing">Pricing</a>
-        <a href="/blogs">Blog</a>
-        <a href="/tutorials">Tutorials</a>
-        <a href="/faq">FAQ</a>
         <a href="/download" class="prerender-cta">Download</a>
       </nav>
     </div>
@@ -1006,6 +1051,12 @@ function buildPageHtml(template: string, page: PageSpec): string {
     /<meta name="twitter:description"[\s\S]*?\/>/,
     () => `<meta name="twitter:description" content="${safeDesc}" />`
   );
+
+  // Keep google-adsense-account meta on '/' (domain verification) and AdSense editorial routes only;
+  // strip it from non-AdSense tool, software, marketing, and legal pages.
+  if (page.path !== '/' && !page.adsense) {
+    html = html.replace(/<meta name="google-adsense-account"[^>]*>\s*/g, '');
+  }
 
   // Inject canonical link, optional JSON-LD, and strictly scoped AdSense script before </head>
   const headExtras = [

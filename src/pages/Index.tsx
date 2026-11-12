@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import HeroSection from "@/components/HeroSection";
 import StatsBar from "@/components/StatsBar";
 import ContributorToolkitSection from "@/components/ContributorToolkitSection";
+import ContributorKnowledgeSection from "@/components/ContributorKnowledgeSection";
 import { DirectEmbeddingShowcase } from "@/components/DirectEmbeddingShowcase";
 import HowItWorks from "@/components/HowItWorks";
 import FeatureHighlights from "@/components/FeatureHighlights";
@@ -36,6 +37,9 @@ const Index = () => {
 
         {/* 2b. Free Browser Contributor Toolkit (4 Tools — Which One Do You Need?) */}
         <ContributorToolkitSection />
+
+        {/* 2c. Practitioner Knowledge Base & 6-Marketplace Limits Reference */}
+        <ContributorKnowledgeSection />
 
         {/* 3. Breakthrough Direct Vector & Video Embedding Showcase (Superpower of Desktop App + Web Tool) */}
         <DirectEmbeddingShowcase />

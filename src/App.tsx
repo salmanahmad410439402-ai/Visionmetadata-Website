@@ -9,39 +9,68 @@ import { initializeAnalytics } from "@/lib/analytics";
 import { applyStoredConsent } from "@/lib/consent";
 import ConsentBanner from "@/components/ConsentBanner";
 import Index from "./pages/Index";
+import Features from "./pages/Features";
+import Pricing from "./pages/Pricing";
+import DownloadPage from "./pages/Download";
+import ContactPage from "./pages/Contact";
+import FAQ from "./pages/FAQ";
+import Tutorials from "./pages/Tutorials";
+import ChromeExtension from "./pages/ChromeExtension";
+import AboutUs from "./pages/AboutUs";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsOfService from "./pages/TermsOfService";
+import RefundPolicy from "./pages/RefundPolicy";
+import EditorialPolicy from "./pages/EditorialPolicy";
+import PlatformLimits from "./pages/PlatformLimits";
+import Blogs from "./pages/Blogs";
+import BlogPost from "./pages/BlogPost";
+import NotFound from "./pages/NotFound";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import AdSenseLoader from "@/components/ads/AdSenseLoader";
 import { JsonLd, organisationSchema } from "@/lib/structuredData";
 import ToolsDiscoveryModal from "@/components/ToolsDiscoveryModal";
 
-// Route-level code splitting so visitors only download the page they open
-const Features = lazy(() => import("./pages/Features"));
-const Pricing = lazy(() => import("./pages/Pricing"));
-const DownloadPage = lazy(() => import("./pages/Download"));
-const ContactPage = lazy(() => import("./pages/Contact"));
-const FAQ = lazy(() => import("./pages/FAQ"));
-const Tutorials = lazy(() => import("./pages/Tutorials"));
-const ChromeExtension = lazy(() => import("./pages/ChromeExtension"));
-const AboutUs = lazy(() => import("./pages/AboutUs"));
-const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
-const TermsOfService = lazy(() => import("./pages/TermsOfService"));
-const RefundPolicy = lazy(() => import("./pages/RefundPolicy"));
-const EditorialPolicy = lazy(() => import("./pages/EditorialPolicy"));
-const ToolPage = lazy(() => import("./pages/Tool"));
-const PlatformLimits = lazy(() => import("./pages/PlatformLimits"));
-const MetadataChecker = lazy(() => import("./pages/MetadataChecker"));
-const StockCsvConverter = lazy(() => import("./pages/StockCsvConverter"));
-const EventCalendar = lazy(() => import("./pages/EventCalendar"));
-const Blogs = lazy(() => import("./pages/Blogs"));
-const BlogPost = lazy(() => import("./pages/BlogPost"));
-const NotFound = lazy(() => import("./pages/NotFound"));
+// Code-split only the heavy interactive workspaces (piexifjs / jszip / AI dashboard)
+// while keeping all editorial, reference, marketing, legal, and 404 routes eager
+// so crawlers (Googlebot WRS, Mediapartners-Google) and readers never see a
+// Suspense loading placeholder wipe out prerendered content.
+const loadToolPage = () => import("./pages/Tool");
+const loadMetadataChecker = () => import("./pages/MetadataChecker");
+const loadStockCsvConverter = () => import("./pages/StockCsvConverter");
+const loadEventCalendar = () => import("./pages/EventCalendar");
+
+const ToolPage = lazy(loadToolPage);
+const MetadataChecker = lazy(loadMetadataChecker);
+const StockCsvConverter = lazy(loadStockCsvConverter);
+const EventCalendar = lazy(loadEventCalendar);
+
+/**
+ * Preloads the matching lazy workspace chunk BEFORE React mounts onto `#root`
+ * so the prerendered `.prerender-shell` stays visible until the interactive
+ * route is ready to render synchronously.
+ */
+export function preloadInitialRoute(pathname: string): Promise<unknown> {
+  const normalized = pathname.replace(/\/+$/, "") || "/";
+  switch (normalized) {
+    case "/tool":
+      return loadToolPage();
+    case "/metadata-checker":
+      return loadMetadataChecker();
+    case "/stock-csv-converter":
+      return loadStockCsvConverter();
+    case "/event-calendar":
+      return loadEventCalendar();
+    default:
+      return Promise.resolve();
+  }
+}
 
 const RouteLoadingFallback = () => (
   <div className="min-h-[65vh] flex items-center justify-center px-6 pt-28 pb-16">
     <div className="glass-panel rounded-2xl px-6 py-4 flex items-center gap-3 text-sm font-semibold text-muted-foreground">
       <span className="h-2.5 w-2.5 rounded-full bg-primary animate-pulse" />
-      Loading workspace…
+      Opening interactive tool…
     </div>
   </div>
 );
