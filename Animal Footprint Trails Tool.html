@@ -808,24 +808,42 @@ function packSVG(s){
     if(r.ymax-r.ymin>band) band=r.ymax-r.ymin;
   });
   var bh=Math.ceil(band+pad*2), H=bh*rows.length;
-  var body='', y=0, inner, cy;
-  rows.forEach(function(r){
-    cy=(r.ymin+r.ymax)/2;
-    inner=r.svg.replace(/^<svg[^>]*>/,'').replace(/<\/svg>\s*$/,'').replace(/^<rect width="\d+" height="\d+" fill="#[0-9A-Fa-f]{6}"\/>/,'');
-    body+='<g transform="translate(0 '+Math.round(y+bh/2)+')"><g transform="translate(0 '+(-Math.round(cy))+')">';
-    body+=inner+'</g></g>';
+  var art='', y=0, inner, cy, i;
+  for(i=0;i<rows.length;i++){
+    cy=(rows[i].ymin+rows[i].ymax)/2;
+    inner=rows[i].svg.replace(/^<svg[^>]*>/,'').replace(/<\/svg>\s*$/,'').replace(/^<rect width="\d+" height="\d+" fill="#[0-9A-Fa-f]{6}"\/>/,'');
+    art+='<g id="'+PACK_MODES[i].id+'-trail" transform="translate(0 '+Math.round(y+bh/2)+')"><g transform="translate(0 '+(-Math.round(cy))+')">'
+       + inner+'</g></g>';
     y+=bh;
-  });
+  }
+  /* ---- artboard: 2500-3500 px on every side, artwork 88% of it and centred ----
+     The board follows the artwork proportions as far as the limits allow: the short
+     side is always 2500 px (the minimum) and the long side is the proportional value
+     capped at 3500. The artwork is scaled to a 6% margin on all sides, so its longest
+     side is ~2200 px on a 2500 px board (never below 2000), and every object sits
+     inside one master group. */
+  var cw=W, ch=H, ratio=(cw&&ch)? Math.min(cw,ch)/Math.max(cw,ch) : 1;
+  var SHORT=2500, LONG=Math.max(2500,Math.min(3500,Math.round(SHORT/ratio)));
+  var boardW=cw>=ch? LONG:SHORT, boardH=cw>=ch? SHORT:LONG;
+  var margin=0.06;
+  var k=Math.min(boardW*(1-2*margin)/cw, boardH*(1-2*margin)/ch);
+  var artW=cw*k, artH=ch*k;
+  var offX=(boardW-artW)/2, offY=(boardH-artH)/2;
+  var body='<g id="'+s.id+'-footprint-trail-3-modes" transform="translate('+round2(offX)+' '+round2(offY)+') scale('+round2(k)+')">'+art+'</g>';
   var bgFill = state.bg==='white'?'#FFFFFF': state.bg==='sand'?'#EADFC6': state.bg==='dark'?'#20301F': null;
-  var bg = bgFill? '<rect width="'+W+'" height="'+H+'" fill="'+bgFill+'"/>':'';
-  return {svg:'<svg xmlns="http://www.w3.org/2000/svg" width="'+W+'" height="'+H+'" viewBox="0 0 '+W+' '+H+'">'+bg+body+'</svg>',W:W,H:H};
+  var bg = bgFill? '<rect width="'+boardW+'" height="'+boardH+'" fill="'+bgFill+'"/>':'';
+  return {svg:'<svg xmlns="http://www.w3.org/2000/svg" width="'+boardW+'" height="'+boardH+'" viewBox="0 0 '+boardW+' '+boardH+'">'+bg+body+'</svg>',
+          W:boardW,H:boardH,artW:Math.round(artW),artH:Math.round(artH)};
 }
 function packName(s){ return slugName(s)+'-3-modes.svg'; }
 function renderPack(s){
   var r=packSVG(s), st=$('pkStage');
   st.className='stage bg-'+state.bg;
   st.innerHTML=r.svg;
-  $('pkFoot').innerHTML='<span class="pill">Straight + S-curve + Wavy</span><span class="pill">'+s.name+'</span><span class="pill">'+r.W+' × '+r.H+' px vector</span><span class="pill">File: '+packName(s)+'</span>';
+  $('pkFoot').innerHTML='<span class="pill">Straight + S-curve + Wavy</span><span class="pill">'+s.name+'</span>'
+    +'<span class="pill">Artboard '+r.W+' × '+r.H+' px</span>'
+    +'<span class="pill">Artwork '+r.artW+' × '+r.artH+' px · one group</span>'
+    +'<span class="pill">File: '+packName(s)+'</span>';
   $('pkBuildSub').textContent=s.name+' built · 3 modes';
 }
 $('pkBuild').addEventListener('click',function(){
