@@ -1,0 +1,1353 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="light dark" />
+<link rel="icon" href="data:," />
+<title>Caution Tapes Vector Tool</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<!-- Type is drawn as vector outlines from glyph data embedded in this file:
+     no web fonts, no network, no installed fonts required. -->
+<style>
+  :root{
+    --bg:#f4f4f2; --panel:#ffffff; --panel2:#ececea; --ink:#16181d; --muted:#5c6068;
+    --line:#d8d8d2; --accent:#f7b500; --danger:#d92b2b;
+    --ok:#1c7c43; --chip:#ffffff; --shadow:0 2px 10px rgba(20,20,20,.08);
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#131417; --panel:#1d1f24; --panel2:#26282e; --ink:#f0f0ec; --muted:#a7abb3;
+      --line:#35373e; --chip:#26282e; --shadow:0 2px 10px rgba(0,0,0,.4);
+    }
+  }
+  *{ box-sizing:border-box; }
+  html{ -webkit-text-size-adjust:100%; }
+  body{ margin:0; background:var(--bg); color:var(--ink);
+    font-family:"Segoe UI", system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif; }
+  button, select, input[type="text"], input[type="number"]{ min-height:2.75rem; font:inherit; }
+  button{ cursor:pointer; }
+  .hazardbar{ height:14px;
+    background:repeating-linear-gradient(45deg, var(--accent) 0 18px, #141414 18px 36px); }
+  .wrap{ max-width:1180px; margin:0 auto; padding:20px 16px 64px; }
+  header.hero{ padding:10px 0 4px; }
+  header.hero h1{ font-size:clamp(26px,4.5vw,40px); line-height:1.08; margin:6px 0 8px;
+    font-weight:800; letter-spacing:-.01em; }
+  header.hero h1 .hl{ background:var(--accent); color:#141414; padding:0 .18em;
+    box-decoration-break:clone; -webkit-box-decoration-break:clone; }
+  header.hero p{ color:var(--muted); max-width:72ch; margin:0; font-size:15.5px; line-height:1.55; }
+  section.panel{ background:var(--panel); border:1px solid var(--line); border-radius:12px;
+    padding:18px; margin-top:18px; box-shadow:var(--shadow); }
+  section.panel h2{ font-size:19px; margin:0 0 14px; font-weight:800; }
+  .grid2{ display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+  @media (max-width:760px){ .grid2{ grid-template-columns:1fr; } }
+  .fld label{ display:block; font-size:12.5px; font-weight:700; letter-spacing:.06em;
+    text-transform:uppercase; color:var(--muted); margin:0 0 7px; }
+  .fld{ margin-bottom:16px; }
+  select, input[type="text"], input[type="number"]{ width:100%; background:var(--chip); color:var(--ink);
+    border:1px solid var(--line); border-radius:8px; padding:10px 12px; }
+  input[type="range"]{ width:100%; accent-color:#e8a400; min-height:2rem; margin-top:10px; }
+  .numrow{ display:flex; align-items:center; gap:10px; margin-top:10px; }
+  .numrow input[type="number"]{ width:110px; }
+  .numrow span{ font-size:13.5px; color:var(--muted); }
+  .chips{ display:flex; flex-wrap:wrap; gap:8px; }
+  .chip{ border:1.5px solid var(--line); background:var(--chip); color:var(--ink);
+    border-radius:999px; padding:9px 14px; font-size:13.5px; font-weight:600; min-height:2.5rem; }
+  .chip[aria-pressed="true"]{ border-color:var(--ink); background:var(--ink); color:var(--bg); }
+  .swatches{ display:grid; grid-template-columns:repeat(auto-fill,minmax(118px,1fr)); gap:8px; }
+  .sw{ border:2px solid var(--line); border-radius:9px; padding:7px; background:var(--chip);
+    text-align:left; min-height:3.4rem; }
+  .sw[aria-pressed="true"]{ border-color:var(--ink); box-shadow:0 0 0 2px var(--accent); }
+  .sw .bar{ display:block; height:16px; border-radius:4px; border:1px solid rgba(0,0,0,.25); margin-bottom:5px; }
+  .sw .nm{ font-size:12px; font-weight:700; line-height:1.25; display:block; }
+  .seg{ display:flex; border:1.5px solid var(--line); border-radius:9px; overflow:hidden; }
+  .seg button{ flex:1; border:0; background:var(--chip); color:var(--ink); font-weight:700;
+    padding:10px 6px; font-size:14px; }
+  .seg button[aria-pressed="true"]{ background:var(--ink); color:var(--bg); }
+  .previewbox{ background:
+      repeating-conic-gradient(#cfcfcf 0% 25%, #f4f4f4 0% 50%) 0 0/22px 22px;
+    border:1px solid var(--line); border-radius:10px; padding:14px; overflow:hidden; }
+  @media (prefers-color-scheme: dark){
+    .previewbox{ background:repeating-conic-gradient(#2c2e33 0% 25%, #22242a 0% 50%) 0 0/22px 22px; }
+  }
+  .previewbox svg{ display:block; width:100%; height:auto; }
+  .btnrow{ display:flex; flex-wrap:wrap; gap:10px; margin-top:10px; align-items:center; }
+  .btn{ border-radius:9px; border:1.5px solid var(--ink); padding:11px 18px; font-weight:800;
+    font-size:14.5px; background:var(--panel); color:var(--ink); min-height:3rem; }
+  .btn.primary{ background:var(--accent); border-color:#141414; color:#141414; }
+  .btn.dark{ background:var(--ink); color:var(--bg); }
+  .btn.small{ padding:8px 12px; font-size:13px; min-height:2.6rem; border-width:1px; }
+  .btn:disabled{ opacity:.45; cursor:not-allowed; }
+  .rowlabel{ font-size:12.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase;
+    color:var(--muted); margin:16px 0 0; }
+  .meta{ font-size:13px; color:var(--muted); margin-top:10px; line-height:1.55; }
+  .meta b{ color:var(--ink); }
+  .cards{ display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:16px; margin-top:16px; }
+  @media (max-width:480px){ .cards{ grid-template-columns:1fr; } }
+  .card{ background:var(--panel); border:1px solid var(--line); border-radius:12px; overflow:hidden;
+    box-shadow:var(--shadow); display:flex; flex-direction:column; }
+  .card .thumb{ padding:12px;
+    background:repeating-conic-gradient(#cfcfcf 0% 25%, #f4f4f4 0% 50%) 0 0/20px 20px; }
+  @media (prefers-color-scheme: dark){
+    .card .thumb{ background:repeating-conic-gradient(#2c2e33 0% 25%, #22242a 0% 50%) 0 0/20px 20px; }
+  }
+  .card .thumb svg{ display:block; width:100%; height:auto; }
+  .card .body{ padding:13px 14px 15px; display:flex; flex-direction:column; gap:8px; flex:1; }
+  .card h3{ font-size:15px; margin:0; line-height:1.35; }
+  .card .kw{ font-size:12px; color:var(--muted); line-height:1.5; word-break:break-word; }
+  .card .acts{ display:flex; flex-wrap:wrap; gap:7px; margin-top:auto; }
+  .card .acts .lbl{ width:100%; font-size:11.5px; font-weight:700; letter-spacing:.05em;
+    text-transform:uppercase; color:var(--muted); margin-top:4px; }
+  .toast{ position:fixed; left:50%; bottom:22px; transform:translateX(-50%) translateY(20px);
+    background:#141414; color:#fff; padding:11px 18px; border-radius:9px; font-size:14px; font-weight:600;
+    opacity:0; pointer-events:none; transition:.25s; z-index:50; max-width:92vw; text-align:center; }
+  .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+  details.tips{ margin-top:18px; background:var(--panel); border:1px solid var(--line);
+    border-radius:12px; padding:14px 18px; box-shadow:var(--shadow); }
+  details.tips summary{ cursor:pointer; font-weight:800; font-size:15px; min-height:2rem; }
+  details.tips ul{ font-size:13px; color:var(--muted); line-height:1.6; margin:10px 0 4px; padding-left:18px; }
+  details.tips li{ margin-bottom:4px; }
+  details.tips b{ color:var(--ink); }
+  footer{ margin-top:20px; color:var(--muted); font-size:12.5px; line-height:1.6; }
+  .hidden{ display:none !important; }
+  /* All-packs exporter progress (new — nothing else uses these classes) */
+  .bar-track{ height:10px; margin-top:14px; background:var(--panel2); border:1px solid var(--line);
+    border-radius:999px; overflow:hidden; }
+  .bar-fill{ height:100%; width:0%; background:var(--accent); transition:width .15s linear; }
+</style>
+</head>
+<body>
+<div class="hazardbar"></div>
+<div class="wrap">
+
+  <header class="hero">
+    <h1>Caution Tapes <span class="hl">Vector Tool</span></h1>
+    <p>Original caution tape vectors with a seamless end-to-end repeat — join copies and print at any length, no break at the join.</p>
+  </header>
+
+  <!-- ============ BUILDER ============ -->
+  <section class="panel" aria-labelledby="builder-h">
+    <h2 id="builder-h">Build a tape</h2>
+
+    <div class="grid2">
+      <div>
+        <div class="fld">
+          <label>Mode</label>
+          <div class="seg" role="group" aria-label="Mode">
+            <button type="button" id="mode-single" aria-pressed="true">Single tape</button>
+            <button type="button" id="mode-set" aria-pressed="false">Tape set (10 in 1)</button>
+          </div>
+        </div>
+        <div class="fld">
+          <label for="style-sel">Style</label>
+          <select id="style-sel"></select>
+        </div>
+        <div class="fld">
+          <label for="word-sel">Word</label>
+          <select id="word-sel"></select>
+        </div>
+        <div class="fld">
+          <label for="custom-word">Custom word (optional)</label>
+          <input type="text" id="custom-word" maxlength="42" placeholder="e.g. FRAGILE HANDLE WITH CARE" />
+        </div>
+        <div class="fld">
+          <label for="font-sel">Font</label>
+          <select id="font-sel">
+            <option value="anton">Anton</option>
+            <option value="archivo">Archivo Black</option>
+            <option value="oswald">Oswald Bold</option>
+          </select>
+        </div>
+        <div class="fld">
+          <label>Background</label>
+          <div class="chips" id="bg-chips">
+            <button type="button" class="chip" data-bg="transparent" aria-pressed="true">Transparent</button>
+            <button type="button" class="chip" data-bg="white" aria-pressed="false">White</button>
+            <button type="button" class="chip" data-bg="black" aria-pressed="false">Black</button>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="fld">
+          <label>Colour</label>
+          <div class="swatches" id="swatches"></div>
+        </div>
+        <div class="fld">
+          <label>Tape thickness — <span id="thick-val">Standard · 120</span></label>
+          <div class="chips" id="thick-chips">
+            <button type="button" class="chip" data-thick="80" aria-pressed="false">Thin · 80</button>
+            <button type="button" class="chip" data-thick="120" aria-pressed="true">Standard · 120</button>
+            <button type="button" class="chip" data-thick="180" aria-pressed="false">Thick · 180</button>
+            <button type="button" class="chip" data-thick="240" aria-pressed="false">Extra Thick · 240</button>
+          </div>
+          <input type="range" id="thick-range" min="70" max="260" step="5" value="120" aria-label="Tape thickness slider" />
+        </div>
+        <div class="fld">
+          <label>Length — whole repeats only, pattern never stretches</label>
+          <div class="chips" id="len-chips">
+            <button type="button" class="chip" data-rep="3" aria-pressed="false">Short · 3</button>
+            <button type="button" class="chip" data-rep="5" aria-pressed="true">Standard · 5</button>
+            <button type="button" class="chip" data-rep="8" aria-pressed="false">Long · 8</button>
+            <button type="button" class="chip" data-rep="12" aria-pressed="false">Extra Long · 12</button>
+          </div>
+          <input type="range" id="len-range" min="2" max="12" step="1" value="5" aria-label="Repeats slider" />
+          <div class="numrow">
+            <input type="number" id="len-num" min="2" max="12" step="1" value="5" aria-label="Custom repeats" />
+            <span>custom repeats (2–12)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="previewbox" id="preview" aria-label="Tape preview"></div>
+    <p class="meta" id="preview-meta"></p>
+
+    <p class="rowlabel">Seamless check — tile joined 3×</p>
+    <div class="btnrow" style="margin-top:6px">
+      <button type="button" class="chip" id="seam-toggle" aria-pressed="true">Seam markers</button>
+    </div>
+    <div class="previewbox" id="seam-preview" style="margin-top:10px" aria-label="Seamless join preview"></div>
+
+    <p class="rowlabel">Seamless tile — 1 repeat (tile it yourself)</p>
+    <div class="btnrow">
+      <button type="button" class="btn" id="dl-tile-eps">EPS 10</button>
+      <button type="button" class="btn" id="dl-tile-svg">SVG</button>
+      <button type="button" class="btn" id="dl-tile-png">PNG</button>
+    </div>
+
+    <p class="rowlabel">Full tape — <span id="full-label">5 repeats</span></p>
+    <div class="btnrow">
+      <button type="button" class="btn primary" id="dl-eps">EPS 10</button>
+      <button type="button" class="btn" id="dl-svg">SVG</button>
+      <button type="button" class="btn" id="dl-png">PNG</button>
+      <button type="button" class="btn dark" id="add-batch">Add to batch ↓</button>
+    </div>
+    <p class="meta">Lettering is already vector outlines in every file — SVG, EPS and PNG all match the preview exactly.</p>
+
+    <p class="meta" style="margin-top:14px"><b>Title:</b> <span id="stock-title"></span></p>
+    <p class="meta"><b>Keywords:</b> <span id="stock-kw"></span></p>
+    <p class="meta"><b>Description:</b> <span id="stock-desc"></span></p>
+    <div class="btnrow">
+      <button type="button" class="btn small" id="copy-meta">Copy title + description + keywords</button>
+    </div>
+  </section>
+
+  <!-- ============ BATCH ============ -->
+  <section class="panel" aria-labelledby="batch-h">
+    <h2 id="batch-h">Batch</h2>
+    <div class="btnrow" style="margin-top:0">
+      <button type="button" class="btn primary" data-gen="8">Generate 8 singles</button>
+      <button type="button" class="btn primary" data-gen="12">Generate 12 singles</button>
+      <button type="button" class="btn primary" data-gen="set4">Generate 4 sets</button>
+      <button type="button" class="btn" id="clear-batch">Clear batch</button>
+    </div>
+    <div class="btnrow">
+      <button type="button" class="btn dark" id="zip-eps">ZIP — all EPS 10</button>
+      <button type="button" class="btn dark" id="zip-svg">ZIP — all SVG</button>
+      <button type="button" class="btn dark" id="zip-png">ZIP — all PNG</button>
+      <button type="button" class="btn" id="dl-txt">Titles + keywords (.txt)</button>
+    </div>
+    <p class="meta" id="batch-count">Batch is empty — generate designs or add the tape above.</p>
+    <div class="cards" id="cards"></div>
+  </section>
+
+  <!-- ============ ALL SVG PACKS (EVERY WORD × EVERY COLOUR) ============ -->
+  <section class="panel" aria-labelledby="allpacks-h">
+    <h2 id="allpacks-h">All SVG packs — every word × every colour</h2>
+    <p class="meta">One click builds a <b>tape pack</b> (10-in-1 set) for <b id="ap-words">all words</b>
+      × <b id="ap-schemes">all colours</b> = <b id="ap-total">every combination</b> SVG packs, then downloads
+      them together as a single ZIP. Packs use the <b>font, thickness and background</b> selected above;
+      each colour gets its own folder inside the ZIP.</p>
+    <div class="btnrow" style="margin-top:12px">
+      <button type="button" class="btn primary" id="all-packs-btn">Generate all SVG packs → ZIP</button>
+      <button type="button" class="btn" id="all-packs-stop" disabled>Stop</button>
+    </div>
+    <div class="bar-track" aria-hidden="true"><div class="bar-fill" id="all-packs-fill"></div></div>
+    <p class="meta" id="all-packs-status">Ready — nothing generated yet.</p>
+  </section>
+
+  <details class="tips">
+    <summary>Upload tips</summary>
+    <ul>
+      <li><b>Shutterstock:</b> upload the EPS 10 plus a JPG/PNG preview of at least 4 MP — every PNG from this tool is above 4 MP. Flat shapes only, no effects.</li>
+      <li><b>Vecteezy:</b> upload the EPS (or SVG) plus the PNG preview, with the title and keywords from each design.</li>
+      <li><b>Text</b> is already converted to vector outlines in every SVG, EPS and PNG — nothing to outline, nothing to install, and it can never reflow or overlap.</li>
+      <li><b>Seamless:</b> every tape is built from one exact repeat unit. The tile file is a single unit — buyers can join copies end-to-end to print any length with no break in the stripes, chevrons or wording.</li>
+      <li><b>Originality:</b> all designs are generated from basic shapes and generic safety words — no brand or company names.</li>
+    </ul>
+  </details>
+
+  <footer>All designs are original vector artwork generated in your browser. Files download straight to your device.</footer>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+"use strict";
+/* ================= DATA ================= */
+var SCHEMES = [
+  { id:'yellow-black', name:'Yellow / Black',    base:'#FFD21F', ink:'#151515', accent:'#151515' },
+  { id:'red-white',    name:'Red / White',       base:'#E02B20', ink:'#FFFFFF', accent:'#FFFFFF' },
+  { id:'orange-black', name:'Orange / Black',    base:'#FF7A1A', ink:'#151515', accent:'#151515' },
+  { id:'orange-white', name:'Orange / White',    base:'#FF7A1A', ink:'#FFFFFF', accent:'#FFFFFF' },
+  { id:'black-white',  name:'Black / White',     base:'#1B1B1B', ink:'#FFFFFF', accent:'#FFD21F' },
+  { id:'white-red',    name:'White / Red',       base:'#FFFFFF', ink:'#D92323', accent:'#151515' },
+  { id:'white-black',  name:'White / Black',     base:'#FFFFFF', ink:'#151515', accent:'#D92323' },
+  { id:'blue-white',   name:'Blue / White',      base:'#1450B4', ink:'#FFFFFF', accent:'#FFFFFF' },
+  { id:'green-white',  name:'Green / White',     base:'#1E8A46', ink:'#FFFFFF', accent:'#FFFFFF' },
+  { id:'pink-black',   name:'Pink / Black',      base:'#FF5C8A', ink:'#151515', accent:'#151515' },
+  { id:'lime-black',   name:'Lime / Black',      base:'#B7E01E', ink:'#151515', accent:'#151515' },
+  { id:'gold-black',   name:'Gold / Black',      base:'#C99700', ink:'#151515', accent:'#151515' }
+];
+var STYLES = [
+  { id:'stripes',      name:'Diagonal hazard stripes' },
+  { id:'stripes-text', name:'Stripes + WARNING text band' },
+  { id:'chevron',      name:'Chevron arrows' },
+  { id:'checker',      name:'Checkerboard' },
+  { id:'text',         name:'Text repeat tape' },
+  { id:'text-icon',    name:'Text + warning triangle icons' },
+  { id:'text-caution', name:'CAUTION dots tape' },
+  { id:'double',       name:'Double line classic' },
+  { id:'biohazard',    name:'Biohazard symbol tape' },
+  { id:'skull',        name:'Skull danger tape' }
+];
+var WORDS = [
+  'WARNING','CAUTION','DANGER','DO NOT CROSS','POLICE LINE DO NOT CROSS','CRIME SCENE DO NOT CROSS',
+  'KEEP OUT','NO TRESPASSING','RESTRICTED AREA','AUTHORIZED PERSONNEL ONLY','UNDER CONSTRUCTION',
+  'CONSTRUCTION AREA','HARD HAT AREA','HIGH VOLTAGE','ELECTRICITY DANGER','BIOHAZARD','RADIOACTIVE',
+  'TOXIC','FLAMMABLE','SAFETY FIRST','WET FLOOR','MIND THE GAP','DO NOT ENTER','NO ENTRY',
+  'QUARANTINE','KEEP AWAY','DANGER KEEP OUT','CAUTION HOT SURFACE','FRAGILE','THIS SIDE UP',
+  'HAPPY HALLOWEEN','HAPPY BIRTHDAY','VIP ONLY','PARTY ZONE','SALE','OPENING SOON'
+];
+var WORD_GROUPS = [
+  { label:'Other potential sellers — Construction & site', words:['UNDER CONSTRUCTION','CONSTRUCTION ZONE','ROAD WORK AHEAD','WORK ZONE','MEN AT WORK','HARD HAT AREA','HARD HAT REQUIRED','OVERHEAD WORK','FALLING OBJECTS','SAFETY FIRST','PROCEED WITH CAUTION'] },
+  { label:'Other potential sellers — Restricted & access', words:['NO TRESPASSING','PRIVATE PROPERTY','RESTRICTED AREA','AUTHORIZED PERSONNEL ONLY','KEEP CLEAR','NO ENTRY','NO PARKING','EMERGENCY EXIT'] },
+  { label:'Other potential sellers — Hazard & floors', words:['WET FLOOR','SLIPPERY WHEN WET','SLIPPERY SURFACE','WATCH YOUR STEP','MIND THE STEP','ELECTRICAL HAZARD','HIGH VOLTAGE','FIRE HAZARD','FLAMMABLE','BIOHAZARD','CHEMICAL HAZARD','QUARANTINE AREA','DO NOT TOUCH','FRAGILE'] },
+  { label:'Other potential sellers — Crime scene (generic)', words:['CRIME SCENE','POLICE LINE - DO NOT CROSS','DO NOT CROSS - POLICE LINE'] },
+  { label:'Other potential sellers — Party, Halloween & seasonal', words:['BEWARE','ENTER IF YOU DARE','HAUNTED HOUSE','ZOMBIE ZONE','KEEP OUT - ZOMBIES','HAPPY HALLOWEEN','TRICK OR TREAT','DANGER - MONSTERS AHEAD','VIP ONLY','HAPPY BIRTHDAY'] },
+  { label:'Other potential sellers — General', words:['CAUTION - WET PAINT','CAUTION - HOT SURFACE','MIND THE GAP','STOP','SLOW DOWN'] }
+];
+var ALL_WORDS = (function(){ var seen={}, out=[];
+  WORDS.concat.apply(WORDS, WORD_GROUPS.map(function(g){ return g.words; })).forEach(function(w){
+    if(!seen[w]){ seen[w]=1; out.push(w); } });
+  return out; })();
+var SET_ORDER = ['stripes-text','stripes','text','chevron','text-icon','checker','text-caution','double','biohazard','skull'];
+
+/* ================= STATE ================= */
+var state = { mode:'single', style:'stripes-text', scheme:SCHEMES[0], word:'WARNING',
+              custom:'', bg:'transparent', font:'anton', thick:120, repeats:5, seam:true };
+var batch = [];
+var usedCombos = {};
+var uidC = 0;
+
+/* ================= HELPERS ================= */
+function $(id){ return document.getElementById(id); }
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function r2(n){ return Math.round(n * 100) / 100; }
+function toast(msg){ var t=$('toast'); t.textContent=msg; t.classList.add('show');
+  clearTimeout(t._h); t._h=setTimeout(function(){ t.classList.remove('show'); },2600); }
+function slug(s){ return s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,''); }
+function effWord(){ var c=state.custom.trim(); return (c? c.toUpperCase() : state.word); }
+function saveBlob(blob, name){ var a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download=name; document.body.appendChild(a); a.click();
+  setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); },400); }
+function copyText(txt, msg){ if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(function(){ toast(msg); }, function(){ fallbackCopy(txt,msg); });
+  } else fallbackCopy(txt,msg); }
+function fallbackCopy(txt,msg){ var ta=document.createElement('textarea'); ta.value=txt;
+  document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); toast(msg); }
+  catch(e){ toast('Copy failed — select the text manually'); } ta.remove(); }
+
+/* ================= REAL VECTOR TEXT (no fonts required) =================
+   Every tape's lettering is drawn as real Bezier outlines generated from the
+   glyph data embedded below (Anton, Archivo Black and Oswald Bold outlines,
+   SIL Open Font License). Exported SVG / EPS / PNG files therefore contain no
+   font reference at all: they look identical on every machine, in every app,
+   with no web font, no network and no installed font — the widths used for the
+   layout are the same widths that are drawn, so text can never overlap, run
+   past the tape edge or get clipped at a seam. */
+var FONTDATA = {"anton":{"cap":859,"xh":733,"g":{" ":[234,[0,0,0,0],""],"!":[229,[27,0,202,859],"M61 234L27 859L202 859L167 234ZM27 0L27 146L202 146L202 0Z"],"\"":[429,[20,549,407,859],"M69 549L20 859L192 859L155 549ZM284 549L235 859L407 859L370 549Z"],"#":[546,[19,0,528,778],"M19 0L67 249L21 249L21 362L89 362L103 433L49 433L49 546L125 546L170 778L309 778L263 546L344 546L390 778L528 778L483 546L528 546L528 433L461 433L447 362L500 362L500 249L425 249L376 0L238 0L287 249L205 249L157 0ZM228 362L309 362L322 433L241 433Z"],"$":[462,[17,-55,445,820],"M188 -55L188 18Q96 28 56 82Q17 136 17 238L17 265L187 265L187 245Q187 169 234 169Q254 169 264 182Q273 195 273 212Q273 242 243 273L103 415Q25 492 25 582Q25 631 48 668Q70 706 107 729Q144 753 188 761L188 820L272 820L272 762Q355 751 399 693Q442 635 442 540L268 540L268 571Q268 592 257 604Q246 615 227 615Q207 615 196 604Q186 594 186 577Q186 553 234 505L371 370Q401 340 423 298Q445 255 445 202Q445 121 396 73Q346 25 272 17L272 -55Z"],"%":[1057,[21,-9,1036,863],"M322 0L586 863L744 863L480 0ZM211 258Q121 258 71 314Q21 370 21 463L21 640Q21 739 68 792Q115 844 211 844Q308 844 355 792Q403 739 403 640L403 463Q403 370 353 314Q303 258 211 258ZM211 386Q230 386 244 400Q257 414 257 434L257 671Q257 700 249 717Q240 733 211 733Q183 733 175 717Q166 700 166 671L166 434Q166 414 179 400Q192 386 211 386ZM845 -9Q754 -9 704 47Q654 103 654 196L654 374Q654 472 701 525Q749 578 845 578Q941 578 989 525Q1036 472 1036 374L1036 196Q1036 103 986 47Q936 -9 845 -9ZM845 119Q864 119 877 133Q890 147 890 167L890 405Q890 434 882 450Q874 467 845 467Q816 467 808 450Q799 433 799 405L799 167Q799 147 812 133Q826 119 845 119Z"],"&":[520,[17,-10,505,867],"M188 -10Q108 -10 63 52Q17 114 17 223Q17 300 31 352Q45 403 70 437Q95 471 127 497L123 506Q103 557 87 603Q72 649 72 698Q72 748 93 786Q114 824 151 845Q188 867 237 867Q285 867 324 846Q363 826 387 784Q410 743 410 679Q410 610 385 564Q359 518 308 475L354 356Q383 429 438 469L505 363Q449 318 411 215L497 0L331 0L312 46Q292 23 260 6Q229 -10 188 -10ZM225 713Q225 701 231 676Q238 651 261 591Q271 601 278 622Q285 643 285 679Q285 717 276 732Q267 747 252 747Q238 747 232 737Q225 726 225 713ZM167 202Q167 115 216 115Q236 115 248 130Q260 145 265 161L183 360Q167 326 167 241Z"],"'":[214,[20,549,192,859],"M69 549L20 859L192 859L155 549Z"],"(":[291,[24,-92,273,890],"M273 -92Q196 -88 140 -52Q84 -16 54 46Q24 109 24 191L24 608Q24 741 85 814Q147 887 273 890L273 760Q236 753 221 730Q206 707 206 664L206 136Q206 100 225 77Q245 55 273 47Z"],")":[291,[18,-92,267,890],"M18 -92L18 47Q46 55 66 77Q85 100 85 136L85 664Q85 707 70 730Q55 753 18 760L18 890Q144 887 206 814Q267 741 267 608L267 191Q267 109 237 45Q207 -19 151 -55Q95 -92 18 -92Z"],"*":[452,[18,362,435,778],"M169 362L191 509L74 417L18 515L151 572L18 625L74 723L190 635L169 778L283 778L266 638L378 723L435 625L300 572L435 515L378 417L265 506L283 362Z"],"+":[355,[20,147,336,463],"M121 147L121 249L20 249L20 362L121 362L121 463L234 463L234 362L336 362L336 249L234 249L234 147Z"],",":[236,[27,-115,209,146],"M57 -115L89 0L27 0L27 146L209 146L209 5L160 -115Z"],"-":[311,[29,249,281,362],"M29 249L29 362L281 362L281 249Z"],".":[229,[27,0,202,146],"M27 0L27 146L202 146L202 0Z"],"/":[405,[14,0,392,863],"M14 0L214 863L392 863L191 0Z"],"0":[494,[20,-8,475,867],"M247 -8Q138 -8 79 53Q20 114 20 229L20 617Q20 738 76 802Q132 867 247 867Q362 867 418 802Q475 738 475 617L475 229Q475 114 416 53Q356 -8 247 -8ZM247 150Q267 150 278 168Q290 187 290 209L290 633Q290 664 283 686Q276 709 247 709Q218 709 211 686Q205 664 205 633L205 209Q205 187 216 168Q228 150 247 150Z"],"1":[331,[12,0,301,860],"M119 0L119 662Q101 641 70 628Q40 615 12 615L12 752Q38 756 68 769Q98 782 123 805Q149 828 163 860L301 860L301 0Z"],"2":[494,[28,0,482,863],"M30 0L30 41Q30 105 50 156Q70 207 101 251Q132 294 167 336Q201 377 231 421Q262 464 281 514Q300 565 300 628Q300 658 291 680Q282 702 254 702Q211 702 211 625L211 520L30 520Q30 531 29 545Q28 560 28 573Q28 666 48 730Q67 795 117 829Q167 863 256 863Q363 863 423 803Q482 743 482 631Q482 556 462 499Q443 442 411 395Q378 349 340 302Q312 270 287 235Q261 201 242 162L476 162L476 0Z"],"3":[494,[19,-10,469,861],"M236 -10Q123 -10 71 50Q19 110 19 231L19 321L195 321L195 231Q195 197 204 173Q212 149 242 149Q272 149 281 175Q289 201 289 259L289 280Q289 325 274 358Q259 391 216 391Q210 391 206 391Q202 391 199 390L199 544Q244 544 267 564Q291 584 291 630Q291 703 249 703Q221 703 212 682Q202 661 202 628L202 602L24 602Q24 608 24 616Q23 625 23 632Q23 750 79 806Q134 861 248 861Q467 861 467 632Q467 569 450 528Q433 486 387 470Q423 452 441 425Q458 397 464 357Q469 316 469 259Q469 130 415 60Q361 -10 236 -10Z"],"4":[494,[9,0,485,860],"M264 0L264 136L9 136L9 270L171 860L439 860L439 279L485 279L485 136L439 136L439 0ZM162 279L264 279L264 712Z"],"5":[494,[22,-12,477,860],"M247 -12Q148 -12 85 37Q22 86 22 188L22 315L201 315L201 242Q201 219 204 197Q207 176 216 162Q226 148 247 148Q275 148 284 167Q292 186 292 215L292 384Q292 405 290 426Q287 446 278 460Q269 474 248 474Q199 474 199 403L42 403L42 860L451 860L451 699L205 699L205 578Q217 593 239 605Q261 617 290 617Q349 617 385 595Q422 572 442 532Q462 492 469 439Q477 387 477 326Q477 249 469 186Q461 124 437 80Q414 35 368 11Q322 -12 247 -12Z"],"6":[494,[26,-8,482,867],"M258 -8Q169 -8 118 23Q68 53 47 115Q26 176 26 268L26 500Q26 590 34 658Q42 727 65 773Q89 819 137 843Q184 867 263 867Q317 867 364 848Q411 830 440 792Q469 755 469 699L469 606L303 606L303 624Q303 645 301 667Q299 688 290 702Q281 716 260 716Q231 716 220 700Q209 685 209 655L209 482Q221 505 246 519Q270 533 305 533Q376 533 415 505Q453 476 468 419Q482 363 482 278Q482 192 461 128Q440 63 391 28Q342 -8 258 -8ZM252 150Q282 150 288 176Q294 202 294 242L294 311Q294 381 254 381Q209 381 209 320L209 214Q209 150 252 150Z"],"7":[494,[34,0,468,860],"M71 0Q79 121 104 225Q130 330 164 420Q198 510 229 585L277 701L34 701L34 860L468 860L468 766Q468 714 451 662Q434 609 406 545Q345 408 309 271Q273 135 265 0Z"],"8":[494,[22,-9,472,870],"M247 -9Q126 -9 74 60Q22 129 22 256L22 313Q22 379 38 419Q54 460 96 481Q56 498 40 535Q23 573 23 629L23 652Q23 766 80 818Q138 870 247 870Q359 870 415 817Q471 763 471 645Q471 583 456 541Q441 499 398 480Q444 457 458 418Q472 379 472 313L472 256Q472 129 420 60Q368 -9 247 -9ZM247 554Q292 554 292 636Q292 663 283 688Q273 712 247 712Q221 712 211 688Q202 663 202 636Q202 554 247 554ZM247 161Q294 161 294 236L294 315Q294 354 283 376Q273 398 247 398Q220 398 210 376Q201 354 201 315L201 236Q201 161 247 161Z"],"9":[494,[26,-8,482,867],"M246 -8Q191 -8 145 11Q98 30 69 67Q40 105 40 161L40 253L206 253L206 236Q206 214 208 193Q210 171 219 157Q228 143 249 143Q277 143 289 159Q300 175 300 205L300 377Q288 354 263 340Q239 326 204 326Q133 326 94 355Q56 383 41 440Q26 497 26 582Q26 667 47 732Q68 796 117 832Q167 867 250 867Q340 867 391 837Q441 806 462 745Q482 684 482 591L482 359Q482 270 475 201Q467 133 443 86Q419 40 372 16Q325 -8 246 -8ZM254 478Q300 478 300 539L300 646Q300 709 257 709Q227 709 221 683Q215 658 215 618L215 548Q215 478 254 478Z"],":":[242,[33,116,208,622],"M33 477L33 622L208 622L208 477ZM33 116L33 261L208 261L208 116Z"],";":[245,[32,0,215,622],"M32 477L32 622L207 622L207 477ZM62 0L94 115L32 115L32 261L215 261L215 120L165 0Z"],"<":[321,[17,98,295,635],"M295 98L17 266L17 468L295 635L295 459L128 366L295 272Z"],"=":[311,[30,249,281,545],"M30 436L30 545L281 545L281 436ZM30 249L30 362L281 362L281 249Z"],">":[321,[26,98,304,635],"M26 98L26 272L193 366L26 459L26 635L304 468L304 266Z"],"?":[492,[23,0,478,867],"M62 222L62 425Q123 425 167 432Q210 438 239 458Q267 479 280 521Q293 562 293 632Q293 664 285 688Q277 711 248 711Q227 711 217 698Q208 685 205 664Q202 643 202 621L202 549L23 549L23 673Q23 772 86 820Q149 867 248 867Q335 867 385 836Q435 805 456 745Q478 685 478 599Q478 514 450 448Q422 381 366 343Q310 305 225 305L225 222ZM57 0L57 146L231 146L231 0Z"],"@":[864,[31,-77,836,867],"M449 -77Q362 -77 287 -52Q211 -27 154 28Q96 82 64 169Q31 256 31 379Q31 533 82 642Q132 751 226 809Q321 867 453 867Q579 867 664 815Q750 763 793 665Q836 567 836 431Q836 288 792 212Q749 135 649 135Q577 135 543 165Q509 194 492 240Q483 195 459 167Q436 139 396 139Q347 139 314 173Q282 206 265 260Q249 315 249 378Q249 448 262 507Q275 565 306 600Q336 634 390 634Q425 634 448 615Q471 597 489 566L508 630L619 630L619 317Q619 279 630 263Q642 247 662 247Q694 247 705 293Q716 339 716 428Q716 528 692 600Q668 672 613 711Q558 750 464 750Q320 750 245 654Q171 558 171 378Q171 208 249 123Q327 38 456 38Q508 38 586 48L601 -62Q515 -77 449 -77ZM441 260Q463 260 471 283Q479 306 479 333L479 524Q449 524 432 512Q415 500 407 469Q400 438 400 382Q400 354 404 325Q407 297 416 278Q425 260 441 260Z"],"A":[485,[15,0,471,859],"M15 0L98 859L389 859L471 0L308 0L296 139L192 139L182 0ZM205 276L283 276L245 713L237 713Z"],"B":[479,[38,0,460,859],"M38 0L38 859L271 859Q365 859 407 814Q450 768 450 663L450 625Q450 565 428 527Q407 490 362 478Q420 463 440 409Q460 355 460 278Q460 194 444 132Q429 69 388 35Q347 0 271 0ZM206 536L241 536Q265 536 272 554Q279 573 279 599L279 685Q279 727 242 727L206 727ZM223 151Q290 151 290 215L290 322Q290 359 279 380Q268 401 238 401L206 401L206 152Q217 151 223 151Z"],"C":[474,[31,-8,455,867],"M238 -8Q145 -8 88 50Q31 108 31 213L31 609Q31 734 81 801Q130 867 242 867Q303 867 351 845Q398 822 426 778Q453 733 453 665L453 517L282 517L282 644Q282 682 272 696Q263 709 242 709Q218 709 210 692Q202 674 202 646L202 215Q202 180 212 165Q223 150 242 150Q264 150 273 168Q282 187 282 215L282 370L455 370L455 208Q455 94 398 43Q341 -8 238 -8Z"],"D":[493,[38,0,461,859],"M38 0L38 859L274 859Q367 859 414 808Q461 756 461 657L461 255Q461 133 418 66Q375 0 269 0ZM211 152L241 152Q288 152 288 198L288 641Q288 684 277 697Q265 709 230 709L211 709Z"],"E":[412,[38,0,393,859],"M38 0L38 859L382 859L382 693L213 693L213 526L375 526L375 364L213 364L213 167L393 167L393 0Z"],"F":[399,[38,0,382,859],"M38 0L38 859L382 859L382 692L211 692L211 555L373 555L373 390L211 390L211 0Z"],"G":[485,[31,-8,457,867],"M215 -8Q31 -8 31 256L31 626Q31 867 242 867Q329 867 375 832Q422 797 439 730Q457 664 457 567L289 567L289 644Q289 671 281 690Q274 709 250 709Q220 709 211 689Q201 669 201 645L201 229Q201 194 210 172Q219 150 246 150Q273 150 282 172Q291 194 291 229L291 352L245 352L245 500L455 500L455 0L386 0L357 72Q312 -8 215 -8Z"],"H":[499,[38,0,461,859],"M38 0L38 859L209 859L209 552L290 552L290 859L461 859L461 0L290 0L290 390L209 390L209 0Z"],"I":[227,[30,0,196,859],"M30 0L30 859L196 859L196 0Z"],"J":[466,[19,-8,438,859],"M229 -8Q170 -8 123 15Q75 37 47 81Q19 125 19 190L19 405L188 405L188 200Q188 178 198 164Q207 150 227 150Q265 150 265 198L265 859L438 859L438 215Q438 146 412 96Q385 46 337 19Q290 -8 229 -8Z"],"K":[472,[38,0,481,859],"M38 0L38 859L208 859L208 515L288 859L461 859L365 466L481 0L303 0L209 416L209 0Z"],"L":[397,[38,0,387,859],"M38 0L38 859L210 859L210 146L387 146L387 0Z"],"M":[746,[38,0,708,859],"M38 0L38 859L300 859L372 335L444 859L708 859L708 0L551 0L551 619L452 0L298 0L193 619L193 0Z"],"N":[498,[38,0,460,859],"M38 0L38 859L215 859L294 448L294 859L460 859L460 0L292 0L206 430L206 0Z"],"O":[486,[31,-8,455,867],"M243 -8Q140 -8 86 54Q31 117 31 234L31 643Q31 753 85 810Q139 867 243 867Q347 867 401 810Q455 753 455 643L455 234Q455 117 401 54Q346 -8 243 -8ZM245 150Q284 150 284 226L284 646Q284 709 246 709Q203 709 203 644L203 225Q203 185 212 168Q222 150 245 150Z"],"P":[472,[38,0,456,859],"M38 0L38 859L265 859Q336 859 378 828Q420 796 438 737Q456 679 456 598Q456 520 441 462Q426 404 387 372Q348 340 277 340L207 340L207 0ZM207 495L217 495Q265 495 275 521Q286 548 286 601Q286 649 276 676Q265 703 226 703L207 703Z"],"Q":[494,[26,-91,476,867],"M418 -91L281 -1Q258 -8 233 -8Q132 -8 79 52Q26 111 26 226L26 641Q26 752 81 810Q135 867 238 867Q341 867 396 810Q450 752 450 641L450 226Q450 119 402 58L476 11ZM238 150Q257 150 265 164Q273 178 275 198Q277 218 277 236L277 638Q277 666 270 687Q262 709 237 709Q212 709 204 688Q196 667 196 639L196 233Q196 216 198 197Q201 177 209 164Q218 150 238 150Z"],"R":[477,[38,0,458,859],"M38 0L38 859L302 859Q368 859 401 829Q435 799 447 745Q458 691 458 619Q458 548 440 506Q422 464 373 448Q414 440 430 408Q446 376 446 325L446 0L277 0L277 336Q277 374 261 383Q246 392 212 392L212 0ZM213 541L254 541Q290 541 290 619Q290 669 282 685Q274 700 253 700L213 700Z"],"S":[461,[21,-8,442,867],"M242 -8Q125 -8 73 51Q21 109 21 237L21 321L190 321L190 214Q190 184 199 167Q208 150 231 150Q254 150 263 164Q272 178 272 209Q272 249 265 275Q257 302 238 326Q218 350 184 382L107 456Q21 537 21 642Q21 752 72 810Q123 867 219 867Q337 867 387 804Q437 741 437 613L262 613L262 672Q262 689 252 699Q242 709 225 709Q204 709 195 698Q185 686 185 668Q185 650 195 629Q205 608 233 581L333 485Q362 457 387 426Q412 394 427 352Q442 311 442 250Q442 129 398 61Q353 -8 242 -8Z"],"T":[396,[10,0,386,859],"M112 0L112 694L10 694L10 859L386 859L386 694L284 694L284 0Z"],"U":[474,[28,-8,446,859],"M237 -8Q129 -8 79 52Q28 113 28 230L28 859L195 859L195 237Q195 215 197 196Q200 176 208 163Q217 150 237 150Q257 150 266 163Q274 175 277 195Q279 215 279 237L279 859L446 859L446 230Q446 113 395 52Q344 -8 237 -8Z"],"V":[469,[11,0,458,860],"M117 0L11 860L175 860L238 275L294 860L458 860L352 0Z"],"W":[712,[13,0,699,859],"M105 0L13 859L181 859L229 317L277 859L437 859L483 317L529 859L699 859L605 0L399 0L356 414L315 0Z"],"X":[484,[13,0,471,860],"M13 0L105 456L32 860L200 860L245 564L284 860L453 860L379 456L471 0L297 0L243 336L188 0Z"],"Y":[446,[5,0,441,859],"M142 0L142 283L5 859L175 859L223 568L271 859L441 859L304 283L304 0Z"],"Z":[410,[16,0,394,859],"M16 0L16 156L212 701L35 701L35 859L394 859L394 709L193 158L385 158L385 0Z"],"[":[318,[30,-92,301,890],"M30 -92L30 890L301 890L301 753L202 753L202 45L301 45L301 -92Z"],"\\":[405,[13,0,391,863],"M214 0L13 863L191 863L391 0Z"],"]":[318,[17,-92,288,890],"M17 -92L17 45L116 45L116 753L17 753L17 890L288 890L288 -92Z"],"^":[474,[20,211,454,662],"M20 211L137 662L336 662L454 211L279 211L237 501L195 211Z"],"_":[365,[23,-177,342,-63],"M23 -177L23 -63L342 -63L342 -177Z"],"`":[317,[30,758,262,974],"M262 758L30 804L30 974L262 867Z"],"a":[483,[20,-8,451,740],"M168 -8Q107 -8 75 21Q43 49 32 98Q20 147 20 210Q20 277 33 320Q46 362 78 390Q110 417 167 436L275 473L275 548Q275 607 236 607Q201 607 201 560L201 516L31 516Q31 520 31 526Q31 532 31 540Q31 649 82 695Q134 740 246 740Q304 740 351 719Q397 699 424 658Q451 618 451 558L451 0L277 0L277 87Q265 41 235 17Q206 -8 168 -8ZM237 128Q259 128 267 146Q274 164 274 185L274 389Q238 375 218 352Q198 330 198 287L198 193Q198 128 237 128Z"],"b":[501,[37,-8,472,859],"M328 -8Q285 -8 258 13Q231 35 215 78L215 0L37 0L37 859L215 859L215 654Q231 695 260 718Q288 740 341 740Q413 740 443 688Q472 636 472 551L472 191Q472 135 457 90Q441 44 409 18Q377 -8 328 -8ZM255 128Q283 128 289 156Q295 183 295 223L295 509Q295 550 289 577Q283 604 256 604Q228 604 221 576Q215 549 215 509L215 223Q215 184 221 156Q228 128 255 128Z"],"c":[491,[29,-8,465,740],"M255 -8Q132 -8 81 55Q29 118 29 240L29 466Q29 558 49 619Q68 680 117 710Q166 740 253 740Q313 740 362 719Q410 697 438 656Q465 614 465 554L465 442L287 442L287 545Q287 570 280 588Q272 605 248 605Q205 605 205 544L205 189Q205 167 215 148Q225 129 247 129Q270 129 279 147Q288 166 288 190L288 313L465 313L465 185Q465 125 438 81Q411 38 364 15Q316 -8 255 -8Z"],"d":[498,[30,-8,466,859],"M179 -8Q128 -8 99 11Q69 29 54 62Q40 95 35 139Q30 183 30 233L30 551Q30 636 60 688Q90 740 162 740Q215 740 244 718Q272 695 288 654L288 859L466 859L466 0L288 0L288 78Q273 38 249 15Q225 -8 179 -8ZM246 129Q271 129 280 149Q288 169 288 221L288 529Q288 555 281 580Q273 605 247 605Q219 605 211 581Q204 557 204 529L204 221Q204 129 246 129Z"],"e":[488,[29,-8,460,740],"M240 -8Q162 -8 116 21Q69 51 49 106Q29 161 29 239L29 533Q29 635 88 688Q146 740 249 740Q460 740 460 533L460 480Q460 383 458 350L204 350L204 208Q204 189 207 170Q209 151 218 139Q226 127 245 127Q272 127 279 151Q286 174 286 212L286 283L460 283L460 241Q460 159 440 104Q419 48 371 20Q323 -8 240 -8ZM203 437L286 437L286 536Q286 575 276 593Q267 610 247 610Q226 610 215 593Q203 577 203 536Z"],"f":[280,[20,0,259,868],"M51 0L51 567L20 567L20 700L51 700L51 750Q51 868 169 868Q225 868 259 854L259 746Q247 749 243 749Q228 749 225 738Q221 727 221 709L221 700L259 700L259 565L225 565L225 0Z"],"g":[504,[22,-127,471,740],"M232 -127Q182 -127 145 -122Q109 -117 80 -104Q51 -90 22 -66L82 35Q146 -3 209 -3Q251 -3 272 23Q292 50 292 93L292 165Q271 90 181 90Q128 90 96 115Q64 140 49 182Q35 225 35 277L35 540Q35 599 47 644Q60 689 92 715Q124 740 181 740Q229 740 256 716Q283 691 292 650L292 732L471 732L471 104Q471 -20 413 -73Q356 -127 232 -127ZM251 222Q292 222 292 296L292 545Q292 565 281 586Q270 607 250 607Q224 607 218 588Q211 569 211 545L211 296Q211 270 218 246Q225 222 251 222Z"],"h":[505,[35,0,472,859],"M35 0L35 859L215 859L215 660Q229 701 258 720Q288 740 327 740Q403 740 438 692Q472 645 472 564L472 0L295 0L295 553Q295 577 285 592Q275 607 254 607Q236 607 225 591Q215 576 215 554L215 0Z"],"i":[243,[34,0,209,923],"M34 777L34 923L209 923L209 777ZM34 0L34 732L209 732L209 0Z"],"j":[263,[17,-127,229,923],"M54 777L54 923L229 923L229 777ZM91 -127Q35 -127 17 -114L17 3Q25 0 33 0Q47 0 50 10Q54 20 54 35L54 732L229 732L229 40Q229 -38 198 -83Q167 -127 91 -127Z"],"k":[491,[35,0,503,859],"M35 0L35 859L208 859L208 480L292 732L473 732L363 414L503 0L317 0L208 345L208 0Z"],"l":[248,[35,0,213,859],"M35 0L35 859L213 859L213 0Z"],"m":[758,[35,0,725,740],"M35 0L35 732L206 732L206 647Q218 692 246 716Q274 740 329 740Q373 740 404 720Q435 700 448 667Q468 703 495 721Q522 740 572 740Q633 740 666 714Q699 688 712 642Q725 596 725 535L725 0L551 0L551 538Q551 609 515 609Q496 609 485 596Q475 583 471 564Q467 545 467 526L467 0L293 0L293 538Q293 561 287 584Q282 607 259 607Q239 607 229 593Q218 579 214 558Q210 537 210 517L210 0Z"],"n":[499,[35,0,465,740],"M35 0L35 732L210 732L210 639Q220 681 246 711Q273 740 320 740Q396 740 431 693Q465 646 465 565L465 0L293 0L293 547Q293 568 284 587Q275 605 254 605Q234 605 224 591Q215 577 212 556Q210 536 210 515L210 0Z"],"o":[497,[29,-8,467,740],"M248 -8Q29 -8 29 219L29 513Q29 617 87 678Q146 740 248 740Q351 740 409 678Q467 617 467 513L467 219Q467 -8 248 -8ZM248 127Q270 127 280 143Q289 159 289 183L289 541Q289 605 248 605Q207 605 207 541L207 183Q207 159 217 143Q226 127 248 127Z"],"p":[501,[35,-122,470,740],"M35 -122L35 732L213 732L213 654Q229 695 258 718Q286 740 339 740Q411 740 441 688Q470 636 470 551L470 191Q470 135 454 90Q438 44 405 18Q371 -8 316 -8Q245 -8 213 78L213 -122ZM254 128Q282 128 287 156Q293 183 293 223L293 509Q293 550 287 577Q282 604 254 604Q226 604 219 576Q213 549 213 509L213 223Q213 184 219 156Q226 128 254 128Z"],"q":[498,[30,-122,466,740],"M288 -122L288 78Q273 38 249 15Q225 -8 179 -8Q128 -8 99 11Q69 29 54 62Q40 95 35 139Q30 183 30 233L30 551Q30 636 60 688Q90 740 162 740Q215 740 244 718Q272 695 288 654L288 732L466 732L466 -122ZM246 129Q269 129 279 153Q288 177 288 220L288 529Q288 555 281 580Q273 605 247 605Q219 605 211 581Q204 557 204 529L204 221Q204 129 246 129Z"],"r":[347,[35,0,339,741],"M35 0L35 732L213 732L213 651Q226 693 258 717Q290 741 339 741L339 595Q317 595 288 591Q258 586 235 578Q213 570 213 560L213 0Z"],"s":[475,[19,-8,456,740],"M236 -8Q19 -8 19 212L19 270L195 270L195 184Q195 159 205 145Q214 131 236 131Q274 131 274 188Q274 236 254 260Q234 283 205 305L112 377Q68 411 45 449Q22 487 22 555Q22 618 52 659Q82 700 132 720Q181 740 239 740Q452 740 452 528L452 514L271 514L271 542Q271 564 263 584Q256 605 234 605Q197 605 197 566Q197 526 228 504L336 425Q387 388 422 338Q456 288 456 204Q456 101 397 46Q338 -8 236 -8Z"],"t":[305,[16,-8,285,859],"M186 -8Q115 -8 90 22Q65 52 65 114L65 571L16 571L16 704L65 704L65 859L235 859L235 704L285 704L285 571L235 571L235 155Q235 137 241 130Q247 123 264 123Q275 123 285 125L285 5Q279 3 248 -2Q217 -8 186 -8Z"],"u":[499,[33,-8,464,732],"M176 -8Q118 -8 87 17Q56 41 44 85Q33 128 33 187L33 732L209 732L209 208Q209 164 216 146Q223 129 248 129Q275 129 282 153Q290 178 290 216L290 732L464 732L464 0L289 0L289 78Q272 36 249 14Q226 -8 176 -8Z"],"v":[461,[11,0,450,732],"M128 0L11 732L186 732L228 243L275 732L450 732L331 0Z"],"w":[696,[23,0,673,732],"M112 0L23 732L173 732L222 339L264 732L432 732L482 339L522 732L673 732L583 0L399 0L347 416L301 0Z"],"x":[459,[4,0,455,733],"M4 0L138 394L16 733L194 733L257 555L319 733L449 733L323 371L455 0L280 0L206 206L136 0Z"],"y":[461,[8,-122,450,732],"M21 -122L21 -11L105 -11Q124 -11 124 2Q124 9 123 16L8 732L175 732L224 193L282 732L450 732L314 -38Q307 -80 286 -101Q266 -122 218 -122Z"],"z":[386,[14,0,379,732],"M14 0L14 107L196 594L22 594L22 732L377 732L377 613L205 131L379 131L379 0Z"],"{":[340,[15,-92,323,890],"M323 -92Q230 -90 178 -73Q125 -57 104 -19Q83 20 83 88L83 251Q83 300 72 323Q60 346 15 351L15 447Q60 453 72 475Q83 498 83 547L83 710Q83 779 104 817Q125 855 178 872Q230 888 323 890L323 760Q296 758 276 751Q255 745 255 719L255 536Q255 489 240 461Q225 434 201 420Q176 406 148 399Q176 393 201 379Q225 365 240 338Q255 310 255 263L255 80Q255 54 276 47Q296 41 323 39Z"],"|":[216,[30,-41,186,954],"M30 -41L30 954L186 954L186 -41Z"],"}":[340,[20,-92,327,890],"M20 -92L20 39Q46 41 67 47Q87 54 87 80L87 263Q87 310 102 338Q117 365 142 379Q166 393 194 399Q166 406 142 420Q117 434 102 461Q87 488 87 536L87 719Q87 745 67 751Q46 758 20 760L20 890Q112 888 165 872Q217 855 238 817Q259 779 259 710L259 547Q259 498 271 475Q283 453 327 447L327 351Q283 346 271 323Q259 300 259 251L259 88Q259 20 238 -19Q217 -57 165 -73Q112 -90 20 -92Z"],"~":[493,[24,396,490,568],"M357 396Q323 396 295 402Q266 409 236 421Q206 433 186 438Q167 444 153 444Q139 444 126 436Q114 428 104 408L24 450Q38 482 54 509Q70 536 94 552Q118 568 156 568Q195 568 221 562Q248 556 280 543Q309 533 324 528Q340 524 352 524Q366 524 378 533Q391 542 401 564L490 535Q477 499 462 467Q446 435 422 415Q398 396 357 396Z"],"’":[232,[24,607,207,868],"M54 607L86 723L24 723L24 868L207 868L207 727L157 607Z"],"‘":[235,[26,599,209,859],"M26 599L26 740L76 859L179 859L147 744L209 744L209 599Z"],"—":[563,[29,249,533,362],"M29 249L29 362L533 362L533 249Z"],"·":[234,[40,353,195,499],"M40 353L40 499L195 499L195 353Z"],"•":[352,[23,197,329,527],"M176 197Q103 197 63 242Q23 288 23 362Q23 436 63 481Q103 527 176 527Q249 527 289 481Q329 436 329 362Q329 288 289 242Q249 197 176 197Z"]},"k":{"AT":-13,"AV":-21,"AW":-13,"AY":-23,"FA":-8,"LT":-31,"LV":-20,"LW":-8,"LY":-31,"PA":-14,"TA":-13,"VA":-20,"WA":-13,"YA":-23,"YJ":-36}},"archivo":{"cap":688,"xh":528,"g":{" ":[333,[0,0,0,0],""],"!":[333,[47,0,286,688],"M102 246L47 688L286 688L229 246ZM67 0L67 185L265 185L265 0Z"],"\"":[500,[59,398,441,688],"M175 398L106 398L59 541L59 688L222 688L222 541ZM393 398L325 398L278 541L278 688L441 688L441 541Z"],"#":[660,[20,-11,639,700],"M639 502L639 391L526 391L500 268L606 268L606 159L472 159L435 -11L318 -11L355 159L240 159L204 -11L84 -11L120 159L20 159L20 268L146 268L174 391L66 391L66 502L196 502L240 700L362 700L317 502L428 502L472 700L592 700L546 502ZM265 267L379 267L408 390L292 390Z"],"$":[667,[69,-67,614,756],"M601 451L416 451Q415 479 394 490Q372 502 345 502Q273 502 273 468Q273 449 298 441Q323 433 380 424Q450 414 497 400Q544 387 579 352Q614 318 614 256Q614 165 552 121Q491 77 389 70L397 -67L284 -67L291 71Q195 81 132 126Q69 172 69 253L254 253L254 249Q255 215 282 202Q310 188 341 188Q424 188 424 227Q424 247 398 256Q372 265 313 275Q242 287 196 301Q151 315 117 348Q83 382 83 442Q83 526 140 568Q196 610 291 618L284 756L397 756L389 619Q481 612 541 570Q601 529 601 451Z"],"%":[1000,[46,-12,945,700],"M413 520Q413 437 368 390Q324 342 230 342Q136 342 91 390Q46 437 46 520Q46 605 91 652Q136 700 230 700Q324 700 368 652Q413 605 413 520ZM231 0L650 687L759 687L342 0ZM170 537L170 505Q170 465 184 442Q199 418 230 418Q289 418 289 505L289 537Q289 624 230 624Q199 624 184 600Q170 577 170 537ZM945 166Q945 83 900 36Q856 -12 762 -12Q668 -12 623 36Q578 83 578 166Q578 251 623 298Q668 346 762 346Q856 346 900 298Q945 251 945 166ZM702 183L702 151Q702 111 716 88Q731 64 762 64Q821 64 821 151L821 183Q821 270 762 270Q731 270 716 246Q702 223 702 183Z"],"&":[889,[75,-12,888,700],"M749 512L749 487L572 487Q572 518 536 538Q499 559 430 559Q366 559 332 534Q299 510 299 475Q299 444 320 428Q340 412 370 412L474 412L474 289L348 289Q317 289 298 270Q278 252 278 217Q278 176 312 152Q347 129 422 129Q572 129 572 218L572 412L888 412L888 289L751 289L751 222Q751 110 672 49Q592 -12 423 -12Q249 -12 162 44Q75 100 75 192Q75 252 106 296Q138 339 195 357L195 361Q152 377 124 416Q95 455 95 503Q95 557 132 602Q168 647 241 674Q314 700 417 700Q519 700 594 675Q669 650 709 607Q749 564 749 512Z"],"'":[278,[57,398,220,688],"M172 398L104 398L57 541L57 688L220 688L220 541Z"],"(":[389,[55,-160,355,737],"M222 288Q222 181 259 56Q296 -68 355 -160L235 -160Q149 -68 102 49Q55 166 55 288Q55 411 102 528Q149 645 235 737L355 737Q296 645 259 520Q222 394 222 288Z"],")":[389,[34,-160,334,737],"M334 288Q334 166 287 49Q240 -68 154 -160L34 -160Q93 -68 130 56Q167 181 167 288Q167 394 130 520Q93 645 34 737L154 737Q240 645 287 528Q334 411 334 288Z"],"*":[556,[95,322,460,688],"M413 637L460 557L348 505L460 454L413 373L312 444L324 322L231 322L243 444L142 373L95 454L207 505L95 557L142 637L243 566L231 688L324 688L312 567Z"],"+":[660,[66,0,594,528],"M594 330L594 198L396 198L396 0L264 0L264 198L66 198L66 330L264 330L264 528L396 528L396 330Z"],",":[333,[60,-183,273,199],"M168 -183L60 -183L142 0L61 0L61 199L273 199L273 11Z"],"-":[333,[39,196,294,354],"M39 196L39 354L294 354L294 196Z"],".":[333,[61,0,273,199],"M61 0L61 199L273 199L273 0Z"],"/":[278,[-2,-48,279,736],"M-2 -48L158 736L279 736L120 -48Z"],"0":[667,[41,-12,626,700],"M626 344Q626 171 560 80Q495 -12 334 -12Q172 -12 106 80Q41 171 41 344Q41 517 106 608Q172 700 334 700Q495 700 560 608Q626 517 626 344ZM238 394L238 295Q238 203 260 163Q282 123 334 123Q386 123 407 163Q428 203 428 295L428 394Q428 486 407 526Q386 565 334 565Q282 565 260 525Q238 485 238 394Z"],"1":[667,[105,0,624,689],"M624 154L624 0L105 0L105 154L268 154L268 465L105 465L105 581Q172 585 255 616Q338 648 400 689L467 689L467 154Z"],"2":[667,[49,0,619,700],"M611 493Q611 435 582 388Q553 341 509 305Q465 269 388 217Q345 189 318 169L619 169L619 0L49 0L49 48Q49 101 74 142Q98 184 145 226Q193 268 283 340Q355 397 384 427Q413 457 413 486Q413 517 392 538Q370 559 327 559Q282 559 256 533Q230 507 230 465L230 445L52 445Q51 453 51 467Q51 575 126 638Q202 700 346 700Q427 700 486 674Q546 649 578 602Q611 555 611 493Z"],"3":[667,[42,-12,625,700],"M605 513Q605 461 577 420Q549 378 505 361L505 357Q562 339 594 294Q625 250 625 187Q621 99 548 44Q476 -12 335 -12Q238 -12 172 14Q106 40 74 85Q42 130 42 186L42 207L218 207Q218 125 322 125Q426 125 426 217Q426 252 406 270Q387 289 356 289L283 289L283 412L340 412Q371 412 390 430Q410 449 410 484Q410 517 386 540Q363 563 322 563Q279 563 255 541Q231 519 231 487L64 487L64 512Q64 564 96 607Q129 650 192 675Q254 700 339 700Q421 700 482 675Q542 650 574 608Q605 565 605 513Z"],"4":[667,[23,0,644,700],"M160 288L358 288L358 431Q389 475 421 535Q453 595 463 634L548 634L548 288L644 288L644 141L548 141L548 0L358 0L358 141L23 141L23 290Q77 368 130 479Q183 590 215 700L411 700Q404 648 363 570Q322 493 266 416Q209 338 160 288Z"],"5":[667,[39,-12,625,688],"M247 518L239 414Q239 416 259 428Q279 439 312 449Q345 459 386 459Q496 459 560 396Q625 334 625 225Q625 159 590 105Q555 51 491 20Q427 -12 343 -12Q196 -12 118 51Q39 114 39 222L215 222Q215 181 243 154Q271 126 322 126Q373 126 400 154Q428 183 428 228Q428 274 400 302Q373 331 323 331Q285 331 266 318Q246 306 238 295Q229 284 227 281L69 303L98 688L574 688L574 518Z"],"6":[667,[41,-12,631,700],"M614 468L436 468L436 475Q436 514 412 540Q388 565 342 565Q295 565 268 532Q242 500 242 445L242 387Q271 413 311 426Q351 439 387 439Q456 439 512 414Q567 390 599 342Q631 295 631 228Q631 114 552 51Q474 -12 339 -12Q188 -12 114 70Q41 153 41 327Q41 524 114 612Q186 700 339 700Q464 700 539 640Q614 579 614 468ZM242 221Q242 174 267 148Q292 123 339 123Q387 123 412 148Q438 172 438 219Q438 266 412 292Q387 319 340 319Q293 319 268 294Q242 268 242 221Z"],"7":[667,[45,0,625,688],"M380 59L380 0L158 0Q158 136 216 268Q275 399 375 516L45 516L45 688L625 688L625 597Q511 456 446 327Q380 198 380 59Z"],"8":[667,[41,-12,626,700],"M600 497Q600 444 579 413Q558 382 516 352L516 348Q571 317 598 282Q626 246 626 189Q626 92 547 40Q468 -12 332 -12Q196 -12 118 40Q41 92 41 189Q41 246 68 282Q95 317 150 348L150 352Q108 382 87 413Q66 444 66 497Q66 561 101 606Q136 652 196 676Q257 700 332 700Q407 700 468 676Q529 652 564 606Q600 561 600 497ZM240 489Q240 451 266 432Q291 414 332 414Q373 414 400 432Q427 451 427 489Q427 528 401 546Q375 565 332 565Q289 565 264 546Q240 528 240 489ZM240 205Q240 166 265 144Q290 123 332 123Q374 123 400 144Q427 166 427 205Q427 244 400 266Q372 287 332 287Q293 287 266 266Q240 244 240 205Z"],"9":[667,[36,-12,626,700],"M626 361Q626 164 554 76Q481 -12 328 -12Q203 -12 128 48Q53 109 53 220L231 220L231 213Q231 174 255 148Q279 123 325 123Q372 123 398 156Q425 188 425 243L425 301Q396 275 356 262Q316 249 280 249Q211 249 156 274Q100 298 68 346Q36 393 36 460Q36 574 114 637Q193 700 328 700Q479 700 552 618Q626 535 626 361ZM229 467Q229 420 254 394Q279 369 326 369Q374 369 400 394Q425 418 425 465Q425 512 400 538Q374 565 327 565Q280 565 254 540Q229 514 229 467Z"],":":[333,[61,0,273,528],"M61 328L61 528L273 528L273 328ZM61 0L61 199L273 199L273 0Z"],";":[333,[60,-183,273,528],"M61 328L61 528L273 528L273 328ZM168 -183L60 -183L142 0L61 0L61 199L273 199L273 11Z"],"<":[660,[67,-13,592,535],"M233 260L592 129L592 -13L67 189L67 332L592 535L592 392Z"],"=":[660,[66,85,594,443],"M66 311L66 443L594 443L594 311ZM66 85L66 217L594 217L594 85Z"],">":[660,[68,-13,593,535],"M593 189L68 -13L68 129L427 260L68 392L68 535L593 332Z"],"?":[611,[37,0,566,700],"M566 496Q566 457 549 426Q532 396 509 375Q486 354 451 329Q422 307 408 294Q395 281 395 267L395 246L224 246L224 296Q224 320 239 340Q254 359 286 389Q319 418 336 441Q354 464 354 492Q354 521 336 542Q318 562 288 562Q223 562 223 478Q223 460 224 451L40 451Q39 458 38 467Q37 476 37 489Q37 553 72 600Q107 648 170 674Q232 700 310 700Q386 700 444 675Q502 650 534 604Q566 557 566 496ZM212 0L212 185L410 185L410 0Z"],"@":[740,[20,-149,720,700],"M720 323Q720 225 694 164Q669 103 630 77Q590 51 546 51Q469 51 437 104Q411 80 379 66Q347 51 303 51Q161 51 161 165Q161 224 190 255Q219 286 274 298Q330 309 420 309L420 329Q420 352 406 365Q393 378 372 378Q351 378 336 369Q322 360 322 339L173 339Q172 343 172 349Q172 406 224 440Q277 474 374 474Q462 474 518 443Q573 412 573 343L573 184Q573 154 602 154Q619 154 636 190Q652 225 652 324Q652 485 579 562Q506 639 380 639Q236 639 162 546Q88 452 88 265Q88 88 152 0Q217 -88 350 -88Q382 -88 427 -78Q472 -69 495 -56L495 -122Q469 -133 424 -141Q380 -149 350 -149Q192 -149 106 -47Q20 55 20 266Q20 491 118 596Q216 700 381 700Q536 700 628 608Q720 515 720 323ZM312 184Q312 145 354 145Q381 145 400 162Q420 178 420 202L420 236Q365 236 338 222Q312 208 312 184Z"],"A":[778,[10,0,769,688],"M535 0L506 97L265 97L236 0L10 0L261 688L518 688L769 0ZM311 251L460 251L388 496L384 496Z"],"B":[778,[74,0,738,688],"M722 519Q722 392 607 359L607 355Q738 325 738 183Q738 129 712 88Q685 46 639 23Q593 0 538 0L74 0L74 688L532 688Q584 688 628 666Q671 645 696 606Q722 567 722 519ZM295 420L447 420Q469 420 484 436Q498 451 498 474L498 484Q498 506 483 522Q468 537 447 537L295 537ZM295 160L463 160Q485 160 500 176Q514 191 514 214L514 224Q514 247 500 262Q485 278 463 278L295 278Z"],"C":[778,[45,-12,733,700],"M733 405L522 405Q522 465 490 500Q459 535 401 535Q334 535 302 493Q271 451 271 376L271 312Q271 238 302 196Q334 153 399 153Q463 153 496 186Q529 219 529 279L733 279Q733 138 646 63Q560 -12 402 -12Q226 -12 136 78Q45 168 45 344Q45 520 136 610Q226 700 402 700Q555 700 644 624Q733 547 733 405Z"],"D":[778,[74,0,733,688],"M733 344Q733 0 372 0L74 0L74 688L372 688Q733 688 733 344ZM295 165L368 165Q507 165 507 314L507 374Q507 523 368 523L295 523Z"],"E":[722,[74,0,676,688],"M74 688L669 688L669 523L295 523L295 428L615 428L615 270L295 270L295 165L676 165L676 0L74 0Z"],"F":[667,[74,0,630,688],"M74 688L630 688L630 523L295 523L295 405L583 405L583 247L295 247L295 0L74 0Z"],"G":[833,[45,-12,770,700],"M770 439L559 439Q559 482 521 508Q483 535 429 535Q351 535 311 494Q271 452 271 376L271 312Q271 236 311 194Q351 153 429 153Q483 153 521 178Q559 204 559 244L403 244L403 384L770 384L770 0L656 0L634 68Q540 -12 388 -12Q217 -12 131 78Q45 167 45 344Q45 519 142 610Q240 700 420 700Q519 700 598 670Q677 640 724 582Q770 523 770 439Z"],"H":[833,[74,0,759,688],"M538 0L538 261L295 261L295 0L74 0L74 688L295 688L295 437L538 437L538 688L759 688L759 0Z"],"I":[389,[84,0,305,688],"M84 0L84 688L305 688L305 0Z"],"J":[667,[23,-12,593,688],"M308 -12Q170 -12 96 49Q23 110 23 239L23 248L230 248L230 240Q230 193 248 173Q265 153 301 153Q337 153 354 173Q372 193 372 240L372 688L593 688L593 239Q593 110 520 49Q446 -12 308 -12Z"],"K":[833,[74,0,819,688],"M540 688L814 688L567 405L819 0L558 0L415 252L295 154L295 0L74 0L74 688L295 688L295 394Z"],"L":[667,[74,0,648,688],"M74 688L295 688L295 176L648 176L648 0L74 0Z"],"M":[944,[60,0,884,688],"M665 0L665 248Q665 294 668 342Q672 391 676 424Q680 457 681 466L677 466L550 0L377 0L249 465L245 465Q246 456 250 424Q255 391 259 342Q263 294 263 248L263 0L60 0L60 688L372 688L476 291L480 291L583 688L884 688L884 0Z"],"N":[833,[74,0,759,688],"M566 0L277 334L277 0L74 0L74 688L267 688L556 349L556 688L759 688L759 0Z"],"O":[833,[45,-12,788,700],"M788 344Q788 170 691 79Q594 -12 416 -12Q238 -12 142 78Q45 169 45 344Q45 519 142 610Q238 700 416 700Q594 700 691 609Q788 518 788 344ZM271 376L271 312Q271 239 308 196Q345 153 416 153Q487 153 524 196Q562 239 562 312L562 376Q562 449 524 492Q487 535 416 535Q345 535 308 492Q271 449 271 376Z"],"P":[722,[74,0,680,688],"M680 462L680 449Q680 385 652 333Q624 281 574 252Q524 222 460 222L295 222L295 0L74 0L74 688L460 688Q524 688 574 658Q624 629 652 578Q680 526 680 462ZM295 383L386 383Q421 383 438 401Q456 419 456 450L456 458Q456 490 438 508Q421 525 386 525L295 525Z"],"Q":[833,[45,-131,788,700],"M416 700Q594 700 691 609Q788 518 788 344Q788 228 744 148Q701 69 618 28L775 -131L512 -131L406 -12Q232 -9 138 82Q45 172 45 344Q45 519 142 610Q238 700 416 700ZM416 535Q345 535 308 492Q271 449 271 376L271 312Q271 239 308 196Q345 153 416 153Q487 153 524 196Q562 239 562 312L562 376Q562 449 524 492Q487 535 416 535Z"],"R":[778,[74,0,747,688],"M594 288L747 0L499 0L377 251L295 251L295 0L74 0L74 688L495 688Q569 688 622 660Q674 631 700 582Q727 534 727 477Q727 414 693 363Q659 312 594 288ZM440 531L295 531L295 404L440 404Q466 404 484 422Q502 441 502 468Q502 495 484 513Q466 531 440 531Z"],"S":[722,[43,-12,686,700],"M667 488L667 476L460 476L460 480Q460 510 438 530Q416 550 371 550Q327 550 304 537Q280 524 280 505Q280 478 312 465Q344 452 415 438Q498 421 552 402Q605 384 645 342Q685 300 686 228Q686 106 604 47Q521 -12 383 -12Q222 -12 132 42Q43 96 43 233L252 233Q252 181 279 164Q306 146 363 146Q405 146 432 155Q460 164 460 192Q460 217 430 230Q399 242 330 256Q246 274 191 294Q136 313 95 358Q54 403 54 480Q54 593 142 646Q229 700 363 700Q495 700 580 646Q665 593 667 488Z"],"T":[722,[23,0,695,688],"M470 512L470 0L249 0L249 512L23 512L23 688L695 688L695 512Z"],"U":[833,[74,-12,759,688],"M417 -12Q253 -12 164 62Q74 136 74 277L74 688L295 688L295 280Q295 222 326 188Q357 153 416 153Q475 153 506 188Q538 223 538 280L538 688L759 688L759 277Q759 136 670 62Q581 -12 417 -12Z"],"V":[778,[17,0,760,688],"M261 0L17 688L253 688L391 228L395 228L534 688L760 688L517 0Z"],"W":[1000,[5,0,995,688],"M591 0L502 419L498 419L409 0L166 0L5 688L235 688L314 298L318 298L396 688L614 688L697 298L701 298L775 688L995 688L834 0Z"],"X":[778,[4,0,778,688],"M778 0L510 0L383 214L379 214L252 0L4 0L250 364L28 688L295 688L399 512L403 512L508 688L755 688L532 363Z"],"Y":[778,[7,0,770,688],"M501 0L280 0L280 267L7 688L261 688L393 459L397 459L529 688L770 688L501 267Z"],"Z":[722,[24,0,691,688],"M364 165L691 165L691 0L24 0L24 71L343 523L48 523L48 688L683 688L683 617Z"],"[":[389,[66,-160,339,737],"M225 634L225 -57L339 -57L339 -160L66 -160L66 737L339 737L339 634Z"],"\\":[278,[-2,-48,279,736],"M157 -48L-2 736L119 736L279 -48Z"],"]":[389,[66,-160,339,737],"M66 -160L66 -57L180 -57L180 634L66 634L66 737L339 737L339 -160Z"],"^":[660,[55,337,604,688],"M462 337L331 549L199 337L55 337L258 688L401 688L604 337Z"],"_":[500,[0,-126,500,-64],"M0 -126L0 -64L500 -64L500 -126Z"],"`":[333,[23,592,310,725],"M183 592L23 721L25 725L218 725L310 592Z"],"a":[667,[30,-12,662,540],"M594 368L594 162Q594 145 602 134Q610 123 626 123L662 123L662 8Q659 6 646 2Q634 -3 611 -8Q588 -12 558 -12Q500 -12 462 6Q425 23 411 54Q373 24 326 6Q279 -12 216 -12Q30 -12 30 136Q30 213 72 254Q113 294 191 309Q269 324 395 324L395 350Q395 381 374 397Q352 413 318 413Q287 413 264 402Q242 391 242 367L242 363L46 363Q45 368 45 377Q45 452 116 496Q188 540 321 540Q442 540 518 500Q594 459 594 368ZM229 162Q229 112 297 112Q336 112 366 133Q395 154 395 185L395 230Q310 230 270 212Q229 193 229 162Z"],"b":[667,[61,-12,631,725],"M408 540Q515 540 573 470Q631 401 631 265Q631 128 573 58Q515 -12 408 -12Q298 -12 240 75L223 0L61 0L61 725L260 725L260 479Q317 540 408 540ZM258 280L258 247Q258 197 280 166Q302 135 346 135Q432 135 432 237L432 290Q432 393 346 393Q302 393 280 362Q258 330 258 280Z"],"c":[667,[36,-12,624,540],"M624 315L431 315Q431 405 333 405Q235 405 235 292L235 235Q235 123 337 123Q439 123 439 215L624 215Q624 100 544 44Q463 -12 333 -12Q194 -12 115 58Q36 128 36 264Q36 400 115 470Q194 540 333 540Q463 540 544 484Q624 429 624 315Z"],"d":[667,[36,-12,606,725],"M444 0L427 75Q369 -12 259 -12Q152 -12 94 58Q36 128 36 265Q36 401 94 470Q152 540 259 540Q350 540 407 479L407 725L606 725L606 0ZM235 290L235 237Q235 135 321 135Q365 135 387 166Q409 197 409 247L409 280Q409 330 387 362Q365 393 321 393Q235 393 235 290Z"],"e":[667,[36,-12,631,540],"M631 264L631 230L235 230Q235 173 260 144Q286 115 341 115Q391 115 414 136Q438 157 438 192L631 192Q631 96 558 42Q485 -12 345 -12Q198 -12 117 56Q36 125 36 264Q36 400 115 470Q194 540 333 540Q478 540 554 472Q631 404 631 264ZM236 324L430 324Q430 365 406 389Q383 413 341 413Q247 413 236 324Z"],"f":[389,[8,0,383,737],"M383 719L383 602L337 602Q305 602 293 590Q281 578 281 549L281 528L383 528L383 393L281 393L281 0L82 0L82 393L8 393L8 528L82 528L82 550Q82 652 132 694Q182 737 275 737Q297 737 330 732Q363 726 383 719Z"],"g":[667,[5,-210,654,627],"M532 484Q561 462 578 432Q594 403 594 370Q594 286 530 243Q467 200 372 200L296 200Q233 200 233 171Q233 157 247 148Q261 140 296 140L476 140Q564 140 609 94Q654 48 654 -29Q654 -86 624 -127Q594 -168 543 -189Q492 -210 432 -210L138 -210Q102 -210 72 -193Q41 -176 23 -146Q5 -117 5 -81Q5 -42 29 -10Q53 21 89 37Q65 54 51 78Q37 102 37 130Q37 169 66 200Q95 232 138 243Q99 268 76 300Q53 333 53 369Q53 461 128 500Q202 540 325 540Q379 540 412 534Q461 565 476 590Q490 616 490 627L654 627Q654 566 624 533Q593 500 532 484ZM248 370Q248 337 268 320Q287 304 323 304Q359 304 380 320Q400 337 400 370Q400 403 380 420Q359 436 323 436Q290 436 269 419Q248 402 248 370ZM194 -48Q194 -71 209 -85Q224 -99 246 -99L402 -99Q424 -99 440 -86Q455 -72 455 -49Q455 -26 440 -13Q425 0 402 0L246 0Q223 0 208 -12Q194 -25 194 -48Z"],"h":[667,[60,0,608,725],"M424 540Q516 540 562 489Q608 438 608 342L608 0L409 0L409 318Q409 352 392 372Q374 393 342 393Q305 393 282 369Q259 345 259 310L259 0L60 0L60 725L259 725L259 473Q291 505 334 522Q377 540 424 540Z"],"i":[333,[67,0,266,725],"M67 590L67 725L266 725L266 590ZM67 0L67 528L266 528L266 0Z"],"j":[333,[-41,-210,266,725],"M67 590L67 725L266 725L266 590ZM83 -210Q57 -210 19 -205Q-19 -200 -41 -192L-41 -73L11 -73Q67 -73 67 -9L67 528L266 528L266 -29Q266 -125 222 -168Q179 -210 83 -210Z"],"k":[667,[60,0,665,726],"M428 528L660 528L465 315L665 0L439 0L328 181L259 114L259 0L60 0L60 726L259 726L259 326Z"],"l":[333,[67,0,266,725],"M67 0L67 725L266 725L266 0Z"],"m":[1000,[60,0,941,540],"M941 342L941 0L742 0L742 318Q742 352 726 372Q709 393 679 393Q644 393 622 369Q600 345 600 310L600 0L401 0L401 318Q401 352 384 372Q368 393 338 393Q303 393 281 369Q259 345 259 310L259 0L60 0L60 528L223 528L236 449Q266 491 316 516Q365 540 420 540Q539 540 580 449Q611 491 660 516Q708 540 761 540Q851 540 896 488Q941 437 941 342Z"],"n":[667,[60,0,608,540],"M608 342L608 0L409 0L409 318Q409 352 392 372Q374 393 342 393Q305 393 282 369Q259 345 259 310L259 0L60 0L60 528L223 528L236 448Q267 490 318 515Q368 540 424 540Q516 540 562 489Q608 438 608 342Z"],"o":[667,[36,-12,631,540],"M631 264Q631 129 552 58Q472 -12 333 -12Q194 -12 115 58Q36 128 36 264Q36 400 115 470Q194 540 333 540Q472 540 552 470Q631 399 631 264ZM235 292L235 235Q235 123 333 123Q432 123 432 235L432 292Q432 405 333 405Q235 405 235 292Z"],"p":[667,[61,-197,631,540],"M631 263Q631 127 573 58Q515 -12 408 -12Q316 -12 260 48L260 -197L61 -197L61 528L223 528L240 453Q298 540 408 540Q515 540 573 470Q631 400 631 263ZM258 281L258 248Q258 198 280 166Q302 135 346 135Q432 135 432 238L432 291Q432 393 346 393Q302 393 280 362Q258 331 258 281Z"],"q":[667,[36,-197,606,540],"M427 453L444 528L606 528L606 -197L407 -197L407 48Q351 -12 259 -12Q152 -12 94 58Q36 127 36 263Q36 400 94 470Q152 540 259 540Q369 540 427 453ZM235 291L235 238Q235 135 321 135Q365 135 387 166Q409 198 409 248L409 281Q409 331 387 362Q365 393 321 393Q235 393 235 291Z"],"r":[444,[60,0,440,541],"M440 529L440 362L376 362Q314 362 286 330Q259 298 259 235L259 0L60 0L60 528L223 528L236 448Q254 494 293 518Q332 541 381 541Q404 541 422 536Q440 530 440 529Z"],"s":[611,[32,-12,577,540],"M564 370L379 370Q379 399 353 411Q335 421 308 421Q236 421 236 387Q236 368 261 360Q286 352 343 343Q413 333 460 320Q507 306 542 272Q577 237 577 175Q577 74 502 31Q426 -12 304 -12Q234 -12 172 8Q110 27 71 68Q32 109 32 172L217 172L217 168Q218 134 246 120Q273 107 304 107Q387 107 387 146Q387 166 361 175Q335 184 276 194Q205 206 160 220Q114 234 80 268Q46 301 46 361Q46 458 120 499Q193 540 311 540Q417 540 490 498Q564 457 564 370Z"],"t":[444,[27,-12,412,688],"M412 528L412 393L300 393L300 192Q300 156 312 140Q324 123 356 123L412 123L412 6Q388 -2 350 -7Q312 -12 284 -12Q196 -12 148 20Q101 52 101 129L101 393L27 393L27 528L109 528L152 688L300 688L300 528Z"],"u":[667,[58,-12,606,528],"M443 0L430 80Q399 37 348 12Q298 -12 242 -12Q150 -12 104 39Q58 90 58 186L58 528L257 528L257 210Q257 176 274 156Q292 135 324 135Q361 135 384 159Q407 183 407 218L407 528L606 528L606 0Z"],"v":[611,[0,0,611,528],"M200 0L0 528L214 528L311 199L318 199L415 528L611 528L409 0Z"],"w":[944,[0,0,944,528],"M556 0L474 294L470 294L387 0L193 0L0 528L214 528L294 216L301 216L384 528L582 528L662 216L669 216L750 528L944 528L750 0Z"],"x":[667,[4,0,662,528],"M662 0L430 0L330 166L326 166L225 0L4 0L207 280L24 528L258 528L342 388L346 388L430 528L650 528L464 275Z"],"y":[611,[0,-210,611,528],"M156 -210Q91 -210 41 -192L41 -73L121 -73Q196 -73 210 0L0 528L214 528L315 177L322 177L415 528L611 528L423 16Q382 -95 322 -152Q263 -210 156 -210Z"],"z":[556,[20,0,535,528],"M302 135L535 135L535 0L20 0L20 65L242 393L32 393L32 528L526 528L526 466Z"],"{":[389,[30,-160,349,737],"M273 598L263 397Q258 294 162 294L162 285Q258 285 263 182L273 -20Q275 -62 349 -62L349 -160L258 -160Q201 -160 159 -131Q117 -102 117 -48L117 195Q117 223 92 236Q67 250 30 250L30 329Q64 329 90 344Q117 358 117 386L117 625Q117 679 159 708Q201 737 258 737L349 737L349 639Q275 639 273 598Z"],"|":[278,[77,-211,201,726],"M77 -211L77 726L201 726L201 -211Z"],"}":[389,[40,-160,359,737],"M272 625L272 386Q272 358 298 344Q325 329 359 329L359 250Q322 250 297 236Q272 223 272 195L272 -48Q272 -102 230 -131Q188 -160 131 -160L40 -160L40 -62Q114 -62 116 -20L126 182Q131 285 227 285L227 294Q131 294 126 397L116 598Q114 639 40 639L40 737L131 737Q188 737 230 708Q272 679 272 625Z"],"~":[660,[39,187,621,409],"M453 199Q424 199 397 208Q370 216 331 233Q292 250 265 258Q238 267 207 267Q163 267 126 249Q89 231 64 210Q39 189 39 187L39 317Q39 319 64 340Q89 361 126 379Q163 397 207 397Q236 397 263 388Q290 380 329 363Q367 346 395 338Q423 329 453 329Q497 329 534 347Q571 365 596 386Q621 407 621 409L621 279Q621 277 596 256Q571 235 534 217Q497 199 453 199Z"],"’":[278,[48,331,234,688],"M143 331L48 331L119 513L48 513L48 688L234 688L234 523Z"],"‘":[278,[44,331,230,688],"M230 506L230 331L44 331L44 496L135 688L230 688L159 506Z"],"—":[1000,[0,196,1002,334],"M0 196L0 334L1002 334L1002 196Z"],"·":[333,[71,235,262,418],"M71 235L71 418L262 418L262 235Z"],"•":[500,[88,183,412,507],"M412 345Q412 301 390 264Q368 227 331 205Q294 183 250 183Q206 183 169 205Q132 227 110 264Q88 301 88 345Q88 389 110 426Q132 463 169 485Q206 507 250 507Q294 507 331 485Q368 463 390 426Q412 389 412 345Z"]},"k":{"AC":-18,"AG":-18,"AO":-18,"AQ":-19,"AT":-69,"AU":-34,"AV":-55,"AW":8,"AY":-85,"A’":-67,"B,":25,"B.":16,"BA":-17,"BU":-26,"C,":25,"C.":17,"D,":-10,"D.":-17,"DA":-43,"DV":-34,"DW":17,"DY":-34,"F,":-146,"F.":-153,"FA":-94,"G,":16,"G.":10,"J,":-18,"J.":-26,"JA":-26,"KC":-34,"KG":-34,"KO":-34,"LC":-17,"LG":-17,"LO":-17,"LT":-51,"LU":-26,"LV":-51,"LW":-17,"LY":-77,"L’":-51,"NA":-10,"O,":-17,"O.":-26,"OA":-34,"OT":-26,"OV":-43,"OW":-17,"OX":-52,"OY":-68,"P,":-180,"P.":-188,"PA":-85,"Q,":33,"Q.":17,"QA":17,"QT":-18,"QV":-43,"QY":-51,"RC":-18,"RG":-18,"RO":-17,"RQ":-20,"RT":-9,"RU":-17,"RV":-17,"RY":-43,"T,":-146,"T-":-68,"T.":-153,"T:":-34,"T;":-34,"TA":-68,"TC":-34,"TG":-34,"TO":-34,"TQ":-34,"U,":-26,"U.":-34,"UA":-34,"V,":-120,"V-":-43,"V.":-128,"V:":-26,"V;":-26,"VA":-57,"VC":-34,"VG":-34,"VO":-34,"VQ":-34,"W,":-43,"W-":-10,"W.":-52,"WC":-17,"WG":-17,"WO":-17,"XC":-34,"XG":-34,"XO":-34,"Y,":-162,"Y-":-86,"Y.":-170,"Y:":-60,"Y;":-60,"YA":-94,"YC":-60,"YG":-60,"YO":-60,"YS":-43,"‘A":-60}},"oswald":{"cap":810,"xh":578,"g":{" ":[256,[0,0,0,0],""],"!":[257,[46,0,211,808],"M96 206L49 808L211 808L152 206ZM46 0L46 152L200 152L200 0Z"],"\"":[360,[25,509,348,810],"M25 509L25 810L164 810L99 509ZM209 509L209 810L348 810L284 509Z"],"#":[534,[47,0,488,810],"M71 0L102 269L47 269L50 370L116 370L130 486L51 486L53 590L148 590L173 810L279 810L253 590L331 590L356 810L461 810L435 590L488 590L485 486L417 486L404 370L483 370L480 269L390 269L357 0L253 0L285 269L207 269L175 0ZM220 370L299 370L313 486L235 486Z"],"$":[485,[22,-110,466,914],"M232 -110L232 -11Q129 -6 78 56Q26 117 22 245L175 268Q176 216 184 184Q192 152 208 138Q223 124 245 124Q273 124 282 143Q290 162 290 183Q290 233 266 268Q243 302 202 337L131 398Q101 425 76 454Q52 482 37 520Q22 557 22 609Q22 704 76 758Q131 812 223 819L223 914L274 914L274 820Q332 817 367 794Q402 770 420 736Q437 701 444 662Q450 624 451 591L296 572Q295 608 292 635Q288 662 278 676Q267 691 244 690Q219 690 207 669Q195 648 195 627Q195 579 220 550Q244 520 273 494L341 435Q375 404 404 369Q432 334 449 291Q466 248 466 192Q466 139 444 95Q422 51 381 24Q340 -4 283 -10L283 -110Z"],"%":[1006,[45,-1,960,811],"M332 0L581 810L671 810L423 0ZM234 350Q131 350 88 404Q45 457 45 565L45 601Q45 711 87 761Q129 811 234 811Q339 811 382 762Q424 713 424 603L424 563Q424 456 381 403Q338 350 234 350ZM234 454Q260 454 272 468Q283 481 286 508Q289 534 289 571L289 596Q289 653 282 680Q275 706 234 706Q194 706 186 680Q179 654 179 597L179 570Q179 533 182 507Q185 481 197 468Q209 454 234 454ZM770 -1Q667 -1 624 52Q582 106 582 214L582 250Q582 360 624 410Q665 460 770 460Q875 460 918 411Q960 362 960 252L960 213Q960 105 917 52Q874 -1 770 -1ZM770 103Q796 103 808 116Q819 130 822 156Q825 182 825 219L825 246Q825 303 818 329Q811 355 770 355Q730 355 722 329Q715 303 715 246L715 219Q715 182 718 156Q721 130 733 116Q745 103 770 103Z"],"&":[570,[39,-15,528,822],"M231 -12Q175 -12 132 12Q88 35 64 78Q39 122 39 182Q39 259 72 317Q104 375 154 427Q134 463 115 500Q96 536 84 572Q73 609 73 644Q73 694 94 734Q114 774 154 798Q193 822 250 822Q302 822 341 800Q380 779 402 740Q425 701 425 650Q425 594 402 551Q380 508 348 474Q317 439 288 407L383 229Q392 245 398 274Q405 304 408 338Q412 372 413 398L523 398Q523 339 516 294Q508 249 494 212Q481 175 462 140Q472 127 490 118Q509 109 528 107L528 -12Q521 -13 514 -14Q507 -15 500 -15Q475 -15 452 -4Q428 6 409 22Q390 39 376 56Q351 24 314 6Q278 -12 231 -12ZM237 97Q259 97 278 108Q296 120 309 139L210 322Q188 287 178 254Q168 222 168 189Q168 163 176 142Q184 121 200 109Q215 97 237 97ZM242 493Q256 512 269 540Q282 568 290 598Q299 629 299 653Q299 679 285 693Q271 707 252 707Q231 707 218 690Q205 673 205 644Q205 603 217 564Q229 524 242 493Z"],"'":[170,[25,509,158,810],"M25 509L25 810L158 810L104 509Z"],"(":[338,[62,-178,303,819],"M303 -178Q237 -179 193 -152Q149 -126 122 -79Q96 -32 83 30Q70 93 66 166Q62 239 62 316Q62 399 66 474Q70 549 83 612Q96 676 122 722Q149 768 193 794Q237 819 303 819L303 705Q275 705 257 679Q239 653 229 604Q219 554 216 482Q212 410 212 316Q212 221 216 150Q220 79 230 32Q241 -16 258 -40Q276 -64 303 -64Z"],")":[328,[35,-178,276,819],"M35 -178L35 -64Q62 -64 80 -40Q97 -16 107 32Q117 80 121 151Q125 222 125 317Q125 411 122 483Q118 555 108 604Q99 654 82 680Q64 705 35 705L35 819Q101 819 145 794Q189 769 216 722Q242 676 255 613Q268 550 272 475Q276 400 276 317Q276 240 272 167Q268 94 255 31Q242 -32 216 -79Q189 -126 145 -152Q101 -179 35 -178Z"],"*":[423,[40,450,403,810],"M170 450L75 507L147 609L40 650L76 747L173 693L160 810L282 810L269 693L367 747L403 649L295 608L368 507L271 450L221 556Z"],"+":[449,[26,207,423,618],"M170 207L170 367L26 367L26 462L170 462L170 618L278 618L278 462L423 462L423 367L278 367L278 207Z"],",":[238,[43,-140,198,154],"M68 -140L58 -87Q84 -80 106 -62Q129 -43 129 0L43 0L43 154L198 154L198 21Q197 -53 165 -94Q133 -135 68 -140Z"],"-":[324,[32,242,292,347],"M32 242L32 347L292 347L292 242Z"],".":[244,[46,0,200,154],"M46 0L46 154L200 154L200 0Z"],"/":[422,[43,0,379,810],"M43 0L291 810L379 810L130 0Z"],"0":[550,[54,-15,495,822],"M275 -15Q202 -15 153 14Q104 44 79 96Q54 148 54 217L54 584Q54 655 78 708Q101 762 150 792Q199 822 275 822Q351 822 400 792Q448 762 472 708Q495 655 495 584L495 217Q495 149 470 96Q445 44 396 14Q347 -15 275 -15ZM275 134Q299 134 310 150Q320 165 322 186Q325 206 325 221L325 580Q325 597 323 618Q321 640 310 656Q300 673 275 673Q250 673 240 656Q229 640 227 618Q225 597 225 580L225 221Q225 206 228 186Q231 165 242 150Q252 134 275 134Z"],"1":[385,[22,0,300,810],"M133 0L133 645Q122 639 108 633Q94 627 78 620Q63 614 48 608Q34 602 22 596L22 720Q33 726 53 736Q73 747 96 760Q119 773 139 786Q159 800 169 810L300 810L300 0Z"],"2":[514,[39,0,486,821],"M41 0L41 118L235 416Q257 449 276 480Q296 511 308 543Q321 575 321 610Q321 645 307 662Q293 679 269 679Q242 679 227 664Q212 649 206 624Q201 599 201 568L201 528L39 528L39 571Q39 643 62 700Q85 756 135 788Q185 821 266 821Q375 821 430 764Q486 708 486 607Q486 558 470 516Q455 474 430 434Q404 395 375 352L227 131L464 131L464 0Z"],"3":[514,[38,-15,483,822],"M261 -15Q176 -15 128 17Q79 49 58 106Q38 164 38 239L38 268L205 268Q205 267 205 257Q205 247 205 239Q205 199 210 174Q215 149 228 138Q241 126 264 126Q287 126 298 138Q310 150 314 174Q318 198 318 234Q318 294 302 326Q285 357 233 358Q232 358 222 358Q212 358 202 358L202 473Q209 473 216 473Q223 473 229 473Q282 473 300 502Q318 531 318 592Q318 639 306 664Q293 689 259 689Q226 689 216 661Q205 633 205 589Q205 579 205 568Q205 558 205 547L38 547L38 596Q38 669 64 720Q91 770 140 796Q190 822 259 822Q329 822 379 797Q429 772 456 724Q483 675 483 603Q483 532 454 484Q425 436 384 425Q412 415 434 393Q457 371 470 334Q483 296 483 238Q483 164 462 107Q440 50 391 18Q342 -15 261 -15Z"],"4":[524,[25,0,505,810],"M274 0L274 182L25 182L25 305L236 810L430 810L430 306L505 306L505 182L430 182L430 0ZM152 306L274 306L274 643Z"],"5":[509,[43,-15,476,810],"M255 -15Q166 -15 120 16Q75 48 59 105Q43 162 43 237L204 237Q204 191 209 162Q214 133 228 120Q241 108 266 109Q292 110 303 130Q314 150 316 188Q319 225 319 278Q319 318 314 349Q310 380 296 398Q283 417 256 417Q231 417 215 399Q199 381 192 343L48 343L63 810L441 810L441 670L197 670L188 503Q198 517 226 528Q254 538 286 541Q348 548 390 518Q433 489 454 429Q476 369 476 282Q476 217 468 162Q460 108 437 68Q414 29 370 7Q326 -15 255 -15Z"],"6":[538,[52,-12,497,821],"M276 -12Q197 -12 148 22Q98 57 75 117Q52 177 52 254L52 547Q52 626 70 688Q89 750 137 786Q185 821 275 821Q353 821 398 797Q443 773 462 727Q481 681 481 613Q481 609 482 606Q482 602 482 599L325 599Q325 648 318 672Q310 695 276 695Q253 695 242 681Q230 667 226 632Q222 597 222 534L222 462Q234 483 261 494Q288 506 322 507Q386 509 424 478Q463 447 480 394Q497 340 497 274Q497 189 477 124Q457 60 409 24Q361 -12 276 -12ZM278 111Q301 111 312 126Q322 142 326 172Q329 203 329 248Q329 288 326 317Q324 346 313 362Q302 379 276 379Q264 379 253 374Q242 369 234 362Q226 354 222 347L222 215Q222 188 226 164Q231 140 244 126Q256 111 278 111Z"],"7":[439,[20,0,404,810],"M65 0L241 683L20 683L20 810L404 810L404 695L228 0Z"],"8":[521,[38,-13,482,821],"M260 -13Q178 -13 129 20Q80 52 59 110Q38 167 38 241Q39 271 44 300Q50 328 62 352Q73 377 90 396Q108 414 132 426Q101 449 77 492Q53 536 51 603Q50 671 74 720Q97 769 144 795Q191 821 260 821Q330 821 376 794Q423 768 446 720Q469 671 467 603Q466 535 443 492Q420 448 388 426Q412 414 430 396Q447 377 458 352Q470 328 476 300Q482 271 482 241Q484 167 462 110Q441 52 392 20Q343 -13 260 -13ZM260 110Q287 110 299 130Q311 150 314 178Q317 205 317 228Q318 259 314 288Q311 317 299 336Q287 354 260 354Q234 354 222 336Q210 317 206 288Q203 260 203 228Q203 205 206 177Q209 149 222 130Q234 110 260 110ZM260 486Q277 486 288 500Q299 513 304 540Q310 567 310 607Q310 648 298 672Q285 696 260 696Q235 696 222 672Q208 648 208 608Q208 568 214 540Q219 513 231 500Q243 486 260 486Z"],"9":[538,[39,-12,484,821],"M261 -12Q183 -12 138 12Q93 36 74 82Q55 129 55 197Q55 200 55 204Q55 207 55 210L211 210Q211 161 220 138Q228 114 262 114Q285 114 296 128Q307 142 310 178Q314 213 314 275L314 347Q301 326 274 315Q248 304 215 302Q151 301 112 334Q73 367 56 423Q39 479 39 545Q39 630 60 692Q82 753 131 787Q180 821 261 821Q341 821 390 789Q439 757 462 700Q484 642 484 564L484 262Q484 183 466 121Q447 59 399 24Q351 -12 261 -12ZM263 430Q283 430 295 441Q307 452 314 462L314 594Q314 622 310 646Q306 669 295 684Q284 698 261 698Q239 698 228 682Q217 667 214 636Q210 606 210 561Q210 522 212 492Q215 463 226 446Q237 430 263 430Z"],":":[278,[67,56,219,564],"M67 412L67 564L219 564L219 412ZM67 56L67 208L219 208L219 56Z"],";":[285,[67,-117,221,575],"M92 -117L81 -65Q109 -60 130 -43Q152 -26 152 17L68 17L68 170L221 170L221 37Q221 -36 189 -76Q157 -117 92 -117ZM67 422L67 575L220 575L220 422Z"],"<":[398,[54,195,364,635],"M364 195L54 352L54 478L364 635L364 494L170 416L364 336Z"],"=":[442,[63,272,379,557],"M63 462L63 557L379 557L379 462ZM63 272L63 367L379 367L379 272Z"],">":[398,[54,195,364,635],"M54 195L54 336L248 416L54 494L54 635L364 478L364 352Z"],"?":[483,[31,0,448,821],"M129 213L129 342Q174 377 210 420Q245 463 266 512Q287 560 287 612Q287 649 274 666Q260 682 234 682Q211 682 197 668Q183 654 183 629Q183 613 186 600Q190 588 195 574L48 540Q40 564 36 586Q31 609 31 634Q31 722 84 772Q138 821 238 821Q339 821 394 768Q448 715 448 617Q448 557 428 503Q408 449 370 401Q331 353 276 311L276 213ZM124 0L124 155L282 155L282 0Z"],"@":[950,[53,-126,921,810],"M472 -126Q359 -126 276 -94Q192 -61 139 2Q86 64 66 152Q45 240 57 351Q68 454 105 538Q142 623 204 684Q267 744 352 777Q437 810 543 810Q648 810 724 778Q799 746 845 688Q891 630 909 552Q927 475 918 383Q914 336 898 286Q881 237 850 194Q820 152 774 126Q727 100 664 100Q637 100 610 108Q583 115 563 132Q543 148 534 174Q522 148 496 130Q471 111 439 108Q383 104 343 130Q303 157 284 206Q264 254 266 314Q268 358 282 410Q295 461 322 508Q349 554 392 584Q434 613 493 613Q518 613 533 600Q548 586 556 570Q563 553 567 543L577 607L707 607L664 280Q663 269 661 249Q659 229 662 212Q664 195 675 191Q695 186 716 198Q738 210 757 236Q776 263 789 300Q802 337 806 382Q814 457 802 518Q791 578 758 622Q725 666 669 690Q613 713 531 713Q445 713 382 684Q318 656 275 606Q232 557 208 492Q183 427 175 353Q167 282 172 222Q178 163 200 116Q221 70 260 38Q298 6 355 -11Q412 -28 488 -28Q513 -28 548 -24Q583 -19 620 -12Q657 -4 686 5L704 -94Q648 -107 588 -116Q528 -126 472 -126ZM473 216Q479 217 499 222Q519 228 526 244L557 480Q556 488 545 491Q534 494 527 494Q487 494 460 466Q434 438 420 396Q407 355 406 313Q406 287 412 264Q419 242 434 228Q449 215 473 216Z"],"A":[551,[21,0,529,810],"M21 0L174 810L378 810L529 0L364 0L337 171L218 171L190 0ZM234 278L320 278L277 594Z"],"B":[588,[60,0,554,810],"M60 0L60 810L271 810Q323 810 370 802Q416 794 452 772Q488 749 508 708Q529 666 529 598Q529 549 514 516Q500 482 474 462Q447 442 410 435Q457 429 489 404Q521 380 538 339Q554 298 554 240Q554 177 538 132Q521 86 490 57Q459 28 414 14Q368 0 309 0ZM239 125L277 125Q336 125 358 155Q381 185 381 243Q381 289 371 316Q361 343 338 356Q315 368 276 368L239 368ZM239 486L274 486Q315 486 336 498Q357 511 364 535Q372 559 372 593Q372 625 360 646Q349 668 326 679Q304 690 270 690L239 690Z"],"C":[563,[49,-12,525,821],"M292 -12Q200 -12 146 22Q93 55 71 116Q49 176 49 258L49 550Q49 634 71 694Q93 755 146 788Q200 821 292 821Q382 821 432 792Q483 762 504 709Q525 656 525 587L525 517L350 517L350 598Q350 622 348 644Q345 666 333 680Q321 695 292 695Q264 695 250 680Q237 665 234 642Q230 620 230 595L230 214Q230 187 234 164Q239 142 252 128Q266 115 292 115Q320 115 332 130Q344 144 347 167Q350 190 350 214L350 299L525 299L525 229Q525 160 504 106Q484 51 434 20Q383 -12 292 -12Z"],"D":[586,[60,0,537,810],"M60 0L60 810L265 810Q371 810 430 784Q489 757 513 700Q537 644 537 554L537 260Q537 169 513 112Q489 54 430 27Q372 0 267 0ZM239 124L267 124Q308 124 326 136Q344 148 348 172Q353 196 353 232L353 585Q353 621 348 643Q342 665 324 675Q306 685 266 685L239 685Z"],"E":[447,[60,0,426,810],"M60 0L60 810L424 810L424 688L239 688L239 487L380 487L380 363L239 363L239 121L426 121L426 0Z"],"F":[434,[60,0,410,810],"M60 0L60 810L410 810L410 689L239 689L239 485L388 485L388 360L239 360L239 0Z"],"G":[582,[49,-12,530,821],"M271 -12Q187 -12 138 23Q90 58 70 122Q49 185 49 268L49 540Q49 626 71 689Q93 752 146 786Q200 821 292 821Q382 821 434 791Q485 761 507 708Q529 655 529 584L529 532L354 532L354 598Q354 624 350 646Q347 668 334 682Q322 695 294 695Q265 695 252 680Q239 664 236 641Q232 618 232 593L232 218Q232 191 238 168Q243 144 258 130Q272 115 299 115Q327 115 342 130Q357 145 363 169Q369 193 369 220L369 315L296 315L296 420L530 420L530 0L412 0L402 67Q386 33 355 10Q324 -12 271 -12Z"],"H":[610,[63,0,547,810],"M63 0L63 810L242 810L242 482L368 482L368 810L547 810L547 0L368 0L368 354L242 354L242 0Z"],"I":[301,[61,0,240,810],"M61 0L61 810L240 810L240 0Z"],"J":[349,[13,-21,289,810],"M13 -21L13 104Q40 104 59 107Q78 110 89 118Q100 127 105 144Q110 160 110 186L110 810L289 810L289 178Q289 112 272 68Q256 23 215 1Q174 -21 100 -21Z"],"K":[567,[60,0,557,810],"M60 0L60 810L239 810L239 479L375 810L550 810L400 444L557 0L375 0L258 358L239 326L239 0Z"],"L":[443,[60,0,425,810],"M60 0L60 810L239 810L239 121L425 121L425 0Z"],"M":[704,[57,0,647,810],"M57 0L71 810L263 810L352 339L448 810L633 810L647 0L520 0L505 539L411 0L298 0L198 543L186 0Z"],"N":[561,[60,0,500,810],"M60 0L60 810L186 810L352 420L352 810L500 810L500 0L379 0L213 420L213 0Z"],"O":[586,[49,-12,537,821],"M292 -12Q201 -12 148 20Q95 52 72 112Q49 172 49 255L49 556Q49 640 72 699Q95 758 148 790Q201 821 292 821Q384 821 438 790Q491 758 514 699Q537 640 537 556L537 255Q537 172 514 112Q491 52 438 20Q384 -12 292 -12ZM292 115Q320 115 333 129Q346 143 350 165Q354 187 354 210L354 600Q354 624 350 646Q346 667 333 681Q320 695 292 695Q266 695 253 681Q240 667 236 646Q232 624 232 600L232 210Q232 187 236 165Q239 143 252 129Q264 115 292 115Z"],"P":[571,[60,0,545,810],"M60 0L60 810L332 810Q405 810 452 782Q499 755 522 702Q545 650 545 575Q545 481 514 432Q483 382 430 363Q377 344 311 344L239 344L239 0ZM239 469L299 469Q332 469 349 481Q366 493 372 517Q377 541 377 578Q377 609 372 632Q368 656 351 670Q334 684 298 684L239 684Z"],"Q":[586,[49,-159,537,821],"M475 -159Q453 -149 422 -126Q391 -104 360 -74Q330 -43 309 -11Q305 -12 301 -12Q297 -12 292 -12Q201 -12 148 20Q95 52 72 112Q49 172 49 255L49 556Q49 640 72 699Q95 758 148 790Q201 821 292 821Q384 821 438 790Q491 758 514 699Q537 640 537 556L537 255Q537 198 526 152Q516 106 492 72Q469 38 430 18Q443 4 457 -10Q471 -23 485 -34Q499 -46 513 -53ZM292 115Q320 115 333 129Q346 143 350 165Q354 187 354 210L354 600Q354 624 350 646Q346 667 333 681Q320 695 292 695Q264 695 252 681Q239 667 236 646Q232 624 232 600L232 210Q232 187 236 165Q239 143 252 129Q264 115 292 115Z"],"R":[600,[60,0,564,810],"M60 0L60 810L283 810Q365 810 425 792Q485 774 518 728Q552 681 552 596Q552 546 544 507Q536 468 514 440Q493 411 453 392L564 0L379 0L290 363L239 363L239 0ZM239 466L289 466Q327 466 348 480Q369 493 378 518Q386 544 386 580Q386 632 367 661Q348 690 297 690L239 690Z"],"S":[514,[42,-12,487,821],"M275 -12Q199 -12 148 15Q97 42 71 98Q45 155 42 245L195 268Q196 216 204 184Q213 152 228 138Q244 124 266 124Q294 124 302 143Q311 162 311 183Q311 233 287 268Q263 302 222 337L152 398Q106 437 74 486Q43 536 43 609Q43 712 104 766Q165 821 270 821Q335 821 374 799Q414 777 434 742Q455 706 462 666Q470 627 471 591L317 572Q316 608 312 634Q309 661 298 676Q287 690 264 690Q239 690 228 669Q216 648 216 627Q216 582 238 554Q259 525 294 494L361 435Q414 390 450 333Q487 276 487 192Q487 135 461 88Q435 42 388 15Q340 -12 275 -12Z"],"T":[445,[11,0,434,810],"M133 0L133 677L11 677L11 810L434 810L434 677L313 677L313 0Z"],"U":[588,[54,-12,534,810],"M294 -12Q201 -12 148 18Q96 49 75 108Q54 166 54 251L54 810L231 810L231 224Q231 199 235 174Q239 149 252 133Q266 117 294 117Q323 117 336 133Q349 149 352 174Q356 199 356 224L356 810L534 810L534 251Q534 166 512 108Q491 49 439 18Q387 -12 294 -12Z"],"V":[526,[22,0,505,810],"M168 0L22 810L175 810L262 260L343 810L505 810L357 0Z"],"W":[697,[27,0,670,810],"M125 0L27 810L179 810L227 338L288 809L407 809L471 341L520 810L670 810L573 0L417 0L348 489L283 0Z"],"X":[515,[7,0,509,810],"M7 0L164 436L14 810L183 810L272 591L344 810L493 810L351 389L509 0L341 0L242 242L155 0Z"],"Y":[493,[8,0,485,810],"M162 0L162 331L8 810L177 810L254 554L323 810L485 810L334 331L334 0Z"],"Z":[433,[29,0,405,810],"M29 0L29 108L227 689L38 689L38 810L403 810L403 709L202 121L405 121L405 0Z"],"[":[332,[51,-185,303,810],"M51 -185L51 810L303 810L303 747L179 747L179 -122L302 -122L302 -185Z"],"\\":[422,[43,0,379,810],"M292 0L43 810L131 810L379 0Z"],"]":[324,[21,-185,273,810],"M22 -185L22 -122L145 -122L145 747L21 747L21 810L273 810L273 -185Z"],"^":[476,[30,475,446,810],"M30 475L173 810L302 810L446 475L308 475L238 670L167 475Z"],"_":[368,[0,-167,368,-58],"M0 -167L0 -58L368 -58L368 -167Z"],"`":[307,[41,608,268,810],"M166 608L41 810L207 810L268 608Z"],"a":[460,[20,-10,424,588],"M154 -10Q110 -10 80 11Q50 32 35 64Q20 97 20 131Q20 185 42 222Q63 259 98 284Q133 309 175 326Q217 344 258 358L258 416Q258 431 255 442Q252 454 245 460Q238 467 224 467Q210 467 202 461Q195 455 192 444Q189 434 188 421L184 379L32 385Q37 489 88 538Q138 588 239 588Q327 588 370 540Q414 491 414 414L414 144Q414 108 416 81Q417 54 420 34Q422 14 424 0L278 0Q275 23 271 50Q267 77 265 82Q255 46 228 18Q200 -10 154 -10ZM212 100Q222 100 230 104Q239 108 246 115Q253 122 258 129L258 287Q238 275 221 262Q204 250 192 235Q180 220 174 202Q167 185 167 163Q167 134 179 117Q191 100 212 100Z"],"b":[506,[51,-10,464,810],"M338 -10Q306 -10 274 4Q243 19 214 44L214 0L51 0L51 810L214 810L214 536Q244 562 276 575Q309 588 340 588Q373 588 396 575Q420 562 435 538Q450 515 457 484Q464 453 464 418L464 169Q464 115 450 75Q435 35 407 12Q379 -10 338 -10ZM259 95Q275 95 284 104Q293 113 297 128Q301 142 301 160L301 430Q301 447 297 460Q293 474 284 482Q276 490 261 490Q248 490 236 484Q225 479 214 471L214 111Q225 104 236 100Q248 95 259 95Z"],"c":[468,[39,-10,434,588],"M239 -10Q176 -10 132 13Q87 36 63 79Q39 122 39 183L39 395Q39 457 63 500Q87 543 132 566Q176 588 239 588Q301 588 344 569Q388 550 411 512Q434 473 434 414L434 353L277 353L277 419Q277 442 272 454Q268 467 260 472Q251 477 239 477Q227 477 219 470Q211 464 207 450Q203 435 203 409L203 169Q203 130 212 116Q222 102 240 102Q253 102 261 108Q269 113 273 126Q277 138 277 159L277 236L434 236L434 166Q434 108 410 68Q387 29 344 10Q300 -10 239 -10Z"],"d":[503,[42,-10,453,810],"M176 -10Q112 -10 77 35Q42 80 42 168L42 407Q42 461 57 502Q72 542 102 565Q132 588 176 588Q208 588 237 576Q266 563 290 542L290 810L453 810L453 0L290 0L290 45Q263 19 234 4Q205 -10 176 -10ZM247 94Q255 94 266 98Q278 102 290 109L290 474Q280 479 269 483Q258 487 248 487Q226 487 216 468Q206 450 206 424L206 158Q206 140 210 126Q214 111 223 102Q232 94 247 94Z"],"e":[470,[39,-10,432,588],"M240 -10Q177 -10 132 12Q87 35 63 78Q39 122 39 183L39 395Q39 457 63 500Q87 543 132 566Q178 588 240 588Q304 588 346 566Q389 544 410 501Q432 458 432 395L432 279L200 279L200 168Q200 146 205 132Q210 118 219 112Q228 106 240 106Q252 106 262 112Q271 117 276 129Q282 141 282 162L282 223L432 223L432 167Q432 79 381 34Q330 -10 240 -10ZM200 355L282 355L282 413Q282 436 276 449Q271 462 262 467Q252 472 239 472Q227 472 218 466Q210 460 205 446Q200 431 200 404Z"],"f":[320,[17,0,308,790],"M72 0L72 468L17 468L17 578L72 578L72 621Q72 672 82 710Q93 748 126 769Q160 790 230 790Q249 790 268 789Q286 788 308 785L308 664Q301 666 292 668Q282 669 273 669Q255 669 245 658Q235 648 235 624L235 578L308 578L308 468L235 468L235 0Z"],"g":[502,[25,-200,517,613],"M240 -200Q175 -200 126 -187Q78 -174 52 -148Q25 -122 25 -83Q25 -53 38 -30Q52 -6 76 11Q101 28 132 40L195 29Q184 20 174 10Q165 1 159 -10Q153 -20 153 -34Q153 -56 178 -67Q203 -78 261 -78Q309 -78 336 -70Q362 -61 362 -36Q362 -22 355 -14Q348 -6 332 -1Q316 4 288 7L144 25Q98 31 71 58Q44 85 44 125Q44 160 66 190Q87 220 122 249L179 217Q167 205 160 194Q153 184 153 171Q153 159 165 152Q177 145 208 141L345 123Q419 114 454 74Q488 34 488 -29Q488 -85 464 -123Q439 -161 384 -180Q330 -200 240 -200ZM250 187Q182 187 136 211Q89 235 66 280Q42 324 42 387Q42 452 66 497Q90 542 136 565Q183 588 250 588Q314 588 358 564Q402 540 426 496Q449 451 449 387Q449 324 426 280Q404 235 360 211Q316 187 250 187ZM250 284Q264 284 272 290Q281 295 286 307Q290 319 292 339Q294 359 294 387Q294 416 292 436Q290 455 286 468Q281 480 272 486Q264 491 250 491Q237 491 228 486Q219 480 214 468Q209 456 207 436Q205 416 205 387Q205 359 207 340Q209 320 214 308Q218 295 227 290Q236 284 250 284ZM414 487L380 531Q395 560 418 578Q440 595 478 613L517 535Q507 532 488 524Q468 515 448 505Q427 495 414 487Z"],"h":[509,[52,0,462,810],"M52 0L52 810L214 810L214 527Q246 559 281 574Q316 588 356 588Q391 588 414 570Q438 553 450 522Q462 492 462 453L462 0L300 0L300 430Q300 451 293 462Q286 473 267 473Q257 473 243 468Q229 462 214 452L214 0Z"],"i":[265,[51,0,215,789],"M52 0L52 578L215 578L215 0ZM51 676L51 789L215 789L215 676Z"],"j":[269,[-17,-180,220,789],"M70 -180Q48 -180 26 -176Q3 -173 -17 -167L-17 -50Q-9 -51 -2 -52Q6 -54 12 -54Q26 -54 36 -49Q46 -44 52 -34Q57 -23 57 -5L57 578L219 578L219 -25Q219 -93 182 -136Q144 -180 70 -180ZM56 676L56 789L220 789L220 676Z"],"k":[510,[51,0,507,810],"M51 0L51 810L208 810L208 361L326 578L507 578L368 341L506 0L330 0L244 275L208 220L208 0Z"],"l":[274,[58,0,220,810],"M58 0L58 810L220 810L220 0Z"],"m":[753,[51,0,706,589],"M51 0L51 578L211 578L211 532Q243 563 278 576Q312 589 348 589Q383 589 408 572Q434 554 447 520Q481 558 518 574Q556 589 594 589Q628 589 653 572Q678 556 692 524Q706 493 706 449L706 0L546 0L546 432Q546 456 538 466Q529 477 512 477Q502 477 487 472Q472 466 458 456Q458 454 458 452Q458 451 458 449L458 0L300 0L300 432Q300 456 291 466Q282 477 265 477Q254 477 240 472Q225 466 211 456L211 0Z"],"n":[507,[51,0,460,588],"M51 0L51 578L214 578L214 520Q246 552 280 570Q315 588 353 588Q389 588 412 570Q436 553 448 522Q460 492 460 453L460 0L298 0L298 430Q298 451 291 462Q284 473 265 473Q255 473 242 468Q228 462 214 452L214 0Z"],"o":[483,[39,-10,444,588],"M241 -10Q179 -10 134 11Q88 32 64 74Q39 116 39 179L39 399Q39 462 64 504Q88 546 134 567Q179 588 241 588Q303 588 348 567Q394 546 419 504Q444 462 444 399L444 179Q444 116 419 74Q394 32 348 11Q303 -10 241 -10ZM242 98Q258 98 267 106Q276 115 280 130Q283 146 283 168L283 410Q283 432 280 448Q276 463 267 472Q258 480 242 480Q226 480 217 472Q208 463 204 448Q200 432 200 410L200 168Q200 146 204 130Q208 115 217 106Q226 98 242 98Z"],"p":[505,[51,-190,463,588],"M51 -190L51 578L214 578L214 536Q243 562 276 575Q309 588 339 588Q372 588 396 575Q419 562 434 538Q449 515 456 484Q463 453 463 418L463 169Q463 115 448 75Q434 35 406 12Q378 -10 337 -10Q306 -10 274 4Q243 19 214 44L214 -190ZM257 95Q273 95 282 104Q291 113 296 128Q300 142 300 160L300 430Q300 447 296 460Q292 474 283 482Q274 490 260 490Q247 490 236 484Q224 479 214 470L214 110Q225 103 236 99Q246 95 257 95Z"],"q":[504,[42,-190,455,588],"M292 -190L292 48Q264 21 235 6Q206 -10 176 -10Q111 -10 76 35Q42 80 42 168L42 407Q42 461 57 502Q72 542 102 565Q132 588 176 588Q209 588 238 575Q267 562 292 539L292 578L455 578L455 -190ZM248 94Q257 94 268 98Q280 103 292 110L292 472Q282 479 271 483Q260 487 249 487Q226 487 216 468Q205 450 205 424L205 158Q205 140 210 126Q214 111 224 102Q233 94 248 94Z"],"r":[383,[53,0,365,585],"M53 0L53 578L216 578L216 482Q244 532 272 558Q300 585 340 585Q348 585 354 584Q360 584 365 582L365 420Q354 425 340 428Q327 432 312 432Q284 432 260 417Q236 402 216 376L216 0Z"],"s":[424,[20,-10,406,588],"M229 -10Q153 -10 102 24Q52 58 20 135L131 184Q147 145 168 122Q190 100 216 100Q235 100 244 108Q254 116 254 130Q254 153 236 172Q219 191 174 228L132 263Q86 302 60 338Q33 375 33 429Q33 476 58 512Q82 548 123 568Q164 588 211 588Q283 588 331 549Q379 510 399 439L292 391Q286 410 275 429Q264 448 249 461Q234 474 215 474Q199 474 190 465Q180 456 180 441Q180 422 202 400Q223 378 261 347L302 311Q327 290 351 266Q375 242 390 213Q406 184 406 147Q406 97 381 62Q356 26 316 8Q275 -10 229 -10Z"],"t":[351,[14,-6,330,754],"M232 -6Q167 -6 132 13Q97 32 84 68Q70 105 70 157L70 471L14 471L14 578L70 578L70 754L235 754L235 578L317 578L317 471L235 471L235 173Q235 148 250 137Q264 126 286 126Q299 126 310 128Q321 129 330 130L330 2Q317 0 289 -3Q261 -6 232 -6Z"],"u":[504,[45,-10,452,578],"M153 -10Q118 -10 94 8Q69 25 57 56Q45 87 45 125L45 578L208 578L208 144Q208 123 216 112Q223 100 242 100Q253 100 265 106Q277 111 290 118L290 578L452 578L452 0L290 0L290 53Q259 24 224 7Q190 -10 153 -10Z"],"v":[421,[10,0,414,578],"M126 0L10 578L166 578L214 209L258 578L414 578L295 0Z"],"w":[597,[21,0,576,578],"M106 0L21 578L157 578L199 250L244 578L362 578L401 242L450 578L576 578L490 0L350 0L300 325L244 0Z"],"x":[442,[11,0,440,578],"M11 0L134 317L17 578L181 578L243 439L298 578L423 578L309 293L440 0L274 0L204 159L146 0Z"],"y":[448,[3,-168,438,578],"M67 -168L67 -55Q98 -55 118 -51Q139 -47 150 -36Q160 -25 160 -6Q160 11 154 36Q148 60 139 91L3 578L156 578L229 244L284 578L438 578L305 -14Q292 -74 264 -108Q236 -141 196 -154Q155 -168 104 -168Z"],"z":[392,[35,0,366,578],"M35 0L35 105L194 459L47 459L47 578L364 578L364 479L203 119L366 119L366 0Z"],"{":[374,[48,-193,343,828],"M343 -193Q264 -193 218 -182Q171 -170 148 -145Q126 -120 120 -79Q113 -38 113 21L113 101Q113 173 110 206Q106 239 92 248Q79 258 48 258L48 376Q79 376 92 386Q106 395 110 428Q113 462 113 533L113 613Q113 673 120 714Q126 755 148 780Q171 805 218 816Q264 828 343 828L343 719Q317 719 301 715Q285 711 277 700Q269 688 266 665Q263 642 263 604L263 514Q263 429 246 379Q229 329 177 317Q229 305 246 256Q263 206 263 121L263 30Q263 -8 266 -30Q269 -53 277 -64Q285 -76 301 -80Q317 -84 343 -84Z"],"|":[262,[64,-180,198,810],"M64 -180L64 810L198 810L198 -180Z"],"}":[379,[37,-193,332,828],"M37 -193L37 -84Q63 -84 79 -80Q95 -76 103 -64Q111 -53 114 -30Q117 -8 117 30L117 121Q117 206 134 256Q152 305 204 317Q152 329 134 379Q117 429 117 514L117 604Q117 642 114 665Q111 688 103 700Q95 711 79 715Q63 719 37 719L37 828Q116 828 162 816Q209 805 232 780Q254 755 260 714Q267 673 267 613L267 533Q267 462 270 428Q274 395 288 386Q301 376 332 376L332 258Q301 258 288 248Q274 239 270 206Q267 173 267 101L267 21Q267 -38 260 -79Q254 -120 232 -145Q209 -170 162 -182Q116 -193 37 -193Z"],"~":[481,[40,333,448,504],"M327 333Q299 333 268 348Q236 362 208 376Q179 391 160 391Q149 391 129 379Q109 367 92 343L40 411Q53 433 72 454Q92 475 114 490Q137 504 158 504Q186 504 218 490Q249 476 277 462Q305 447 323 447Q337 447 356 461Q375 475 391 494L448 436Q437 412 417 388Q397 364 374 348Q350 333 327 333Z"],"’":[204,[30,526,174,810],"M51 526L39 577Q77 578 88 603Q100 628 100 667L30 667L30 810L174 810Q174 780 174 752Q173 724 172 699Q168 613 144 570Q120 527 51 526Z"],"‘":[204,[30,534,173,818],"M30 534Q30 564 30 592Q31 621 32 645Q34 731 59 774Q84 818 153 818L165 767Q126 766 115 741Q104 716 104 677L173 677L173 534Z"],"—":[1051,[32,242,1019,353],"M32 242L32 353L1019 353L1019 242Z"],"·":[226,[37,300,191,452],"M37 300L37 452L191 452L191 300Z"],"•":[478,[59,188,417,558],"M238 188Q193 188 152 208Q111 229 85 270Q59 310 59 371Q59 434 85 476Q111 517 152 538Q193 558 238 558Q284 558 324 537Q365 516 391 474Q417 433 417 371Q417 311 391 270Q365 229 324 208Q283 188 238 188Z"]},"k":{"\"A":-68,"\"C":-17,"\"G":-17,"\"J":-38,"\"O":-17,"\"Q":-17,"&T":-34,"'A":-68,"'C":-17,"'G":-17,"'J":-38,"'O":-17,"'Q":-17,"*J":-26,"*X":-17,",B":-8,",C":-17,",D":-8,",E":-8,",F":-8,",G":-17,",H":-8,",I":-8,",K":-8,",L":-8,",N":-8,",O":-17,",P":-8,",Q":-17,",R":-8,",T":-58,",U":-17,",V":-48,",W":-39,",Y":-54,"-T":-43,"-V":-22,"-W":-8,"-X":-17,"-Y":-43,".B":-8,".C":-17,".D":-8,".E":-8,".F":-8,".G":-17,".H":-8,".I":-8,".K":-8,".L":-8,".N":-8,".O":-17,".P":-8,".Q":-17,".R":-8,".T":-58,".U":-17,".V":-48,".W":-39,".Y":-54,"/C":-17,"/G":-17,"/O":-17,"/Q":-17,"/S":-26,"0X":-8,"0Y":-17,"17":-3,"24":-17,"41":-17,"47":-12,"57":-17,"61":-8,"62":-8,"67":-10,"69":-13,"6Y":-8,"74":-23,"87":-11,"8Y":-8,"97":-18,":T":-68,":V":-17,":W":-26,":Y":-48,";T":-68,";V":-17,";W":-26,";Y":-48,"A\"":-68,"A'":-68,"AC":-13,"AG":-13,"AO":-13,"AS":-8,"AT":-45,"AU":-8,"AV":-34,"AW":-20,"AY":-44,"A’":-52,"A‘":-68,"B\"":-39,"B'":-39,"B,":-17,"B.":-17,"BT":-20,"BV":-23,"BW":-5,"BX":-20,"BY":-27,"B’":-39,"B‘":-39,"C\"":-17,"C'":-17,"C,":-8,"C.":-8,"CX":-8,"CY":-4,"C’":-17,"C‘":-17,"D\"":-26,"D'":-26,"D,":-17,"D.":-17,"D7":-8,"DA":-13,"DJ":-8,"DT":-8,"DV":-8,"DX":-17,"DY":-17,"DZ":-8,"D\\":-34,"D’":-26,"D‘":-26,"F\"":-8,"F'":-8,"F,":-82,"F.":-82,"F:":-18,"F;":-18,"FA":-33,"FJ":-22,"FS":-6,"F’":-8,"F‘":-8,"G\"":-26,"G'":-26,"GT":-16,"GV":-9,"GW":-3,"GY":-16,"G’":-26,"G‘":-26,"J,":-37,"J.":-37,"K-":-26,"KC":-23,"KG":-23,"KO":-23,"KQ":-22,"KS":-19,"L\"":7,"L'":7,"L*":-110,"L-":-43,"L1":-34,"L7":-8,"LC":-13,"LG":-13,"LO":-13,"LQ":-17,"LS":-8,"LT":-69,"LU":-18,"LV":-69,"LW":-45,"LY":-84,"L\\":-85,"L’":-15,"L‘":-112,"L·":-77,"MS":-13,"MT":-6,"MV":-8,"MY":-8,"O\"":-26,"O'":-26,"O,":-17,"O.":-17,"O7":-8,"OA":-13,"OJ":-8,"OT":-8,"OV":-8,"OX":-17,"OY":-17,"OZ":-8,"O\\":-34,"O’":-26,"O‘":-26,"P,":-70,"P-":-51,"P.":-82,"P/":-74,"P4":-6,"P7":-8,"PA":-48,"PJ":-30,"PS":-8,"PX":-17,"PZ":-6,"P\\":-26,"Q\"":-26,"Q'":-26,"Q,":-17,"Q.":-17,"Q7":-8,"QA":-13,"QJ":-8,"QT":-8,"QV":-8,"QX":-17,"QY":-17,"QZ":-8,"Q\\":-34,"Q’":-26,"Q‘":-26,"RC":-8,"RG":-8,"RO":-8,"RQ":-8,"RS":-4,"RT":-11,"RU":-6,"RV":-12,"RW":-3,"RY":-23,"R\\":-26,"S/":-17,"SA":-8,"SM":-8,"SS":-17,"SV":-8,"SX":-8,"SY":-8,"S\\":-34,"T&":-8,"T,":-58,"T-":-43,"T.":-58,"T/":-51,"T:":-68,"T;":-68,"TA":-45,"TC":-8,"TG":-8,"TJ":-28,"TM":-6,"TO":-8,"TQ":-8,"U,":-17,"U.":-17,"U/":-26,"UA":-8,"V,":-57,"V-":-22,"V.":-57,"V:":-26,"V;":-26,"VA":-34,"VC":-9,"VG":-9,"VJ":-5,"VM":-8,"VO":-9,"VQ":-9,"VS":-7,"W,":-39,"W-":-8,"W.":-39,"W/":-34,"W:":-26,"W;":-26,"WA":-20,"WS":-4,"W\\":-17,"X*":-26,"X-":-17,"X0":-8,"XC":-17,"XG":-17,"XO":-17,"XQ":-17,"XS":-15,"X\\":-17,"Y,":-77,"Y-":-43,"Y.":-77,"Y/":-43,"Y0":-17,"Y4":-26,"Y6":-8,"Y8":-8,"Y:":-57,"Y;":-57,"YA":-44,"YC":-17,"YG":-17,"YJ":-5,"YM":-8,"YO":-17,"YQ":-17,"YS":-8,"ZC":-8,"ZG":-8,"ZO":-8,"ZQ":-8,"ZS":-6,"\\C":-17,"\\G":-17,"\\O":-17,"\\Q":-17,"\\S":-26,"\\T":-51,"\\U":-26,"\\V":-5,"\\W":-43,"\\Y":-51,"’A":-68,"’C":-17,"’G":-17,"’J":-38,"’O":-17,"’Q":-17,"‘A":-52,"‘C":-17,"‘G":-17,"‘J":-38,"‘O":-17,"‘Q":-17}}};
+
+var FONTS = [
+  { id:'anton',   name:'Anton',         data:'anton'   },
+  { id:'archivo', name:'Archivo Black', data:'archivo' },
+  { id:'oswald',  name:'Oswald Bold',   data:'oswald'  }
+];
+function fontById(id){ for(var i=0;i<FONTS.length;i++) if(FONTS[i].id===id) return FONTS[i]; return FONTS[0]; }
+function fontData(f){ return FONTDATA[f.data || 'anton'] || FONTDATA.anton; }
+function effFont(spec){ var f = fontById(spec.font || 'anton');
+  if(f.id === 'anton' && (spec.word || '').length >= 15) return fontById('oswald');
+  return f; }
+
+/* --- glyph path parser: M / L / Q / C / Z, coordinates in 1/1000 em --- */
+function parsePathData(d){
+  var out = [], cmd = '', nums = [], s = '', i, ch;
+  function endNum(){ if(s){ nums.push(parseFloat(s)); s = ''; } }
+  function endCmd(){ endNum(); if(cmd) out.push([cmd, nums]); nums = []; }
+  for(i = 0; i < d.length; i++){
+    ch = d.charAt(i);
+    if(ch === ' ' || ch === ',') endNum();
+    else if(ch === '-' && s) { endNum(); s = '-'; }
+    else if('MLQCZ'.indexOf(ch) >= 0){ endCmd(); cmd = ch; }
+    else s += ch;
+  }
+  endCmd();
+  return out;
+}
+function glyphInfo(f, ch){
+  var fd = fontData(f);
+  if(!fd._cache) fd._cache = {};
+  if(fd._cache[ch]) return fd._cache[ch];
+  var raw = fd.g[ch] || fd.g['?'] || fd.g[' '] || [500, [0, 0, 0, 0], ''];
+  var g = { adv:raw[0], x0:raw[1][0], y0:raw[1][1], x1:raw[1][2], y1:raw[1][3],
+            cmds:parsePathData(raw[2]) };
+  fd._cache[ch] = g;
+  return g;
+}
+function kernOf(f, a, b){ var fd = fontData(f); return (fd.k && a && b) ? (fd.k[a + b] || 0) : 0; }
+function capHeight(f, fs){ return fontData(f).cap / 1000 * fs; }
+/* normalise typed words so every character has a real outline in the font */
+var FOLD = { '\u2018':"'", '\u2019':"'", '\u201c':'"', '\u201d':'"', '\u2013':'-', '\u2014':'-',
+  '\u2026':'...', '\u00a0':' ', '\u2212':'-' };
+function foldText(t){
+  t = String(t || '');
+  if(t.normalize) t = t.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  var out = '', i, ch;
+  for(i = 0; i < t.length; i++){
+    ch = t.charAt(i);
+    out += (FOLD[ch] !== undefined ? FOLD[ch] : ch);
+  }
+  return out;
+}
+/* layout of one word: glyph origins (1/1000 em) + the exact ink box */
+function textRun(f, text){
+  text = foldText(text);
+  var x = 0, i, ch, g, prev = '', placed = [];
+  var minx = 1e9, maxx = -1e9, miny = 1e9, maxy = -1e9, any = false;
+  for(i = 0; i < text.length; i++){
+    ch = text.charAt(i);
+    if(i) x += kernOf(f, prev, ch);
+    g = glyphInfo(f, ch);
+    if(g.cmds.length){
+      any = true;
+      if(x + g.x0 < minx) minx = x + g.x0;
+      if(x + g.x1 > maxx) maxx = x + g.x1;
+      if(g.y0 < miny) miny = g.y0;
+      if(g.y1 > maxy) maxy = g.y1;
+    }
+    placed.push({ ch:ch, x:x });
+    x += g.adv;
+    prev = ch;
+  }
+  if(!any){ minx = maxx = miny = maxy = 0; }
+  return { placed:placed, advance:x, inkL:minx, inkR:maxx, inkW:maxx - minx, inkB:miny, inkT:maxy };
+}
+/* the visible (ink) width and the advance width, already scaled to font-size */
+function textInkWidth(f, text, fs){ return textRun(f, text).inkW / 1000 * fs; }
+function textAdvance(f, text, fs){ return textRun(f, text).advance / 1000 * fs; }
+function num2(v){ var r = Math.round(v * 100) / 100; return (r % 1 === 0) ? String(r | 0) : String(r); }
+/* six-decimal formatter for the text scale — rounding this would change the
+   width of every word, so it must stay exact */
+function num6(v){ var s = (Math.round(v * 1e6) / 1e6).toFixed(6); return s.replace(/0+$/, '').replace(/\.$/, ''); }
+
+/* --- SVG: the word as one <path>, in font units, placed by a transform.
+   Compact, exact and readable by every SVG renderer and editor. --- */
+function wordPathUnits(f, text){
+  var run = textRun(f, text), d = '', i, j, k, p, g, cmd, v;
+  for(i = 0; i < run.placed.length; i++){
+    p = run.placed[i];
+    g = glyphInfo(f, p.ch);
+    for(j = 0; j < g.cmds.length; j++){
+      cmd = g.cmds[j][0]; v = g.cmds[j][1];
+      if(cmd === 'Z'){ d += 'Z'; continue; }
+      d += cmd;
+      for(k = 0; k < v.length; k += 2)
+        d += Math.round(p.x + v[k]) + ' ' + Math.round(v[k + 1]) + ' ';
+    }
+  }
+  return d;
+}
+function textOnceSVG(word, x, yBase, fs, fill, f){
+  if(!word) return '';
+  var run = textRun(f, word), s = fs / 1000;
+  var d = wordPathUnits(f, word);
+  if(!d) return '';
+  var ox = x - run.inkL * s;          /* left edge of the ink lands exactly on x */
+  return '<g transform="translate(' + num2(ox) + ' ' + num2(yBase) + ') scale(' + num6(s) + ' -' + num6(s)
+    + ')"><path d="' + d + '" fill="' + fill + '"/></g>';
+}
+/* --- PostScript: the very same outlines, drawn through the same transform --- */
+function wordPathPS(f, text){
+  var run = textRun(f, text), o = [], i, j, k, p, g, cmds, cmd, v;
+  var cx = 0, cy = 0, qx, qy, nx, ny;
+  function int(v){ return String(Math.round(v)); }
+  for(i = 0; i < run.placed.length; i++){
+    p = run.placed[i];
+    g = glyphInfo(f, p.ch);
+    cmds = g.cmds;
+    for(j = 0; j < cmds.length; j++){
+      cmd = cmds[j][0]; v = cmds[j][1];
+      if(cmd === 'M'){ cx = p.x + v[0]; cy = v[1]; o.push(int(cx) + ' ' + int(cy) + ' moveto'); }
+      else if(cmd === 'L'){ cx = p.x + v[0]; cy = v[1]; o.push(int(cx) + ' ' + int(cy) + ' lineto'); }
+      else if(cmd === 'Q'){
+        qx = p.x + v[0]; qy = v[1]; nx = p.x + v[2]; ny = v[3];
+        o.push(int(cx + 2 / 3 * (qx - cx)) + ' ' + int(cy + 2 / 3 * (qy - cy)) + ' '
+             + int(nx + 2 / 3 * (qx - nx)) + ' ' + int(ny + 2 / 3 * (qy - ny)) + ' '
+             + int(nx) + ' ' + int(ny) + ' curveto');
+        cx = nx; cy = ny;
+      }
+      else if(cmd === 'C'){
+        o.push(int(p.x + v[0]) + ' ' + int(v[1]) + ' ' + int(p.x + v[2]) + ' ' + int(v[3]) + ' '
+             + int(p.x + v[4]) + ' ' + int(v[5]) + ' curveto');
+        cx = p.x + v[4]; cy = v[5];
+      }
+      else if(cmd === 'Z') o.push('closepath');
+    }
+  }
+  return o.join(' ');
+}
+/* measurer adapters so ONE geometry function drives SVG, EPS and PNG —
+   both measure from the very outlines that are drawn, so the layout can
+   never disagree with the artwork. */
+function textMeasurer(f){ return {
+  font:f,
+  measure:function(w, fs){ return textInkWidth(f, w, fs); },
+  fit:function(w, fs, maxW){
+    var iw = textInkWidth(f, w, fs);
+    if(!iw || iw <= maxW) return fs;
+    return Math.max(6, fs * maxW / iw);
+  },
+  cap:function(fs){ return capHeight(f, fs); }
+}; }
+function svgMeasurer(spec){ return textMeasurer(effFont(spec)); }
+function epsMeasurer(spec){ return textMeasurer(effFont(spec)); }
+
+/* ================= SEAMLESS REPEAT GEOMETRY =================
+   Every style defines ONE exact repeat unit of width U. A tape of any length
+   is a whole number of units stamped side by side — never a partial unit.
+   - stripes:  U is a whole number of stripe periods S, so the stripe cut at
+     the right edge continues at the left edge at the same angle/position.
+   - stripes+text: the stripe period S is re-derived as U/k so it divides the
+     text unit exactly — stripes AND text are both seamless in the same unit.
+   - chevron/checker: U is a whole number of arrows / cells.
+   - text & icon styles: U = icon + gap + whole word + ONE uniform trailing
+     gap, so the gap across a join equals the gap inside the tape. */
+function unitGeom(spec, M){
+  var H = spec.thick || 120, word = spec.word || '', st = spec.style;
+  var g = { H:H, f:effFont(spec) };
+  /* baseline that centres the CAPITALS of the word on a given centre line */
+  function midBase(fs){ return H / 2 + M.cap(fs) / 2; }
+  if(st === 'stripes'){ g.S = H * 0.9; g.U = g.S * 3; }
+  else if(st === 'chevron'){ g.cw = H * 0.7; g.U = g.cw * 2; }
+  else if(st === 'checker'){ g.cell = H / 2; g.U = H; }
+  else if(st === 'text' || st === 'double'){
+    g.fs = M.fit(word, st === 'text' ? H * 0.56 : H * 0.46, 1100);
+    g.wordW = M.measure(word, g.fs);          /* real ink width of the word */
+    g.pad = g.fs * 0.22; g.gap = g.fs * 0.90;  /* inset left, space right   */
+    g.U = g.pad + g.wordW + g.gap;
+    g.xText = g.pad; g.yB = midBase(g.fs);
+  }
+  else if(st === 'stripes-text'){
+    g.fs = M.fit(word, H * 0.40, 1100);
+    g.wordW = M.measure(word, g.fs);
+    g.pad = g.fs * 0.22; g.gap = g.fs * 0.90;
+    g.U = g.pad + g.wordW + g.gap;
+    var kk = Math.max(1, Math.round(g.U / (H * 0.9))); g.S = g.U / kk;
+    g.xText = g.pad; g.yB = H / 2 + M.cap(g.fs) / 2;
+  }
+  else if(st === 'text-icon'){
+    g.ts = H * 0.74; g.tw = g.ts * 1.13;
+    g.fs = M.fit(word, H * 0.47, 1100); g.wordW = M.measure(word, g.fs);
+    g.g1 = H * 0.28; g.gap = H * 0.55;
+    g.U = g.tw + g.g1 + g.wordW + g.gap;
+    g.xText = g.tw + g.g1; g.yB = midBase(g.fs);
+  }
+  else if(st === 'text-caution'){
+    g.fs = M.fit('CAUTION', H * 0.52, 1100); g.wordW = M.measure('CAUTION', g.fs);
+    g.pad = g.fs * 0.22; g.gap = g.fs * 0.78;
+    g.U = g.pad + g.wordW + g.gap;
+    g.xText = g.pad; g.yB = midBase(g.fs);
+  }
+  else if(st === 'biohazard'){
+    g.br = H * 0.40; g.symW = g.br * 2 * 1.18;
+    g.fs = M.fit(word, H * 0.42, 1100); g.wordW = M.measure(word, g.fs);
+    g.g1 = H * 0.22; g.gap = H * 0.5;
+    g.U = g.symW + g.g1 + g.wordW + g.gap;
+    g.xText = g.symW + g.g1; g.yB = midBase(g.fs);
+  }
+  else if(st === 'skull'){
+    g.su = H * 0.92;
+    g.fs = M.fit(word, H * 0.44, 1100); g.wordW = M.measure(word, g.fs);
+    g.g1 = g.su * 1.06; g.gap = H * 0.5;
+    g.U = g.g1 + g.wordW + g.gap;
+    g.xText = g.g1; g.yB = midBase(g.fs);
+  }
+  return g;
+}
+function singleSpecOf(spec){
+  return { mode:'single', style:spec.style, scheme:spec.scheme, word:spec.word,
+           bg:spec.bg, font:spec.font || 'anton', thick:spec.thick || 120, repeats:spec.repeats || 5 };
+}
+function currentSpec(){
+  return { mode:state.mode, style:state.style, scheme:state.scheme, word:effWord(),
+           bg:state.bg, font:state.font, thick:state.thick, repeats:state.repeats };
+}
+/* ================= ICONS (solid fills only — no blue, no hollow shapes) ================= */
+function triSVG(cx, cy, s){
+  var w = s * 1.13, top = cy - s * 0.52, bot = cy + s * 0.48;
+  var exW = Math.max(3, s * 0.115), exTop = cy - s * 0.17, exH = s * 0.38;
+  return '<polygon points="' + r2(cx) + ',' + r2(top) + ' ' + r2(cx + w / 2) + ',' + r2(bot)
+    + ' ' + r2(cx - w / 2) + ',' + r2(bot) + '" fill="#FFC400" stroke="#151515" stroke-width="'
+    + r2(s * 0.10) + '" stroke-linejoin="round"/>'
+    + '<rect x="' + r2(cx - exW / 2) + '" y="' + r2(exTop) + '" width="' + r2(exW) + '" height="'
+    + r2(exH) + '" rx="' + r2(exW * 0.45) + '" fill="#151515"/>'
+    + '<circle cx="' + r2(cx) + '" cy="' + r2(exTop + exH + s * 0.115) + '" r="' + r2(exW * 0.62) + '" fill="#151515"/>';
+}
+function bioSVG(cx, cy, r, fill){
+  var b = '', i, a;
+  for(i = 0; i < 3; i++){ a = -90 + i * 120;
+    b += '<path d="M' + cx + ' ' + cy + ' L' + r2(cx + r * Math.cos((a - 32) * Math.PI / 180)) + ' ' + r2(cy + r * Math.sin((a - 32) * Math.PI / 180))
+       + ' A' + r + ' ' + r + ' 0 0 1 ' + r2(cx + r * Math.cos((a + 32) * Math.PI / 180)) + ' ' + r2(cy + r * Math.sin((a + 32) * Math.PI / 180)) + ' Z" fill="' + fill + '"/>'; }
+  return b + '<circle cx="' + cx + '" cy="' + cy + '" r="' + r2(r * 0.30) + '" fill="' + fill + '"/>';
+}
+/* Skull outline as plain path data (100 x 100 local box) so the SVG preview,
+   the EPS and the PNG are all built from this one definition. */
+var SKULL_BODY = 'M-38 -6Q-38 -42 0 -42Q38 -42 38 -6Q38 16 24 24L24 42L14 42L14 30L5 30L5 42L-5 42L-5 30L-14 30L-14 42L-24 42L-24 24Q-38 16 -38 -6Z';
+var SKULL_NOSE = 'M0 8L-6 20L6 20Z';
+var SKULL_EYES = [[-16, -4, 9.5], [16, -4, 9.5]];
+function skullMap(cx, cy, s){ var u = s / 100; return function(x, y){ return [cx + x * u, cy + y * u]; }; }
+/* map a parsed path through any point transform, as an SVG <path> */
+function mapPathSVG(cmds, map, fill){
+  var d = '', i, j, k, c, v, p;
+  for(i = 0; i < cmds.length; i++){
+    c = cmds[i][0]; v = cmds[i][1];
+    if(c === 'Z'){ d += 'Z'; continue; }
+    d += c;
+    for(k = 0; k < v.length; k += 2){ p = map(v[k], v[k + 1]); d += num2(p[0]) + ' ' + num2(p[1]) + ' '; }
+  }
+  return d ? '<path d="' + d + '" fill="' + fill + '"/>' : '';
+}
+/* the same path in PostScript (y flipped into the EPS bottom-left space) */
+function mapPathPS(cmds, map, H){
+  var o = [], i, j, k, c, v, p, q, r, cx = 0, cy = 0, c1, c2, e;
+  function P(x, y){ var pt = map(x, y); return num2(pt[0]) + ' ' + num2(H - pt[1]); }
+  for(i = 0; i < cmds.length; i++){
+    c = cmds[i][0]; v = cmds[i][1];
+    if(c === 'M'){ o.push(P(v[0], v[1]) + ' moveto'); cx = v[0]; cy = v[1]; }
+    else if(c === 'L'){ o.push(P(v[0], v[1]) + ' lineto'); cx = v[0]; cy = v[1]; }
+    else if(c === 'Q'){
+      q = [v[0], v[1]]; e = [v[2], v[3]];
+      c1 = [cx + 2 / 3 * (q[0] - cx), cy + 2 / 3 * (q[1] - cy)];
+      c2 = [e[0] + 2 / 3 * (q[0] - e[0]), e[1] + 2 / 3 * (q[1] - e[1])];
+      o.push(P(c1[0], c1[1]) + ' ' + P(c2[0], c2[1]) + ' ' + P(e[0], e[1]) + ' curveto');
+      cx = e[0]; cy = e[1];
+    }
+    else if(c === 'C'){
+      o.push(P(v[0], v[1]) + ' ' + P(v[2], v[3]) + ' ' + P(v[4], v[5]) + ' curveto');
+      cx = v[4]; cy = v[5];
+    }
+    else if(c === 'Z') o.push('closepath');
+  }
+  return o.join(' ');
+}
+var _skullBody = null, _skullNose = null;
+function skullFull(cx, cy, s, fill, hole){
+  var u = s / 100, map = skullMap(cx, cy, s), b = '', i;
+  if(!_skullBody){ _skullBody = parsePathData(SKULL_BODY); _skullNose = parsePathData(SKULL_NOSE); }
+  b += mapPathSVG(_skullBody, map, fill);
+  for(i = 0; i < SKULL_EYES.length; i++){
+    var ey = SKULL_EYES[i];
+    b += '<circle cx="' + r2(cx + ey[0] * u) + '" cy="' + r2(cy + ey[1] * u) + '" r="' + r2(ey[2] * u) + '" fill="' + hole + '"/>';
+  }
+  b += mapPathSVG(_skullNose, map, hole);
+  return b;
+}
+
+/* ---- ONE repeat unit, drawn in local coords [0,U] x [0,H]. Base colour is
+   NOT drawn here (the tape group fills the whole width once). ---- */
+function unitBodySVG(spec, idp, g){
+  var sc = spec.scheme, st = spec.style, word = spec.word, H = g.H, f = g.f, b = '', yB, i, o;
+  if(st === 'stripes'){
+    b += '<rect x="0" y="0" width="' + r2(g.U) + '" height="' + H + '" fill="url(#' + idp + 'p)"/>';
+  }
+  else if(st === 'stripes-text'){
+    b += '<rect x="0" y="0" width="' + r2(g.U) + '" height="' + H + '" fill="url(#' + idp + 'p)"/>';
+    b += '<rect x="0" y="' + r2(H * 0.24) + '" width="' + r2(g.U) + '" height="' + r2(H * 0.52) + '" fill="' + sc.base + '"/>';
+    yB = g.yB;
+    b += textOnceSVG(word, g.xText, yB, g.fs, sc.ink, f);
+  }
+  else if(st === 'chevron'){
+    for(i = 0; i < 2; i++){ o = i * g.cw;
+      b += '<polygon points="' + r2(o) + ',0 ' + r2(o + g.cw / 2) + ',0 ' + r2(o + g.cw) + ',' + r2(H / 2) + ' '
+        + r2(o + g.cw / 2) + ',' + H + ' ' + r2(o) + ',' + H + ' ' + r2(o + g.cw / 2) + ',' + r2(H / 2) + '" fill="' + sc.ink + '"/>'; }
+  }
+  else if(st === 'checker'){
+    b += '<rect x="0" y="0" width="' + r2(g.cell) + '" height="' + r2(g.cell) + '" fill="' + sc.ink + '"/>'
+       + '<rect x="' + r2(g.cell) + '" y="' + r2(g.cell) + '" width="' + r2(g.cell) + '" height="' + r2(g.cell) + '" fill="' + sc.ink + '"/>';
+  }
+  else if(st === 'text'){
+    yB = g.yB;
+    b += textOnceSVG(word, g.xText, yB, g.fs, sc.ink, f);
+  }
+  else if(st === 'text-icon'){
+    yB = g.yB;
+    b += triSVG(g.tw / 2, H / 2, g.ts);
+    b += textOnceSVG(word, g.xText, yB, g.fs, sc.ink, f);
+  }
+  else if(st === 'text-caution'){
+    yB = g.yB;
+    b += textOnceSVG('CAUTION', g.xText, yB, g.fs, sc.ink, f);
+    b += '<circle cx="' + r2(g.xText + g.wordW + g.gap / 2) + '" cy="' + r2(H / 2) + '" r="' + r2(g.fs * 0.11) + '" fill="' + sc.ink + '"/>';
+  }
+  else if(st === 'double'){
+    b += '<rect x="0" y="' + r2(H * 0.10) + '" width="' + r2(g.U) + '" height="' + r2(H * 0.07) + '" fill="' + sc.ink + '"/>'
+       + '<rect x="0" y="' + r2(H * 0.83) + '" width="' + r2(g.U) + '" height="' + r2(H * 0.07) + '" fill="' + sc.ink + '"/>';
+    yB = g.yB;
+    b += textOnceSVG(word, g.xText, yB, g.fs, sc.ink, f);
+  }
+  else if(st === 'biohazard'){
+    yB = g.yB;
+    b += bioSVG(g.symW / 2, H / 2, g.br, sc.ink);
+    b += textOnceSVG(word, g.xText, yB, g.fs, sc.ink, f);
+  }
+  else if(st === 'skull'){
+    yB = g.yB;
+    b += skullFull(g.su * 0.5, H / 2, g.su, sc.ink, sc.base);
+    b += textOnceSVG(word, g.xText, yB, g.fs, sc.ink, f);
+  }
+  return b;
+}
+
+/* ---- a full tape: the unit stamped `repeats` times. Width = repeats × U exactly.
+   The stripe pattern is referenced inside each translated unit group, so its
+   phase restarts at every unit origin — and because U is a whole number of
+   stripe periods, the phase at the right edge equals the phase at the left. ---- */
+function tapeGroupSVG(spec, idp, repeats){
+  var g = unitGeom(spec, svgMeasurer(spec));
+  var H = g.H, U = g.U, W = U * repeats, defs = '', body = '', k;
+  defs += '<clipPath id="' + idp + 'c"><rect x="0" y="0" width="' + r2(W) + '" height="' + H + '"/></clipPath>';
+  if(spec.style === 'stripes' || spec.style === 'stripes-text'){
+    var tile = g.S / Math.SQRT2;
+    defs += '<pattern id="' + idp + 'p" width="' + r2(tile) + '" height="' + r2(tile)
+      + '" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="' + r2(tile / 2)
+      + '" height="' + r2(tile) + '" fill="' + spec.scheme.ink + '"/></pattern>';
+  }
+  var unit = unitBodySVG(spec, idp, g);
+  body += '<g clip-path="url(#' + idp + 'c)">';
+  body += '<rect x="-4" y="-4" width="' + r2(W + 8) + '" height="' + (H + 8) + '" fill="' + spec.scheme.base + '"/>';
+  for(k = 0; k < repeats; k++)
+    body += '<g transform="translate(' + r2(k * U) + ' 0)">' + unit + '</g>';
+  body += '</g>';
+  return { defs:defs, body:body, W:W, U:U, H:H };
+}
+function bgRectSVG(bg, w, h){
+  if(bg === 'white') return '<rect width="' + r2(w) + '" height="' + r2(h) + '" fill="#FFFFFF"/>';
+  if(bg === 'black') return '<rect width="' + r2(w) + '" height="' + r2(h) + '" fill="#101010"/>';
+  return '';
+}
+/* main preview: tape with a little breathing room + soft shadow */
+function buildDisplaySVG(spec){
+  uidC++;
+  var tp = tapeGroupSVG(spec, 't' + uidC + '_', spec.repeats || 5);
+  var VB = tp.H + 90, TY = 45;
+  return '<svg xmlns="http://www.w3.org/2000/svg" width="' + Math.round(tp.W * 2) + '" height="' + Math.round(VB * 2)
+    + '" viewBox="0 0 ' + r2(tp.W) + ' ' + VB + '"><defs>' + tp.defs + '</defs>'
+    + bgRectSVG(spec.bg, tp.W, VB)
+    + '<rect x="6" y="' + (TY + 7) + '" width="' + r2(tp.W) + '" height="' + tp.H + '" fill="rgba(0,0,0,0.20)"/>'
+    + '<g transform="translate(0 ' + TY + ')">' + tp.body + '</g></svg>';
+}
+/* export SVG: exact tape rectangle, no padding, no shadow — tiles perfectly */
+function buildExportSVG(spec, tile){
+  uidC++;
+  var s = singleSpecOf(spec);
+  var tp = tapeGroupSVG(s, 'x' + uidC + '_', tile ? 1 : (spec.repeats || 5));
+  return '<svg xmlns="http://www.w3.org/2000/svg" width="' + Math.round(tp.W * 2) + '" height="' + (tp.H * 2)
+    + '" viewBox="0 0 ' + r2(tp.W) + ' ' + tp.H + '"><defs>' + tp.defs + '</defs>'
+    + bgRectSVG(spec.bg, tp.W, tp.H) + tp.body + '</svg>';
+}
+/* seamless check: one unit joined 3 times, optional seam markers */
+function seamlessSVG(spec){
+  uidC++;
+  var s = singleSpecOf(spec);
+  var tp = tapeGroupSVG(s, 'sm' + uidC + '_', 3);
+  var markers = '';
+  if(state.seam){
+    markers = '<g stroke="#D92B2B" stroke-width="2" stroke-dasharray="7 5">'
+      + '<line x1="' + r2(tp.U) + '" y1="-20" x2="' + r2(tp.U) + '" y2="' + (tp.H + 8) + '"/>'
+      + '<line x1="' + r2(2 * tp.U) + '" y1="-20" x2="' + r2(2 * tp.U) + '" y2="' + (tp.H + 8) + '"/></g>'
+      + '<g fill="#D92B2B" font-family="sans-serif" font-size="13" font-weight="700">'
+      + '<text x="' + r2(tp.U + 6) + '" y="-7">seam</text>'
+      + '<text x="' + r2(2 * tp.U + 6) + '" y="-7">seam</text></g>';
+  }
+  return '<svg xmlns="http://www.w3.org/2000/svg" width="' + Math.round(tp.W * 2) + '" height="' + Math.round((tp.H + 30) * 2)
+    + '" viewBox="-4 -24 ' + r2(tp.W + 8) + ' ' + (tp.H + 32) + '"><defs>' + tp.defs + '</defs>'
+    + bgRectSVG(spec.bg, tp.W, tp.H) + tp.body + markers + '</svg>';
+}
+function setRowRepeats(sub, M){
+  var g = unitGeom(sub, M);
+  return Math.max(2, Math.min(12, Math.round(1200 / g.U)));
+}
+function buildSetSVG(spec){
+  uidC++;
+  var Ht = spec.thick || 120, rows = SET_ORDER.length, gap = Math.round(Ht * 0.28), top = 56;
+  var tps = [], maxW = 0, i;
+  for(i = 0; i < rows; i++){
+    var sub = { mode:'single', style:SET_ORDER[i], scheme:spec.scheme, word:spec.word,
+                bg:'transparent', font:spec.font, thick:Ht, repeats:5 };
+    var tp = tapeGroupSVG(sub, 's' + uidC + '_' + i + '_', setRowRepeats(sub, svgMeasurer(sub)));
+    tps.push(tp); if(tp.W > maxW) maxW = tp.W;
+  }
+  var H = top * 2 + rows * Ht + (rows - 1) * gap;
+  var defs = '', body = bgRectSVG(spec.bg, maxW, H);
+  for(i = 0; i < rows; i++){
+    defs += tps[i].defs;
+    body += '<rect x="5" y="' + (top + i * (Ht + gap) + 6) + '" width="' + r2(tps[i].W) + '" height="' + Ht + '" fill="rgba(0,0,0,0.16)"/>'
+          + '<g transform="translate(0 ' + (top + i * (Ht + gap)) + ')">' + tps[i].body + '</g>';
+  }
+  return { svg:'<svg xmlns="http://www.w3.org/2000/svg" width="' + Math.round(maxW * 2) + '" height="' + (H * 2)
+    + '" viewBox="0 0 ' + r2(maxW) + ' ' + H + '"><defs>' + defs + '</defs>' + body + '</svg>', height:H };
+}
+function specSVG(spec){ return spec.mode === 'set' ? buildSetSVG(spec).svg : buildDisplaySVG(spec); }
+function exportSVGFor(spec, tile){
+  if(spec.mode === 'set' && !tile) return buildSetSVG(spec).svg;
+  return buildExportSVG(spec, tile);
+}
+/* ================= EPS 10 EXPORT =================
+   Same seamless geometry as the SVG (same unit width, same outlines): the
+   lettering is written into the EPS as Bezier outlines, so the file needs no
+   font at all and cannot reflow. Exact tape rectangle — no padding — so EPS
+   tiles join perfectly too. */
+function hexRGB(h){ return [parseInt(h.slice(1,3),16), parseInt(h.slice(3,5),16), parseInt(h.slice(5,7),16)]; }
+function epsColor(hex){ var c = hexRGB(hex);
+  return (c[0]/255).toFixed(3) + ' ' + (c[1]/255).toFixed(3) + ' ' + (c[2]/255).toFixed(3) + ' setrgbcolor'; }
+function epsHeader(w, h, title){
+  var bw = Math.ceil(w), bh = Math.ceil(h);
+  return '%!PS-Adobe-3.0 EPSF-3.0\n%%Creator: Caution Tapes Vector Tool\n%%Title: ' + title
+    + '\n%%CreationDate: ' + new Date().toISOString()
+    + '\n%%BoundingBox: 0 0 ' + bw + ' ' + bh
+    + '\n%%HiResBoundingBox: 0 0 ' + r2(w) + ' ' + r2(h)
+    + '\n%%LanguageLevel: 2\n%%Pages: 1\n%%DocumentData: Clean7Bit\n%%EndComments\n';
+}
+/* one tape in EPS local coords: origin bottom-left, y up. Returns body + size. */
+function epsTape(spec, repeats){
+  var g = unitGeom(spec, epsMeasurer(spec));
+  var sc = spec.scheme, st = spec.style, word = spec.word;
+  var H = g.H, U = g.U, W = U * repeats, o = [], k, off, x, yB;
+  /* text is emitted as filled Bezier outlines, exactly as in the SVG */
+  function show(wd, sx, yBsvg, fs){
+    var run = textRun(g.f, wd), s = fs / 1000, p = wordPathPS(g.f, wd);
+    if(!p) return;
+    var ox = sx - run.inkL * s;
+    /* PostScript is y-up, so the outline scale is positive here (the SVG
+       version uses a negative y scale because SVG is y-down). */
+    o.push('gsave ' + r2(ox) + ' ' + r2(H - yBsvg) + ' translate ' + num6(s) + ' ' + num6(s)
+      + ' scale newpath ' + p + ' fill grestore');
+  }
+  o.push('gsave');
+  o.push('newpath 0 0 ' + r2(W) + ' ' + H + ' rectclip');
+  o.push(epsColor(sc.base));
+  o.push('-4 -4 ' + r2(W + 8) + ' ' + (H + 8) + ' rectfill');
+  if(st === 'stripes' || st === 'stripes-text'){
+    /* bands depend on (x+y) with period S; U is a whole number of periods,
+       so the band phase at x=W matches x=0 — the join is invisible. */
+    var stepE = g.S / Math.SQRT2, R = W + H;
+    o.push(epsColor(sc.ink));
+    o.push('gsave newpath 0 0 ' + r2(W) + ' ' + H + ' rectclip ' + r2(W / 2) + ' ' + r2(H / 2) + ' translate 45 rotate');
+    for(x = -R; x < R; x += stepE) o.push(r2(x) + ' ' + r2(-R) + ' ' + r2(stepE / 2) + ' ' + r2(2 * R) + ' rectfill');
+    o.push('grestore');
+    if(st === 'stripes-text'){
+      o.push(epsColor(sc.base));
+      o.push('0 ' + r2(H - H * 0.24 - H * 0.52) + ' ' + r2(W) + ' ' + r2(H * 0.52) + ' rectfill');
+      o.push(epsColor(sc.ink));
+      yB = g.yB;
+      for(k = 0; k < repeats; k++) show(word, k * U + g.xText, yB, g.fs);
+    }
+  }
+  else if(st === 'chevron'){
+    o.push(epsColor(sc.ink));
+    for(x = 0; x < W - 0.01; x += g.cw)
+      o.push('newpath ' + r2(x) + ' 0 moveto ' + r2(x + g.cw / 2) + ' 0 lineto ' + r2(x + g.cw) + ' ' + r2(H / 2)
+        + ' lineto ' + r2(x + g.cw / 2) + ' ' + H + ' lineto ' + r2(x) + ' ' + H + ' lineto '
+        + r2(x + g.cw / 2) + ' ' + r2(H / 2) + ' lineto closepath fill');
+  }
+  else if(st === 'checker'){
+    var cols = Math.round(W / g.cell), rr, cc;
+    o.push(epsColor(sc.ink));
+    for(rr = 0; rr < 2; rr++) for(cc = 0; cc < cols; cc++)
+      if((cc + rr) % 2 === 1) o.push(r2(cc * g.cell) + ' ' + r2(rr * g.cell) + ' ' + r2(g.cell) + ' ' + r2(g.cell) + ' rectfill');
+  }
+  else if(st === 'text'){
+    o.push(epsColor(sc.ink));
+    yB = g.yB;
+    for(k = 0; k < repeats; k++) show(word, k * U + g.xText, yB, g.fs);
+  }
+  else if(st === 'double'){
+    o.push(epsColor(sc.ink));
+    o.push('0 ' + r2(H * 0.83) + ' ' + r2(W) + ' ' + r2(H * 0.07) + ' rectfill');
+    o.push('0 ' + r2(H * 0.10) + ' ' + r2(W) + ' ' + r2(H * 0.07) + ' rectfill');
+    yB = g.yB;
+    for(k = 0; k < repeats; k++) show(word, k * U + g.xText, yB, g.fs);
+  }
+  else if(st === 'text-icon'){
+    yB = g.yB;
+    for(k = 0; k < repeats; k++){
+      off = k * U;
+      var cx = off + g.tw / 2, cyT = H / 2;
+      var topE = H - (cyT - g.ts * 0.52), botE = H - (cyT + g.ts * 0.48);
+      var triPath = 'newpath ' + r2(cx) + ' ' + r2(topE) + ' moveto ' + r2(cx + g.tw / 2) + ' ' + r2(botE)
+        + ' lineto ' + r2(cx - g.tw / 2) + ' ' + r2(botE) + ' lineto closepath';
+      o.push('1.000 0.769 0.000 setrgbcolor');
+      o.push(triPath + ' fill');
+      o.push('0.082 0.082 0.082 setrgbcolor ' + r2(g.ts * 0.10) + ' setlinewidth 1 setlinejoin');
+      o.push(triPath + ' stroke');
+      var exW = Math.max(3, g.ts * 0.115), exTopSVG = cyT - g.ts * 0.17, exH = g.ts * 0.38;
+      o.push(r2(cx - exW / 2) + ' ' + r2(H - exTopSVG - exH) + ' ' + r2(exW) + ' ' + r2(exH) + ' rectfill');
+      o.push('newpath ' + r2(cx) + ' ' + r2(H - (exTopSVG + exH + g.ts * 0.115)) + ' ' + r2(exW * 0.62) + ' 0 360 arc closepath fill');
+      o.push(epsColor(sc.ink));
+      show(word, off + g.xText, yB, g.fs);
+    }
+  }
+  else if(st === 'text-caution'){
+    o.push(epsColor(sc.ink));
+    yB = g.yB;
+    for(k = 0; k < repeats; k++){
+      off = k * U;
+      show('CAUTION', off + g.xText, yB, g.fs);
+      o.push('newpath ' + r2(off + g.xText + g.wordW + g.gap / 2) + ' ' + r2(H / 2) + ' ' + r2(g.fs * 0.11) + ' 0 360 arc closepath fill');
+    }
+  }
+  else if(st === 'biohazard'){
+    o.push(epsColor(sc.ink));
+    yB = g.yB;
+    for(k = 0; k < repeats; k++){
+      off = k * U;
+      var bcx = off + g.symW / 2, bcy = H / 2, ai;
+      for(ai = 0; ai < 3; ai++){ var aa = 90 - ai * 120;
+        o.push('newpath ' + r2(bcx) + ' ' + bcy + ' moveto ' + r2(bcx) + ' ' + bcy + ' ' + r2(g.br) + ' ' + (aa - 32) + ' ' + (aa + 32) + ' arc closepath fill'); }
+      o.push('newpath ' + r2(bcx) + ' ' + bcy + ' ' + r2(g.br * 0.30) + ' 0 360 arc closepath fill');
+      show(word, off + g.xText, yB, g.fs);
+    }
+  }
+  else if(st === 'skull'){
+    yB = g.yB;
+    for(k = 0; k < repeats; k++){
+      off = k * U;
+      var scx = off + g.su * 0.5, scy = H / 2, u = g.su / 100;
+      var smap = skullMap(scx, scy, g.su), si2;
+      if(!_skullBody){ _skullBody = parsePathData(SKULL_BODY); _skullNose = parsePathData(SKULL_NOSE); }
+      o.push(epsColor(sc.ink) + ' newpath ' + mapPathPS(_skullBody, smap, H) + ' fill');
+      o.push(epsColor(sc.base));
+      for(si2 = 0; si2 < SKULL_EYES.length; si2++){
+        var e2 = SKULL_EYES[si2];
+        o.push('newpath ' + r2(scx + e2[0] * u) + ' ' + r2(H - (scy + e2[1] * u)) + ' ' + r2(e2[2] * u) + ' 0 360 arc closepath fill');
+      }
+      o.push('newpath ' + mapPathPS(_skullNose, smap, H) + ' fill');
+      o.push(epsColor(sc.ink));
+      show(word, off + g.xText, yB, g.fs);
+    }
+  }
+  o.push('grestore');
+  return { body:o.join('\n'), W:W, U:U, H:H };
+}
+function buildEPS(spec, tile){
+  var title = specTitle(spec), i;
+  if(spec.mode === 'set' && !tile){
+    var Ht = spec.thick || 120, rows = SET_ORDER.length, gap = Math.round(Ht * 0.28), top = 56;
+    var H = top * 2 + rows * Ht + (rows - 1) * gap;
+    var parts = [], sheetW = 0;
+    for(i = 0; i < rows; i++){
+      var sub = { mode:'single', style:SET_ORDER[i], scheme:spec.scheme, word:spec.word,
+                  bg:'transparent', font:spec.font, thick:Ht, repeats:5 };
+      var t = epsTape(sub, setRowRepeats(sub, epsMeasurer(sub)));
+      parts.push(t); if(t.W > sheetW) sheetW = t.W;
+    }
+    var out = epsHeader(sheetW, H, title);
+    if(spec.bg === 'white') out += '1 1 1 setrgbcolor 0 0 ' + r2(sheetW) + ' ' + H + ' rectfill\n';
+    if(spec.bg === 'black') out += '0.06 0.06 0.06 setrgbcolor 0 0 ' + r2(sheetW) + ' ' + H + ' rectfill\n';
+    for(i = 0; i < rows; i++){
+      var bottom = H - (top + i * (Ht + gap)) - Ht;
+      out += 'gsave 0 ' + r2(bottom) + ' translate\n' + parts[i].body + '\ngrestore\n';
+    }
+    return out + 'showpage\n%%EOF\n';
+  }
+  var s = singleSpecOf(spec);
+  var tt = epsTape(s, tile ? 1 : (spec.repeats || 5));
+  var out2 = epsHeader(tt.W, tt.H, title);
+  if(spec.bg === 'white') out2 += '1 1 1 setrgbcolor 0 0 ' + r2(tt.W) + ' ' + tt.H + ' rectfill\n';
+  if(spec.bg === 'black') out2 += '0.06 0.06 0.06 setrgbcolor 0 0 ' + r2(tt.W) + ' ' + tt.H + ' rectfill\n';
+  return out2 + tt.body + '\nshowpage\n%%EOF\n';
+}
+
+/* ================= STOCK METADATA ================= */
+function styleName(id){ for(var i=0;i<STYLES.length;i++) if(STYLES[i].id===id) return STYLES[i].name; return id; }
+function specTitle(spec){
+  var w = spec.word.toLowerCase().replace(/\b\w/g, function(c){ return c.toUpperCase(); });
+  if(spec.mode === 'set') return 'Caution Tape Set — ' + w + ' Warning Tape Collection, ' + spec.scheme.name + ' Seamless Hazard Barrier Tapes Vector';
+  return w + ' Caution Tape — ' + spec.scheme.name + ' ' + styleName(spec.style) + ' Seamless Barrier Tape Vector Illustration';
+}
+function specKeywords(spec){
+  var w = spec.word.toLowerCase(), base = ['caution tape','warning tape','barrier tape','hazard tape',
+    'safety tape','warning sign','danger sign','construction tape','barricade tape','police tape',
+    'caution sign','hazard stripes','safety warning','restricted area','do not cross','vector illustration',
+    'seamless tape','seamless repeat','tileable tape','endless tape','yellow caution tape','warning banner','danger tape'];
+  var extra = { 'stripes':['diagonal stripes','hazard stripes black yellow','striped warning'],
+    'chevron':['chevron arrows','arrow tape','direction arrows'], 'checker':['checkerboard pattern','checkered tape'],
+    'biohazard':['biohazard symbol','toxic warning','hazard symbol'], 'skull':['skull warning','danger skull','poison warning'] };
+  var list = base.slice();
+  (extra[spec.style] || []).forEach(function(k){ if(list.indexOf(k) < 0) list.push(k); });
+  if(w && list.indexOf(w) < 0) list.unshift(w);
+  if(spec.mode === 'set'){ list.splice(2, 0, 'caution tape set', 'warning tape collection', 'tape set'); }
+  return list.slice(0, 32).join(', ');
+}
+function specDescription(spec){
+  var w = spec.word;
+  if(spec.mode === 'set')
+    return 'Set of 10 original caution tape vector illustrations in ' + spec.scheme.name.toLowerCase()
+      + ' — hazard stripes, chevron arrows, checkerboard and repeating "' + w + '" text tapes in one collection. '
+      + 'Every tape is a seamless end-to-end repeat: join copies and the pattern and wording continue with no break, so it prints at any length. '
+      + 'Transparent background. EPS 10 vector with the lettering already converted to outlines, fully scalable and font-free.';
+  return 'Original ' + w.toLowerCase() + ' caution tape vector illustration — ' + spec.scheme.name.toLowerCase() + ' '
+    + styleName(spec.style).toLowerCase() + ' barrier tape with repeating "' + w + '" wording. '
+    + 'Seamless end-to-end repeat built from one exact tile unit: join copies and the stripes, pattern and wording continue across the join with no gap or break, so buyers can print it at any length. '
+    + 'Supplied as one seamless tile (single repeat) plus the full tape at your chosen length. Transparent background. EPS 10 vector with the lettering already converted to outlines, fully scalable and font-free.';
+}
+function specFname(spec, tile){
+  var base = slug(spec.word || 'caution') + '-' + spec.scheme.id + '-' + (spec.mode === 'set' ? 'tape-set' : spec.style) + '-tape';
+  if(tile) return base + '-seamless-tile';
+  return spec.mode === 'set' ? base : base + '-x' + (spec.repeats || 5);
+}
+
+/* ================= RASTER EXPORT (PNG, always 4 MP+) ================= */
+function svgDims(svg){ var m = svg.match(/viewBox="0 0 ([\d.]+) ([\d.]+)"/); return { w:+m[1], h:+m[2] }; }
+function rasterDims(W, H){
+  var s = Math.sqrt(5200000 / (W * H));
+  var w = Math.round(W * s), h = Math.round(H * s);
+  if(w < 2400){ w = 2400; h = Math.round(2400 * H / W); }
+  if(w > 26000){ w = 26000; h = Math.round(26000 * H / W); }
+  return { w:w, h:h };
+}
+function exportSizeText(spec, tile){
+  var d = svgDims(exportSVGFor(spec, tile)), rd = rasterDims(d.w, d.h);
+  return rd.w + ' × ' + rd.h + ' px · ' + (rd.w * rd.h / 1000000).toFixed(1) + ' MP';
+}
+function svgToBlob(spec, tile){
+  return document.fonts.ready.then(function(){ return new Promise(function(resolve, reject){
+    var svg = svgDoc(exportSVGFor(spec, tile)), d = svgDims(svg), rd = rasterDims(d.w, d.h);
+    var url = URL.createObjectURL(new Blob([svg], { type:'image/svg+xml;charset=utf-8' }));
+    var img = new Image();
+    img.onload = function(){
+      var cv = document.createElement('canvas'); cv.width = rd.w; cv.height = rd.h;
+      var ctx = cv.getContext('2d');
+      ctx.drawImage(img, 0, 0, rd.w, rd.h);
+      URL.revokeObjectURL(url);
+      cv.toBlob(function(b){ b ? resolve({ blob:b, w:rd.w, h:rd.h }) : reject(new Error('render failed')); }, 'image/png');
+    };
+    img.onerror = function(){ URL.revokeObjectURL(url); reject(new Error('render failed')); };
+    img.src = url;
+  }); });
+}
+
+/* ================= DOWNLOADS ================= */
+/* every SVG leaves the tool as a standalone, self-contained document */
+function svgDoc(svg){ return '<?xml version="1.0" encoding="UTF-8"?>\n' + svg; }
+function dlEPS(spec, tile){ saveBlob(new Blob([buildEPS(spec, tile)], { type:'application/postscript' }), specFname(spec, tile) + '.eps');
+  toast('EPS 10 downloaded — ' + specFname(spec, tile) + '.eps'); }
+function dlSVG(spec, tile){ saveBlob(new Blob([svgDoc(exportSVGFor(spec, tile))], { type:'image/svg+xml' }), specFname(spec, tile) + '.svg');
+  toast('SVG downloaded — ' + specFname(spec, tile) + '.svg'); }
+function dlPNG(spec, tile){ svgToBlob(spec, tile).then(function(r){
+    saveBlob(r.blob, specFname(spec, tile) + '.png');
+    toast('PNG downloaded — ' + r.w + ' × ' + r.h + ' px (' + (r.w * r.h / 1000000).toFixed(1) + ' MP)');
+  }).catch(function(){ toast('Render failed — try the SVG/EPS download'); }); }
+/* ================= UI ================= */
+function comboKey(spec){ return [spec.mode, spec.style, spec.scheme.id, spec.word, spec.bg, spec.font || 'anton', spec.thick || 120, spec.repeats || 5].join('|'); }
+function renderPreview(){
+  var spec = currentSpec();
+  $('preview').innerHTML = specSVG(spec);
+  $('seam-preview').innerHTML = seamlessSVG(spec);
+  $('seam-toggle').setAttribute('aria-pressed', state.seam ? 'true' : 'false');
+  $('stock-title').textContent = specTitle(spec);
+  $('stock-desc').textContent = specDescription(spec);
+  $('stock-kw').textContent = specKeywords(spec);
+  $('full-label').textContent = spec.mode === 'set' ? 'set of 10 tapes' : (spec.repeats || 5) + ' repeats';
+  var g = unitGeom(singleSpecOf(spec), svgMeasurer(spec));
+  $('preview-meta').innerHTML = 'Repeat unit <b>' + r2(g.U) + ' units</b> · Thickness <b>' + (spec.thick || 120)
+    + '</b> · Font <b>' + effFont(spec).name + '</b>'
+    + ' · Tile PNG <b>' + exportSizeText(spec, true) + '</b>'
+    + ' · Full PNG <b>' + exportSizeText(spec, false) + '</b>';
+}
+function markChips(containerId, attr, val){
+  var btns = $(containerId).querySelectorAll('button');
+  for(var i=0;i<btns.length;i++) btns[i].setAttribute('aria-pressed', btns[i].getAttribute(attr)===val ? 'true' : 'false');
+}
+function buildControls(){
+  var ss = $('style-sel');
+  STYLES.forEach(function(s){ var o=document.createElement('option'); o.value=s.id; o.textContent=s.name; ss.appendChild(o); });
+  ss.value = state.style;
+  var ws = $('word-sel'), seen = {};
+  function addGroup(label, words){
+    var g = document.createElement('optgroup'); g.label = label;
+    words.forEach(function(w){ if(seen[w]) return; seen[w]=1;
+      var o=document.createElement('option'); o.value=w; o.textContent=w; g.appendChild(o); });
+    if(g.children.length) ws.appendChild(g);
+  }
+  addGroup('★ Best sellers', WORDS);
+  WORD_GROUPS.forEach(function(g){ addGroup(g.label, g.words); });
+  ws.value = state.word;
+  var sw = $('swatches');
+  SCHEMES.forEach(function(s){
+    var b = document.createElement('button'); b.type='button'; b.className='sw';
+    b.setAttribute('aria-pressed', s.id===state.scheme.id ? 'true' : 'false');
+    b.setAttribute('data-scheme', s.id);
+    b.innerHTML = '<span class="bar" style="background:repeating-linear-gradient(45deg, ' + s.base + ' 0 9px, ' + s.ink + ' 9px 18px)"></span><span class="nm">' + esc(s.name) + '</span>';
+    b.addEventListener('click', function(){ state.scheme = s;
+      var all = sw.querySelectorAll('.sw');
+      for(var i=0;i<all.length;i++) all[i].setAttribute('aria-pressed', all[i].getAttribute('data-scheme')===s.id ? 'true' : 'false');
+      renderPreview(); });
+    sw.appendChild(b);
+  });
+}
+/* ================= BATCH ================= */
+function addToBatch(spec, silent){
+  var key = comboKey(spec);
+  for(var i=0;i<batch.length;i++) if(comboKey(batch[i].spec)===key){ if(!silent) toast('That exact design is already in the batch'); return false; }
+  usedCombos[key] = 1;
+  batch.push({ spec:spec, svg:specSVG(spec), title:specTitle(spec), description:specDescription(spec), keywords:specKeywords(spec), fname:specFname(spec, false) });
+  return true;
+}
+function renderBatch(){
+  $('batch-count').textContent = batch.length
+    ? 'Batch: ' + batch.length + ' design' + (batch.length>1?'s':'') + ' ready. ZIP buttons download the whole batch at once.'
+    : 'Batch is empty — generate designs or add the tape above.';
+  var wrap = $('cards'); wrap.innerHTML = '';
+  batch.forEach(function(it, idx){
+    var card = document.createElement('div'); card.className = 'card';
+    card.innerHTML = '<div class="thumb">' + it.svg + '</div><div class="body"><h3>' + esc(it.title) + '</h3>'
+      + '<p class="kw">' + esc(it.description) + '</p>'
+      + '<p class="kw">' + esc(it.keywords) + '</p>'
+      + '<div class="acts">'
+      + '<span class="lbl">Full tape</span>'
+      + '<button type="button" class="btn small" data-act="eps" data-i="' + idx + '">EPS 10</button>'
+      + '<button type="button" class="btn small" data-act="svg" data-i="' + idx + '">SVG</button>'
+      + '<button type="button" class="btn small" data-act="png" data-i="' + idx + '">PNG</button>'
+      + '<span class="lbl">Seamless tile — 1 repeat</span>'
+      + '<button type="button" class="btn small" data-act="teps" data-i="' + idx + '">Tile EPS</button>'
+      + '<button type="button" class="btn small" data-act="tsvg" data-i="' + idx + '">Tile SVG</button>'
+      + '<button type="button" class="btn small" data-act="tpng" data-i="' + idx + '">Tile PNG</button>'
+      + '<span class="lbl"></span>'
+      + '<button type="button" class="btn small" data-act="copy" data-i="' + idx + '">Copy title + description + keywords</button>'
+      + '<button type="button" class="btn small" data-act="del" data-i="' + idx + '">Remove</button>'
+      + '</div></div>';
+    wrap.appendChild(card);
+  });
+}
+function rnd(arr){ return arr[Math.floor(Math.random() * arr.length)]; }
+function generate(kind){
+  var added = 0, guard = 0;
+  if(kind === 'set4'){
+    while(added < 4 && guard++ < 200){
+      var spec = { mode:'set', style:'stripes-text', scheme:rnd(SCHEMES), word:rnd(ALL_WORDS),
+                   bg:rnd(['transparent','white','black']), font:rnd(FONTS).id,
+                   thick:rnd([80,120,180,240]), repeats:5 };
+      if(addToBatch(spec, true)) added++;
+    }
+  } else {
+    var n = parseInt(kind, 10);
+    while(added < n && guard++ < 400){
+      var s2 = { mode:'single', style:rnd(STYLES).id, scheme:rnd(SCHEMES), word:rnd(ALL_WORDS),
+                 bg:'transparent', font:rnd(FONTS).id, thick:rnd([80,120,120,180,240]),
+                 repeats:rnd([3,4,5,5,6,8]) };
+      if(addToBatch(s2, true)) added++;
+    }
+  }
+  renderBatch();
+  toast(added ? added + ' new design' + (added>1?'s':'') + ' added to the batch' : 'No new combinations left in this session');
+  if(added) $('cards').scrollIntoView({ behavior:'smooth', block:'nearest' });
+}
+function zipAll(kind){
+  if(!batch.length){ toast('Batch is empty — generate designs first'); return; }
+  if(typeof JSZip === 'undefined'){ toast('ZIP library still loading — try again in a moment'); return; }
+  toast('Building ZIP…');
+  var zip = new JSZip(), jobs;
+  if(kind === 'eps'){ batch.forEach(function(it){ zip.file(it.fname + '.eps', buildEPS(it.spec, false)); }); jobs = Promise.resolve(); }
+  else if(kind === 'svg'){ batch.forEach(function(it){ zip.file(it.fname + '.svg', svgDoc(exportSVGFor(it.spec, false))); }); jobs = Promise.resolve(); }
+  else { jobs = Promise.all(batch.map(function(it){
+      return svgToBlob(it.spec, false).then(function(r){ zip.file(it.fname + '.png', r.blob); });
+    })); }
+  jobs.then(function(){ return zip.generateAsync({ type:'blob' }); }).then(function(b){
+    saveBlob(b, 'caution-tapes-' + kind + '.zip'); toast('ZIP downloaded — ' + batch.length + ' files');
+  }).catch(function(){ toast('ZIP failed — download designs one by one'); });
+}
+/* ================= ALL SVG PACKS — EVERY WORD × EVERY COLOUR =================
+   One button builds EVERY tape PACK the tool can make for the current font,
+   thickness and background: every word in the library × every colour scheme.
+   A pack is always a tape SET (10 tapes in 1) — never a single tape — and every
+   pack is drawn by the exact same buildSetSVG() geometry the "Tape set (10 in 1)"
+   mode already uses. All packs are then exported together in ONE ZIP, one folder
+   per colour scheme inside one master folder. This block only adds behaviour;
+   no existing function is changed. */
+var packRun = { busy:false, stop:false };
+
+function packSpecs(){
+  var out = [], bg = state.bg, font = state.font, thick = state.thick, si, wi;
+  for(si = 0; si < SCHEMES.length; si++){
+    for(wi = 0; wi < ALL_WORDS.length; wi++){
+      out.push({ mode:'set', style:'stripes-text', scheme:SCHEMES[si], word:ALL_WORDS[wi],
+                 bg:bg, font:font, thick:thick, repeats:5 });
+    }
+  }
+  return out;
+}
+function packCount(){ return ALL_WORDS.length * SCHEMES.length; }
+function setPackStatus(msg){ $('all-packs-status').textContent = msg; }
+function setPackBar(pct){ $('all-packs-fill').style.width = Math.max(0, Math.min(100, pct)).toFixed(1) + '%'; }
+/* folder = colour scheme, file = same naming the single exports use (deduped) */
+function packPath(spec, used){
+  var folder = 'caution-tape-svg-packs/' + spec.scheme.id, base = specFname(spec, false), name = base, n = 2, path;
+  do { path = folder + '/' + name + '.svg'; if(used[path]) name = base + '-' + (n++); }
+  while(used[path]);
+  used[path] = 1;
+  return path;
+}
+function buildAllPacksZip(){
+  if(packRun.busy) return;
+  if(typeof JSZip === 'undefined'){ toast('ZIP library still loading — try again in a moment'); return; }
+  var specs = packSpecs(), total = specs.length, zip = new JSZip(), used = {}, i = 0;
+  packRun.busy = true; packRun.stop = false;
+  $('all-packs-btn').disabled = true; $('all-packs-stop').disabled = false;
+  setPackBar(0);
+  setPackStatus('Generating packs… 0 / ' + total);
+
+  function finish(msg){
+    packRun.busy = false; packRun.stop = false;
+    $('all-packs-btn').disabled = false; $('all-packs-stop').disabled = true;
+    setPackStatus(msg);
+    toast(msg.length > 95 ? msg.slice(0, 95) + '…' : msg);
+  }
+  function chunk(){
+    if(packRun.stop){ finish('Stopped after ' + i + ' of ' + total + ' packs — nothing was downloaded.'); setPackBar(0); return; }
+    var end = Math.min(total, i + 10);
+    while(i < end){
+      var spec = specs[i];
+      zip.file(packPath(spec, used), svgDoc(exportSVGFor(spec, false)));
+      i++;
+    }
+    var pct = i / total * 90;
+    setPackBar(pct);
+    setPackStatus('Generating packs… ' + i + ' / ' + total + ' (' + Math.round(i / total * 100) + '%)');
+    if(i < total) setTimeout(chunk, 0);
+    else finalise();
+  }
+  function finalise(){
+    setPackStatus('Packing ' + total + ' SVG packs into the ZIP…');
+    zip.generateAsync({ type:'blob', compression:'DEFLATE', compressionOptions:{ level:6 } },
+      function(meta){
+        setPackBar(90 + meta.percent * 0.10);
+        setPackStatus('Packing ZIP… ' + Math.round(meta.percent) + '% of ' + total + ' SVG packs');
+      }).then(function(blob){
+        saveBlob(blob, 'caution-tape-svg-packs-' + total + '.zip');
+        setPackBar(100);
+        finish('ZIP downloaded — ' + total + ' SVG tape packs (' + ALL_WORDS.length + ' words × '
+          + SCHEMES.length + ' colours) · ' + (blob.size / 1048576).toFixed(1) + ' MB');
+      }).catch(function(){
+        finish('ZIP failed — try again, or build smaller groups from the Batch panel.');
+        setPackBar(0);
+      });
+  }
+  setPackStatus('Waiting for fonts, then generating ' + total + ' packs…');
+  if(document.fonts && document.fonts.ready)
+    document.fonts.ready.then(function(){ setTimeout(chunk, 0); }, function(){ setTimeout(chunk, 0); });
+  else setTimeout(chunk, 0);
+}
+function bindAllPacks(){
+  $('all-packs-btn').addEventListener('click', buildAllPacksZip);
+  $('all-packs-stop').addEventListener('click', function(){
+    if(!packRun.busy) return;
+    packRun.stop = true;
+    setPackStatus('Stopping…');
+  });
+}
+function initAllPacks(){
+  $('ap-words').textContent = ALL_WORDS.length + ' words';
+  $('ap-schemes').textContent = SCHEMES.length + ' colours';
+  $('ap-total').textContent = packCount();
+  bindAllPacks();
+}
+/* ================= EVENTS ================= */
+function bindEvents(){
+  $('mode-single').addEventListener('click', function(){ state.mode = 'single';
+    $('mode-single').setAttribute('aria-pressed','true'); $('mode-set').setAttribute('aria-pressed','false'); renderPreview(); });
+  $('mode-set').addEventListener('click', function(){ state.mode = 'set';
+    $('mode-set').setAttribute('aria-pressed','true'); $('mode-single').setAttribute('aria-pressed','false'); renderPreview(); });
+  $('style-sel').addEventListener('change', function(){ state.style = this.value; renderPreview(); });
+  $('font-sel').addEventListener('change', function(){ state.font = this.value; renderPreview(); });
+  $('word-sel').addEventListener('change', function(){ state.word = this.value; renderPreview(); });
+  $('custom-word').addEventListener('input', function(){ state.custom = this.value; renderPreview(); });
+  $('bg-chips').addEventListener('click', function(e){ var b = e.target.closest('button'); if(!b) return;
+    state.bg = b.getAttribute('data-bg'); markChips('bg-chips', 'data-bg', state.bg); renderPreview(); });
+  function thickName(t){ return t <= 95 ? 'Thin' : t <= 150 ? 'Standard' : t <= 210 ? 'Thick' : 'Extra Thick'; }
+  function syncThick(){
+    $('thick-range').value = state.thick;
+    $('thick-val').textContent = thickName(state.thick) + ' · ' + state.thick;
+    var btns = $('thick-chips').querySelectorAll('button');
+    for(var i = 0; i < btns.length; i++)
+      btns[i].setAttribute('aria-pressed', +btns[i].getAttribute('data-thick') === state.thick ? 'true' : 'false');
+  }
+  $('thick-chips').addEventListener('click', function(e){ var b = e.target.closest('button'); if(!b) return;
+    state.thick = +b.getAttribute('data-thick'); syncThick(); renderPreview(); });
+  $('thick-range').addEventListener('input', function(){ state.thick = +this.value; syncThick(); renderPreview(); });
+  function syncLen(){
+    $('len-range').value = Math.min(12, state.repeats);
+    $('len-num').value = state.repeats;
+    var btns = $('len-chips').querySelectorAll('button');
+    for(var i = 0; i < btns.length; i++)
+      btns[i].setAttribute('aria-pressed', +btns[i].getAttribute('data-rep') === state.repeats ? 'true' : 'false');
+  }
+  $('len-chips').addEventListener('click', function(e){ var b = e.target.closest('button'); if(!b) return;
+    state.repeats = +b.getAttribute('data-rep'); syncLen(); renderPreview(); });
+  $('len-range').addEventListener('input', function(){ state.repeats = +this.value; syncLen(); renderPreview(); });
+  $('len-num').addEventListener('change', function(){
+    var v = Math.round(+this.value || 5);
+    state.repeats = Math.max(2, Math.min(12, v)); syncLen(); renderPreview(); });
+  $('seam-toggle').addEventListener('click', function(){ state.seam = !state.seam; renderPreview(); });
+  $('dl-tile-eps').addEventListener('click', function(){ dlEPS(currentSpec(), true); });
+  $('dl-tile-svg').addEventListener('click', function(){ dlSVG(currentSpec(), true); });
+  $('dl-tile-png').addEventListener('click', function(){ dlPNG(currentSpec(), true); });
+  $('dl-eps').addEventListener('click', function(){ dlEPS(currentSpec(), false); });
+  $('dl-svg').addEventListener('click', function(){ dlSVG(currentSpec(), false); });
+  $('dl-png').addEventListener('click', function(){ dlPNG(currentSpec(), false); });
+  $('copy-meta').addEventListener('click', function(){ var s = currentSpec();
+    copyText('Title: ' + specTitle(s) + '\nDescription: ' + specDescription(s) + '\nKeywords: ' + specKeywords(s), 'Title, description + keywords copied'); });
+  $('add-batch').addEventListener('click', function(){ if(addToBatch(currentSpec())){ renderBatch(); toast('Added to batch'); } });
+  var gens = document.querySelectorAll('[data-gen]');
+  for(var i = 0; i < gens.length; i++) gens[i].addEventListener('click', function(){ generate(this.getAttribute('data-gen')); });
+  $('clear-batch').addEventListener('click', function(){ batch = []; renderBatch(); toast('Batch cleared (session combination memory kept)'); });
+  $('zip-eps').addEventListener('click', function(){ zipAll('eps'); });
+  $('zip-svg').addEventListener('click', function(){ zipAll('svg'); });
+  $('zip-png').addEventListener('click', function(){ zipAll('png'); });
+  $('dl-txt').addEventListener('click', function(){
+    if(!batch.length){ toast('Batch is empty — generate designs first'); return; }
+    var txt = batch.map(function(it){ return it.fname + '\nTitle: ' + it.title + '\nDescription: ' + it.description + '\nKeywords: ' + it.keywords; }).join('\n\n');
+    saveBlob(new Blob([txt], { type:'text/plain' }), 'caution-tapes-titles-descriptions-keywords.txt'); toast('TXT downloaded'); });
+  $('cards').addEventListener('click', function(e){ var b = e.target.closest('button'); if(!b) return;
+    var it = batch[+b.getAttribute('data-i')]; if(!it) return;
+    var act = b.getAttribute('data-act');
+    if(act === 'eps') dlEPS(it.spec, false);
+    else if(act === 'svg') dlSVG(it.spec, false);
+    else if(act === 'png') dlPNG(it.spec, false);
+    else if(act === 'teps') dlEPS(it.spec, true);
+    else if(act === 'tsvg') dlSVG(it.spec, true);
+    else if(act === 'tpng') dlPNG(it.spec, true);
+    else if(act === 'copy') copyText('Title: ' + it.title + '\nDescription: ' + it.description + '\nKeywords: ' + it.keywords, 'Title, description + keywords copied');
+    else if(act === 'del'){ batch.splice(+b.getAttribute('data-i'), 1); renderBatch(); }
+  });
+}
+/* ================= INIT ================= */
+buildControls();
+bindEvents();
+renderPreview();
+renderBatch();
+initAllPacks();
+/* Nothing to wait for: measurements come from the same outlines that are
+   drawn, so the first render is already exact. */
+</script>
+</body>
+</html>
